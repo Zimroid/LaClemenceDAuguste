@@ -1,0 +1,26 @@
+COMMANDES CLIENT
+log_in : Identification du joueur
+log_out : Déconnexion du joueur
+game_create : Créer une partie
+game_leave : Quitter une partie
+game_list : Liste des parties qui attendent des joueurs
+game_join : Rejoindre une partie
+game_leave : Quitter une partie
+game_kick : Kicker un joueur d'une partie
+game_addbot : Ajouter un bot a une partie
+game_start : Commencer une partie
+turn_move : Déplacement d'une légion
+turn_card : Utilisation d'une carte
+turn_laurel : Déplacement du laurier
+turn_leave : Abandon de la partie par le joueur
+chat : Utilisation du chat
+
+COMMANDES SERVEUR
+game_list : Liste des parties qui attendent des joueurs
+game_players : Liste des joueurs dans une partie
+game_configuration : Configuration de la partie
+game_plateau : Etat du plateau, des cartes et du dernier tour de chaque joueurs
+turn_wait : Tour spécial pour un joueur (laurier ou carte devin)
+turn_new : Nouveau tour (tous les clients sont prêts)
+player_chat : Message envoyé par un joueur
+player_leave : Un joueur a quitté la partie

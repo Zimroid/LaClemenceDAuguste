@@ -1,0 +1,9 @@
+Fin du tour / Nouveau tour
+
+Attributs :
+    command : la commande décrite, ici "next_turn"
+
+Exemple :
+{
+    "command": "special_turn"
+}

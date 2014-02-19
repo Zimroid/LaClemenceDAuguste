@@ -1,0 +1,19 @@
+Déplacement d'une légion
+
+Attributs :
+    command : la commande décrite, ici "turn_move"
+    source : case de départ de la légion
+    destination : case de destination de la légion
+
+Exemple :
+{
+    "command": "turn_move",
+	"source": {
+        "u": 4
+        "w": 1
+    }
+	"destination": {
+        "u": 7
+        "w": 2
+    }
+}

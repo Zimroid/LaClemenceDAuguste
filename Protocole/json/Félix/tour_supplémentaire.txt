@@ -1,0 +1,24 @@
+Tour supplémentaire
+
+Attributs :
+    command : la commande décrite, ici "special_turn"
+	legions : tableau des légions jouant ce tour spécial
+		legion_id : id de la légion
+		type : type de mouvement à faire (laurier, muraille, ..)
+
+Exemple :
+{
+    "command": "special_turn",
+	"legions"
+	[
+		{
+			"legion_id": 2,
+			"type": laurel
+		},
+		{
+			"legion_id": 3,
+			"type": wall
+		}
+		...
+	]
+}

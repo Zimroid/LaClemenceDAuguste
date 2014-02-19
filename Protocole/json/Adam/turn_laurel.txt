@@ -1,0 +1,14 @@
+Déplacement du laurier
+
+Attributs :
+    command : la commande décrite, ici "turn_laurel"
+    destination : case de destination du laurier
+
+Exemple :
+{
+    "command": "turn_laurel",
+	"destination": {
+        "u": 7
+        "w": 2
+    }
+}

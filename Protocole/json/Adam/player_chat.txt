@@ -1,0 +1,13 @@
+Chat (coté serveur)
+
+Attributs :
+    command : la commande décrite, ici "chat"
+    author : pseudo du joueur l'ayant envoyé
+	message : message envoyé
+
+Exemple :
+{
+    "command": "player_chat",
+    "author": "Félix",
+	"message": "Bonjour !"
+}

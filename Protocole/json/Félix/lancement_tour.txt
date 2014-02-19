@@ -1,0 +1,11 @@
+Lancement du tour
+
+Attributs :
+    command : la commande décrite, ici "start_turn"
+	time_limit : temps limite par tour (en secondes)
+
+Exemple :
+{
+    "command": "start_turn",
+	"time_limit": 120
+}
