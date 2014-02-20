@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Index</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script type="text/javascript" src="websocket.js"></script>
+        <script type="text/javascript" src="chat.js"></script>
+        <script type="text/javascript" src="clock.js"></script>
+    </head>
+    
+    <body onload="startTime()">
+        <h1 class="headS" style="display: inline-block;">Chat Auguste v0.1</h1>
+        <div class="headS" id="time" style="display: inline-block; padding:50px;"></div>
+        
+        <div id="chat">
+            <div class="chatStruct" id="showMessage">
+                Bonjour et bienvenue sur Auguste ...
+            </div>
+
+            <br/>
+
+            <div class="chatStruct" id="sendMessage">
+                <form onSubmit="addMessage(); return false;" autocomplete="off" >
+                    <input type="text" id="message" name="message" />
+                    <input type="submit" id="valid" value="Envoyer">
+                </form>
+            </div>
+        </div>
+    </body>
+
+    <style>
+        body {
+            width : 1200px;
+            margin : auto;
+        }
+        
+        .chatStruct {
+            width : 800px;
+            margin-left : 60px;            
+            border : lightgrey outset 2px;
+            padding : 5px;
+        }
+        
+        #showMessage {
+            height : 500px;
+            overflow:auto;
+        }
+                
+        #message {
+            width : 700px;
+        }
+        
+        #valid {
+            width : 90px;
+        }
+    </style>
+</html>
