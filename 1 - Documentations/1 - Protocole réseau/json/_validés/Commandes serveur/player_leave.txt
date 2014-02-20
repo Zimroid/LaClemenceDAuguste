@@ -1,0 +1,13 @@
+Déconnexion d'un joueur
+
+Attributs :
+    command : la commande décrite, ici "player_chat"
+    player : numéro du joueur déconnecté (0 a 5)
+    disconnect : déconnecté ou abandon
+
+Exemple :
+{
+    "command": "player_leave",
+    "player": 2,
+    "disconnect" : false
+}

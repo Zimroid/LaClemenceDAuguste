@@ -1,0 +1,11 @@
+Rejoindre une partie (lancé depuis le client)
+
+Attributs :
+    command : la commande décrite, ici "game_join"
+	game_name : le nom de la partie que le client veut rejoindre
+
+Exemple :
+{
+    "command": "game_join",
+    "game_name": "Partie de Maxime"
+}

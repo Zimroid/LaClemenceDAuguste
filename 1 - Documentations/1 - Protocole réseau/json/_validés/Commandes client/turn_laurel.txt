@@ -1,0 +1,12 @@
+Déplacement du laurier
+
+Attributs :
+    command : la commande décrite, ici "turn_laurel"
+    session : identifiant de la session du joueur
+    destination : case de destination du laurier
+
+Exemple :
+{
+    "command": "turn_laurel",
+    "session": "dfs65d7s984vsd213v3ds0sdvs"
+}

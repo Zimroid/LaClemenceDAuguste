@@ -1,0 +1,13 @@
+S'identifier
+
+Attributs :
+    command : la commande décrite, ici "log_in"
+	login : le login du joueur
+	password : le mot de passe du joueur
+
+Exemple :
+{
+    "command": "log_in",
+    "login": "Joel",
+	"password": "Ch0c0l4t"
+}

@@ -1,0 +1,11 @@
+Fin du tour / Nouveau tour
+
+Attributs :
+    command : la commande décrite, ici "turn_new"
+    time_limit : temps limite par tour (en secondes)
+
+Exemple :
+{
+    "command": "turn_new",
+	"time_limit": 120
+}

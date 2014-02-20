@@ -1,0 +1,27 @@
+Mise à jour plateau
+
+Attributs :
+    command : la commande décrite, ici "game_plateau"
+	board : liste des cases
+		content : none/pawn/laurel/wall/...
+		legion_id : id de la légion (si légionnaire)
+		armored : boolean (si légionnaire)
+
+Exemple :
+{
+    "command": "game_plateau",
+	"board":
+	[
+		{
+			"content": "none"
+		},
+		{
+			"content": "pawn",
+			"legion_id": 1,
+			"armored": false
+		},
+		{
+			"content": "laurel"
+		}
+	]
+}

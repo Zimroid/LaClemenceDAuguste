@@ -1,0 +1,11 @@
+Identification réussie
+
+Attributs :
+    command : la commande décrite, ici "log_confirm"
+    session : identifiant de la session du joueur
+
+Exemple :
+{
+    "command": "log_confirm",
+    "session": "srg5e6r54b65f4bd6546"
+}

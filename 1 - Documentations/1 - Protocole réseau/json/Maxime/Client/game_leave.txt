@@ -1,0 +1,10 @@
+Déconnexion d'un joueur
+
+Attributs :
+    command : la commande décrite, ici "game_leave"
+	(on ne donne pas de player_id car n'importe quel joueur pourrais envoyer au serveur l'ordre de déconnecter tel ou tel autre joueur)
+
+Exemple :
+{
+    "command": "game_leave"
+}

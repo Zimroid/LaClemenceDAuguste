@@ -1,0 +1,13 @@
+Kick d'un joueur
+
+Attributs :
+    command : la commande décrite, ici "game_kick"
+    session : identifiant de la session du joueur
+    player_id : le numéro du joueur qu'on veux kicker
+
+Exemple :
+{
+    "command": "game_kick",
+    "session": "sezgerjty654g65h7kg65h4",
+    "player_id" : 2
+}
