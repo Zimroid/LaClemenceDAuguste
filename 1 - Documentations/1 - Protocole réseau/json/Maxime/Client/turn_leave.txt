@@ -1,0 +1,9 @@
+Passer son tour
+
+Attributs :
+    command : la commande décrite, ici "turn_leave"
+
+Exemple :
+{
+    "command": "turn_leave"
+}

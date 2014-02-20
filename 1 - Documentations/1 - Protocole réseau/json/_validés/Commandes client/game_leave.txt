@@ -1,0 +1,11 @@
+Déconnexion d'un joueur
+
+Attributs :
+    command : la commande décrite, ici "game_leave"
+    session : identifiant de la session du joueur
+
+Exemple :
+{
+    "command": "game_leave",
+    "session": "sdg87b9f1d651324sdgz"
+}

@@ -1,0 +1,11 @@
+Ajouter un bot
+
+Attributs :
+    command : la commande décrite, ici "game_addbot"
+	game_name : le nom de la partie ou le serveur doit ajouter un bot
+
+Exemple :
+{
+    "command": "game_join",
+    "game_name": "Partie de Maxime"
+}

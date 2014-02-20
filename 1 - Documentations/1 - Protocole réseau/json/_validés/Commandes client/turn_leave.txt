@@ -1,0 +1,11 @@
+Abandon d'un joueur
+
+Attributs :
+    command : la commande décrite, ici "turn_leave"
+    session : identifiant de la session du joueur
+
+Exemple :
+{
+    "command": "turn_leave",
+    "session": "47dg6n1fg0fg6nf01sxw65"
+}

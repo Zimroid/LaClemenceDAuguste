@@ -1,0 +1,11 @@
+Faire "passer son tour" au client (pour des coups spéciaux par exemple)
+
+Attributs :
+    command : la commande décrite, ici "turn_wait"
+	time_limit : temps limite par tour (en secondes)
+
+Exemple :
+{
+    "command": "turn_wait",
+	"time_limit": 120
+}

@@ -1,0 +1,13 @@
+Chat (coté client)
+
+Attributs :
+    command : la commande décrite, ici "chat"
+    session : identifiant de la session du joueur
+    message : message envoyé
+
+Exemple :
+{
+    "command": "chat",
+    "session": "fvb3v2nh498gh7k9g8h7sd",
+    "message": "Bonjour ;)"
+}
