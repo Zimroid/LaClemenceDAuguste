@@ -8,7 +8,7 @@ Attributs :
 
 Exemple :
 {
-    "command": "game_join",
+    "command": "game_addbot",
     "session": "trut4y65n41n3v24bn64654",
     "game": 47,
     "team": 1

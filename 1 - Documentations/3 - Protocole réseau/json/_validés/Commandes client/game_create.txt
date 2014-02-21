@@ -12,7 +12,7 @@ Attributs :
 
 Exemple :
 {
-    "command": "create_game",
+    "command": "game_create",
     "session": "dfb4d6f5b4d65f4bd654fb65d4",
     "game_name": "Partie de Maxime",
     "turn_timer": 120,
