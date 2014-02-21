@@ -2,7 +2,6 @@ Données échangées SERVEUR -> CLIENT
 
 Données d'un joueur :
 {
-    "id": (int représentant le joueur pour la partie courante),
     "name": (string),
     "pawn": (string représentant un type de pion),
     "color": (string couleur hexadécimale),
@@ -62,8 +61,9 @@ Données d'une case :
     "armor": (booléen représentant la présence d'une armure),
     "laurel": (booléen représentant la préésence du laurier ou non),
     "tent": (booléen représentant la présence d'une tente ou non),
-    "player": (int représentent le joueur a qui appartient la légion sur la case, -1 si pas de légion)
-    "death: ("none"|"battle"|"surrounding" représentant comment la légion va mourrir)
+    "team": (int représentant l'équipe a qui appartient la légion sur la case, -1 si pas de légion)
+    "player": (int représentent le membre e l'équipe qui appartient la légion sur la case, -1 si pas de légion)
+    "death: ("none"|"battle"|"surrounding" représentant comment la légion de la case va mourrir)
 }
 
 Données d'un déplacement :
@@ -97,6 +97,7 @@ Données d'un tour :
     "cards": (liste des cartes jouées, si cartes activées)
     [
         {
+            "team": (int représentant la team),
             "player": (int représentant le joueur),
             "team_card": (booléen indiquant s'il s'agit d'une carte joueur ou équipe),
             "card": (int représentant la position de la carte dans la liste des cartes du joueur ou de l'équipe)
