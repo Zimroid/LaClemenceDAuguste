@@ -1,0 +1,11 @@
+Chat
+
+Attributs :
+    command : la commande décrite, ici "chat"
+    message : le message
+
+Exemple :
+{
+    "command": "chat",
+    "message": "Bonjour :)"
+}

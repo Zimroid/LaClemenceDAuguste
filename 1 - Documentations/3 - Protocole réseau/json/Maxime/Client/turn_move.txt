@@ -1,0 +1,29 @@
+Mouvement
+
+Attributs :
+    command : la commande décrite, ici "turn_move"
+	start : position de la case de départ de mouvement
+		u
+		w
+	end : position de la case de fin de mouvement
+		u
+		w
+
+Exemple :
+{
+    "command": "turn_move",
+    "start":
+	[
+		{
+			"u": 0,
+			"w": 0
+		}
+	],
+	"end":
+	[
+		{
+			"u": 1,
+			"w": -1
+		}
+	]
+}

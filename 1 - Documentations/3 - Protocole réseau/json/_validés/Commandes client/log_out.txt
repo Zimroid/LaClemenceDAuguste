@@ -1,0 +1,11 @@
+Déconnexion
+
+Attributs :
+    command : la commande décrite, ici "log_out"
+    session : identifiant de la session du joueur
+
+Exemple :
+{
+    "command": "log_out",
+    "session": "xdghq6srg76sqf4b6sf5g654"
+}

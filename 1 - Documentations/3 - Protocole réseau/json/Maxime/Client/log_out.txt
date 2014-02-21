@@ -1,0 +1,9 @@
+Se déconnecter
+
+Attributs :
+    command : la commande décrite, ici "log_out"
+
+Exemple :
+{
+    "command": "log_out"
+}
