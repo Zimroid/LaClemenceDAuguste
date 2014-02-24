@@ -86,15 +86,6 @@ public class SocketHandler {
                 data.add(temp);
             }
             
-            /*String[] hash = message.split(",");
-            String[] data0 = hash[0].replace("\"", "").split(":");
-            String[] data1 = hash[1].replace("\"", "").split(":");
-            String[] data2 = hash[2].replace("\"", "").split(":");
-            String[] data3 = hash[3].replace("\"", "").split(":");
-            System.out.println("3:" + data1[1]);
-            System.out.println("3:" + hash[2]);
-            System.out.println("3:" + hash[3]);
-            */
             String newMess = data.get(1)[1] + " [" + data.get(2)[1] + ":" + data.get(2)[2] + "] : " + data.get(3)[1];
             return newMess;
         }
