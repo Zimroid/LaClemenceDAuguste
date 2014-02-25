@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import org.json.*;
 
 /**
  * @author Vr4el / Zim
@@ -49,6 +50,7 @@ public class SocketHandler implements Runnable
                 String message = in.readLine();
                 if(message != null)
                 {
+                    traitement(this, message);
                     System.out.println(message);
                     ss.broadcast(message);
                 }
@@ -69,4 +71,23 @@ public class SocketHandler implements Runnable
         this.out.println(message);
         this.out.flush();
     }
+    
+    /**
+      * Fonction de traitement des messages recus
+      * @param source : source du message, objet de type SocketHandler
+      * @param message : donnée recue sérialisé au format JSON
+      */
+     public static void traitement(SocketHandler source,String message)
+     {
+         try
+         {
+             JSONObject jso = new JSONObject(message);
+             String commande = (String) jso.get("command");
+             System.out.println("Réception commande : " + commande);
+         }
+         catch(JSONException e)
+         {
+             System.out.println("Une erreur s'est produite durant le traitement d'un objet JSON :\n" + e.getMessage());
+         }
+     }
 }
