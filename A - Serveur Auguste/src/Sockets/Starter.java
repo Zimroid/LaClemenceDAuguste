@@ -7,7 +7,7 @@ import java.net.ServerSocket;
  * @author Vr4el / Zim
  * Ceci est le main du serveur de calcul
  */
-public class ServerTest
+public class Starter
 {
     // On déclare la socket et un thread et on initialise la socket à null
     public static ServerSocket ss = null;

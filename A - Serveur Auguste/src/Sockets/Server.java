@@ -90,10 +90,11 @@ public final class Server implements Runnable
       * @param source : source du message, objet de type SocketHandler
       * @param message : donnée recue sérialisé au format JSON
       */
-     public static void traitement(SocketHandler source,String message)
+     public static void traitement(SocketHandler source, String message)
      {
          try
          {
+             System.out.println("Récéption JSON : " + message);
              JSONObject jso = new JSONObject(message);
              String commande = (String) jso.get("command");
              System.out.println("Réception commande : " + commande);
