@@ -1,0 +1,23 @@
+Déplacement d'une légion
+
+Attributs :
+    command : la commande décrite, ici "turn_move"
+    session : identifiant de la session du joueur
+    source : case de départ de la légion (ou LAU -> laurier)
+    destination : case de destination de la légion
+
+Exemple :
+{
+    "command": "turn_move",
+    "session": "sdbdfbvn13vb246h5g4g",
+	"source":
+    {
+        "u": 4,
+        "w": 1
+    }
+	"destination":
+    {
+        "u": 7,
+        "w": 2
+    }
+}

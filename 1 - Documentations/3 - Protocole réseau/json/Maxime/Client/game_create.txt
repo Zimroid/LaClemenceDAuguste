@@ -1,0 +1,19 @@
+Création d'une partie
+
+Attributs :
+    command : la commande décrite, ici "game_create"
+    game_name : nom de la partie tel qu'il sera vu par les autres joueurs cherchant une partie
+    plateau_size : taille du plateau
+    cards : booléen indiquant si les cartes sont autorisées ou non
+    teams : nombre d'équipes (2, 3 ou 6)
+    legion_per_players : nombre de légions par joueurs
+
+Exemple :
+{
+    "command": "game_create",
+    "game_name": "Partie de Maxime",
+    "plateau_size": 8,
+    "cards": false,
+    "teams": 2,
+    "legion_per_players": 1
+}

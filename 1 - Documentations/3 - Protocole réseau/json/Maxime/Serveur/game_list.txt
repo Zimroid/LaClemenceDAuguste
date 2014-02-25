@@ -1,0 +1,27 @@
+Lister les parties en attente de joueurs.
+
+Attributs :
+    command : la commande décrite, ici "game_list"
+		games : tableau des parties en cours
+			game_name : nom de la partie
+			players_in : nombre de joueur en se moment qui attendent
+			players_max : nombre de joueur requis pour débuter la partie
+
+Exemple :
+{
+    "command": "game_list",
+		"games":
+		[
+			{
+				"game_name": "Partie de Maxime",
+				"players_in": 2,
+				"players_max": 4
+			},
+			{
+				"game_name": "The Game",
+				"players_in": 1,
+				"players_max": 2
+			}
+			...
+		]
+}

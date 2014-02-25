@@ -1,0 +1,15 @@
+Rejoindre une partie (lancé depuis le client)
+
+Attributs :
+    command : la commande décrite, ici "game_join"
+    session : identifiant de la session du joueur
+    game : identifiant de la partie à rejoindre
+    team : numéro de la team à rejoindre (1 à 6 ou 0 si peu importe)
+
+Exemple :
+{
+    "command": "game_join",
+    "session": "sdv6s54v65sd4v6s5d4vs654",
+    "game": 47,
+    "team": 0
+}

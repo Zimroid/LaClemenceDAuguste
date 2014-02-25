@@ -1,0 +1,13 @@
+Chat
+
+Attributs :
+    command : la commande décrite, ici "chat"
+    player_name : le nom du joueur d'ou viens le message
+    message : le message
+
+Exemple :
+{
+    "command": "chat",
+    "player_name": "Carlo",
+    "message": "Bonjour :)"
+}

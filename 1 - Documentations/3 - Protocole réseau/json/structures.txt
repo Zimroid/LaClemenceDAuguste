@@ -1,0 +1,107 @@
+Données échangées SERVEUR -> CLIENT
+
+Données d'un joueur :
+{
+    "name": (string),
+    "pawn": (string représentant un type de pion),
+    "color": (string couleur hexadécimale),
+    "groups": (int représentant le nombre de groupes de légions contrôlés par le joueur),
+    "state": ("waiting"|"playing"|"disconnected"|"left"),
+    "cards": (cartes du joueur)
+    [
+      <carte>,
+      <carte>,
+      ...
+    ]
+}
+
+
+Données des cartes :
+{
+    "type": (int représentant le type de la carte),
+}
+
+
+Données des équipes :
+{
+    "players": (joueurs de l'équipe)
+    [
+        <joueur>,
+        <joueur>,
+        ...
+    ],
+    "cards": (cartes de l'équipe)
+    [
+        <carte>,
+        <carte>,
+        ...
+    ]
+}
+
+
+Données d'un jeu :
+{
+    "name": (string),
+    "turn_timer": (int représentant le temps pour un tour en secondes),
+    "board_size": (int représentant la dimension du plateau),
+    "cards": (booléen autorisant ou non les cartes),
+    "legion_per_group": (int représentant le nombre de légions par groupe),
+    "teams": (équipes de la partie)
+    [
+        <équipe>,
+        <équipe>,
+        ...
+    ]
+}
+
+Données d'une case :
+{
+    "u": (int),
+    "w": (int),
+    "armor": (booléen représentant la présence d'une armure),
+    "laurel": (booléen représentant la préésence du laurier ou non),
+    "tent": (booléen représentant la présence d'une tente ou non),
+    "team": (int représentant l'équipe a qui appartient la légion sur la case, -1 si pas de légion)
+    "player": (int représentent le membre e l'équipe qui appartient la légion sur la case, -1 si pas de légion)
+    "death: ("none"|"battle"|"surrounding" représentant comment la légion de la case va mourrir)
+}
+
+Données d'un déplacement :
+{
+    "u_start": (int),
+    "w_start": (int),
+    "u_end": (int),
+    "w_end": (int)
+}
+
+Données d'un tour :
+{
+    "board": (liste des cases non vides)
+    [
+        <case>,
+        <case>,
+        ...
+    ],
+    "moves": (liste des déplacements du tour)
+    [
+        <déplacement>,
+        <déplacement>,
+        ...
+    ],
+    "teams": (liste des équipes et des joueurs)
+    [
+        <équipe>,
+        <équipe>,
+        ...
+    ],
+    "cards": (liste des cartes jouées, si cartes activées)
+    [
+        {
+            "team": (int représentant la team),
+            "player": (int représentant le joueur),
+            "team_card": (booléen indiquant s'il s'agit d'une carte joueur ou équipe),
+            "card": (int représentant la position de la carte dans la liste des cartes du joueur ou de l'équipe)
+        },
+        (...)
+    ]
+}

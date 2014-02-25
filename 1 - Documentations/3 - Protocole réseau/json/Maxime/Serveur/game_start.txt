@@ -1,0 +1,17 @@
+Envoi initial
+
+Attributs :
+    command : la commande décrite, ici "game_start"
+	board_size : taille du plateau
+	cards : utilisation des cartes ou non
+	teams : nombre d'équipes
+	legion_per_player : nombre de légion par joueur
+
+Exemple :
+{
+    "command": "game_start",
+    "board_size": 8,
+    "cards": false,
+    "teams": 2,
+    "legion_per_player": 1
+}

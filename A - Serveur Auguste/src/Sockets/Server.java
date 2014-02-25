@@ -1,133 +1,85 @@
 package Sockets;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
-import org.json.*;
 
 /**
- * Classe de controle des entrées au serveur
- * @author Vincent
+ * @author Vr4el / Zim
+ * C'est ici que le serveur de calcul recevra et enverra les données
+ * Grace à socketList on peut accéder d'ici à la totalité des clients actuellement connecté
+ * C'est donc ici que seront traiter les info de SocketHandler
+ * Et on enverra nos réponse au bon SocketHandler
  */
-
-public class Server implements Runnable {
+public final class Server implements Runnable
+{
+    private static volatile Server instance = null;
     private ServerSocket socketserver = null;
-    private ArrayList<SocketHandler> socketList = null;
+    private ArrayList<SocketHandler> socketList;
     public Thread t1;
     
-    public Server (ServerSocket ss) {
-	 socketserver = ss;
-         socketList = new ArrayList<> ();
+    private Server (ServerSocket ss)
+    {
+	 this.socketserver = ss;
+         this.socketList = new ArrayList<>();
     }
+    
+    /**
+     * @param ss ServerSocket la socket du serveur
+     * @return Une instance du serveur
+     * Permet de retourner une instance du Serveur
+     */
+    public final static Server getInstance(ServerSocket ss)
+    {
+         if (Server.instance == null)
+         {
+            synchronized(Server.class) {
+              if (Server.instance == null) {
+                Server.instance = new Server(ss);
+              }
+            }
+         }
+         return Server.instance;
+     }
 
     /**
-     * Traitement des demandes d'accès au serveur
+     * Fonction qui se lance quand on fait un Server.start();
      */
     @Override
-    public void run() {
-	try {
-            while(true) {
-                // Réception des clients
-                SocketHandler sh = new SocketHandler(socketserver.accept());
+    public void run()
+    {
+        // Ici on tente de connecter des clients
+	try
+        {
+            // On écoute en boucle si un client essais de se connecter
+            while(true)
+            {
+                // On envois au client this pour qu'il puisse communiquer avec le serveur
+                SocketHandler sh = new SocketHandler(socketserver.accept(), this);
+                // Une fois le client accepté on sauvegarde sa connexion dans socketList
 		socketList.add(sh);
 		System.out.println("Nouveau client ...");
-
-                // Création d'un gestionnaire pour traiter avec le client
+                
+                // Si un nouveaux client à bien été connecté on lance un nouveau thread pour lui
                 t1 = new Thread(sh);
                 t1.start();
             }
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             System.err.println("Erreur serveur lors de l'ajout d'un client ...");
 	}
     }
-
-    /**
-     *  Gestionnaire de socket
-     *  -> crée un thread pour traiter les messages reçu par la socket
-     *  -> permet d'envoyer des messages depuis la socket
-     */
-    public class SocketHandler implements Runnable{
-        private Socket s = null;
-        private BufferedReader in;
-        private PrintWriter out;
-
-        /**
-         * Constructeur du gestionnaire de la socket
-         * @param s : socket à gérer
-         */
-        public SocketHandler (Socket s) {
-            try {
-                this.s = s;
-                this.out = new PrintWriter(this.s.getOutputStream());
-                this.in = new BufferedReader (new InputStreamReader (this.s.getInputStream()));
-            }
-            catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        /**
-         *  Thread de traitement des informations reçues
-         */
-        @Override
-        public void run() {
-            try {
-                while(true) {
-                    String message = in.readLine();
-                    if(message != null) {
-                        // Traitement du message reçu
-                        traitement(this, message);
-                        
-                        // Impression sur le serveur et broadcast du message (v. beta)
-                        System.out.println(message);
-                        broadcast(message);
-                    }
-                }
-            }
-            catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        
-        /**
-         * Fonction permettant l'envoi d'un message
-         * @param message : message à envoyer
-         */
-        public void send (String message) {
-            this.out.println(message);
-            this.out.flush();
-        }
-    }
     
     /**
-     * Broadcast d'un message
-     * @param message
+     * Cette fonction permetra d'envoyer un message à l'ensemble des clients connecté
+     * @param message String le message à broadcaster
      */
     public void broadcast (String message)
     {
-        for (SocketHandler sh : socketList) {
+        for(SocketHandler sh : socketList)
+        {
             sh.send(message);
-        }
-    }
-    
-    /**
-     * Fonction de traitement des messages recus
-     * @param source : source du message, objet de type SocketHandler
-     * @param message : donnée recue sérialisé au format JSON
-     */
-    public static void traitement(SocketHandler source,String message) {
-        try {
-            JSONObject jso = new JSONObject(message);
-            String commande = (String) jso.get("command");
-            System.out.println("Réception commande : " + commande);
-        }
-        catch (JSONException e) {
-            System.out.println("Une erreur s'est produite durant le traitement d'un objet JSON :\n" + e.getMessage());
         }
     }
 }

@@ -1,0 +1,13 @@
+Utilisation d'une carte
+
+Attributs :
+    command : la commande décrite, ici "turn_card"
+    session : identifiant de la session du joueur
+    card : identifiant de la carte (0 = devin, 1 = mur, 2 = volcan)
+
+Exemple :
+{
+    "command": "turn_card",
+    "session": "gjfy57tj68y79f87d454",
+    "card": 1
+}

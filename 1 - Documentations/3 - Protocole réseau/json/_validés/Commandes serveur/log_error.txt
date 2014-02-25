@@ -1,0 +1,11 @@
+Réponse de l'identification
+
+Attributs :
+    command : la commande décrite, ici "log_error"
+    error : code de l'erreur (par ex. 4 = login inconnu)
+
+Exemple :
+{
+    "command": "log_error",
+    "error": 4
+}
