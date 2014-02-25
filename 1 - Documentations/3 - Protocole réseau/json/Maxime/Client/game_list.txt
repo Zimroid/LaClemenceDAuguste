@@ -1,9 +1,0 @@
-Lister les parties en attente de joueurs.
-
-Attributs :
-    command : la commande décrite, ici "game_list"
-
-Exemple :
-{
-    "command": "game_list"
-}
