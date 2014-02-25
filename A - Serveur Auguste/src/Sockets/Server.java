@@ -3,6 +3,8 @@ package Sockets;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * @author Vr4el / Zim
@@ -82,4 +84,23 @@ public final class Server implements Runnable
             sh.send(message);
         }
     }
+    
+    /**
+      * Fonction de traitement des messages recus
+      * @param source : source du message, objet de type SocketHandler
+      * @param message : donnée recue sérialisé au format JSON
+      */
+     public static void traitement(SocketHandler source,String message)
+     {
+         try
+         {
+             JSONObject jso = new JSONObject(message);
+             String commande = (String) jso.get("command");
+             System.out.println("Réception commande : " + commande);
+         }
+         catch(JSONException e)
+         {
+             System.out.println("Une erreur s'est produite durant le traitement d'un objet JSON :\n" + e.getMessage());
+         }
+     }
 }
