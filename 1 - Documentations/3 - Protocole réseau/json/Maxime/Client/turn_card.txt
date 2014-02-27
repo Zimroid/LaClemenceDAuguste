@@ -1,0 +1,31 @@
+Card
+
+Attributs :
+    command : la commande décrite, ici "turn_card"
+    card_name : nom de la carte
+    effect : un tableau traité par le serveur par rapport au nom de la carte
+
+Exemple :
+{
+    "command": "turn_card",
+    "card_name": "Cavalier",
+    "effect":
+    [
+        {
+            "start":
+            [
+                {
+                    "u": 0,
+                    "w": 0
+                }
+            ],
+            "end":
+            [
+                {
+                    "u": 2,
+                    "w": -2
+                }
+            ]
+        }
+    ]
+}

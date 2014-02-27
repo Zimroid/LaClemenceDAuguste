@@ -1,0 +1,16 @@
+Liste des parties disponibles
+
+Attributs :
+    command : la commande décrite, ici "game_list"
+    games : liste des parties
+
+Exemple :
+{
+    "command": "game_list",
+    "games":
+    [
+        <jeu>,
+        <jeu>,
+        ...
+    ]
+}

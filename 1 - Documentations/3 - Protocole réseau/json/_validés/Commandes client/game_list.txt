@@ -1,0 +1,11 @@
+Lister les parties en attente de joueurs.
+
+Attributs :
+    command : la commande décrite, ici "game_list"
+    session : identifiant de la session du joueur
+
+Exemple :
+{
+    "command": "game_list",
+    "session": "sfb6c7jty84n64f6876"
+}

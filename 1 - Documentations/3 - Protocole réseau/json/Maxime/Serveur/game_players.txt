@@ -1,0 +1,27 @@
+Lister les joueurs d'une partie.
+
+Attributs :
+    command : la commande décrite, ici "game_players"
+		players : tableau des joueurs
+			player_name : nom du joueur
+			player_id : l'id du joueurs (et de ses légions)
+			player_team : l'id de la team
+
+Exemple :
+{
+    "command": "game_players",
+		"players":
+		[
+			{
+				"player_name": "Célia",
+				"player_id": 1,
+				"player_team": 1
+			},
+			{
+				"player_name": "Vincent",
+				"player_id": 2,
+				"player_team": 1
+			}
+			...
+		]
+}

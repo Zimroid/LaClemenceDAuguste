@@ -1,0 +1,15 @@
+Chat (côté serveur)
+
+Attributs :
+    command : la commande décrite, ici "player_chat"
+    author : numéro du joueur l'ayant envoyé (0 a 5)
+    time : temps (timestamp) de réception du message
+    message : message envoyé
+
+Exemple :
+{
+    "command": "player_chat",
+    "author": 2,
+    "time" : 6846516651321,
+    "message": "Bonjour ;)"
+}

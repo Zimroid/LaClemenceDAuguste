@@ -1,0 +1,13 @@
+Lancement d'un nouveau tour
+
+Attributs :
+    command : la commande décrite, ici "game_turn"
+    game : information concernant la partie
+    turn : information du dernier tour
+
+Exemple :
+{
+    "command": "game_list",
+    "game": <jeu>,
+    "turn": <tour>
+}

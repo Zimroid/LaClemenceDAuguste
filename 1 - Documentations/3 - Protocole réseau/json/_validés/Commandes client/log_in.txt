@@ -1,0 +1,15 @@
+Identification
+
+Attributs :
+    command : la commande décrite, ici "log_in"
+    session : identifiant de la session du joueur
+    login : le login du joueur
+    password : le mot de passe du joueur (peut être haché)
+
+Exemple :
+{
+    "command": "log_in",
+    "session": "6jh4s65g4ns6f5g1ns65f46",
+    "login": "Joel",
+    "password": "Ch0c0l4t"
+}

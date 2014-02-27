@@ -1,0 +1,15 @@
+Ajouter un bot
+
+Attributs :
+    command : la commande décrite, ici "game_addbot"
+    session : identifiant de la session du joueur
+    game : identifiant de la partie à rejoindre
+    team : numéro de la team à rejoindre (1 à 6)
+
+Exemple :
+{
+    "command": "game_addbot",
+    "session": "trut4y65n41n3v24bn64654",
+    "game": 47,
+    "team": 1
+}
