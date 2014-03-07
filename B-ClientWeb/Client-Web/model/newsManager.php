@@ -16,7 +16,7 @@ class newsManager
 	public function getNewsList() 
     { 
         $newsList = array();
-        $q = $this->_db->query('SELECT id, nom, image, contenu FROM news ORDER BY date'); 
+        $q = $this->_db->query('SELECT id, nom, image, contenu FROM news ORDER BY date DESC'); 
 
         if($q != NULL)
 		{

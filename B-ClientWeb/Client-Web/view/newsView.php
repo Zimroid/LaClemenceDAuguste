@@ -5,13 +5,13 @@
 		
 		foreach($newsList as $news)
 		{
-			echo '<li>';
 			echo $news->getId();
 			echo ' - ';
-			echo $news->getQuestion();
-			echo ' - ';
-			echo $news->getReponse();
-			echo '</li>';
+			echo $news->getNom();
+			echo '<br/>';
+			echo $news->getImage();
+			echo '<br/>';
+			echo $news->getContenu();
 		}
 		
 		echo '</ul>';
