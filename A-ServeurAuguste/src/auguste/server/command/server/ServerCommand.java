@@ -28,6 +28,15 @@ public abstract class ServerCommand
 	private final JSONObject json = new JSONObject();
 	
 	/**
+	 * Retourne le JSON de la commande.
+	 * @return JSON de la commande
+	 */
+	public JSONObject getJSON()
+	{
+		return this.json;
+	}
+	
+	/**
 	 * Retourne le JSON de la commande sous forme de JSON.
 	 * @return JSON de la commande
 	 */
@@ -42,11 +51,6 @@ public abstract class ServerCommand
 	*/
    public enum CommandName
    {
-	   GAME_LIST,
-	   GAME_TURN,
-	   LOG_CONFIRM,
-	   LOG_ERROR,
-	   PLAYER_CHAT,
-	   PLAYER_LEAVE
+	   PLAYER_CHAT
    }
 }

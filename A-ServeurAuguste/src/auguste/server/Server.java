@@ -64,7 +64,7 @@ public class Server extends WebSocketServer
 	 * classe mère en utilisant l'adresse donnée.
 	 * @param address Adresse à laquelle le serveur est attachée
 	 */
-	public Server(InetSocketAddress address)
+	private Server(InetSocketAddress address)
 	{
 		// Appel à la fonction mère
 		super(address);
