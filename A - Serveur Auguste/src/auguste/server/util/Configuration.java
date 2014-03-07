@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package auguste.server;
+package auguste.server.util;
 
 import java.util.Properties;
 

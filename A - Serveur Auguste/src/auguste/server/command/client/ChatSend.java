@@ -14,27 +14,32 @@
  * limitations under the License.
  */
 
-package auguste.server;
+package auguste.server.command.client;
 
-import auguste.server.util.Configuration;
+import auguste.server.Server;
+import auguste.server.entity.Player;
+import org.json.JSONObject;
 
 /**
- * Classe de lancement du serveur.
+ * Commande d'envoi d'un message.
  * @author Lzard
  */
-public class Starter
+public class ChatSend extends ClientCommand
 {
 	/**
-	 * Point d'entrée de l'application.
-	 * @param args Arguments de la commande
+	 * Constructeur faisant appel au constructeur de la classe mère.
+	 * @param player Joueur ayant émit la commande
+	 * @param command Commande émise
 	 */
-	public static void main(String[] args)
+	public ChatSend(Player player, JSONObject command)
 	{
-		// Chargement de la configuration
-		Configuration.load();
-		
-		// Lancement
-		Server.getInstance().start();
+		super(player, command);
+	}
+	
+	@Override
+	public void execute()
+	{
+		Server.getInstance().broadcast(":)");
 	}
 	
 }

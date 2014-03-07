@@ -16,7 +16,7 @@
 
 package auguste.server.entity;
 
-import auguste.server.Log;
+import auguste.server.util.Log;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;

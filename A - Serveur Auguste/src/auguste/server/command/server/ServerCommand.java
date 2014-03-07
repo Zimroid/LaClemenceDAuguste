@@ -14,27 +14,39 @@
  * limitations under the License.
  */
 
-package auguste.server;
+package auguste.server.command.server;
 
-import auguste.server.util.Configuration;
+import org.json.JSONObject;
 
 /**
- * Classe de lancement du serveur.
+ * Classe abstraite des commandes serveurs à envoyer.
  * @author Lzard
  */
-public class Starter
+public abstract class ServerCommand
 {
+	// JSON de la commande
+	private final JSONObject json = new JSONObject();
+	
 	/**
-	 * Point d'entrée de l'application.
-	 * @param args Arguments de la commande
+	 * Retourne le JSON de la commande sous forme de JSON.
+	 * @return JSON de la commande
 	 */
-	public static void main(String[] args)
+	public String getJSONString()
 	{
-		// Chargement de la configuration
-		Configuration.load();
-		
-		// Lancement
-		Server.getInstance().start();
+		return this.json.toString();
 	}
 	
+	/**
+	* Enumération des commandes émises par le serveur.
+	* @author Lzard
+	*/
+   public enum CommandName
+   {
+	   GAME_LIST,
+	   GAME_TURN,
+	   LOG_CONFIRM,
+	   LOG_ERROR,
+	   PLAYER_CHAT,
+	   PLAYER_LEAVE
+   }
 }

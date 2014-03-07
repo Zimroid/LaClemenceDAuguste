@@ -14,27 +14,13 @@
  * limitations under the License.
  */
 
-package auguste.server;
-
-import auguste.server.util.Configuration;
+package auguste.server.command.server;
 
 /**
- * Classe de lancement du serveur.
+ * Commande d'envoi d'un message de chat.
  * @author Lzard
  */
-public class Starter
+public class ChatMessage extends ServerCommand
 {
-	/**
-	 * Point d'entrée de l'application.
-	 * @param args Arguments de la commande
-	 */
-	public static void main(String[] args)
-	{
-		// Chargement de la configuration
-		Configuration.load();
-		
-		// Lancement
-		Server.getInstance().start();
-	}
 	
 }

@@ -14,27 +14,13 @@
  * limitations under the License.
  */
 
-package auguste.server;
-
-import auguste.server.util.Configuration;
+package auguste.server.exception;
 
 /**
- * Classe de lancement du serveur.
+ * Exception lancée lorsqu'une commande enfreint les règles du jeu.
  * @author Lzard
  */
-public class Starter
+public class RuleException extends Exception
 {
-	/**
-	 * Point d'entrée de l'application.
-	 * @param args Arguments de la commande
-	 */
-	public static void main(String[] args)
-	{
-		// Chargement de la configuration
-		Configuration.load();
-		
-		// Lancement
-		Server.getInstance().start();
-	}
 	
 }
