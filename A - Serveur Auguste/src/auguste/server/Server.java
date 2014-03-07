@@ -16,7 +16,16 @@
 
 package auguste.server;
 
+import auguste.server.command.client.ChatSend;
+import auguste.server.command.client.ClientCommand;
+import auguste.server.command.client.CreateAccount;
+import auguste.server.command.client.LogIn;
+import auguste.server.command.client.LogOut;
+import auguste.server.entity.Player;
+import auguste.server.util.Log;
+import auguste.server.util.Configuration;
 import java.net.InetSocketAddress;
+import java.util.HashMap;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -47,6 +56,8 @@ public class Server extends WebSocketServer
 		// Retour de l'instance du serveur
 		return Server.INSTANCE;
 	}
+	
+	private final HashMap<WebSocket, Player> players = new HashMap<>(); // Liste des joueurs connectés
 	
 	/**
 	 * Instanciation du serveur. Effectue un simple appel au constructeur de la
@@ -86,6 +97,9 @@ public class Server extends WebSocketServer
 	{
 		// Signalisation
 		Log.out("Disconnected from " + socket.getRemoteSocketAddress() + " (" + code + ": " + reason + ")");
+		
+		// Suppression de la liste des joueurs connectés
+		this.players.remove(socket);
 	}
 
 	/**
@@ -102,10 +116,27 @@ public class Server extends WebSocketServer
 		// Lecture de la commande
 		try
 		{
-			JSONObject command = new JSONObject(content);
-			System.out.println("Identified command: " + command.getString("command"));
+			JSONObject json = new JSONObject(content);
+			System.out.println("Identified command: " + json.getString("command"));
+			
+			// Définition de la commande
+			ClientCommand command;
+			Player player = this.players.get(socket);
+			switch (ClientCommand.CommandName.valueOf(json.getString("command")))
+			{
+				case CHAT_SEND:      command = new ChatSend(player, json);      break;
+				case CREATE_ACCOUNT: command = new CreateAccount(player, json); break;
+				case LOG_IN:         command = new LogIn(player, json);         break;
+				case LOG_OUT:        command = new LogOut(player, json);        break;
+				default:             command = null;                            break;
+			}
+			
+			// Exécution de la commande
+			if (command == null) throw new JSONException("Unknown command");
+			else                 command.execute();
 		}
-		catch (JSONException ex) {
+		catch (JSONException ex)
+		{
 			Log.debug("Unable to read JSON:" + ex);
 		}
 	}

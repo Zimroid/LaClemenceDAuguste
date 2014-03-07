@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package auguste.server;
+package auguste.server.util;
 
+import auguste.server.util.Configuration;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

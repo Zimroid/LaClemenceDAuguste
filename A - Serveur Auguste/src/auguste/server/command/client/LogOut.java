@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Conseil7.
+ * Copyright 2014 Lzard.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,32 @@
  * limitations under the License.
  */
 
-package auguste.server;
+package auguste.server.command.client;
 
-import auguste.server.util.Configuration;
+import auguste.server.Server;
+import auguste.server.entity.Player;
+import org.json.JSONObject;
 
 /**
- * Classe de lancement du serveur.
+ * Commande de déconnexion d'un joueur.
  * @author Lzard
  */
-public class Starter
+public class LogOut extends ClientCommand
 {
 	/**
-	 * Point d'entrée de l'application.
-	 * @param args Arguments de la commande
+	 * Constructeur faisant appel au constructeur de la classe mère.
+	 * @param player Joueur ayant émit la commande
+	 * @param command Commande émise
 	 */
-	public static void main(String[] args)
+	public LogOut(Player player, JSONObject command)
 	{
-		// Chargement de la configuration
-		Configuration.load();
-		
-		// Lancement
-		Server.getInstance().start();
+		super(player, command);
+	}
+	
+	@Override
+	public void execute()
+	{
+		Server.getInstance().broadcast(":)");
 	}
 	
 }
