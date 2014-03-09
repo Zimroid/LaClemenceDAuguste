@@ -1,8 +1,13 @@
 allow from all
 
 RewriteEngine on
-RewriteRule ^$ index.php?page=news
-RewriteRule ^accueil$ index.php?page=news
-RewriteRule ^regles$ index.php?page=regles
-RewriteRule ^faq$ index.php?page=faq
-RewriteRule ^contact$ index.php?page=contact
+RewriteRule ^$ 			index.php?page=news
+RewriteRule ^accueil$ 	index.php?page=news
+RewriteRule ^rules$ 	index.php?page=rules
+RewriteRule ^faq$ 		index.php?page=faq
+RewriteRule ^contact$ 	index.php?page=contact
+
+RewriteRule ^newGame$	index.php?page=newGame
+RewriteRule ^joinGame$ 	index.php?page=joinGame
+
+RewriteRule ^download$	index.php?page=download

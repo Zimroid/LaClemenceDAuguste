@@ -19,7 +19,7 @@ class pageController
 	}
 	
 	// Page des règles
-    public function regles()
+    public function rules()
 	{
 		include 'view/rulesView.php';
 	}
@@ -35,6 +35,12 @@ class pageController
 	public function contact()
 	{
 		include 'view/contactView.php';
+	}
+	
+	// Téléchargement
+	public function download()
+	{
+		include 'view/downloadView.php';
 	}
 }
 ?>

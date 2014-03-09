@@ -6,23 +6,8 @@
 	// Rechargement partiel de la page via JS
 	if(isset($_GET['script']) && $_GET['script'] == '1')
 	{
-		// Mise à jour du corps de la page
-		if(isset($_GET['page']) && $_GET['page'] == 'news')
-		{
-			$pageCtr->news();
-		}
-		else if(isset($_GET['page']) && $_GET['page'] == 'regles')
-		{
-			$pageCtr->regles();
-		}
-		else if(isset($_GET['page']) && $_GET['page'] == 'faq')
-		{
-			$pageCtr->faq();
-		}
-		else if(isset($_GET['page']) && $_GET['page'] == 'contact')
-		{
-			$pageCtr->contact();
-		}
+		// Récupération de la page pour remplissage
+		include_once("indexPages.php");
 	}
 	
 	// Requete complète
@@ -31,31 +16,18 @@
 		// Affichage menu
 		include 'view/menuView.php';
 		
-		// Mise à jour du corps de la page
-		if(false) // Si JavaScript
+		// Si JavaScript
+		if(false)
 		{
 			// Affichage page centrale (à remplir en JS)
-			include 'view/mainView.php';
+			include_once("controller/pageController.php");
 		}
 		
-		else // Si pas-JavaScript
+		// Si pas-JavaScript
+		else
 		{
-			if(isset($_GET['page']) && $_GET['page'] == 'news')
-			{
-				$pageCtr->news();
-			}
-			else if(isset($_GET['page']) && $_GET['page'] == 'regles')
-			{
-				$pageCtr->regles();
-			}
-			else if(isset($_GET['page']) && $_GET['page'] == 'faq')
-			{
-				$pageCtr->faq();
-			}
-			else if(isset($_GET['page']) && $_GET['page'] == 'contact')
-			{
-				$pageCtr->contact();
-			}
+			// Récupération de la page pour remplissage
+			include_once("indexPages.php");
 			
 			// + Information Jeu et Chat non-disponible sans JS !!!
 		}

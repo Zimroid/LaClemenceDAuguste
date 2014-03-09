@@ -22,13 +22,24 @@
 				<a href="<?php echo $sitePath; ?>">Accueil</a>
 			</li>
 			<li>
-				<a href="<?php echo $sitePath; ?>/regles">Règles</a>
+				<a href="<?php echo $sitePath; ?>/rules">Règles</a>
 			</li>
 			<li>
 				<a href="<?php echo $sitePath; ?>/faq">FAQ</a>
 			</li>
 			<li>
 				<a href="<?php echo $sitePath; ?>/contact">Contact</a>
+			</li>
+			<br/>
+			<li>
+				<a href="<?php echo $sitePath; ?>/newGame">Créer une partie</a>
+			</li>
+			<li>
+				<a href="<?php echo $sitePath; ?>/joinGame">Rejoindre une partie</a>
+			</li>
+			<br/>
+			<li>
+				<a href="<?php echo $sitePath; ?>/download">Téléchargement</a>
 			</li>
 		</ul>
 		<p>-----------------------------------</p>
