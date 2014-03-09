@@ -1,5 +1,5 @@
-var wsUri = "ws://" + document.location.host + document.location.pathname + "endpoint";
-var websocket = new WebSocket(wsUri);
+var websocket = new WebSocket("ws://localhost:9000");
+//var websocket = new WebSocket("130.79.214.171:9000");
 
 websocket.onmessage = function(evt) { onMessage(evt) };
 websocket.onerror = function(evt) { onError(evt) };
@@ -16,5 +16,7 @@ function sendText(json) {
 function onMessage(evt) {
     console.log("received: " + evt.data);
     // Traitement des données reçues
-    showMessage(evt.data);
+    // On utilise pas ça pour l'instant (le serveur doit envoyer autre chose que ":)" du JSON par exemple...)
+    //showMessage(evt.data);
+    showMessage('{"command":"CHAT_SEND","text":"' + evt.data + '"}');
 }

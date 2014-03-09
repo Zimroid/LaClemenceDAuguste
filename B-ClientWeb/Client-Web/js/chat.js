@@ -6,44 +6,33 @@
 // Récupération adresse ip
 ip = null;
 
-$(function() {
+$(function(){
     $("#h1Chat").draggable();
 });
 
 // Envoi d'un message
 function addMessage()
 {
-    var message = document.getElementById("message");
+    var message = $("#message").val();
     
-    if(message != null && message.value != "")
+    if(message != "")
     {
-        // Récupération de la date
-        var today = new Date();
-        var h = checkTime(today.getHours());
-        var m = checkTime(today.getMinutes());
-        var time = h + ":" + m;
-        
-        // Récupération du message
-        var stringMessage = message.value;
-        message.value = "";
-        
         var json = JSON.stringify({
-            "ipClient" : ip,
-            "auteur": null,
-            "time": time,
-            "message": stringMessage
+            "command": "CHAT_SEND",
+            "text": message
         });
-        
+
+        $("#message").val("");
         sendText(json);
     }
 }
 
 // Affichage d'un message
-function showMessage(jsonData) {
-    console.log("Affichage de données");
+function showMessage(jsonData)
+{
     var json = JSON.parse(jsonData);
     
-    var messagesList = document.getElementById("showMessage");
-    messagesList.innerHTML += "<br />" + json.auteur +  " [" + json.time + "] : " + json.message;
+    var messagesList = $("#chatMessages");
+    messagesList.html(messagesList.html() + "<br />" /*+ json.author*/ +  " [" /*+ json.time*/ + "] : " + json.text);
     messagesList.scrollTop = messagesList.scrollHeight;
 }
