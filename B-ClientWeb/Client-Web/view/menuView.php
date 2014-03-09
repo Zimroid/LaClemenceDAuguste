@@ -1,5 +1,5 @@
 <?php require_once("view/siteGlobalVar.php"); ?>
-
+<!DOCTYPE html>
 <html>
 	<head>
         <title><?php echo $siteName; ?></title>
@@ -9,6 +9,7 @@
         <script type="text/javascript" src="<?php echo $sitePath; ?>/jquery/js/jquery-ui-1.10.4.custom.min.js"></script>
         <!--script type="text/javascript" src="< ?php echo $sitePath; ?>/js/websocket.js"></script-->
         <script type="text/javascript" src="<?php echo $sitePath; ?>/js/chat.js"></script>
+        <link rel="stylesheet" href="<?php echo $sitePath; ?>/css/chat.css" type="text/css">
     </head>
 
 	<body>
