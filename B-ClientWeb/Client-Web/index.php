@@ -13,24 +13,15 @@
 	// Requete complète
 	else
 	{
-		// Affichage menu
-		include 'view/menuView.php';
+		// Affichage en-tête
+		include 'view/headerView.php';
 		
-		// Si JavaScript
-		if(false)
-		{
-			// Affichage page centrale (à remplir en JS)
-			include_once("controller/pageController.php");
-		}
+		// Récupération de la page
+		echo "<div id='mainPage'>";
+		include_once("indexPages.php");
+		echo "</div>";
 		
-		// Si pas-JavaScript
-		else
-		{
-			// Récupération de la page pour remplissage
-			include_once("indexPages.php");
-			
-			// + Information Jeu et Chat non-disponible sans JS !!!
-		}
+		// + Information Jeu et Chat non-disponible sans JS !!!
 		
 		// Affichage chat
 		include 'view/chatView.php';
