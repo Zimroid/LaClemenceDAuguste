@@ -1,4 +1,6 @@
-<?php
+<h1>FAQ</h1>
+
+<?php	
 	if($faqList != null)
 	{
 		echo '<ul>';

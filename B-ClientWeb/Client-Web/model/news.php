@@ -1,5 +1,5 @@
 <?php
-class user
+class news
 {
 	// Attributs
 	private $_id;

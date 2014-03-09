@@ -12,17 +12,29 @@ class pageController
     }
 	
 	// Page de news
-    public function showNews()
+    public function news()
 	{
 		$newsList = $this->newsMan->getNewsList();
 		include 'view/newsView.php';
 	}
-
-	// Page faq
-	public function showFaq()
+	
+	// Page des règles
+    public function regles()
+	{
+		include 'view/rulesView.php';
+	}
+	
+	// Page FAQ
+	public function faq()
 	{
 		$faqList = $this->faqMan->getFaqList();
 		include 'view/faqView.php';
+	}
+	
+	// Page de contact
+	public function contact()
+	{
+		include 'view/contactView.php';
 	}
 }
 ?>

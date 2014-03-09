@@ -1,4 +1,6 @@
-<?php
+<h1>News</h1>
+
+<?php	
 	if($newsList != null)
 	{
 		echo '<ul>';
