@@ -28,11 +28,6 @@ body
     max-height: calc(100% - 8em);
 }
 
-#chatInfo
-{
-    height: 5em;
-}
-
 #chatSend
 {
     height:     2em;
