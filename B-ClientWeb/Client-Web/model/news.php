@@ -6,6 +6,7 @@ class news
 	private $_nom;
 	private $_image;
 	private $_contenu;
+	private $_date;
 	
 	// Constructeur
 	public function __construct(array $data) { 
@@ -13,6 +14,7 @@ class news
         $this->_nom =     $data['nom']; 
         $this->_image =   $data['image'];
 		$this->_contenu = $data['contenu'];
+		$this->_date = 	  $data['date'];
     }
 	
 	// Méthodes de lecture
@@ -30,6 +32,10 @@ class news
 	
 	public function getContenu() { 
         return $this->_contenu; 
+    }
+	
+	public function getDate() { 
+        return $this->_date; 
     }
 }
 ?>

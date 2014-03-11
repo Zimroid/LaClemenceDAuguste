@@ -10,6 +10,7 @@ class faqManager
     public function __construct()
 	{ 
         $this->_db = new PDO(SQL_DSN, SQL_USERNAME, SQL_PASSWORD);
+		$this->_db->query("SET NAMES utf8");
     }
 	
 	// Récupère toutes les news
