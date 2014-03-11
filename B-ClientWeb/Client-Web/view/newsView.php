@@ -7,9 +7,7 @@
 		
 		foreach($newsList as $news)
 		{
-			echo $news->getId();
-			echo ' - ';
-			echo $news->getNom();
+			echo $news->getId() . ' - ' . $news->getNom() . ' - ' . $news->getDate();
 			echo '<br/>';
 			echo $news->getImage();
 			echo '<br/>';
