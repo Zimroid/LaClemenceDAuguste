@@ -4,16 +4,15 @@
 	if($newsList != null)
 	{
 		echo '<ul>';
-		
 		foreach($newsList as $news)
 		{
-			echo $news->getId() . ' - ' . $news->getNom() . ' - ' . $news->getDate();
-			echo '<br/>';
-			echo $news->getImage();
-			echo '<br/>';
-			echo $news->getContenu();
+			echo '<li>';
+				echo '<h3>' . $news->getNom() . '</h3>';
+				echo 'Date : ' . $news->getDate();
+				//echo '<br/>' . $news->getImage();
+				echo '<br/>' . $news->getContenu();
+			echo '</li>';
 		}
-		
 		echo '</ul>';
 	}
 ?>

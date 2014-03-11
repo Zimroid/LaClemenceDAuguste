@@ -37,6 +37,18 @@ class pageController
 		include 'view/contactView.php';
 	}
 	
+	// Page de création de partie
+	public function newGame()
+	{
+		include 'view/newGameView.php';
+	}
+	
+	// Liste des parties disponibles
+	public function joinGame()
+	{
+		include 'view/joinGameView.php';
+	}
+	
 	// Téléchargement
 	public function download()
 	{

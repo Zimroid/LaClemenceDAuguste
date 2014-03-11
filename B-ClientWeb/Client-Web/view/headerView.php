@@ -15,7 +15,12 @@
 
 	<body>
 		<header>
-			<a href="<?php echo $sitePath; ?>">
+			<script>
+				document.write("<a href='' onclick='reloadContent(\"<?php echo $sitePath; ?>/index.php?script=1&page=news\"); return false;' >");
+			</script>
+			<noscript>
+				<a href='<?php echo $sitePath; ?>'>
+			</noscript>
 				<h2><?php echo $siteName; ?></h2>
 			</a>
 		</header>

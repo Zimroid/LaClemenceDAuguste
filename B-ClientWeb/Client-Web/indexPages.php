@@ -20,11 +20,11 @@
 	// Pages de jeu
 	else if(isset($_GET['page']) && $_GET['page'] == 'newGame')
 	{
-		$pageCtr->contact();
+		$pageCtr->newGame();
 	}
 	else if(isset($_GET['page']) && $_GET['page'] == 'joinGame')
 	{
-		$pageCtr->contact();
+		$pageCtr->joinGame();
 	}
 	
 	// Page DL

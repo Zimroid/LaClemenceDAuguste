@@ -8,12 +8,9 @@
 		foreach($faqList as $faq)
 		{
 			echo '<li>';
-			echo $faq->getId();
-			echo ' - ';
-			echo $faq->getQuestion();
-			echo ' - ';
+			echo '<b>' . $faq->getQuestion() . '</b><br/>';
 			echo $faq->getReponse();
-			echo '</li>';
+			echo '</li><br/>';
 		}
 		
 		echo '</ul>';
