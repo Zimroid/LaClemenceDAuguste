@@ -36,23 +36,13 @@
 					<input type="text" name="user" id="user" placeholder="Pseudo">
 					<label for="password">Mot de passe : </label>
 					<input type="password" name="pass" id="password" placeholder="Mot de passe">
-					<button type="submit">Me connecter</button>
+					<input type="submit">Me connecter</input>
 				</form>
 			</fieldset>
 
-			<!-- Inscription -->
-			<fieldset style="display:inline-block;">
-				<legend>Inscription</legend>
-				<form onSubmit="alert('Envoi Inscription'); return false;" autocomplete="off" >
-					<label for="user">Pseudo : </label>
-					<input type="text" name="user" id="user" placeholder="Pseudo">
-					<label for="password">Mot de passe : </label>
-					<input type="password" name="pass" id="password" placeholder="Mot de passe">
-					<label for="configrm">Confirmation : </label>
-					<input type="password" name="conf" id="confirm" placeholder="Confirmer">
-					<button type="submit">M'inscrire</button>
-				</form>
-			</fieldset>
+			<a href="<?php echo $sitePath; ?>/subscribe">
+				<button>M'inscrire au jeu</button>
+			</a>
 <?php
 		}
 ?>

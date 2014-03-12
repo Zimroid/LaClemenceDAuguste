@@ -1,6 +1,6 @@
 /*
  * Système de chat ...
- * Utilisation d'un script pour la récupération de l'IP
+ * 
  */
 
 // Récupération adresse ip
@@ -17,7 +17,8 @@ function addMessage()
     
     if(message != "")
     {
-        var json = JSON.stringify({
+        var json = JSON.stringify(
+		{
             "command": "CHAT_SEND",
             "text": message
         });
