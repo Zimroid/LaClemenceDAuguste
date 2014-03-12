@@ -35,6 +35,11 @@ public class Player
 	private static final String COLUMN_LOGIN    = "login";
 	private static final String COLUMN_PASSWORD = "password";
 	
+	// Valeurs par défaut des champs d'un utilisateur non loggé
+	public static final int    DEFAULT_ID       = 0;
+	public static final String DEFAULT_LOGIN    = "Anonymous";
+	public static final String DEFAULT_PASSWORD = "";
+	
 	private int    id;       // ID du joueur
 	private String login;    // Login du joueur
 	private String password; // Mot de passe hashé du joueur
@@ -62,6 +67,15 @@ public class Player
 		this.id       = set.getInt   (Player.COLUMN_ID);
 		this.login    = set.getString(Player.COLUMN_LOGIN);
 		this.password = set.getString(Player.COLUMN_PASSWORD);
+	}
+	
+	/**
+	 * Indique si le joueur est identifié.
+	 * @return Booléen indiquant si le joueur est identifié
+	 */
+	public boolean isLogged()
+	{
+		return this.id != Player.DEFAULT_ID;
 	}
 
 	/**

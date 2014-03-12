@@ -16,9 +16,7 @@
 
 package auguste.server.command.client;
 
-import auguste.server.Server;
 import auguste.server.entity.Player;
-import org.json.JSONObject;
 
 /**
  * Commande de déconnexion d'un joueur.
@@ -26,20 +24,12 @@ import org.json.JSONObject;
  */
 public class LogOut extends ClientCommand
 {
-	/**
-	 * Constructeur faisant appel au constructeur de la classe mère.
-	 * @param player Joueur ayant émit la commande
-	 * @param command Commande émise
-	 */
-	public LogOut(Player player, JSONObject command)
-	{
-		super(player, command);
-	}
-	
 	@Override
 	public void execute()
 	{
-		Server.getInstance().broadcast(":)");
+		// Remise des informations du joueur à celles par défaut
+		this.getPlayer().setId(Player.DEFAULT_ID);
+		this.getPlayer().setLogin(Player.DEFAULT_LOGIN);
+		this.getPlayer().setPassword(Player.DEFAULT_PASSWORD);
 	}
-	
 }

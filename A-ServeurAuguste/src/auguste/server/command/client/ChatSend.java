@@ -17,8 +17,8 @@
 package auguste.server.command.client;
 
 import auguste.server.Server;
-import auguste.server.entity.Player;
-import org.json.JSONObject;
+import auguste.server.command.server.ChatMessage;
+import org.json.JSONException;
 
 /**
  * Commande d'envoi d'un message.
@@ -26,20 +26,18 @@ import org.json.JSONObject;
  */
 public class ChatSend extends ClientCommand
 {
-	/**
-	 * Constructeur faisant appel au constructeur de la classe mère.
-	 * @param player Joueur ayant émit la commande
-	 * @param command Commande émise
-	 */
-	public ChatSend(Player player, JSONObject command)
-	{
-		super(player, command);
-	}
-	
 	@Override
-	public void execute()
+	public void execute() throws JSONException
 	{
-		Server.getInstance().broadcast(":)");
+		// Envoi du message à tous les clients connectés si l'utilisateur est identifié
+		if (this.getPlayer().isLogged())
+		{
+			Server.getInstance().broadcast(
+					(new ChatMessage(
+							this.getPlayer(),
+							this.getCommand().getString("message")
+					)).getJSONString()
+			);
+		}
 	}
-	
 }

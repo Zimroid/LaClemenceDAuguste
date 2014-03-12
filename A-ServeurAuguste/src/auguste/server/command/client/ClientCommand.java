@@ -17,6 +17,10 @@
 package auguste.server.command.client;
 
 import auguste.server.entity.Player;
+import auguste.server.exception.RuleException;
+import java.sql.SQLException;
+import org.java_websocket.WebSocket;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -25,24 +29,26 @@ import org.json.JSONObject;
  */
 public abstract class ClientCommand
 {
-	private Player player;      // Joueur qui a émit la commande
 	private JSONObject command; // Contenu de la commande
-	
-	/**
-	 * Constructeur d'un objet commande du client.
-	 * @param player Joueur ayant émit cette commande
-	 * @param command JSON de la commande
-	 */
-	public ClientCommand(Player player, JSONObject command)
-	{
-		this.player = player;
-		this.command = command;
-	}
+	private Player player;      // Joueur qui a émit la commande
+	private WebSocket socket;   // Socket ayant reçu la commande
 	
 	/**
 	 * Exécution de la commande.
+	 * @throws java.sql.SQLException
+	 * @throws org.json.JSONException
+	 * @throws auguste.server.exception.RuleException
 	 */
-	public abstract void execute();
+	public abstract void execute() throws SQLException, JSONException, RuleException;
+
+	/**
+	 * Retourne le JSONObject de la commande.
+	 * @return JSONObject de la commande
+	 */
+	public JSONObject getCommand()
+	{
+		return command;
+	}
 
 	/**
 	 * Retourne le joueur ayant émit la commande.
@@ -54,12 +60,11 @@ public abstract class ClientCommand
 	}
 
 	/**
-	 * Retourne le JSONObject de la commande.
-	 * @return JSONObject de la commande
+	 * Retourne la WebSocket ayant reçu la commande
+	 * @return WebSocket ayant reçu la commande
 	 */
-	public JSONObject getCommand()
-	{
-		return command;
+	public WebSocket getSocket() {
+		return socket;
 	}
 
 	/**
@@ -78,6 +83,14 @@ public abstract class ClientCommand
 	public void setCommand(JSONObject command)
 	{
 		this.command = command;
+	}
+
+	/**
+	 * Modifie la WebSocket ayant reçu la commande.
+	 * @param socket WebSocket à utiliser
+	 */
+	public void setSocket(WebSocket socket) {
+		this.socket = socket;
 	}
 	
 	/**

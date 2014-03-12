@@ -16,20 +16,17 @@
 
 package auguste.server.command.server;
 
-import auguste.server.entity.Player;
 import org.json.JSONException;
 
 /**
  * Commande d'envoi d'un message de chat.
  * @author Lzard
  */
-public class ChatMessage extends ServerCommand
+public class LogConfirm extends ServerCommand
 {
-	public ChatMessage(Player author, String message) throws JSONException
+	public LogConfirm() throws JSONException
 	{
 		// Création du JSON
-		this.getJSON().put("command", "chat_message");
-		this.getJSON().put("author", author.getLogin());
-		this.getJSON().put("text", message);
+		this.getJSON().put("command", "log_confirm");
 	}
 }

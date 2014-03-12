@@ -22,9 +22,11 @@ import auguste.server.command.client.CreateAccount;
 import auguste.server.command.client.LogIn;
 import auguste.server.command.client.LogOut;
 import auguste.server.entity.Player;
+import auguste.server.exception.RuleException;
 import auguste.server.util.Log;
 import auguste.server.util.Configuration;
 import java.net.InetSocketAddress;
+import java.sql.SQLException;
 import java.util.HashMap;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -83,6 +85,10 @@ public class Server extends WebSocketServer
 	{
 		// Signalisation
 		Log.out("Connection with " + socket.getRemoteSocketAddress());
+		
+		// Création de l'utilisateur anonyme et ajout dans la liste
+		Player newPlayer = new Player(Player.DEFAULT_ID, Player.DEFAULT_LOGIN, Player.DEFAULT_PASSWORD);
+		this.players.put(socket, newPlayer);
 	}
 
 	/**
@@ -122,22 +128,36 @@ public class Server extends WebSocketServer
 			// Définition de la commande
 			ClientCommand command;
 			Player player = this.players.get(socket);
-			switch (ClientCommand.CommandName.valueOf(json.getString("command")))
+			switch (ClientCommand.CommandName.valueOf(json.getString("command").toUpperCase()))
 			{
-				case CHAT_SEND:      command = new ChatSend(player, json);      break;
-				case CREATE_ACCOUNT: command = new CreateAccount(player, json); break;
-				case LOG_IN:         command = new LogIn(player, json);         break;
-				case LOG_OUT:        command = new LogOut(player, json);        break;
-				default:             command = null;                            break;
+				case CHAT_SEND:      command = new ChatSend();      break;
+				case CREATE_ACCOUNT: command = new CreateAccount(); break;
+				case LOG_IN:         command = new LogIn();         break;
+				case LOG_OUT:        command = new LogOut();        break;
+				default:             command = null;                break;
 			}
 			
 			// Exécution de la commande
 			if (command == null) throw new JSONException("Unknown command");
-			else                 command.execute();
+			else
+			{
+				command.setCommand(json);
+				command.setPlayer(player);
+				command.setSocket(socket);
+				command.execute();
+			}
+		}
+		catch (RuleException ex)
+		{
+			Log.debug("Unauthorized move: " + ex);
 		}
 		catch (JSONException ex)
 		{
-			Log.debug("Unable to read JSON:" + ex);
+			Log.debug("Unable to read JSON: " + ex);
+		}
+		catch (SQLException ex)
+		{
+			Log.debug("SQL error: " + ex);
 		}
 	}
 
@@ -150,7 +170,8 @@ public class Server extends WebSocketServer
 	public void onError(WebSocket socket, Exception ex)
 	{
 		// Signalisation
-		Log.error("Error from " + socket.getRemoteSocketAddress() + ": " + ex);
+		if (socket != null) Log.error("Error from " + socket.getRemoteSocketAddress() + ": " + ex);
+		else                Log.error("Error:" + ex);
 	}
 	
 	/**

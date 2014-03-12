@@ -16,9 +16,14 @@
 
 package auguste.server.command.client;
 
-import auguste.server.Server;
+import auguste.server.command.server.LogConfirm;
+import auguste.server.command.server.LogError;
 import auguste.server.entity.Player;
-import org.json.JSONObject;
+import auguste.server.manager.PlayerManager;
+import auguste.server.util.Db;
+import java.sql.Connection;
+import java.sql.SQLException;
+import org.json.JSONException;
 
 /**
  * Commande d'identification d'un joueur.
@@ -26,20 +31,33 @@ import org.json.JSONObject;
  */
 public class LogIn extends ClientCommand
 {
-	/**
-	 * Constructeur faisant appel au constructeur de la classe mère.
-	 * @param player Joueur ayant émit la commande
-	 * @param command Commande émise
-	 */
-	public LogIn(Player player, JSONObject command)
-	{
-		super(player, command);
-	}
+	// Clés du JSON
+	private static final String JSONKEY_NAME     = "name";
+	private static final String JSONKEY_PASSWORD = "password";
 	
 	@Override
-	public void execute()
+	public void execute() throws SQLException, JSONException
 	{
-		Server.getInstance().broadcast(":)");
+		// Connexion à la base de données et récupération du nouveau joueur
+		Player playerToLog;
+		try (Connection connection = Db.open())
+		{
+			playerToLog = PlayerManager.getPlayer(
+					connection,
+					this.getCommand().getString(LogIn.JSONKEY_NAME),
+					this.getCommand().getString(LogIn.JSONKEY_PASSWORD)
+			);
+			connection.close();
+		}
+		
+		// Si un joueur a été trouvé, mise à jour du joueur connecté
+		if (playerToLog != null)
+		{
+			this.getPlayer().setId(playerToLog.getId());
+			this.getPlayer().setLogin(playerToLog.getLogin());
+			this.getSocket().send((new LogConfirm()).getJSONString());
+		}
+		else this.getSocket().send((new LogError()).getJSONString());
 	}
 	
 }
