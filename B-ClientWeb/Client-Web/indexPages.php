@@ -32,4 +32,10 @@
 	{
 		$pageCtr->download();
 	}
+	
+	// Page Inscription
+	else if(isset($_GET['page']) && $_GET['page'] == 'subscribe')
+	{
+		$pageCtr->subscribe();
+	}
 ?>

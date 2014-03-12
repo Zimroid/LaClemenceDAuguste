@@ -54,5 +54,11 @@ class pageController
 	{
 		include 'view/downloadView.php';
 	}
+	
+	// Inscription
+	public function subscribe()
+	{
+		include 'view/subscribeView.php';
+	}
 }
 ?>

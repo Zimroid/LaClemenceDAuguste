@@ -11,3 +11,6 @@ RewriteRule ^newGame$	index.php?page=newGame
 RewriteRule ^joinGame$ 	index.php?page=joinGame
 
 RewriteRule ^download$	index.php?page=download
+
+
+RewriteRule ^subscribe$	index.php?page=subscribe
