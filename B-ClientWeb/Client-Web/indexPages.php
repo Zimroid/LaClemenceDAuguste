@@ -39,9 +39,13 @@
 		$pageCtr->subscribe();
 	}
 	
-	// Page Chat : connexion utilisateur
+	// Page Chat : gestion utilisateur
 	else if(isset($_GET['page']) && $_GET['page'] == 'connect')
 	{
 		$userCtr->connect();
+	}
+	else if(isset($_GET['page']) && $_GET['page'] == 'deconnect')
+	{
+		$userCtr->deconnect();
 	}
 ?>

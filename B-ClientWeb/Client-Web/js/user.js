@@ -37,13 +37,10 @@ function inscription()
     {
         var json = JSON.stringify(
 		{
-			"command": "CREATE_ACCOUNT",
-			//"command": "ACCOUNT_CREATE",
+			"command": "ACCOUNT_CREATE",
 			"name": user,
 			"password": pass
         });
-		
-		alert(json);
 
         sendText(json);
     }

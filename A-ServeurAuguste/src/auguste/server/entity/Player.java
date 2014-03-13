@@ -16,11 +16,14 @@
 
 package auguste.server.entity;
 
+import auguste.server.entity.action.Action;
+import auguste.server.entity.pawn.Pawn;
 import auguste.server.util.Log;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import org.apache.commons.codec.binary.Hex;
 
 
@@ -66,6 +69,12 @@ public class Player
 	private int    id;       // ID du joueur
 	private String login;    // Login du joueur
 	private String password; // Mot de passe hashé du joueur
+        
+        // Variables métier
+        private final ArrayList<Pawn> pawns;
+        private Team team;
+        private Action action;
+        private Game game;
 	
 	/**
 	 * Instanciation d'un utilisateur avec les valeurs données.
@@ -78,6 +87,7 @@ public class Player
 		this.id       = id;
 		this.login    = login;
 		this.password = password;
+                this.pawns = new ArrayList<>();
 	}
 	
 	/**
@@ -87,6 +97,7 @@ public class Player
 	 */
 	public Player(ResultSet set) throws SQLException
 	{
+        this.pawns = new ArrayList<>();
 		this.id       = set.getInt   (Player.COLUMN_ID);
 		this.login    = set.getString(Player.COLUMN_LOGIN);
 		this.password = set.getString(Player.COLUMN_PASSWORD);
@@ -159,4 +170,76 @@ public class Player
 	{
 		this.password = password;
 	}
+
+    /**
+     * @return the pawns
+     */
+    public ArrayList<Pawn> getPawns()
+    {
+        return pawns;
+    }
+    
+    /**
+     * @param pawn the pawn to add
+     */
+    public void addPawn(Pawn pawn)
+    {
+        this.pawns.add(pawn);
+    }
+    
+    /**
+     * @param pawn the pawn to remove
+     */
+    public void removePawn(Pawn pawn)
+    {
+        this.pawns.remove(pawn);
+    }
+
+    /**
+     * @return the team
+     */
+    public Team getTeam()
+    {
+        return team;
+    }
+
+    /**
+     * @param team the team to set
+     */
+    public void setTeam(Team team)
+    {
+        this.team = team;
+    }
+
+    /**
+     * @return the action
+     */
+    public Action getAction()
+    {
+        return action;
+    }
+
+    /**
+     * @param action the action to set
+     */
+    public void setAction(Action action)
+    {
+        this.action = action;
+    }
+
+    /**
+     * @return the game
+     */
+    public Game getGame()
+    {
+        return game;
+    }
+
+    /**
+     * @param game the game to set
+     */
+    public void setGame(Game game)
+    {
+        this.game = game;
+    }
 }

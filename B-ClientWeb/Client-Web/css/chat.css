@@ -1,23 +1,16 @@
-html
-{
-    height: 100%;
-}
-
-body
-{
-    height: 100%;
-    margin: 0px;
-}
-
 #chatBox
 {
     overflow:   none;
     position:   absolute;
-    width:      30%;
-    min-width:  200px;
+    width:      355px;
     height:     100%;
     top:        0px;
     right:      0px;
+}
+
+#chatHeader
+{
+    height: 9em;
 }
 
 #chatMessages
@@ -25,12 +18,13 @@ body
     overflow:   auto;
     position:   relative;
     bottom:     0;
-    max-height: calc(100% - 8em);
+    height: calc(100% - 14em);
 }
 
 #chatSend
 {
-    height:     2em;
+    height:     5em;
+    width:      100%;
     position :  absolute;
     bottom:     0px;
 }
