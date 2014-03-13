@@ -99,8 +99,12 @@ public abstract class ClientCommand
 	*/
 	public enum CommandName
 	{
-		CHAT_SEND,
 		ACCOUNT_CREATE,
+		CHAT_SEND,
+		GAME_CREATE,
+		GAME_JOIN,
+		GAME_LIST,
+		GAME_START,
 		LOG_IN,
 		LOG_OUT
 	}

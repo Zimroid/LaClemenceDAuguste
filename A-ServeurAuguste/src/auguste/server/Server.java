@@ -136,6 +136,10 @@ public class Server extends WebSocketServer
 				{
 					case ACCOUNT_CREATE: command = new AccountCreate(); break;
 					case CHAT_SEND:      command = new ChatSend();      break;
+					case GAME_CREATE:    command = new GameCreate();    break;
+					case GAME_JOIN:      command = new GameJoin();      break;
+					case GAME_LIST:      command = new GameList();      break;
+					case GAME_START:     command = new GameStart();     break;
 					case LOG_IN:         command = new LogIn();         break;
 					case LOG_OUT:        command = new LogOut();        break;
 					default:             command = null;                break;

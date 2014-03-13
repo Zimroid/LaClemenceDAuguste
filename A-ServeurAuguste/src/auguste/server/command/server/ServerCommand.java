@@ -51,9 +51,10 @@ public abstract class ServerCommand
 	*/
    public enum CommandName
    {
-	   ERROR_MESSAGE,
-	   CONFIRM_ACCOUNT,
+	   CHAT_MESSAGE,
+	   CONFIRM,
 	   CONFIRM_LOG,
-	   PLAYER_CHAT
+	   ERROR_MESSAGE,
+	   GAME_AVAILABLES
    }
 }

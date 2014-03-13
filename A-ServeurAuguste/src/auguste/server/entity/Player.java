@@ -100,6 +100,11 @@ public class Player
 	{
 		return this.id != Player.DEFAULT_ID;
 	}
+	
+	public boolean isInGame()
+	{
+		return false;
+	}
 
 	/**
 	 * Retourne l'ID du joueur.
