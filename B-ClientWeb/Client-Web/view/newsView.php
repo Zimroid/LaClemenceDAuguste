@@ -1,7 +1,7 @@
 <h1>News</h1>
 
 <?php	
-	if($newsList != null)
+	if(isset($newsList) && $newsList != null)
 	{
 		echo '<ul>';
 		foreach($newsList as $news)

@@ -7,7 +7,7 @@ websocket.onopen    = function(evt) { onOpen(evt)    };
 
 function onOpen(evt)
 {
-	alert("Opened");
+	console.log("Web socket opened !");
 }
 
 function onError(evt)

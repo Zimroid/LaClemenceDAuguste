@@ -13,7 +13,7 @@ class userController
 	// Connexion
 	public function connect()
 	{
-		$_SESSION["username"] = $_POST["username"];
+		$_SESSION["username"] = $_GET["user"];
 		include 'view/chatView.php';
 	}
 }

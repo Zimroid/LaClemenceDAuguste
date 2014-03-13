@@ -5,6 +5,7 @@
 
 function reloadChat(url, data)
 {
+	alert(url);
 	var xhr = null;
 	try //(Firefox, Chrome, Opera, Safari)
 	{
@@ -16,7 +17,7 @@ function reloadChat(url, data)
 		return;
 	}
 	
-	xhr.open("POST", url, true);
+	xhr.open("GET", url, true);
 	
 	// Execution au retour
 	xhr.onreadystatechange = function()
@@ -32,6 +33,5 @@ function reloadChat(url, data)
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	
 	// Envoi
-	xhr.data = data;
 	xhr.send();
 }
