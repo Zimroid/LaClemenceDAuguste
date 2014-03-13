@@ -16,7 +16,6 @@
 
 package auguste.server.util;
 
-import auguste.server.util.Configuration;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -47,13 +46,27 @@ public class Db
 		}
 		catch (SQLException ex)
 		{
+			// Erreur de base de données
 			Log.error("Unable to connect to database: " + ex);
 			return null;
 		}
 		catch (ClassNotFoundException ex)
 		{
+			// Driver JDBC absent
 			Log.error("Missing JDBC MySQL Driver: " + ex);
 			return null;
 		}
+	}
+	
+	/**
+	 * Femerture d'une connexion avec la base de données.
+	 * @param connection Connexion à fermer
+	 * @throws SQLException
+	 */
+	public static void close(Connection connection) throws SQLException
+	{
+		// Commit et fermeture de la connexion
+		connection.commit();
+		connection.close();
 	}
 }

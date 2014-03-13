@@ -18,9 +18,10 @@ package auguste.server;
 
 import auguste.server.command.client.ChatSend;
 import auguste.server.command.client.ClientCommand;
-import auguste.server.command.client.CreateAccount;
+import auguste.server.command.client.AccountCreate;
 import auguste.server.command.client.LogIn;
 import auguste.server.command.client.LogOut;
+import auguste.server.command.server.ErrorMessage;
 import auguste.server.entity.Player;
 import auguste.server.exception.RuleException;
 import auguste.server.util.Log;
@@ -55,11 +56,11 @@ public class Server extends WebSocketServer
 	 */
 	public static Server getInstance()
 	{
-		// Retour de l'instance du serveur
 		return Server.INSTANCE;
 	}
 	
-	private final HashMap<WebSocket, Player> players = new HashMap<>(); // Liste des joueurs connectés
+	// Liste des joueurs connectés
+	private final HashMap<WebSocket, Player> players = new HashMap<>();
 	
 	/**
 	 * Instanciation du serveur. Effectue un simple appel au constructeur de la
@@ -122,41 +123,49 @@ public class Server extends WebSocketServer
 		// Lecture de la commande
 		try
 		{
-			JSONObject json = new JSONObject(content);
-			System.out.println("Identified command: " + json.getString("command"));
-			
-			// Définition de la commande
-			ClientCommand command;
-			Player player = this.players.get(socket);
-			switch (ClientCommand.CommandName.valueOf(json.getString("command").toUpperCase()))
+			try
 			{
-				case CHAT_SEND:      command = new ChatSend();      break;
-				case CREATE_ACCOUNT: command = new CreateAccount(); break;
-				case LOG_IN:         command = new LogIn();         break;
-				case LOG_OUT:        command = new LogOut();        break;
-				default:             command = null;                break;
+				// Instanciation et signalisation de la commande
+				JSONObject json = new JSONObject(content);
+				Player player = this.players.get(socket);
+				System.out.println("Identified command: " + json.getString("command"));
+
+				// Définition de la commande
+				ClientCommand command;
+				switch (ClientCommand.CommandName.valueOf(json.getString("command").toUpperCase()))
+				{
+					case ACCOUNT_CREATE: command = new AccountCreate(); break;
+					case CHAT_SEND:      command = new ChatSend();      break;
+					case LOG_IN:         command = new LogIn();         break;
+					case LOG_OUT:        command = new LogOut();        break;
+					default:             command = null;                break;
+				}
+
+				// Exécution de la commande
+				if (command == null) throw new JSONException("Unknown command");
+				else
+				{
+					command.setCommand(json);
+					command.setPlayer(player);
+					command.setSocket(socket);
+					command.execute();
+				}
 			}
-			
-			// Exécution de la commande
-			if (command == null) throw new JSONException("Unknown command");
-			else
+			catch (RuleException ex)
 			{
-				command.setCommand(json);
-				command.setPlayer(player);
-				command.setSocket(socket);
-				command.execute();
+				// Reçu une action qui enfreint les règles
+				Log.debug("Unauthorized move: " + ex);
+				socket.send((new ErrorMessage(ErrorMessage.TYPE_RULE_ERROR)).getJSONString());
 			}
-		}
-		catch (RuleException ex)
-		{
-			Log.debug("Unauthorized move: " + ex);
 		}
 		catch (JSONException ex)
 		{
+			// JSON reçu faux ou illisible
 			Log.debug("Unable to read JSON: " + ex);
 		}
 		catch (SQLException ex)
 		{
+			// Erreur de communication avec la base de données
 			Log.debug("SQL error: " + ex);
 		}
 	}
@@ -180,7 +189,6 @@ public class Server extends WebSocketServer
 	 */
 	public void broadcast(String message)
 	{
-		// Broadcast du message à tous les utilisateurs connectés
 		this.broadcast(this.connections(), message);
 	}
 	

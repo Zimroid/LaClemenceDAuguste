@@ -26,7 +26,7 @@ import org.apache.commons.codec.binary.Hex;
 
 /**
  * Classe représentant un joueur.
- * @author Vr4el / Lzard
+ * @author Lzard
  */
 public class Player
 {
@@ -40,6 +40,29 @@ public class Player
 	public static final String DEFAULT_LOGIN    = "Anonymous";
 	public static final String DEFAULT_PASSWORD = "";
 	
+	/**
+	 * Hashage de mot de passe.
+	 * @param password Mot de passe à hacher
+	 * @return Mot de passe hashé ou chaîne vide en cas d'erreur
+	 */
+	public static String hashPassword(String password)
+	{
+		try
+		{
+			MessageDigest digest = MessageDigest.getInstance("SHA-1");
+			digest.reset();
+			digest.update(password.getBytes());
+			return new String(Hex.encodeHex(digest.digest()));
+		}
+		catch (NoSuchAlgorithmException ex)
+		{
+			// Algorithme indisponible
+			Log.error("MessageDigest algorithm unavailable: " + ex);
+			return new String();
+		}
+	}
+	
+	// Attributs
 	private int    id;       // ID du joueur
 	private String login;    // Login du joueur
 	private String password; // Mot de passe hashé du joueur
@@ -97,7 +120,7 @@ public class Player
 	}
 
 	/**
-	 * Retourne le mot de passe du joueur.
+	 * Retourne le mot de passe hashé du joueur.
 	 * @return Mot de passe du joueur
 	 */
 	public String getPassword()
@@ -115,7 +138,7 @@ public class Player
 	}
 
 	/**
-	 * Modifie le login du joueur
+	 * Modifie le login du joueur.
 	 * @param login Login à utiliser
 	 */
 	public void setLogin(String login)
@@ -124,21 +147,11 @@ public class Player
 	}
 
 	/**
-	 * Hash et modifie le mot de passe du joueur
-	 * @param password Mot de passe à hasher et à utiliser
+	 * Modifie le mot de passe hashé du joueur.
+	 * @param password Mot de passe à utiliser
 	 */
 	public void setPassword(String password)
 	{
-		try
-		{
-			MessageDigest digest = MessageDigest.getInstance("SHA-1");
-			digest.reset();
-			digest.update(password.getBytes());
-			this.password = new String(Hex.encodeHex(digest.digest()));
-		}
-		catch (NoSuchAlgorithmException ex)
-		{
-			Log.error("MessageDigest algorithm unavailable: " + ex);
-		}
+		this.password = password;
 	}
 }

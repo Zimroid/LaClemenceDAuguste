@@ -16,6 +16,9 @@
 
 package auguste.server.util;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -29,19 +32,18 @@ public class Configuration
 	
 	/**
 	 * Charge la configuration de base du serveur
+	 * @param filename Chemin du fichier de configuration
+	 * @throws java.io.FileNotFoundException
+	 * @throws java.io.IOException
 	 */
-	public static void load()
+	public static void load(String filename) throws FileNotFoundException, IOException
 	{
-		// Configuration du serveur
-		Configuration.CONFIGURATION.setProperty("server_host_name", "130.79.214.172");
-		Configuration.CONFIGURATION.setProperty("server_host_port", "47135");
-
-		// Configuration de la connexion à la base de données
-		Configuration.CONFIGURATION.setProperty("db_host",     "localhost");
-		Configuration.CONFIGURATION.setProperty("db_port",     "3306");
-		Configuration.CONFIGURATION.setProperty("db_name",     "auguste");
-		Configuration.CONFIGURATION.setProperty("db_login",    "root");
-		Configuration.CONFIGURATION.setProperty("db_password", "saix");
+		// Chargement de la configuration depuis un fichier
+		try (FileInputStream stream = new FileInputStream(filename))
+		{
+			Configuration.CONFIGURATION.load(stream);
+			stream.close();
+		}
 	}
 	
 	/**
@@ -63,4 +65,5 @@ public class Configuration
 	{
 		return Integer.valueOf(Configuration.CONFIGURATION.getProperty(key, "0"));
 	}
+	
 }

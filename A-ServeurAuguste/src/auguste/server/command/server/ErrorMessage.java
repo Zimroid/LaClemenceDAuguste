@@ -16,44 +16,27 @@
 
 package auguste.server.command.server;
 
-import org.json.JSONObject;
+import org.json.JSONException;
 
 /**
- * Classe abstraite des commandes serveurs à envoyer.
+ * Commande de signalisation qu'une erreur est survenue.
  * @author Lzard
  */
-public abstract class ServerCommand
+public class ErrorMessage extends ServerCommand
 {
-	// JSON de la commande
-	private final JSONObject json = new JSONObject();
+	// Déclaration des types d'erreurs
+	public static final String TYPE_LOG_ERROR  = "log_error";
+	public static final String TYPE_RULE_ERROR = "rule_error";
 	
 	/**
-	 * Retourne le JSON de la commande.
-	 * @return JSON de la commande
+	 * Création du JSON de la commande
+	 * @param type Type de l'erreur
+	 * @throws JSONException
 	 */
-	public JSONObject getJSON()
+	public ErrorMessage(String type) throws JSONException
 	{
-		return this.json;
+		// Création du JSON
+		this.getJSON().put("command", "error_message");
+		this.getJSON().put("type", type);
 	}
-	
-	/**
-	 * Retourne le JSON de la commande sous forme de JSON.
-	 * @return JSON de la commande
-	 */
-	public String getJSONString()
-	{
-		return this.json.toString();
-	}
-	
-	/**
-	* Enumération des commandes émises par le serveur.
-	* @author Lzard
-	*/
-   public enum CommandName
-   {
-	   ERROR_MESSAGE,
-	   CONFIRM_ACCOUNT,
-	   CONFIRM_LOG,
-	   PLAYER_CHAT
-   }
 }

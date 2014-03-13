@@ -16,6 +16,7 @@
 
 package auguste.server.command.client;
 
+import auguste.server.command.server.Confirm;
 import auguste.server.entity.Player;
 import auguste.server.manager.PlayerManager;
 import auguste.server.util.Db;
@@ -27,7 +28,7 @@ import org.json.JSONException;
  * Commande de création d'un compte.
  * @author Lzard
  */
-public class CreateAccount extends ClientCommand
+public class AccountCreate extends ClientCommand
 {
 	@Override
 	public void execute() throws JSONException, SQLException
@@ -39,16 +40,19 @@ public class CreateAccount extends ClientCommand
 			Player newPlayer = new Player(
 					Player.DEFAULT_ID,
 					this.getCommand().getString("name"),
-					Player.DEFAULT_PASSWORD
+					Player.hashPassword(this.getCommand().getString("password"))
 			);
-			newPlayer.setPassword(this.getCommand().getString("password"));
 			
 			// Sauvegarde du joueur
 			try (Connection connection = Db.open())
 			{
-				PlayerManager.savePlayer(connection, newPlayer);
+				PlayerManager manager = new PlayerManager(connection);
+				manager.savePlayer(newPlayer);
 				connection.close();
 			}
+			
+			// Signalisation
+			this.getSocket().send((new Confirm(Confirm.TYPE_ACCOUNT_CREATE)).getJSONString());
 		}
 	}
 }

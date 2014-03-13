@@ -16,8 +16,8 @@
 
 package auguste.server.command.client;
 
-import auguste.server.command.server.LogConfirm;
-import auguste.server.command.server.LogError;
+import auguste.server.command.server.ConfirmLog;
+import auguste.server.command.server.ErrorMessage;
 import auguste.server.entity.Player;
 import auguste.server.manager.PlayerManager;
 import auguste.server.util.Db;
@@ -42,8 +42,8 @@ public class LogIn extends ClientCommand
 		Player playerToLog;
 		try (Connection connection = Db.open())
 		{
-			playerToLog = PlayerManager.getPlayer(
-					connection,
+			PlayerManager manager = new PlayerManager(connection);
+			playerToLog = manager.getPlayer(
 					this.getCommand().getString(LogIn.JSONKEY_NAME),
 					this.getCommand().getString(LogIn.JSONKEY_PASSWORD)
 			);
@@ -55,9 +55,9 @@ public class LogIn extends ClientCommand
 		{
 			this.getPlayer().setId(playerToLog.getId());
 			this.getPlayer().setLogin(playerToLog.getLogin());
-			this.getSocket().send((new LogConfirm(this.getPlayer().getLogin())).getJSONString());
+			this.getSocket().send((new ConfirmLog(this.getPlayer().getLogin())).getJSONString());
 		}
-		else this.getSocket().send((new LogError()).getJSONString());
+		else this.getSocket().send((new ErrorMessage(ErrorMessage.TYPE_LOG_ERROR)).getJSONString());
 	}
 	
 }

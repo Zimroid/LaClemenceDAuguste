@@ -14,24 +14,29 @@
  * limitations under the License.
  */
 
-package auguste.server.command.server;
+package auguste.server;
 
-import auguste.server.entity.Player;
-import java.util.Date;
-import org.json.JSONException;
+import auguste.server.util.Configuration;
+import java.io.IOException;
 
 /**
- * Commande d'envoi d'un message de chat.
+ * Classe de lancement du serveur.
  * @author Lzard
  */
-public class ChatMessage extends ServerCommand
+public class Main
 {
-	public ChatMessage(Player author, String message) throws JSONException
+	/**
+	 * Point d'entrée de l'application.
+	 * @param args Arguments de la commande
+	 * @throws java.io.IOException
+	 */
+	public static void main(String[] args) throws IOException
 	{
-		// Création du JSON
-		this.getJSON().put("command", "chat_message");
-		this.getJSON().put("author", author.getLogin());
-		this.getJSON().put("date", (new Date()).getTime());
-		this.getJSON().put("text", message);
+		// Chargement de la configuration
+		Configuration.load("properties.conf");
+		
+		// Lancement
+		Server.getInstance().start();
 	}
+	
 }

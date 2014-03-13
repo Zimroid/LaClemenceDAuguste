@@ -30,8 +30,8 @@ import org.json.JSONObject;
 public abstract class ClientCommand
 {
 	private JSONObject command; // Contenu de la commande
-	private Player player;      // Joueur qui a émit la commande
-	private WebSocket socket;   // Socket ayant reçu la commande
+	private Player     player;  // Joueur qui a émit la commande
+	private WebSocket  socket;  // Socket ayant reçu la commande
 	
 	/**
 	 * Exécution de la commande.
@@ -89,7 +89,8 @@ public abstract class ClientCommand
 	 * Modifie la WebSocket ayant reçu la commande.
 	 * @param socket WebSocket à utiliser
 	 */
-	public void setSocket(WebSocket socket) {
+	public void setSocket(WebSocket socket)
+	{
 		this.socket = socket;
 	}
 	
@@ -99,7 +100,7 @@ public abstract class ClientCommand
 	public enum CommandName
 	{
 		CHAT_SEND,
-		CREATE_ACCOUNT,
+		ACCOUNT_CREATE,
 		LOG_IN,
 		LOG_OUT
 	}

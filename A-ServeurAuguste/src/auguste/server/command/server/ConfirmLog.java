@@ -22,11 +22,12 @@ import org.json.JSONException;
  * Commande d'envoi d'un message de chat.
  * @author Lzard
  */
-public class LogError extends ServerCommand
+public class ConfirmLog extends ServerCommand
 {
-	public LogError() throws JSONException
+	public ConfirmLog(String playerName) throws JSONException
 	{
 		// Création du JSON
-		this.getJSON().put("command", "log_error");
+		this.getJSON().put("command", "confirm_log");
+		this.getJSON().put("login", playerName);
 	}
 }

@@ -14,27 +14,23 @@
  * limitations under the License.
  */
 
-package auguste.server;
+package auguste.server.command.server;
 
-import auguste.server.util.Configuration;
+import org.json.JSONException;
 
 /**
- * Classe de lancement du serveur.
+ * Commande d'envoi d'un message de chat.
  * @author Lzard
  */
-public class Starter
+public class Confirm extends ServerCommand
 {
-	/**
-	 * Point d'entrée de l'application.
-	 * @param args Arguments de la commande
-	 */
-	public static void main(String[] args)
-	{
-		// Chargement de la configuration
-		Configuration.load();
-		
-		// Lancement
-		Server.getInstance().start();
-	}
+	public static final String TYPE_ACCOUNT_CREATE = "account_create";
+	public static final String TYPE_LOG_OUT = "log_out";
 	
+	public Confirm(String type) throws JSONException
+	{
+		// Création du JSON
+		this.getJSON().put("command", "confirm");
+		this.getJSON().put("type", type);
+	}
 }

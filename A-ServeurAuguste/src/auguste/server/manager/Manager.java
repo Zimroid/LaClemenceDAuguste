@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Conseil7.
+ * Copyright 2014 Lzard.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,35 @@
  * limitations under the License.
  */
 
-package auguste.server.command.server;
+package auguste.server.manager;
 
-import org.json.JSONException;
+import java.sql.Connection;
 
 /**
- * Commande d'envoi d'un message de chat.
+ *
  * @author Lzard
  */
-public class LogConfirm extends ServerCommand
+public class Manager
 {
-	public LogConfirm(String playerName) throws JSONException
+	// Connexion à la base de données
+	private final Connection connection;
+	
+	/**
+	 * Constructeur. Initialisation de la connexion à la base de données.
+	 * @param connection Connexion à la base de données
+	 */
+	public Manager(Connection connection)
 	{
-		// Création du JSON
-		this.getJSON().put("command", "log_confirm");
-		this.getJSON().put("login", playerName);
+		this.connection = connection;
 	}
+
+	/**
+	 * Retourne la connexion à la base de données.
+	 * @return Connexion à la base de données
+	 */
+	public Connection getConnection()
+	{
+		return connection;
+	}
+	
 }

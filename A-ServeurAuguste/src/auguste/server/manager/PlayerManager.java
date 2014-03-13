@@ -28,7 +28,7 @@ import java.sql.Statement;
  * données.
  * @author Lzard
  */
-public class PlayerManager
+public class PlayerManager extends Manager
 {
 	// Requête pour récupérer un joueur avec son ID
 	private static final String QUERY_PLAYER_FROM_ID =
@@ -49,18 +49,26 @@ public class PlayerManager
 	// Requête pour supprimer un utilisateur
 	private static final String QUERY_DELETE_PLAYER =
 			"DELETE FROM player WHERE id = ?";
+
+	/**
+	 * Constructeur. Initialise la connexion à la base de données.
+	 * @param connection
+	 */
+	public PlayerManager(Connection connection)
+	{
+		super(connection);
+	}
 	
 	/**
 	 * Récupération d'un joueur via son ID.
-	 * @param connection Connexion à la base de données
 	 * @param id ID du joueur
 	 * @return Instance de Player correspondant à l'ID
 	 * @throws java.sql.SQLException
 	 */
-	public static Player getPlayer(Connection connection, int id) throws SQLException
+	public Player getPlayer(int id) throws SQLException
 	{
 		// Préparation et exécution de la requête
-		PreparedStatement statement = connection.prepareStatement(PlayerManager.QUERY_PLAYER_FROM_ID);
+		PreparedStatement statement = this.getConnection().prepareStatement(PlayerManager.QUERY_PLAYER_FROM_ID);
 		statement.setInt(1, id);
 		ResultSet set = statement.executeQuery();
 		set.first();
@@ -71,18 +79,17 @@ public class PlayerManager
 
 	/**
 	 * Récupère un joueur via son login et son mot de passe.
-	 * @param connection Connexion à la base de données
 	 * @param login Login du joueur
 	 * @param password Mot de passe du joueur
 	 * @return Instance de Player correspondant au joueur ou null si erreur
 	 * @throws java.sql.SQLException
 	 */
-	public static Player getPlayer(Connection connection, String login, String password) throws SQLException
+	public Player getPlayer(String login, String password) throws SQLException
 	{
 		// Préparation et exécution de la requête
-		PreparedStatement statement = connection.prepareStatement(PlayerManager.QUERY_PLAYER_FROM_LOGIN);
+		PreparedStatement statement = this.getConnection().prepareStatement(PlayerManager.QUERY_PLAYER_FROM_LOGIN);
 		statement.setString(1, login);
-		statement.setString(2, password);
+		statement.setString(2, Player.hashPassword(password));
 		ResultSet set = statement.executeQuery();
 
 		// Si aucun résultat, retourne null, sinon retourne le joueur
@@ -92,17 +99,16 @@ public class PlayerManager
 
 	/**
 	 * Sauvegarde d'un joueur dans la base de données.
-	 * @param connection Connexion à la base de données
 	 * @param player Joueur à sauvegarder
 	 * @throws java.sql.SQLException
 	 */
-	public static void savePlayer(Connection connection, Player player) throws SQLException
+	public void savePlayer(Player player) throws SQLException
 	{
 		// Si c'est un nouveau joueur, on l'insère, sinon on le met à jour
-		if (player.getId() == 0)
+		if (player.getId() == Player.DEFAULT_ID)
 		{
 			// Préparation et exécution de la requête
-			PreparedStatement statement = connection.prepareStatement(PlayerManager.QUERY_ADD_PLAYER, Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement statement = this.getConnection().prepareStatement(PlayerManager.QUERY_ADD_PLAYER, Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, player.getLogin());
 			statement.setString(2, player.getPassword());
 			statement.executeUpdate();
@@ -115,7 +121,7 @@ public class PlayerManager
 		else
 		{
 			// Préparation et exécution de la requête
-			PreparedStatement statement = connection.prepareStatement(PlayerManager.QUERY_UPDATE_PLAYER, Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement statement = this.getConnection().prepareStatement(PlayerManager.QUERY_UPDATE_PLAYER, Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, player.getLogin());
 			statement.setString(2, player.getPassword());
 			statement.setInt   (3, player.getId());
@@ -125,14 +131,13 @@ public class PlayerManager
 	
 	/**
 	 * Supprime un joueur de la base de données.
-	 * @param connection Connexion à la base de données
 	 * @param player Joueur à supprimer
 	 * @throws SQLException
 	 */
-	public static void deletePlayer(Connection connection, Player player) throws SQLException
+	public void deletePlayer(Player player) throws SQLException
 	{
 		// Préparation et exécution de la requête
-		PreparedStatement statement = connection.prepareStatement(PlayerManager.QUERY_UPDATE_PLAYER, Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement statement = this.getConnection().prepareStatement(PlayerManager.QUERY_UPDATE_PLAYER, Statement.RETURN_GENERATED_KEYS);
 		statement.setInt(1, player.getId());
 		statement.executeUpdate();
 	}
