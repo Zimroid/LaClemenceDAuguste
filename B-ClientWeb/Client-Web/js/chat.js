@@ -20,7 +20,7 @@ function addMessage()
         var json = JSON.stringify(
 		{
             "command": "CHAT_SEND",
-            "text": message
+            "message": message
         });
 
         $("#message").val("");

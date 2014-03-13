@@ -1,7 +1,9 @@
 <?php
 	require_once("controller/pageController.php");
+	require_once("controller/userController.php");
 	
 	$pageCtr = new pageController();
+	$userCtr = new userController();
 	
 	// Rechargement partiel de la page via JS
 	if(isset($_GET['script']) && $_GET['script'] == '1')
@@ -21,9 +23,9 @@
 		include_once("indexPages.php");
 		echo "</div>";
 		
-		// + Information Jeu et Chat non-disponible sans JS !!!
-		
 		// Affichage chat
+		echo "<div id='chatBox'>";
 		include 'view/chatView.php';
+		echo "</div>";
 	}
 ?>

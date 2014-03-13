@@ -38,4 +38,10 @@
 	{
 		$pageCtr->subscribe();
 	}
+	
+	// Page Chat : connexion utilisateur
+	else if(isset($_GET['page']) && $_GET['page'] == 'connect')
+	{
+		$userCtr->connect();
+	}
 ?>
