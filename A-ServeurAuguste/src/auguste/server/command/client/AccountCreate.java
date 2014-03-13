@@ -48,6 +48,7 @@ public class AccountCreate extends ClientCommand
 			{
 				PlayerManager manager = new PlayerManager(connection);
 				manager.savePlayer(newPlayer);
+				connection.commit();
 				connection.close();
 			}
 			
