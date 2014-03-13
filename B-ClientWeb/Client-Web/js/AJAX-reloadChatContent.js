@@ -3,9 +3,8 @@
 // Rechargement partiel de la page (zone chat)
 //---------------------------------------
 
-function reloadChat(url, data)
+function reloadChat(url)
 {
-	alert(url);
 	var xhr = null;
 	try //(Firefox, Chrome, Opera, Safari)
 	{
