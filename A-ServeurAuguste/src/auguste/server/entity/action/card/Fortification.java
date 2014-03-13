@@ -24,22 +24,10 @@ import auguste.server.entity.Team;
  */
 public class Fortification {
     
-    // Variables métier
-    private final Team team;
-    
     /**
     * Instanciation d'une carte de type muraille
-    * @param team L'équipe possédant la carte
     */
-    public Fortification(Team team)
+    public Fortification()
     {
-        this.team = team;
-    }
-
-    /**
-     * @return the team
-     */
-    public Team getTeam() {
-        return team;
     }
 }

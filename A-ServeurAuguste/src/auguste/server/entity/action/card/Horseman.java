@@ -16,30 +16,16 @@
 
 package auguste.server.entity.action.card;
 
-import auguste.server.entity.Team;
-
 /**
  * Classe représentant une carte de type cavalier.
  * @author Zwyk
  */
 public class Horseman {
     
-    // Variables métier
-    private final Team team;
-    
     /**
     * Instanciation d'une carte de type cavalier
-    * @param team L'équipe possédant la carte
     */
-    public Horseman(Team team)
+    public Horseman()
     {
-        this.team = team;
-    }
-
-    /**
-     * @return the team
-     */
-    public Team getTeam() {
-        return team;
     }
 }

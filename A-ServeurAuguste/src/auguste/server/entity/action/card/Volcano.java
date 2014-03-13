@@ -16,30 +16,16 @@
 
 package auguste.server.entity.action.card;
 
-import auguste.server.entity.Team;
-
 /**
  * Classe représentant une carte de type volcan
  * @author Zwyk
  */
 public class Volcano {
     
-    // Variables métier
-    private final Team team;
-    
     /**
     * Instanciation d'une carte de type volcan.
-    * @param team L'équipe possédant la carte
     */
-    public Volcano(Team team)
+    public Volcano()
     {
-        this.team = team;
-    }
-
-    /**
-     * @return the team
-     */
-    public Team getTeam() {
-        return team;
     }
 }

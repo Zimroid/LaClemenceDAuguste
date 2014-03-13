@@ -16,30 +16,16 @@
 
 package auguste.server.entity.action.card;
 
-import auguste.server.entity.Legion;
-
 /**
  * Classe représentant une carte de type devin.
  * @author Zwyk
  */
 public class Soothsayer {
     
-    // Variables métier
-    private final Legion legion;
-    
     /**
-    * Instanciation d'une carte de type muraille
-    * @param legion La légion possédant la carte
+    * Instanciation d'une carte de type muraille*
     */
-    public Soothsayer(Legion legion)
+    public Soothsayer()
     {
-        this.legion = legion;
-    }
-
-    /**
-     * @return the legion
-     */
-    public Legion getLegion() {
-        return legion;
     }
 }
