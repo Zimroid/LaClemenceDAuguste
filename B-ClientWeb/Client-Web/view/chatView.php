@@ -1,3 +1,4 @@
+<div id="chatHeader">
 <?php 
 	// Si connecté
 	if(isset($_SESSION['username']) AND $_SESSION['username'] != null) 
@@ -14,11 +15,17 @@
 ?>
 		<!-- Connexion -->
 		<label for="user">Pseudo : </label>
+		<br />
 		<input type="text" name="user" id="user" placeholder="Pseudo" />
 		
+		<br />
+
 		<label for="password">Mot de passe : </label>
+		<br />
 		<input type="password" name="password" id="password" placeholder="Mot de passe" />
 		
+		<br />
+
 		<input type="button" value="Me connecter" onclick="connexion(); " />
 			
 		<br/>	
@@ -34,15 +41,12 @@
 <?php
 	}
 ?>
-<br/>
-<br/>
+</div>
 
 <!-- Div d'affichage des messages -->
 <div id="chatMessages">
 	Bonjour et bienvenue sur Auguste ...
 </div>
-
-<br/>
 
 <!-- Div d'envoi d'un message-->
 <div id="chatSend">

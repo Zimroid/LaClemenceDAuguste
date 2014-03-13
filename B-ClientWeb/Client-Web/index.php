@@ -18,6 +18,11 @@
 		// Affichage en-tête
 		include 'view/headerView.php';
 		
+		// Récupération du menu
+		echo "<div id='menu'>";
+		include_once("view/menuView.php");
+		echo "</div>";
+
 		// Récupération de la page
 		echo "<div id='mainPage'>";
 		include_once("indexPages.php");
