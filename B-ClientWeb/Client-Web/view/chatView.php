@@ -4,7 +4,7 @@
 	{
 ?>
 		<div>Nom d'utilisateur : <?php echo $_SESSION['username']; ?></div>
-		<button onclick="alert('Envoi déconnexion');">Déconnexion</button>
+		<button onclick="deconnexion();">Déconnexion</button>
 <?php
 	}
 	

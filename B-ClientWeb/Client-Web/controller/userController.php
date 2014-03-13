@@ -16,5 +16,12 @@ class userController
 		$_SESSION["username"] = $_GET["user"];
 		include 'view/chatView.php';
 	}
+	
+	// Deconnexion
+	public function deconnect()
+	{
+		$_SESSION["username"] = null;
+		include 'view/chatView.php';
+	}
 }
 ?>
