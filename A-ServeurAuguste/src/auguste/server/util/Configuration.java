@@ -33,15 +33,15 @@ public class Configuration
 	public static void load()
 	{
 		// Configuration du serveur
-		Configuration.CONFIGURATION.setProperty("server_host_name", "localhost");
-		Configuration.CONFIGURATION.setProperty("server_host_port", "9000");
+		Configuration.CONFIGURATION.setProperty("server_host_name", "130.79.214.172");
+		Configuration.CONFIGURATION.setProperty("server_host_port", "47135");
 
 		// Configuration de la connexion à la base de données
 		Configuration.CONFIGURATION.setProperty("db_host",     "localhost");
 		Configuration.CONFIGURATION.setProperty("db_port",     "3306");
 		Configuration.CONFIGURATION.setProperty("db_name",     "auguste");
 		Configuration.CONFIGURATION.setProperty("db_login",    "root");
-		Configuration.CONFIGURATION.setProperty("db_password", "");
+		Configuration.CONFIGURATION.setProperty("db_password", "saix");
 	}
 	
 	/**
