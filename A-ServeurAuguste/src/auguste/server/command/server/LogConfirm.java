@@ -24,9 +24,10 @@ import org.json.JSONException;
  */
 public class LogConfirm extends ServerCommand
 {
-	public LogConfirm() throws JSONException
+	public LogConfirm(String playerName) throws JSONException
 	{
 		// Création du JSON
 		this.getJSON().put("command", "log_confirm");
+		this.getJSON().put("login", playerName);
 	}
 }

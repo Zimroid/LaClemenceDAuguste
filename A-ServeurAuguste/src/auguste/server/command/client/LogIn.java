@@ -55,7 +55,7 @@ public class LogIn extends ClientCommand
 		{
 			this.getPlayer().setId(playerToLog.getId());
 			this.getPlayer().setLogin(playerToLog.getLogin());
-			this.getSocket().send((new LogConfirm()).getJSONString());
+			this.getSocket().send((new LogConfirm(this.getPlayer().getLogin())).getJSONString());
 		}
 		else this.getSocket().send((new LogError()).getJSONString());
 	}
