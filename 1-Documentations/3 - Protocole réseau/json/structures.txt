@@ -1,4 +1,4 @@
-Données échangées SERVEUR -> CLIENT
+﻿Données échangées SERVEUR -> CLIENT
 
 Données d'un joueur :
 {
@@ -41,6 +41,7 @@ Données des équipes :
 
 Données d'un jeu :
 {
+    "id": (int),
     "name": (string),
     "turn_timer": (int représentant le temps pour un tour en secondes),
     "board_size": (int représentant la dimension du plateau),

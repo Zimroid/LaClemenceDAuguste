@@ -2,7 +2,6 @@ Création d'une partie
 
 Attributs :
     command : la commande décrite, ici "create_game"
-    session : identifiant de la session du joueur
     game_name : nom de la partie tel qu'il sera vu par les autres joueurs cherchant une partie
     turn_timer : durée maximum d'un tour en secondes
     board_size : taille du plateau
@@ -13,7 +12,6 @@ Attributs :
 Exemple :
 {
     "command": "game_create",
-    "session": "dfb4d6f5b4d65f4bd654fb65d4",
     "game_name": "Partie de Maxime",
     "turn_timer": 120,
     "board_size": 8,
