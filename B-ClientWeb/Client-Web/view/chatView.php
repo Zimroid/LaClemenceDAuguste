@@ -51,7 +51,7 @@
 <!-- Div d'envoi d'un message-->
 <div id="chatSend">
 	<form onSubmit="addMessage(); return false;" autocomplete="off" >
-		<input type="text" id="message" name="message" />
+		<textarea type="text" id="message" name="message"></textarea>
 		<input type="submit" id="valid" value="Envoyer" />
 	</form>
 </div>

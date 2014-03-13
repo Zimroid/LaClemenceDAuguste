@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width">
         
 		<script>
-			sitePath = "<?php echo $sitePath; ?>";
+			var sitePath = "<?php echo $sitePath; ?>";
 		</script>
 		
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/jquery/js/jquery-1.11.0.min.js"></script>
@@ -20,6 +20,7 @@
 		
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/chat.js"></script>
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/user.js"></script>
+		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/game.js"></script>
 		
 		<link rel="stylesheet" href="<?php echo $sitePath; ?>/css/main.css" type="text/css">	
 		<link rel="stylesheet" href="<?php echo $sitePath; ?>/css/chat.css" type="text/css">	
