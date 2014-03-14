@@ -14,28 +14,19 @@
  * limitations under the License.
  */
 
-package auguste.server.command.client;
+package auguste.server.command.server;
 
-import auguste.server.Server;
-import auguste.server.command.server.Confirm;
-import auguste.server.exception.RuleException;
-import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
  *
  * @author Lzard
  */
-public class GameJoin extends ClientCommand
+public class GameConfirm extends ServerCommand
 {
-
-	@Override
-	public void execute() throws SQLException, JSONException, RuleException {
-		if (this.getPlayer().isLogged() && !this.getPlayer().isInGame())
-		{
-			this.getPlayer().setGame(Server.getInstance().getGames().get(this.getCommand().getString("game_name")));
-			this.getSocket().send((new Confirm("game_join")).getJSONString());
-		}
+	public GameConfirm() throws JSONException
+	{
+		// Création du JSON
+		this.getJSON().put("command", "game_confirm");
 	}
-	
 }

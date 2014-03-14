@@ -16,18 +16,17 @@
 
 package auguste.server;
 
-import auguste.server.command.client.ChatSend;
 import auguste.server.command.client.ClientCommand;
-import auguste.server.command.client.AccountCreate;
-import auguste.server.command.client.LogIn;
-import auguste.server.command.client.LogOut;
 import auguste.server.command.server.ErrorMessage;
+import auguste.server.entity.Game;
 import auguste.server.entity.Player;
 import auguste.server.exception.RuleException;
+import auguste.server.exception.UnknownCommandException;
 import auguste.server.util.Log;
 import auguste.server.util.Configuration;
 import java.net.InetSocketAddress;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -61,6 +60,9 @@ public class Server extends WebSocketServer
 	
 	// Liste des joueurs connectés
 	private final HashMap<WebSocket, Player> players = new HashMap<>();
+	
+	// Liste des parties en cours
+	private final HashMap<String, Game> games = new HashMap<>();
 	
 	/**
 	 * Instanciation du serveur. Effectue un simple appel au constructeur de la
@@ -131,29 +133,22 @@ public class Server extends WebSocketServer
 				System.out.println("Identified command: " + json.getString("command"));
 
 				// Définition de la commande
-				ClientCommand command;
-				switch (ClientCommand.CommandName.valueOf(json.getString("command").toUpperCase()))
-				{
-					case ACCOUNT_CREATE: command = new AccountCreate(); break;
-					case CHAT_SEND:      command = new ChatSend();      break;
-					case GAME_CREATE:    command = new GameCreate();    break;
-					case GAME_JOIN:      command = new GameJoin();      break;
-					case GAME_LIST:      command = new GameList();      break;
-					case GAME_START:     command = new GameStart();     break;
-					case LOG_IN:         command = new LogIn();         break;
-					case LOG_OUT:        command = new LogOut();        break;
-					default:             command = null;                break;
-				}
+				ClientCommand command = ClientCommand.get(json.getString("command"));
 
 				// Exécution de la commande
-				if (command == null) throw new JSONException("Unknown command");
-				else
+				if (command != null)
 				{
 					command.setCommand(json);
 					command.setPlayer(player);
 					command.setSocket(socket);
 					command.execute();
 				}
+			}
+			catch (UnknownCommandException ex)
+			{
+				// Reçu une commande inconnue
+				Log.debug("Unknown command: " + ex);
+				socket.send((new ErrorMessage(ErrorMessage.TYPE_COMMAND_ERROR)).getJSONString());
 			}
 			catch (RuleException ex)
 			{
@@ -211,6 +206,16 @@ public class Server extends WebSocketServer
 		{
 			socket.send(message);
 		}
+	}
+	
+	public HashMap<String, Game> getGames()
+	{
+		return this.games;
+	}
+	
+	public HashMap<WebSocket, Player> getPlayers()
+	{
+		return this.players;
 	}
 	
 }

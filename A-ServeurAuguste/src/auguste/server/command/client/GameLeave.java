@@ -16,7 +16,6 @@
 
 package auguste.server.command.client;
 
-import auguste.server.Server;
 import auguste.server.command.server.Confirm;
 import auguste.server.exception.RuleException;
 import java.sql.SQLException;
@@ -26,15 +25,15 @@ import org.json.JSONException;
  *
  * @author Lzard
  */
-public class GameJoin extends ClientCommand
+public class GameLeave extends ClientCommand
 {
 
 	@Override
 	public void execute() throws SQLException, JSONException, RuleException {
-		if (this.getPlayer().isLogged() && !this.getPlayer().isInGame())
+		if (this.getPlayer().isLogged() && this.getPlayer().isInGame())
 		{
-			this.getPlayer().setGame(Server.getInstance().getGames().get(this.getCommand().getString("game_name")));
-			this.getSocket().send((new Confirm("game_join")).getJSONString());
+			this.getPlayer().setGame(null);
+			this.getSocket().send((new Confirm("game_leave")).getJSONString());
 		}
 	}
 	

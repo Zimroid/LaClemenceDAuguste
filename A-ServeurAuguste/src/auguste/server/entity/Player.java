@@ -74,7 +74,7 @@ public class Player
         private final ArrayList<Pawn> pawns;
         private Team team;
         private Action action;
-        private Game game;
+        private Game game = null;
 	
 	/**
 	 * Instanciation d'un utilisateur avec les valeurs données.
@@ -114,7 +114,7 @@ public class Player
 	
 	public boolean isInGame()
 	{
-		return false;
+		return this.game != null;
 	}
 
 	/**

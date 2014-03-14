@@ -25,8 +25,9 @@ import org.json.JSONException;
 public class ErrorMessage extends ServerCommand
 {
 	// Déclaration des types d'erreurs
-	public static final String TYPE_LOG_ERROR  = "log_error";
-	public static final String TYPE_RULE_ERROR = "rule_error";
+	public static final String TYPE_LOG_ERROR     = "log_error";
+	public static final String TYPE_COMMAND_ERROR = "command_error";
+	public static final String TYPE_RULE_ERROR    = "rule_error";
 	
 	/**
 	 * Création du JSON de la commande
