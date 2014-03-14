@@ -16,10 +16,33 @@
 
 package auguste.server.command.client;
 
+import auguste.server.Server;
+import auguste.server.command.server.GameTurn;
+import auguste.server.entity.Player;
+import auguste.server.exception.RuleException;
+import java.sql.SQLException;
+import org.json.JSONException;
+
 /**
  *
  * @author Lzard
  */
-public class GameStart {
+public class GameStart extends ClientCommand
+{
+
+	public GameStart() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public void execute() throws SQLException, JSONException, RuleException {
+		if (this.getPlayer().isLogged() && this.getPlayer().isInGame())
+		{
+			for (Player player : Server.getInstance().getPlayers().values())
+			{
+				if (player.getGame() == this.getPlayer().getGame()) this.getSocket().send((new GameTurn()).getJSONString());
+			}
+		}
+	}
 	
 }

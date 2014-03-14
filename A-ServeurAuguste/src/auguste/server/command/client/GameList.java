@@ -16,10 +16,20 @@
 
 package auguste.server.command.client;
 
+import auguste.server.exception.RuleException;
+import java.sql.SQLException;
+import org.json.JSONException;
+
 /**
  *
  * @author Lzard
  */
-public class GameList {
+public class GameList extends ClientCommand
+{
+
+	@Override
+	public void execute() throws SQLException, JSONException, RuleException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 	
 }

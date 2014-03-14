@@ -18,6 +18,7 @@ package auguste.server.command.client;
 
 import auguste.server.entity.Player;
 import auguste.server.exception.RuleException;
+import auguste.server.exception.UnknownCommandException;
 import java.sql.SQLException;
 import org.java_websocket.WebSocket;
 import org.json.JSONException;
@@ -29,6 +30,31 @@ import org.json.JSONObject;
  */
 public abstract class ClientCommand
 {
+	public static ClientCommand get(String name) throws UnknownCommandException
+	{
+		try
+		{
+			ClientCommand command = null;
+			switch (ClientCommand.CommandName.valueOf(name.toUpperCase()))
+			{
+				case ACCOUNT_CREATE: command = new AccountCreate(); break;
+				case CHAT_SEND:      command = new ChatSend();      break;
+				case GAME_CREATE:    command = new GameCreate();    break;
+				case GAME_JOIN:      command = new GameJoin();      break;
+				case GAME_LEAVE:     command = new GameLeave();     break;
+				case GAME_LIST:      command = new GameList();      break;
+				case GAME_START:     command = new GameStart();     break;
+				case LOG_IN:         command = new LogIn();         break;
+				case LOG_OUT:        command = new LogOut();        break;
+			}
+			return command;
+		}
+		catch(IllegalArgumentException ex)
+		{
+			throw new UnknownCommandException();
+		}
+	}
+	
 	private JSONObject command; // Contenu de la commande
 	private Player     player;  // Joueur qui a émit la commande
 	private WebSocket  socket;  // Socket ayant reçu la commande
@@ -103,6 +129,7 @@ public abstract class ClientCommand
 		CHAT_SEND,
 		GAME_CREATE,
 		GAME_JOIN,
+		GAME_LEAVE,
 		GAME_LIST,
 		GAME_START,
 		LOG_IN,
