@@ -19,15 +19,23 @@ package auguste.server.command.server;
 import org.json.JSONException;
 
 /**
- * Commande d'envoi d'un message de chat.
+ * Commande de confirmation d'une action quelconque.
  * @author Lzard
  */
-public class ConfirmLog extends ServerCommand
+public class MessageConfirm extends ServerCommand
 {
-	public ConfirmLog(String playerName) throws JSONException
-	{
-		// Création du JSON
-		this.getJSON().put("command", "confirm_log");
-		this.getJSON().put("login", playerName);
-	}
+    /**
+     * Remplit le JSON avec les paramètres fournis.
+     * @param type Type de confirmation
+     * @throws JSONException Erreur de JSON
+     */
+    public MessageConfirm(String type) throws JSONException
+    {
+        // Constructeur de la classe mère
+        super("message_confirm");
+        
+        // Création du JSON
+        this.getJSON().put("type", type);
+    }
+    
 }

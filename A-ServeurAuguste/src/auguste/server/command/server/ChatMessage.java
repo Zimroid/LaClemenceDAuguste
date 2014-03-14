@@ -26,12 +26,21 @@ import org.json.JSONException;
  */
 public class ChatMessage extends ServerCommand
 {
-	public ChatMessage(Player author, String message) throws JSONException
-	{
-		// Création du JSON
-		this.getJSON().put("command", "chat_message");
-		this.getJSON().put("author", author.getLogin());
-		this.getJSON().put("date", (new Date()).getTime());
-		this.getJSON().put("text", message);
-	}
+    /**
+     * Remplit le JSON avec les paramètres fournis.
+     * @param author Auteur du message
+     * @param message Contenu du message
+     * @throws JSONException Erreur de JSON
+     */
+    public ChatMessage(Player author, String message) throws JSONException
+    {
+        // Constructeur de la classe mère
+        super("chat_message");
+        
+        // Création du JSON
+        this.getJSON().put("author", author.getName());
+        this.getJSON().put("date",   (new Date()).getTime());
+        this.getJSON().put("text",   message);
+    }
+
 }

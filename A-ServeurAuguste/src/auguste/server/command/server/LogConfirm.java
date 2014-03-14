@@ -16,21 +16,27 @@
 
 package auguste.server.command.server;
 
+import auguste.server.entity.Player;
 import org.json.JSONException;
 
 /**
- * Commande d'envoi d'un message de chat.
+ * Commande de confirmation d'identification.
  * @author Lzard
  */
-public class Confirm extends ServerCommand
+public class LogConfirm extends ServerCommand
 {
-	public static final String TYPE_ACCOUNT_CREATE = "account_create";
-	public static final String TYPE_LOG_OUT = "log_out";
-	
-	public Confirm(String type) throws JSONException
-	{
-		// Création du JSON
-		this.getJSON().put("command", "confirm");
-		this.getJSON().put("type", type);
-	}
+    /**
+     * Remplit le JSON avec les paramètres fournis.
+     * @param player Joueur connecté
+     * @throws JSONException Erreur de JSON
+     */
+    public LogConfirm(Player player) throws JSONException
+    {
+        // Constructeur de la classe mère
+        super("log_confirm");
+        
+        // Création du JSON
+        this.getJSON().put("name", player.getName());
+    }
+    
 }

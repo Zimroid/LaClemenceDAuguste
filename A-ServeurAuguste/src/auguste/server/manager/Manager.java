@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Lzard.
+ * Copyright 2014 Conseil7.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,32 +17,50 @@
 package auguste.server.manager;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
- *
+ * Classe abstraite des Managers de données.
  * @author Lzard
  */
-public class Manager
+public abstract class Manager
 {
-	// Connexion à la base de données
-	private final Connection connection;
-	
-	/**
-	 * Constructeur. Initialisation de la connexion à la base de données.
-	 * @param connection Connexion à la base de données
-	 */
-	public Manager(Connection connection)
-	{
-		this.connection = connection;
-	}
+    // Connexion à la base de données
+    private final Connection connection;
+    
+    /**
+     * Initialisation de la connexion à la base de données.
+     * @param connection Connexion à la base de données
+     */
+    public Manager(Connection connection)
+    {
+        this.connection = connection;
+    }
 
-	/**
-	 * Retourne la connexion à la base de données.
-	 * @return Connexion à la base de données
-	 */
-	public Connection getConnection()
-	{
-		return connection;
-	}
-	
+    /**
+     * Prépare une requête à la connexion.
+     * @param query Requête demandée
+     * @return PreparedStatement de la requête
+     * @throws java.sql.SQLException Erreur SQL
+     */
+    public PreparedStatement query(String query) throws SQLException
+    {
+        return this.connection.prepareStatement(query);
+    }
+    
+    /**
+     * Prépare une requête avec récupération des identifiants générés.
+     * @param query Requête demandée
+     * @param generatedKeys Retourner les identifiants ?
+     * @return PreparedStatement de la requête
+     * @throws SQLException Erreur SQL
+     */
+    public PreparedStatement query(String query, boolean generatedKeys) throws SQLException
+    {
+        if (generatedKeys) return this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        else               return this.query(query);
+    }
+    
 }

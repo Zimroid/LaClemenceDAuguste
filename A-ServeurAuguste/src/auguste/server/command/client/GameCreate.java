@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Lzard.
+ * Copyright 2014 Conseil7.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,14 @@ import org.json.JSONException;
  */
 public class GameCreate extends ClientCommand
 {
-	@Override
-	public void execute() throws JSONException
-	{
-		// Création de la partie si le joueur est connecté est n'est pas en game
-		if (this.getPlayer().isLogged() && !this.getPlayer().isInGame())
-		{
-			
-		}
-	}
+    @Override
+    public void execute() throws JSONException
+    {
+        // Création de la partie si le joueur est connecté est n'est pas en game
+        if (this.getPlayer().isLogged() && !this.getPlayer().isInGame())
+        {
+            
+        }
+    }
+    
 }

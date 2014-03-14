@@ -21,15 +21,14 @@ import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
- *
+ * Commande pour récupérer la liste des parties disponibles.
  * @author Lzard
  */
 public class GameList extends ClientCommand
 {
-
-	@Override
-	public void execute() throws SQLException, JSONException, RuleException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-	
+    @Override
+    public void execute() throws SQLException, JSONException, RuleException
+    {
+    }
+    
 }

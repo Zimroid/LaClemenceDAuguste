@@ -24,35 +24,36 @@ import java.io.PrintStream;
  */
 public class Log
 {
-	// Configuration des sorties
-	private static final PrintStream OUT   = System.out;
-	private static final PrintStream DEBUG = System.out;
-	private static final PrintStream ERROR = System.err;
-	
-	/**
-	 * Ecriture d'un message à logger.
-	 * @param message Message à logger
-	 */
-	public static void out(String message)
-	{
-		Log.OUT.println(message);
-	}
-	
-	/**
-	 * Ecriture d'un message de débuggage.
-	 * @param message Message à logger
-	 */
-	public static void debug(String message)
-	{
-		Log.DEBUG.println(message);
-	}
-	
-	/**
-	 * Ecriture d'un message d'erreur.
-	 * @param message Message à logger
-	 */
-	public static void error(String message)
-	{
-		Log.ERROR.println(message);
-	}
+    // Configuration des sorties
+    private static final PrintStream OUT   = System.out;
+    private static final PrintStream DEBUG = System.out;
+    private static final PrintStream ERROR = System.err;
+    
+    /**
+     * Ecriture d'un message à logger.
+     * @param message Message à logger
+     */
+    public static void out(String message)
+    {
+        Log.OUT.println(message);
+    }
+    
+    /**
+     * Ecriture d'un message d'erreur.
+     * @param message Message à logger
+     */
+    public static void error(String message)
+    {
+        Log.ERROR.println(message);
+    }
+    
+    /**
+     * Ecriture d'un message de débuggage si la fonctionnalité est activée.
+     * @param message Message à logger
+     */
+    public static void debug(String message)
+    {
+        if (Configuration.get("debug").equals("true")) Log.DEBUG.println(message);
+    }
+    
 }

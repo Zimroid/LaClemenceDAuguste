@@ -16,6 +16,7 @@
 
 package auguste.server.command.server;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -24,37 +25,32 @@ import org.json.JSONObject;
  */
 public abstract class ServerCommand
 {
-	// JSON de la commande
-	private final JSONObject json = new JSONObject();
-	
-	/**
-	 * Retourne le JSON de la commande.
-	 * @return JSON de la commande
-	 */
-	public JSONObject getJSON()
-	{
-		return this.json;
-	}
-	
-	/**
-	 * Retourne le JSON de la commande sous forme de JSON.
-	 * @return JSON de la commande
-	 */
-	public String getJSONString()
-	{
-		return this.json.toString();
-	}
-	
-	/**
-	* Enumération des commandes émises par le serveur.
-	* @author Lzard
-	*/
-   public enum CommandName
-   {
-	   CHAT_MESSAGE,
-	   CONFIRM,
-	   CONFIRM_LOG,
-	   ERROR_MESSAGE,
-	   GAME_AVAILABLES
-   }
+    // JSON de la commande
+    private final JSONObject json = new JSONObject();
+    
+    /**
+     * Insère dans le JSON le nom de la commande.
+     * @param name Nom de la commande
+     * @throws org.json.JSONException Erreur de JSON
+     */
+    public ServerCommand(String name) throws JSONException
+    {
+        this.getJSON().put("command", name);
+    }
+    
+    /**
+     * Retourne le JSON de la commande.
+     * @return JSON de la commande
+     */
+    public JSONObject getJSON()
+    {
+        return this.json;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.json.toString();
+    }
+   
 }

@@ -25,18 +25,26 @@ import java.io.IOException;
  */
 public class Main
 {
-	/**
-	 * Point d'entrée de l'application.
-	 * @param args Arguments de la commande
-	 * @throws java.io.IOException
-	 */
-	public static void main(String[] args) throws IOException
-	{
-		// Chargement de la configuration
-		Configuration.load("properties.conf");
-		
-		// Lancement
-		Server.getInstance().start();
-	}
-	
+    // Fichier de configuration
+    private static final String CONFIGURATION_FILE = "properties.conf";
+    
+    /**
+     * Point d'entrée de l'application. Charge la configuration, vérifie
+     * la présence du driver JDBC et lance le serveur.
+     * @param args Arguments de la commande
+     * @throws java.io.IOException Fichier de configuration absent
+     * @throws java.lang.ClassNotFoundException Driver JDBC absent
+     */
+    public static void main(String[] args) throws IOException, ClassNotFoundException
+    {
+        // Chargement de la configuration
+        Configuration.load(Main.CONFIGURATION_FILE);
+        
+        // Vérification de la présence du driver JDBC
+        Class.forName(Configuration.get("db_driver"));
+        
+        // Lancement
+        Server.getInstance().start();
+    }
+    
 }

@@ -27,43 +27,43 @@ import java.util.Properties;
  */
 public class Configuration
 {
-	// Collection de la configuration du serveur
-	private static final Properties CONFIGURATION = new Properties();
-	
-	/**
-	 * Charge la configuration de base du serveur
-	 * @param filename Chemin du fichier de configuration
-	 * @throws java.io.FileNotFoundException
-	 * @throws java.io.IOException
-	 */
-	public static void load(String filename) throws FileNotFoundException, IOException
-	{
-		// Chargement de la configuration depuis un fichier
-		try (FileInputStream stream = new FileInputStream(filename))
-		{
-			Configuration.CONFIGURATION.load(stream);
-			stream.close();
-		}
-	}
-	
-	/**
-	 * Renvoie la configuration demandée.
-	 * @param key Clé de la configuration
-	 * @return Valeur correspondant à la clé, chaîne vide si clé inconnue
-	 */
-	public static String get(String key)
-	{
-		return Configuration.CONFIGURATION.getProperty(key, "");
-	}
-	
-	/**
-	 * Renvoie la configuration demandée sous forme d'entier.
-	 * @param key Clé de la configuration
-	 * @return Valeur correspondant à la clé ou 0 si clé inconnue
-	 */
-	public static int getInt(String key)
-	{
-		return Integer.valueOf(Configuration.CONFIGURATION.getProperty(key, "0"));
-	}
-	
+    // Properties de la configuration du serveur
+    private static final Properties CONFIGURATION = new Properties();
+    
+    /**
+     * Charge la configuration de base du serveur.
+     * @param file Chemin du fichier de configuration
+     * @throws java.io.FileNotFoundException Fichier non trouvé
+     * @throws java.io.IOException Fichier illisible
+     */
+    public static void load(String file) throws FileNotFoundException, IOException
+    {
+        // Chargement de la configuration depuis un fichier
+        try (FileInputStream stream = new FileInputStream(file))
+        {
+            Configuration.CONFIGURATION.load(stream);
+            stream.close();
+        }
+    }
+    
+    /**
+     * Renvoie la configuration demandée.
+     * @param key Clé de la configuration
+     * @return Valeur correspondant à la clé ou chaîne vide si clé inconnue
+     */
+    public static String get(String key)
+    {
+        return Configuration.CONFIGURATION.getProperty(key, "");
+    }
+    
+    /**
+     * Renvoie la configuration demandée sous forme d'entier.
+     * @param key Clé de la configuration
+     * @return Valeur correspondant à la clé ou 0 si clé inconnue
+     */
+    public static int getInt(String key)
+    {
+        return Integer.valueOf(Configuration.CONFIGURATION.getProperty(key, "0"));
+    }
+    
 }

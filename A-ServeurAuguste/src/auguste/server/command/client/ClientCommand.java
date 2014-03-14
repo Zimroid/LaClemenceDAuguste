@@ -30,110 +30,119 @@ import org.json.JSONObject;
  */
 public abstract class ClientCommand
 {
-	public static ClientCommand get(String name) throws UnknownCommandException
-	{
-		try
-		{
-			ClientCommand command = null;
-			switch (ClientCommand.CommandName.valueOf(name.toUpperCase()))
-			{
-				case ACCOUNT_CREATE: command = new AccountCreate(); break;
-				case CHAT_SEND:      command = new ChatSend();      break;
-				case GAME_CREATE:    command = new GameCreate();    break;
-				case GAME_JOIN:      command = new GameJoin();      break;
-				case GAME_LEAVE:     command = new GameLeave();     break;
-				case GAME_LIST:      command = new GameList();      break;
-				case GAME_START:     command = new GameStart();     break;
-				case LOG_IN:         command = new LogIn();         break;
-				case LOG_OUT:        command = new LogOut();        break;
-			}
-			return command;
-		}
-		catch(IllegalArgumentException ex)
-		{
-			throw new UnknownCommandException();
-		}
-	}
-	
-	private JSONObject command; // Contenu de la commande
-	private Player     player;  // Joueur qui a émit la commande
-	private WebSocket  socket;  // Socket ayant reçu la commande
-	
-	/**
-	 * Exécution de la commande.
-	 * @throws java.sql.SQLException
-	 * @throws org.json.JSONException
-	 * @throws auguste.server.exception.RuleException
-	 */
-	public abstract void execute() throws SQLException, JSONException, RuleException;
+    /**
+     * Retourne l'objet commande correspondant au nom de la commande.
+     * @param name Nom de la commande
+     * @return Objet commande correspondant
+     * @throws UnknownCommandException Nom de commande inconnu
+     */
+    public static ClientCommand get(String name) throws UnknownCommandException
+    {
+        // Identification et instanciation de la commande
+        try
+        {
+            ClientCommand command = null;
+            switch (CommandName.valueOf(name.toUpperCase()))
+            {
+                case ACCOUNT_CREATE: command = new AccountCreate(); break;
+                case CHAT_SEND:      command = new ChatSend();      break;
+                case GAME_CREATE:    command = new GameCreate();    break;
+                case GAME_JOIN:      command = new GameJoin();      break;
+                case GAME_LEAVE:     command = new GameLeave();     break;
+                case GAME_LIST:      command = new GameList();      break;
+                case GAME_START:     command = new GameStart();     break;
+                case LOG_IN:         command = new LogIn();         break;
+                case LOG_OUT:        command = new LogOut();        break;
+            }
+            return command;
+        }
+        catch(IllegalArgumentException ex)
+        {
+            // Commande inconnue
+            throw new UnknownCommandException(name);
+        }
+    }
+    
+    // Attributs
+    private JSONObject json;    // JSON de la commande
+    private Player     player;  // Joueur qui a émit la commande
+    private WebSocket  socket;  // Socket ayant reçu la commande
+    
+    /**
+     * Exécution de la commande.
+     * @throws java.sql.SQLException Erreur SQL
+     * @throws org.json.JSONException Erreur JSON
+     * @throws auguste.server.exception.RuleException Règles enfreintes
+     */
+    public abstract void execute() throws RuleException, JSONException, SQLException;
 
-	/**
-	 * Retourne le JSONObject de la commande.
-	 * @return JSONObject de la commande
-	 */
-	public JSONObject getCommand()
-	{
-		return command;
-	}
+    /**
+     * Retourne le JSONObject de la commande.
+     * @return JSONObject de la json
+     */
+    public JSONObject getJSON()
+    {
+        return json;
+    }
 
-	/**
-	 * Retourne le joueur ayant émit la commande.
-	 * @return Player ayant émit la commande
-	 */
-	public Player getPlayer()
-	{
-		return player;
-	}
+    /**
+     * Retourne le joueur ayant émit la commande.
+     * @return Player ayant émit la commande
+     */
+    public Player getPlayer()
+    {
+        return player;
+    }
 
-	/**
-	 * Retourne la WebSocket ayant reçu la commande
-	 * @return WebSocket ayant reçu la commande
-	 */
-	public WebSocket getSocket() {
-		return socket;
-	}
+    /**
+     * Retourne la WebSocket ayant reçu la commande.
+     * @return WebSocket ayant reçu la commande
+     */
+    public WebSocket getSocket() {
+        return socket;
+    }
 
-	/**
-	 * Modifie le joueur ayant émit la commande.
-	 * @param player Player à utiliser
-	 */
-	public void setPlayer(Player player)
-	{
-		this.player = player;
-	}
+    /**
+     * Modifie le JSONObject de la commande.
+     * @param command JSONObject à utiliser
+     */
+    public void setJSON(JSONObject command)
+    {
+        this.json = command;
+    }
 
-	/**
-	 * Modifie le JSONObject de la commande.
-	 * @param command JSONObject à utiliser
-	 */
-	public void setCommand(JSONObject command)
-	{
-		this.command = command;
-	}
+    /**
+     * Modifie le joueur ayant émit la commande.
+     * @param player Player à utiliser
+     */
+    public void setPlayer(Player player)
+    {
+        this.player = player;
+    }
 
-	/**
-	 * Modifie la WebSocket ayant reçu la commande.
-	 * @param socket WebSocket à utiliser
-	 */
-	public void setSocket(WebSocket socket)
-	{
-		this.socket = socket;
-	}
-	
-	/**
-	* Liste des commandes émises par le client.
-	*/
-	public enum CommandName
-	{
-		ACCOUNT_CREATE,
-		CHAT_SEND,
-		GAME_CREATE,
-		GAME_JOIN,
-		GAME_LEAVE,
-		GAME_LIST,
-		GAME_START,
-		LOG_IN,
-		LOG_OUT
-	}
+    /**
+     * Modifie la WebSocket ayant reçu la commande.
+     * @param socket WebSocket à utiliser
+     */
+    public void setSocket(WebSocket socket)
+    {
+        this.socket = socket;
+    }
+    
+    /**
+    * Liste des commande émises par le client.
+    */
+    private enum CommandName
+    {
+        ACCOUNT_CREATE,
+        CHAT_SEND,
+        GAME_CREATE,
+        GAME_JOIN,
+        GAME_LEAVE,
+        GAME_LIST,
+        GAME_START,
+        LOG_IN,
+        LOG_OUT
+    }
 
 }

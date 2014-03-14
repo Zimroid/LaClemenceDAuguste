@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Lzard.
+ * Copyright 2014 Conseil7.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,27 @@
 package auguste.server.exception;
 
 /**
- *
+ * Exception lancée lorsqu'une commande n'est pas reconnue.
  * @author Lzard
  */
 public class UnknownCommandException extends Exception
 {
-	
+    // Commande non-reconnue
+    private final String command;
+    
+    /**
+     * Enregistre la commande non reconnue.
+     * @param command
+     */
+    public UnknownCommandException(String command)
+    {
+        this.command = command;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.command;
+    }
+    
 }

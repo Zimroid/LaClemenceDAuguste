@@ -16,8 +16,8 @@
 
 package auguste.server.command.client;
 
-import auguste.server.command.server.ConfirmLog;
-import auguste.server.command.server.ErrorMessage;
+import auguste.server.command.server.LogConfirm;
+import auguste.server.command.server.MessageError;
 import auguste.server.entity.Player;
 import auguste.server.manager.PlayerManager;
 import auguste.server.util.Db;
@@ -30,34 +30,30 @@ import org.json.JSONException;
  * @author Lzard
  */
 public class LogIn extends ClientCommand
-{
-	// Clés du JSON
-	private static final String JSONKEY_NAME     = "name";
-	private static final String JSONKEY_PASSWORD = "password";
-	
-	@Override
-	public void execute() throws SQLException, JSONException
-	{
-		// Connexion à la base de données et récupération du nouveau joueur
-		Player playerToLog;
-		try (Connection connection = Db.open())
-		{
-			PlayerManager manager = new PlayerManager(connection);
-			playerToLog = manager.getPlayer(
-					this.getCommand().getString(LogIn.JSONKEY_NAME),
-					this.getCommand().getString(LogIn.JSONKEY_PASSWORD)
-			);
-			connection.close();
-		}
-		
-		// Si un joueur a été trouvé, mise à jour du joueur connecté
-		if (playerToLog != null)
-		{
-			this.getPlayer().setId(playerToLog.getId());
-			this.getPlayer().setLogin(playerToLog.getLogin());
-			this.getSocket().send((new ConfirmLog(this.getPlayer().getLogin())).getJSONString());
-		}
-		else this.getSocket().send((new ErrorMessage(ErrorMessage.TYPE_LOG_ERROR)).getJSONString());
-	}
-	
+{    
+    @Override
+    public void execute() throws SQLException, JSONException
+    {
+        // Connexion à la base de données et récupération du nouveau joueur
+        Player playerToLog;
+        try (Connection connection = Db.open())
+        {
+            PlayerManager manager = new PlayerManager(connection);
+            playerToLog = manager.getPlayer(
+                    this.getJSON().getString("name"),
+                    this.getJSON().getString("password")
+            );
+            connection.close();
+        }
+        
+        // Si un joueur a été trouvé, mise à jour du joueur connecté
+        if (playerToLog != null)
+        {
+            this.getPlayer().setId(playerToLog.getId());
+            this.getPlayer().setName(playerToLog.getName());
+            this.getSocket().send((new LogConfirm(this.getPlayer())).toString());
+        }
+        else this.getSocket().send((new MessageError("log_error")).toString());
+    }
+    
 }

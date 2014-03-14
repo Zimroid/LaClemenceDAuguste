@@ -22,22 +22,20 @@ import org.json.JSONException;
  * Commande de signalisation qu'une erreur est survenue.
  * @author Lzard
  */
-public class ErrorMessage extends ServerCommand
+public class MessageError extends ServerCommand
 {
-	// Déclaration des types d'erreurs
-	public static final String TYPE_LOG_ERROR     = "log_error";
-	public static final String TYPE_COMMAND_ERROR = "command_error";
-	public static final String TYPE_RULE_ERROR    = "rule_error";
-	
-	/**
-	 * Création du JSON de la commande
-	 * @param type Type de l'erreur
-	 * @throws JSONException
-	 */
-	public ErrorMessage(String type) throws JSONException
-	{
-		// Création du JSON
-		this.getJSON().put("command", "error_message");
-		this.getJSON().put("type", type);
-	}
+    /**
+     * Remplit le JSON avec les paramètres fournis.
+     * @param type Type de l'erreur
+     * @throws JSONException Erreur de JSON
+     */
+    public MessageError(String type) throws JSONException
+    {
+        // Constructeur de la classe mère
+        super("message_error");
+        
+        // Création du JSON
+        this.getJSON().put("type", type);
+    }
+    
 }

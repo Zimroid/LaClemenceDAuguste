@@ -24,25 +24,21 @@ import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
- *
+ * Commande pour commencer une partie.
  * @author Lzard
  */
 public class GameStart extends ClientCommand
 {
-
-	public GameStart() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public void execute() throws SQLException, JSONException, RuleException {
-		if (this.getPlayer().isLogged() && this.getPlayer().isInGame())
-		{
-			for (Player player : Server.getInstance().getPlayers().values())
-			{
-				if (player.getGame() == this.getPlayer().getGame()) this.getSocket().send((new GameTurn()).getJSONString());
-			}
-		}
-	}
-	
+    @Override
+    public void execute() throws SQLException, JSONException, RuleException
+    {
+        if (this.getPlayer().isLogged() && this.getPlayer().isInGame())
+        {
+            for (Player player : Server.getInstance().getPlayers().values())
+            {
+                if (player.getGame() == this.getPlayer().getGame()) this.getSocket().send((new GameTurn()).toString());
+            }
+        }
+    }
+    
 }

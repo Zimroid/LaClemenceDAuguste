@@ -26,18 +26,19 @@ import org.json.JSONException;
  */
 public class ChatSend extends ClientCommand
 {
-	@Override
-	public void execute() throws JSONException
-	{
-		// Envoi du message à tous les clients connectés si l'utilisateur est identifié
-		if (this.getPlayer().isLogged())
-		{
-			Server.getInstance().broadcast(
-					(new ChatMessage(
-							this.getPlayer(),
-							this.getCommand().getString("message")
-					)).getJSONString()
-			);
-		}
-	}
+    @Override
+    public void execute() throws JSONException
+    {
+        // Envoi du message à tous les clients connectés si l'utilisateur est identifié
+        if (this.getPlayer().isLogged())
+        {
+            Server.getInstance().broadcast(
+                    (new ChatMessage(
+                            this.getPlayer(),
+                            this.getJSON().getString("message")
+                    )).toString()
+            );
+        }
+    }
+    
 }

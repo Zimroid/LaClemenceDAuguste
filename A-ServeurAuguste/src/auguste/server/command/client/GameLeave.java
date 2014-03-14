@@ -16,25 +16,25 @@
 
 package auguste.server.command.client;
 
-import auguste.server.command.server.Confirm;
+import auguste.server.command.server.MessageConfirm;
 import auguste.server.exception.RuleException;
 import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
- *
+ * Commande pour quitter une partie.
  * @author Lzard
  */
 public class GameLeave extends ClientCommand
 {
-
-	@Override
-	public void execute() throws SQLException, JSONException, RuleException {
-		if (this.getPlayer().isLogged() && this.getPlayer().isInGame())
-		{
-			this.getPlayer().setGame(null);
-			this.getSocket().send((new Confirm("game_leave")).getJSONString());
-		}
-	}
-	
+    @Override
+    public void execute() throws SQLException, JSONException, RuleException
+    {
+        if (this.getPlayer().isLogged() && this.getPlayer().isInGame())
+        {
+            this.getPlayer().setGame(null);
+            this.getSocket().send((new MessageConfirm("game_leave")).toString());
+        }
+    }
+    
 }

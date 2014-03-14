@@ -22,5 +22,22 @@ package auguste.server.exception;
  */
 public class RuleException extends Exception
 {
-	
+    // Règle enfreinte
+    private final String rule;
+    
+    /**
+     * Enregistre l'énoncé de la règle enfreinte.
+     * @param rule
+     */
+    public RuleException(String rule)
+    {
+        this.rule = rule;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.rule;
+    }
+    
 }

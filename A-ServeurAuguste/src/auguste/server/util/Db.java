@@ -26,47 +26,33 @@ import java.sql.SQLException;
  */
 public class Db
 {
-	/**
-	 * Ouvre et retourne une connexion à la base de données.
-	 * @return Une instance de Connection ou null en cas d'erreur
-	 */
-	public static Connection open()
-	{
-		// Vérification du driver et connexion à la base
-		try
-		{
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection connection = DriverManager.getConnection(
-					"jdbc:mysql://" + Configuration.get("db_host") + ":" + Configuration.get("db_port") + "/" + Configuration.get("db_name"),
-					Configuration.get("db_login"),
-					Configuration.get("db_password")
-			);
-			connection.setAutoCommit(false);
-			return connection;
-		}
-		catch (SQLException ex)
-		{
-			// Erreur de base de données
-			Log.error("Unable to connect to database: " + ex);
-			return null;
-		}
-		catch (ClassNotFoundException ex)
-		{
-			// Driver JDBC absent
-			Log.error("Missing JDBC MySQL Driver: " + ex);
-			return null;
-		}
-	}
-	
-	/**
-	 * Femerture d'une connexion avec la base de données.
-	 * @param connection Connexion à fermer
-	 * @throws SQLException
-	 */
-	public static void close(Connection connection) throws SQLException
-	{
-		// Commit et fermeture de la connexion
-		connection.commit();
-		connection.close();
-	}
+    /**
+     * Ouvre et retourne une connexion à la base de données. Désactive le commit
+     * automatique.
+     * @return Une instance de Connection ou null en cas d'erreur
+     * @throws java.sql.SQLException Erreur SQL
+     */
+    public static Connection open() throws SQLException
+    {
+        Connection connection = DriverManager.getConnection(
+                "jdbc:mysql://" + Configuration.get("db_host") + ":" + Configuration.get("db_port") + "/" + Configuration.get("db_name"),
+                Configuration.get("db_login"),
+                Configuration.get("db_password")
+        );
+        connection.setAutoCommit(false);
+        return connection;
+    }
+    
+    /**
+     * Commit des modifications etemerture d'une connexion avec la base de
+     * données.
+     * @param connection Connexion à fermer
+     * @throws SQLException Erreur SQL
+     */
+    public static void close(Connection connection) throws SQLException
+    {
+        connection.commit();
+        connection.close();
+    }
+    
 }
