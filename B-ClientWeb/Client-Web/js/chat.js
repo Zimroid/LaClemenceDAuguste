@@ -3,13 +3,6 @@
  * 
  */
 
-// Récupération adresse ip
-ip = null;
-
-$(function(){
-    $("#h1Chat").draggable();
-});
-
 // Envoi d'un message
 function addMessage()
 {

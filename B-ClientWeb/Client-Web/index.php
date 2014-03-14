@@ -1,7 +1,7 @@
 <?php
 	require_once("controller/pageController.php");
 	require_once("controller/userController.php");
-	
+
 	$pageCtr = new pageController();
 	$userCtr = new userController();
 	

@@ -26,6 +26,14 @@
 	{
 		$pageCtr->joinGame();
 	}
+	else if(isset($_GET['page']) && $_GET['page'] == 'gameConfig')
+	{
+		$pageCtr->gameConfig();
+	}
+	else if(isset($_GET['page']) && $_GET['page'] == 'game')
+	{
+		$pageCtr->game();
+	}
 	
 	// Page DL
 	else if(isset($_GET['page']) && $_GET['page'] == 'download')

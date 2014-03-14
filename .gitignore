@@ -1,5 +1,12 @@
-/2 - Tests/CommandeWriter/nbproject/private/
-/2 - Tests/InterfaceTestJSON/build/
-/2 - Tests/InterfaceTestJSON/dist/
+*.class
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
 /2-Tests/InterfaceTestJSON/build/
 /2-Tests/InterfaceTestJSON/dist/
+B-ClientWeb/Client-Web/model/config.php

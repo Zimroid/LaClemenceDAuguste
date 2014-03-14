@@ -1,24 +1,19 @@
-#chatBox
-{
-    overflow:   none;
-    position:   absolute;
-    width:      355px;
-    height:     100%;
-    top:        0px;
-    right:      0px;
-}
-
 #chatHeader
 {
     height: 9em;
+    padding-left: 1em;
+    border-bottom: 2px solid #666666;
 }
 
 #chatMessages
 {
-    overflow:   auto;
-    position:   relative;
-    bottom:     0;
-    height: calc(100% - 14em);
+    overflow-y:     auto;
+    overflow-x:     hidden;
+    position:       relative;
+    bottom:         0;
+    height:         calc(100% - 14em);
+    text-overflow:  ellipsis;
+    padding-left: 1em;
 }
 
 #chatSend
@@ -27,4 +22,21 @@
     width:      100%;
     position :  absolute;
     bottom:     0px;
+}
+
+#chatSend > form
+{
+    height: 100%;
+}
+
+#chatSend > form > #message
+{
+    width: calc(100% - 6px);
+    height: calc(70% - 6px);
+}
+
+#chatSend > form > #valid
+{
+    width: 100%;
+    height: 30%;
 }

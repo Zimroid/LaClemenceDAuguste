@@ -48,6 +48,18 @@ class pageController
 	{
 		include 'view/joinGameView.php';
 	}
+
+	// Panneau des paramêtres de jeu (attente des joueur et lancement d'une partie)
+	public function gameConfig()
+	{
+		include 'view/gameConfigView.php';
+	}
+
+	// Panneau des paramêtres de jeu (attente des joueur et lancement d'une partie)
+	public function game()
+	{
+		include 'view/gameView.php';
+	}
 	
 	// Téléchargement
 	public function download()

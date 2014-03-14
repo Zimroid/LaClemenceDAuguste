@@ -44,6 +44,22 @@ function process(evt)
 			reloadChat(sitePath + "/index.php?script=1&page=deconnect");
 		}
 	}
+
+	// Si on nous confirme la création d'une partie
+	// ATTENTION NOM DE COMMANDE NON DEFINITIVE !!!
+	else if(command == "game_confirm")
+	{
+		reloadContent(sitePath + "/index.php?script=1&page=gameConfig");
+	}
+
+	// Si on nous envois un plateau de jeu
+	// ATTENTION NOM DE COMMANDE NON DEFINITIVE !!!
+	else if(command == "game_turn")
+	{
+		// Qu'on soit n'importe ou on recharge la page principal pour arriver en jeu (cas pour un nouveau tour, un début de partie voir une reconnexion)
+		reloadContent(sitePath + "/index.php?script=1&page=game");
+	}
+
 	
 	else
 	{
