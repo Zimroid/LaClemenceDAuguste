@@ -13,5 +13,6 @@
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/chat.js"></script>
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/user.js"></script>
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/game.js"></script>
+		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/util.js"></script>
 	</body>
 </html>

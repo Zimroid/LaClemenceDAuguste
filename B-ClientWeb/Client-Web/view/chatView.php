@@ -45,15 +45,13 @@
 
 <!-- Div d'affichage des messages -->
 <div id="chatMessages">
-	Bonjour et bienvenue sur le chat Auguste !<br>
-	Pour participer à de meilleures conversations,<br>
-	merci de rester courtois et d'éviter le langage SMS.
+	Bonjour et bienvenue sur le chat Auguste ! Pour participer à de meilleures conversations, merci de rester courtois et d'éviter le langage SMS.
 </div>
 
 <!-- Div d'envoi d'un message-->
 <div id="chatSend">
 	<form onSubmit="addMessage(); return false;" autocomplete="off" >
-		<textarea type="text" id="message" name="message"></textarea>
+		<textarea type="text" id="message" name="message" onKeyPress="toucheEntree(event)"></textarea>
 		<input type="submit" id="valid" value="Envoyer" />
 	</form>
 </div>

@@ -29,7 +29,8 @@ function process(evt)
 		if (h < 10) { h = "0" + h; }
 		if (m < 10) { m = "0" + m; }
 
-		messagesList.innerHTML += "<br />" + data.author +  " [" + h + ":" + m + "] : " + data.text;
+		message = data.text.replace("\n","<br>");
+		messagesList.innerHTML += "<br />" + data.author +  " [" + h + ":" + m + "] : " + message;
 		messagesList.scrollTop = messagesList.scrollHeight;
 	}
 	

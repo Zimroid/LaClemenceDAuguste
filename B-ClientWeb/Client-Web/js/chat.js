@@ -7,6 +7,7 @@
 function addMessage()
 {
     var message = $("#message").val();
+    message = htmlspecialchars(message);
     
     if(message != "")
     {
@@ -27,6 +28,15 @@ function showMessage(jsonData)
     var json = JSON.parse(jsonData);
     
     var messagesList = $("#chatMessages");
-    messagesList.html(messagesList.html() + "<br />" /*+ json.author*/ +  " [" /*+ json.time*/ + "] : " + json.text);
+    messagesList.html(messagesList.html() + "<br />" +  " [" + "] : " + json.text);
     messagesList.scrollTop = messagesList.scrollHeight;
+}
+
+function toucheEntree(event)
+{
+	if ((event.keyCode == 13) && (event.shiftKey)) this.value += '\n';
+	else if (event.keyCode == 13) {
+		addMessage();
+		event.preventDefault();
+	}
 }
