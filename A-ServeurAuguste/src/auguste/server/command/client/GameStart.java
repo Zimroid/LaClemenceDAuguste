@@ -32,12 +32,12 @@ public class GameStart extends ClientCommand
     @Override
     public void execute() throws SQLException, JSONException, RuleException
     {
-        if (this.getUser().isIdentified() && this.getUser().isInGame())
+        if (this.getUser().isLogged() && this.getUser().isInGame())
         {
-            for (User user : Server.getInstance().getUsers().values())
+            /*for (User user : Server.getInstance().getUsers().values())
             {
                 if (user.getGame() == this.getUser().getGame()) this.getSocket().send((new GameTurn()).toString());
-            }
+            }*/
         }
     }
     

@@ -27,7 +27,7 @@ public class RuleException extends Exception
     
     /**
      * Enregistre l'énoncé de la règle enfreinte.
-     * @param rule
+     * @param rule Règle enfreinte
      */
     public RuleException(String rule)
     {

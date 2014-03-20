@@ -30,14 +30,14 @@ public class ChatSend extends ClientCommand
     public void execute() throws JSONException
     {
         // Envoi du message à tous les clients connectés si l'utilisateur est identifié
-        if (this.getUser().isIdentified())
+        if (this.getUser().isLogged())
         {
-            Server.getInstance().broadcast(
+            /*Server.getInstance().broadcast(
                     (new ChatMessage(
                             this.getUser(),
                             this.getJSON().getString("message")
                     )).toString()
-            );
+            );*/
         }
     }
     

@@ -18,6 +18,9 @@ package auguste.server.command.client;
 
 import auguste.server.command.server.MessageConfirm;
 import auguste.engine.entity.Player;
+import auguste.server.Server;
+import auguste.server.User;
+import auguste.server.command.server.MessageError;
 import org.json.JSONException;
 
 /**
@@ -29,13 +32,21 @@ public class LogOut extends ClientCommand
     @Override
     public void execute() throws JSONException
     {
-        // Remise des informations du joueur à celles par défaut
-        this.getUser().setId(User.DEFAULT_ID);
-        this.getUser().setName(Player.DEFAULT_LOGIN);
-        this.getUser().setPassword(Player.DEFAULT_PASSWORD);
-        
-        // Signalisation
-        this.getSocket().send((new MessageConfirm("log_out")).toString());
+        // Commande pouvant être exécuté que par des utilisateurs identifiés
+        if (this.getUser().isLogged())
+        {
+            // Désidentification de l'utilisateur
+            Server.getInstance().logOut(this.getUser());
+            
+            // Remise des informations du joueur à celles par défaut
+            this.getUser().setId(User.DEFAULT_ID);
+            this.getUser().setName(User.DEFAULT_NAME);
+            this.getUser().setPassword(User.DEFAULT_PASSWORD);
+
+            // Signalisation
+            this.getSocket().send((new MessageConfirm("log_out")).toString());
+        }
+        else this.getUser().send((new MessageError("not_logged")).toString());
     }
     
 }

@@ -72,9 +72,10 @@ public abstract class ClientCommand
     
     /**
      * Exécution de la commande.
-     * @throws java.sql.SQLException                  Erreur SQL
-     * @throws org.json.JSONException                 Erreur JSON
-     * @throws auguste.server.exception.RuleException Règles enfreintes
+     * @throws auguste.server.exception.CommandException Erreur de commande
+     * @throws auguste.server.exception.RuleException    Règles enfreintes
+     * @throws org.json.JSONException                    Erreur JSON
+     * @throws java.sql.SQLException                     Erreur SQL
      */
     public abstract void execute() throws RuleException, JSONException, SQLException;
 
@@ -135,7 +136,7 @@ public abstract class ClientCommand
     /**
     * Liste des commande émises par le client.
     */
-    private final enum CommandName
+    private enum CommandName
     {
         ACCOUNT_CREATE,
         CHAT_SEND,

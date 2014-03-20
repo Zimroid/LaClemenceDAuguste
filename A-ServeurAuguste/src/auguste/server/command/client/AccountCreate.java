@@ -18,6 +18,7 @@ package auguste.server.command.client;
 
 import auguste.server.User;
 import auguste.server.command.server.MessageConfirm;
+import auguste.server.command.server.MessageError;
 import auguste.server.manager.UserManager;
 import auguste.server.util.Db;
 import java.sql.Connection;
@@ -34,26 +35,35 @@ public class AccountCreate extends ClientCommand
     public void execute() throws JSONException, SQLException
     {
         // Création du compte si le joueur n'est pas identifié
-        if (!this.getUser().isIdentified())
+        if (!this.getUser().isLogged())
         {
             // Création du joueur
             User newUser = new User(
                     User.DEFAULT_ID,
                     this.getJSON().getString("name"),
-                    User.hashPassword(this.getJSON().getString("password"))
+                    User.hashPassword(this.getJSON().getString("password")),
+                    null
             );
             
             // Sauvegarde du joueur
             try (Connection connection = Db.open())
             {
+                // Initialisation
                 UserManager manager = new UserManager(connection);
-                manager.saveUser(newUser);
+                
+                // Vérification de la disponibilité du nom
+                if (manager.getNameAvailable(newUser.getName()))
+                {
+                    manager.saveUser(newUser);
+                    this.getUser().send((new MessageConfirm("account_create")).toString());
+                }
+                else this.getUser().send((new MessageError("name_unavailable")).toString());
+                
+                // Fermeture de la connexion
                 Db.close(connection);
             }
-            
-            // Signalisation
-            this.getSocket().send((new MessageConfirm("account_create")).toString());
         }
+        else this.getUser().send((new MessageError("already_logged")).toString());
     }
     
 }
