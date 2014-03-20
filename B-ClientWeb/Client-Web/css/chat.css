@@ -1,8 +1,8 @@
 #chatHeader
 {
-    height: 9em;
-    padding-left: 1em;
-    border-bottom: 2px solid #666666;
+    height:         9em;
+    padding-left:   1em;
+    border-bottom:  2px solid #666666;
 }
 
 #chatMessages
@@ -13,15 +13,16 @@
     bottom:         0;
     height:         calc(100% - 14em);
     text-overflow:  ellipsis;
-    padding-left: 1em;
+    padding-left:   1em;
+    padding-top:    0.5em;
 }
 
 #chatSend
 {
     height:     5em;
     width:      100%;
-    position :  absolute;
-    bottom:     0px;
+    position:   absolute;
+    bottom:     6px;
 }
 
 #chatSend > form
@@ -31,12 +32,13 @@
 
 #chatSend > form > #message
 {
-    width: calc(100% - 6px);
+    width:  calc(100% - 6px);
     height: calc(70% - 6px);
+    resize: none;
 }
 
 #chatSend > form > #valid
 {
-    width: 100%;
+    width:  100%;
     height: 30%;
 }

@@ -21,7 +21,7 @@
 	else
 	{
 		// Affichage en-tête
-		include 'view/headerView.php';
+		include_once("view/headerView.php");
 		
 		// Récupération du menu
 		echo "<div id='menu'>";
@@ -35,10 +35,10 @@
 		
 		// Affichage chat
 		echo "<div id='chatBox'>";
-		include 'view/chatView.php';
+		include_once("view/chatView.php");
 		echo "</div>";
 		
 		// Affichage pied-de-page
-		include 'view/footerView.php';
+		include_once("view/footerView.php");
 	}
 ?>

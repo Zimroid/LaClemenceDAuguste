@@ -11,30 +11,30 @@ body
 
 #menu
 {
-    width:      240px;
-    height:     100%;
-    position:   absolute;
-	height: 100%;
-	border-right: 2px solid #666;
+    width:          190px;
+    height:         100%;
+    position:       absolute;
+	height:         100%;
+	border-right:   2px solid #666;
 }
 
 #mainPage
 {
     width:          calc(100% - 595px - 2em);
-    margin-left:    calc(240px + 1em);
+    margin-left:    calc(190px + 1em);
     height:         100%;
     position:       absolute;
     overflow:       auto;
-	padding-right: 1em;
+	padding-right:  1em;
 }
 
 #chatBox
 {
-    overflow:   none;
-    position:   absolute;
-    width:      355px;
-    height:     100%;
-    top:        0px;
-    right:      0px;
-    border-left: 2px solid #666;
+    overflow:       none;
+    position:       absolute;
+    width:          355px;
+    height:         100%;
+    top:            0px;
+    right:          0px;
+    border-left:    2px solid #666;
 }

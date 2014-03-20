@@ -1,0 +1,62 @@
+header
+{
+	height: 70px;
+}
+#title
+{
+	margin: 	0px;
+	padding: 	12%;
+	text-align:	center;
+}
+nav
+{
+	margin-right: 1em;
+	margin-left: 1em;
+}
+nav > ul
+{
+	margin:				0px;
+	padding:			0px;
+	list-style-type:	none;
+}
+nav > div.navDivider
+{
+	margin: 			1em;
+	background-color:	#666;
+	height:				2px;
+}
+nav > ul > li
+{
+	background-repeat:		no-repeat;
+  	background-position: 	0 50%;
+ 	padding: 				3px 0 3px 20px;
+  	margin: 				0.4em 0;
+}
+nav > ul > li.liHome
+{
+	background-image: url('images/home.png');
+}
+nav > ul > li.liRules
+{
+	background-image: url();
+}
+nav > ul > li.liFAQ
+{
+	background-image: url();
+}
+nav > ul > li.liContact
+{
+	background-image: url();
+}
+nav > ul > li.liDownload
+{
+	background-image: url();
+}
+nav > ul > li.liCreate
+{
+	background-image: url();
+}
+nav > ul > li.liJoin
+{
+	background-image: url();
+}
