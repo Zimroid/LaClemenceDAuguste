@@ -31,6 +31,8 @@ function inscription()
 	var pass = $("#passwordSubscribe").val();
 	var conf = $("#confirmSubscribe").val();
 	
+	alert(user+"-"+pass+"-"+conf);
+	
     if(user != "" && pass != "" && conf != "" && pass == conf)
     {
         var json = JSON.stringify(
