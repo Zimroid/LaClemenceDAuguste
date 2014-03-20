@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package august.client.command.server;
+package auguste.client.command.server;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,22 +13,21 @@ import org.json.JSONObject;
  *
  * @author Evinrude
  */
-public class ConfirmCommand extends CommandServer
+public class LogClient extends CommandServer
 {
-    public ConfirmCommand(JSONObject json)
+    public LogClient(JSONObject json)
     {
         super(json);
     }
     
-    public ConfirmCommand()
+    public LogClient()
     {
         super();
     }
 
     @Override
-    public void execute() throws JSONException
+    public void execute() throws JSONException 
     {
-        String confirm_msg = this.getJSON().getString("type");
-        System.out.println(confirm_msg);
+        System.out.println("Bienvenu "+this.getJSON().getString("login"));
     }
 }
