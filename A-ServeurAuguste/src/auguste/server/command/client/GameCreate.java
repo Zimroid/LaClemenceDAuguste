@@ -28,7 +28,7 @@ public class GameCreate extends ClientCommand
     public void execute() throws JSONException
     {
         // Création de la partie si le joueur est connecté est n'est pas en game
-        if (this.getUser().isIdentified() && !this.getUser().isInGame())
+        if (this.getUser().isLogged() && !this.getUser().isInGame())
         {
             
         }

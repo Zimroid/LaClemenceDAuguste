@@ -22,6 +22,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.apache.commons.codec.binary.Hex;
+import org.java_websocket.WebSocket;
 
 /**
  * Classe représentant un utilisateur connecté au serveur.
@@ -57,47 +58,68 @@ public class User
     }
     
     // Attributs
-    private int    id;       // ID de l'utilisateur
-    private String name;     // Nom de l'utilisateur
-    private String password; // Mot de passe hashé de l'utilisateur
+    private int    id;        // ID de l'utilisateur
+    private String name;      // Nom de l'utilisateur
+    private String password;  // Mot de passe hashé de l'utilisateur
+    
+    // WebSocket de l'utilisateur
+    private final WebSocket socket;
     
     /**
      * Instanciation d'un utilisateur avec les valeurs données.
      * @param id       ID de l'utilisateur
      * @param name     Nom de l'utilisateur
      * @param password Mot de passe hashé de l'utilisateur
+     * @param socket   Socket de l'utilisateur
      */
-    public User(int id, String name, String password)
+    public User(int id, String name, String password, WebSocket socket)
     {
         this.id       = id;
         this.name     = name;
         this.password = password;
+        this.socket   = socket;
     }
     
     /**
      * Instanciation d'un utilisateur à partir d'un résultat de requête.
-     * @param set ResultSet d'une requête
+     * @param set    ResultSet d'une requête
+     * @param socket Socket de l'utilisateur
      * @throws java.sql.SQLException Erreur SQL
      */
-    public User(ResultSet set) throws SQLException
+    public User(ResultSet set, WebSocket socket) throws SQLException
     {
         this.id       = set.getInt   ("id");
         this.name     = set.getString("name");
         this.password = set.getString("password");
+        this.socket   = socket;
     }
     
-    public User()
+    /**
+     * Instanciation d'un utilisateur avec les valeurs par défaut
+     * @param socket
+     */
+    public User(WebSocket socket)
     {
         this.id       = User.DEFAULT_ID;
         this.name     = User.DEFAULT_NAME;
         this.password = User.DEFAULT_PASSWORD;
+        this.socket   = socket;
+    }
+    
+    /**
+     * Envoi d'un message à la socket de l'utilisateur.
+     * @param message Message à envoyer.
+     */
+    public void send(String message)
+    {
+        this.socket.send(message);
     }
     
     /**
      * Indique si l'utilisateur est identifié.
      * @return Booléen indiquant si l'utilisateur est identifié
      */
-    public boolean isIdentified()
+    public boolean isLogged()
     {
         return this.id != User.DEFAULT_ID;
     }

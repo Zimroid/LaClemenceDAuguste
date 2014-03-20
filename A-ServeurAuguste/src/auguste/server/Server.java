@@ -59,6 +59,9 @@ public class Server extends WebSocketServer
     // Liste des utilisateurs connectés
     private final HashMap<WebSocket, User> users = new HashMap<>();
     
+    // Liste des utilisateurs identifiés
+    private final HashMap<Integer, User> loggedUsers = new HashMap<>();
+    
     // Liste des parties en cours de création
     private final HashMap<String, Game> games = new HashMap<>();
     
@@ -88,7 +91,7 @@ public class Server extends WebSocketServer
         Log.out("Connection with " + socket.getRemoteSocketAddress());
         
         // Création de l'utilisateur anonyme et ajout dans la liste
-        this.users.put(socket, new User());
+        this.users.put(socket, new User(socket));
     }
 
     /**
@@ -180,47 +183,21 @@ public class Server extends WebSocketServer
     }
     
     /**
-     * Méthode pour broadcaster un message à tous les utilisateurs.
-     * @param message Message à envoyer
+     * Ajoute un utilisateur à la liste des utilisateurs connectés.
+     * @param user Utilisateur à connecter
      */
-    public void broadcast(String message)
+    public void logIn(User user)
     {
-        this.broadcast(this.connections(), message);
+        this.loggedUsers.put(user.getId(), user);
     }
     
     /**
-     * Méthode pour broadcaster un message à une liste d'utilisateurs.
-     * @param targets Liste des sockets cibles
-     * @param message Message à envoyer
+     * Supprime un utilisateur de la liste des utilisateurs connectés.
+     * @param user Utilisateur à déconnecter
      */
-    public void broadcast(Iterable<WebSocket> targets, String message)
+    public void logOut(User user)
     {
-        // Signalisation
-        Log.out("Broadcast: \"" + message + "\"");
-        
-        // Envoi du message
-        for (WebSocket socket : targets)
-        {
-            socket.send(message);
-        }
-    }
-    
-    /**
-     * Retourne la liste des utilisateurs actuellement connectés.
-     * @return HashMap des utilisateurs connectés
-     */
-    public HashMap<WebSocket, User> getUsers()
-    {
-        return this.users;
-    }
-    
-    /**
-     * Retourne la liste des parties en cours.
-     * @return HashMap des parties en cours
-     */
-    public HashMap<String, Game> getGames()
-    {
-        return this.games;
+        this.loggedUsers.remove(user.getId());
     }
     
 }

@@ -77,7 +77,7 @@ public class UserManager extends Manager
         set.first();
 
         // Retour du joueur
-        return new User(set);
+        return new User(set, null);
     }
 
     /**
@@ -96,7 +96,7 @@ public class UserManager extends Manager
         ResultSet set = statement.executeQuery();
 
         // Si aucun résultat, retourne null, sinon retourne le joueur
-        if (set.first()) return new User(set);
+        if (set.first()) return new User(set, null);
         else             return null;
     }
     
