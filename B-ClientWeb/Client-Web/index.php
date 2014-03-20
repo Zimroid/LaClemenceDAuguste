@@ -1,4 +1,9 @@
 <?php
+	// Compression gzip
+	ob_start('ob_gzhandler');
+	register_shutdown_function('ob_end_flush');
+	header('Content-Type: text/html; charset=utf-8');
+	
 	require_once("controller/pageController.php");
 	require_once("controller/userController.php");
 
@@ -32,5 +37,8 @@
 		echo "<div id='chatBox'>";
 		include 'view/chatView.php';
 		echo "</div>";
+		
+		// Affichage pied-de-page
+		include 'view/footerView.php';
 	}
 ?>

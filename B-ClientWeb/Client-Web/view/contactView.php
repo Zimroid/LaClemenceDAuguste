@@ -1,4 +1,4 @@
-<h1>Contact</h1>
+<h2>Contact</h2>
 
 <p>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed pulvinar urna, quis hendrerit sem. Phasellus ac nunc nunc. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla mattis, lorem non hendrerit volutpat, dolor mi laoreet arcu, et mollis velit felis vel nulla. Fusce nec velit feugiat, volutpat felis et, luctus lectus. Integer fermentum aliquam urna quis volutpat. Pellentesque at fringilla magna, eget blandit velit. Pellentesque pretium nibh tellus, quis laoreet quam aliquam quis. Quisque sodales vestibulum mauris, in convallis diam rhoncus quis.

@@ -1,4 +1,4 @@
-<h2>The game</h2>
+<h3>The game</h3>
 
 <div>Plateau</div>
 
