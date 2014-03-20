@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package auguste.server.entity.action.card;
+package auguste.engine.entity.action.card;
 
-import auguste.server.entity.Team;
+import auguste.engine.entity.Team;
 
 /**
  * Classe représentant une carte de type muraille.

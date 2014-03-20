@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package auguste.server.entity.action;
+package auguste.engine.entity.action;
 
-import auguste.server.entity.Legion;
-import auguste.server.entity.action.card.Card;
+import auguste.engine.entity.Legion;
+import auguste.engine.entity.action.card.Card;
 
 /**
  * Classe représentant une action.

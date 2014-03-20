@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package auguste.server.entity.pawn;
+package auguste.engine.entity.pawn;
 
-import auguste.server.entity.Cell;
-import auguste.server.entity.Legion;
+import auguste.engine.entity.Cell;
+import auguste.engine.entity.Legion;
 
 /**
  * Classe représentant un pion.

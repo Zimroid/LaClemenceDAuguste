@@ -14,18 +14,23 @@
  * limitations under the License.
  */
 
-package auguste.server.entity.action.card;
+package auguste.engine.entity.pawn;
+
+import auguste.engine.entity.Cell;
 
 /**
- * Classe représentant une carte de type cavalier.
+ * Classe représentant un soldat.
  * @author Zwyk
  */
-public class Horseman {
-    
+public class Soldier extends Pawn
+{
+
     /**
-    * Instanciation d'une carte de type cavalier
+    * Instanciation d'un soldat avec la case sur laquelle il est situé.
+    * @param cell Case sur laquelle est situé le soldat
     */
-    public Horseman()
+    public Soldier(Cell cell)
     {
+        super(cell);
     }
 }

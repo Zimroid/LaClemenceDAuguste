@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-package auguste.server.entity.pawn;
-
-import auguste.server.entity.Cell;
+package auguste.engine.entity.action.card;
 
 /**
- * Classe représentant une armure.
+ * Classe représentant une carte de type devin.
  * @author Zwyk
  */
-public class Armor extends Pawn
-{
-
+public class Soothsayer {
+    
     /**
-    * Instanciation d'une armure avec la case sur laquelle elle est située.
-    * @param cell Case sur laquelle est située l'armure
+    * Instanciation d'une carte de type muraille*
     */
-    public Armor(Cell cell)
+    public Soothsayer()
     {
-        super(cell);
     }
 }

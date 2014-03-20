@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package auguste.server.entity.action;
+package auguste.engine.entity.action;
 
-import auguste.server.entity.Cell;
-import auguste.server.entity.pawn.Pawn;
+import auguste.engine.entity.Cell;
+import auguste.engine.entity.pawn.Pawn;
 
 /**
  * Classe représentant un mouvement.

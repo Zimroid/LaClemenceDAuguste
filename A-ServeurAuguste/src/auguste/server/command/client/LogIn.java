@@ -18,7 +18,7 @@ package auguste.server.command.client;
 
 import auguste.server.command.server.LogConfirm;
 import auguste.server.command.server.MessageError;
-import auguste.server.entity.Player;
+import auguste.engine.entity.Player;
 import auguste.server.manager.UserManager;
 import auguste.server.util.Db;
 import java.sql.Connection;

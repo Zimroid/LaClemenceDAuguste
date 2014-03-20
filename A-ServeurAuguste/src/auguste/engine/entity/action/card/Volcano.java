@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-package auguste.server.entity.pawn;
-
-import auguste.server.entity.Cell;
+package auguste.engine.entity.action.card;
 
 /**
- * Classe représentant un laurier.
+ * Classe représentant une carte de type volcan
  * @author Zwyk
  */
-public class Laurel extends Pawn
-{
-
+public class Volcano {
+    
     /**
-    * Instanciation d'un laurier avec la case sur laquelle il est situé.
-    * @param cell Case sur laquelle est situé le laurier
+    * Instanciation d'une carte de type volcan.
     */
-    public Laurel(Cell cell)
+    public Volcano()
     {
-        super(cell);
     }
 }

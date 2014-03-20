@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package auguste.server.entity;
+package auguste.engine.entity;
 
-import auguste.server.entity.action.card.Soothsayer;
-import auguste.server.entity.pawn.Pawn;
+import auguste.engine.entity.action.card.Soothsayer;
+import auguste.engine.entity.pawn.Pawn;
 import java.awt.Color;
 import java.util.ArrayList;
 

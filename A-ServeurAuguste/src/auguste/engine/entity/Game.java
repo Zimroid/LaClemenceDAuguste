@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package auguste.server.entity;
+package auguste.engine.entity;
 
 import java.util.ArrayList;
 

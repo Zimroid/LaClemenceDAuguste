@@ -16,7 +16,7 @@
 
 package auguste.server;
 
-import auguste.server.entity.Player;
+import auguste.engine.entity.Player;
 import auguste.server.util.Log;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

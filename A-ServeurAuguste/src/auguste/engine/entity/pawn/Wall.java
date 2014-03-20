@@ -14,18 +14,23 @@
  * limitations under the License.
  */
 
-package auguste.server.entity.action.card;
+package auguste.engine.entity.pawn;
+
+import auguste.engine.entity.Cell;
 
 /**
- * Classe représentant une carte de type devin.
+ * Classe représentant un mur.
  * @author Zwyk
  */
-public class Soothsayer {
-    
+public class Wall extends Pawn
+{
+
     /**
-    * Instanciation d'une carte de type muraille*
+    * Instanciation d'un mur avec la case sur laquelle il est situé.
+    * @param cell Case sur laquelle est situé le mur
     */
-    public Soothsayer()
+    public Wall(Cell cell)
     {
+        super(cell);
     }
 }

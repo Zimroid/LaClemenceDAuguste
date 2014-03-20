@@ -14,12 +14,23 @@
  * limitations under the License.
  */
 
-package auguste.server.entity.action.card;
+package auguste.engine.entity.pawn;
+
+import auguste.engine.entity.Cell;
 
 /**
- * Classe représentant une carte.
+ * Classe représentant un laurier.
  * @author Zwyk
  */
-public class Card
-{    
+public class Laurel extends Pawn
+{
+
+    /**
+    * Instanciation d'un laurier avec la case sur laquelle il est situé.
+    * @param cell Case sur laquelle est situé le laurier
+    */
+    public Laurel(Cell cell)
+    {
+        super(cell);
+    }
 }

@@ -18,8 +18,8 @@ package auguste.server;
 
 import auguste.server.command.client.ClientCommand;
 import auguste.server.command.server.MessageError;
-import auguste.server.entity.Game;
-import auguste.server.entity.Player;
+import auguste.engine.entity.Game;
+import auguste.engine.entity.Player;
 import auguste.server.exception.RuleException;
 import auguste.server.exception.UnknownCommandException;
 import auguste.server.util.Log;

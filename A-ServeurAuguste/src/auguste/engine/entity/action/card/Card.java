@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package auguste.server.entity.action.card;
+package auguste.engine.entity.action.card;
 
 /**
- * Classe représentant une carte de type volcan
+ * Classe représentant une carte.
  * @author Zwyk
  */
-public class Volcano {
-    
-    /**
-    * Instanciation d'une carte de type volcan.
-    */
-    public Volcano()
-    {
-    }
+public class Card
+{    
 }

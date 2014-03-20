@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package auguste.server.entity;
+package auguste.engine.entity;
 
-import auguste.server.entity.action.card.Fortification;
-import auguste.server.entity.action.card.Horseman;
-import auguste.server.entity.action.card.Volcano;
+import auguste.engine.entity.action.card.Fortification;
+import auguste.engine.entity.action.card.Horseman;
+import auguste.engine.entity.action.card.Volcano;
 import java.util.ArrayList;
 
 /**

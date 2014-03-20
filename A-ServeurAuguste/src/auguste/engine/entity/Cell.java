@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package auguste.server.entity;
+package auguste.engine.entity;
 
-import auguste.server.entity.pawn.Pawn;
+import auguste.engine.entity.pawn.Pawn;
 import java.awt.Point;
 
 /**

@@ -16,7 +16,7 @@
 
 package auguste.server.command.server;
 
-import auguste.server.entity.Player;
+import auguste.engine.entity.Player;
 import org.json.JSONException;
 
 /**

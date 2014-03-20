@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package auguste.server.entity.pawn;
+package auguste.engine.entity.pawn;
 
-import auguste.server.entity.Cell;
+import auguste.engine.entity.Cell;
 
 /**
- * Classe représentant un mur.
+ * Classe représentant une armure.
  * @author Zwyk
  */
-public class Wall extends Pawn
+public class Armor extends Pawn
 {
 
     /**
-    * Instanciation d'un mur avec la case sur laquelle il est situé.
-    * @param cell Case sur laquelle est situé le mur
+    * Instanciation d'une armure avec la case sur laquelle elle est située.
+    * @param cell Case sur laquelle est située l'armure
     */
-    public Wall(Cell cell)
+    public Armor(Cell cell)
     {
         super(cell);
     }

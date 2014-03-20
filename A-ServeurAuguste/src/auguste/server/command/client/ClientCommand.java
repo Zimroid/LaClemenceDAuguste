@@ -17,7 +17,7 @@
 package auguste.server.command.client;
 
 import auguste.server.User;
-import auguste.server.entity.Player;
+import auguste.engine.entity.Player;
 import auguste.server.exception.RuleException;
 import auguste.server.exception.UnknownCommandException;
 import java.sql.SQLException;
