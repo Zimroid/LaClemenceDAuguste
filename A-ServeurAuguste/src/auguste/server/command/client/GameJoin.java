@@ -31,9 +31,9 @@ public class GameJoin extends ClientCommand
     @Override
     public void execute() throws SQLException, JSONException, RuleException
     {
-        if (this.getPlayer().isLogged() && !this.getPlayer().isInGame())
+        if (this.getUser().isLogged() && !this.getUser().isInGame())
         {
-            this.getPlayer().setGame(Server.getInstance().getGames().get(this.getJSON().getString("game_name")));
+            this.getUser().setGame(Server.getInstance().getGames().get(this.getJSON().getString("game_name")));
             this.getSocket().send((new MessageConfirm("game_join")).toString());
         }
     }

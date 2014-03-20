@@ -58,7 +58,7 @@ public class Server extends WebSocketServer
     }
     
     // Liste des joueurs connectés
-    private final HashMap<WebSocket, Player> players = new HashMap<>();
+    private final HashMap<WebSocket, User> users = new HashMap<>();
     
     // Liste des parties en cours de création
     private final HashMap<String, Game> games = new HashMap<>();
@@ -89,8 +89,8 @@ public class Server extends WebSocketServer
         Log.out("Connection with " + socket.getRemoteSocketAddress());
         
         // Création de l'utilisateur anonyme et ajout dans la liste
-        Player newPlayer = new Player(Player.DEFAULT_ID, Player.DEFAULT_LOGIN, Player.DEFAULT_PASSWORD);
-        this.players.put(socket, newPlayer);
+        User newUser = new User(User.DEFAULT_ID, User.DEFAULT_LOGIN, User.DEFAULT_PASSWORD);
+        this.users.put(socket, newUser);
     }
 
     /**
@@ -107,7 +107,7 @@ public class Server extends WebSocketServer
         Log.out("Disconnected from " + socket.getRemoteSocketAddress() + " (" + code + ": " + reason + ")");
         
         // Suppression de la liste des joueurs connectés
-        this.players.remove(socket);
+        this.users.remove(socket);
     }
 
     /**
@@ -128,7 +128,7 @@ public class Server extends WebSocketServer
             {
                 // Instanciation et signalisation de la commande
                 JSONObject json = new JSONObject(content);
-                Player player = this.players.get(socket);
+                User user = this.users.get(socket);
                 System.out.println("Identified command: " + json.getString("command"));
 
                 // Définition de la commande
@@ -136,7 +136,7 @@ public class Server extends WebSocketServer
 
                 // Exécution de la commande
                 command.setJSON(json);
-                command.setPlayer(player);
+                command.setUser(user);
                 command.setSocket(socket);
                 command.execute();
             }
@@ -208,9 +208,9 @@ public class Server extends WebSocketServer
      * Retourne la liste des joueurs actuellement connectés.
      * @return HashMap des joueurs connectés
      */
-    public HashMap<WebSocket, Player> getPlayers()
+    public HashMap<WebSocket, User> getUsers()
     {
-        return this.players;
+        return this.users;
     }
     
     /**

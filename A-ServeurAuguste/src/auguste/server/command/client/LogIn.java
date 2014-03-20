@@ -19,7 +19,7 @@ package auguste.server.command.client;
 import auguste.server.command.server.LogConfirm;
 import auguste.server.command.server.MessageError;
 import auguste.server.entity.Player;
-import auguste.server.manager.PlayerManager;
+import auguste.server.manager.UserManager;
 import auguste.server.util.Db;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -38,8 +38,8 @@ public class LogIn extends ClientCommand
         Player playerToLog;
         try (Connection connection = Db.open())
         {
-            PlayerManager manager = new PlayerManager(connection);
-            playerToLog = manager.getPlayer(
+            UserManager manager = new UserManager(connection);
+            playerToLog = manager.getUser(
                     this.getJSON().getString("name"),
                     this.getJSON().getString("password")
             );
@@ -49,9 +49,9 @@ public class LogIn extends ClientCommand
         // Si un joueur a été trouvé, mise à jour du joueur connecté
         if (playerToLog != null)
         {
-            this.getPlayer().setId(playerToLog.getId());
-            this.getPlayer().setName(playerToLog.getName());
-            this.getSocket().send((new LogConfirm(this.getPlayer())).toString());
+            this.getUser().setId(playerToLog.getId());
+            this.getUser().setName(playerToLog.getName());
+            this.getSocket().send((new LogConfirm(this.getUser())).toString());
         }
         else this.getSocket().send((new MessageError("log_error")).toString());
     }
