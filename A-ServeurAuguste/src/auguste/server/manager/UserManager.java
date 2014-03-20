@@ -16,7 +16,7 @@
 
 package auguste.server.manager;
 
-import auguste.server.entity.Player;
+import auguste.server.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,7 +27,7 @@ import java.sql.SQLException;
  * données.
  * @author Lzard
  */
-public class PlayerManager extends Manager
+public class UserManager extends Manager
 {
     // Requête pour récupérer un joueur avec son ID
     private static final String QUERY_PLAYER_FROM_ID =
@@ -57,7 +57,7 @@ public class PlayerManager extends Manager
      * Initialise la connexion à la base de données.
      * @param connection
      */
-    public PlayerManager(Connection connection)
+    public UserManager(Connection connection)
     {
         super(connection);
     }
@@ -68,16 +68,16 @@ public class PlayerManager extends Manager
      * @return Instance de Player correspondant à l'ID
      * @throws java.sql.SQLException Erreur SQL
      */
-    public Player getPlayer(int id) throws SQLException
+    public User getUser(int id) throws SQLException
     {
         // Préparation et exécution de la requête
-        PreparedStatement statement = this.query(PlayerManager.QUERY_PLAYER_FROM_ID);
+        PreparedStatement statement = this.query(UserManager.QUERY_PLAYER_FROM_ID);
         statement.setInt(1, id);
         ResultSet set = statement.executeQuery();
         set.first();
 
         // Retour du joueur
-        return new Player(set);
+        return new User(set);
     }
 
     /**
@@ -87,16 +87,16 @@ public class PlayerManager extends Manager
      * @return Instance de Player correspondant au joueur ou null si erreur
      * @throws java.sql.SQLException Erreur SQL
      */
-    public Player getPlayer(String login, String password) throws SQLException
+    public User getUser(String login, String password) throws SQLException
     {
         // Préparation et exécution de la requête
-        PreparedStatement statement = this.query(PlayerManager.QUERY_PLAYER_BY_LOGIN);
+        PreparedStatement statement = this.query(UserManager.QUERY_PLAYER_BY_LOGIN);
         statement.setString(1, login);
-        statement.setString(2, Player.hashPassword(password));
+        statement.setString(2, User.hashPassword(password));
         ResultSet set = statement.executeQuery();
 
         // Si aucun résultat, retourne null, sinon retourne le joueur
-        if (set.first()) return new Player(set);
+        if (set.first()) return new User(set);
         else             return null;
     }
     
@@ -109,7 +109,7 @@ public class PlayerManager extends Manager
     public boolean getNameAvailable(String name) throws SQLException
     {
         // Préparation et exécution de la requête
-        PreparedStatement statement = this.query(PlayerManager.QUERY_NAME_AVAILABLE);
+        PreparedStatement statement = this.query(UserManager.QUERY_NAME_AVAILABLE);
         statement.setString(1, name);
         ResultSet set = statement.executeQuery();
         
@@ -119,46 +119,46 @@ public class PlayerManager extends Manager
 
     /**
      * Sauvegarde d'un joueur dans la base de données.
-     * @param player Joueur à sauvegarder
+     * @param user Joueur à sauvegarder
      * @throws java.sql.SQLException Erreur SQL
      */
-    public void savePlayer(Player player) throws SQLException
+    public void saveUser(User user) throws SQLException
     {
         // Si c'est un nouveau joueur, on l'insère, sinon on le met à jour
-        if (player.getId() == Player.DEFAULT_ID)
+        if (user.getId() == User.DEFAULT_ID)
         {
             // Préparation et exécution de la requête
-            PreparedStatement statement = this.query(PlayerManager.QUERY_ADD_PLAYER, true);
-            statement.setString(1, player.getName());
-            statement.setString(2, player.getPassword());
+            PreparedStatement statement = this.query(UserManager.QUERY_ADD_PLAYER, true);
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getPassword());
             statement.executeUpdate();
             
             // Récupération de l'ID du nouveau joueur
             ResultSet keysSet = statement.getGeneratedKeys();
             keysSet.first();
-            player.setId(keysSet.getInt(1));
+            user.setId(keysSet.getInt(1));
         }
         else
         {
             // Préparation et exécution de la requête
-            PreparedStatement statement = this.query(PlayerManager.QUERY_UPDATE_PLAYER);
-            statement.setString(1, player.getName());
-            statement.setString(2, player.getPassword());
-            statement.setInt   (3, player.getId());
+            PreparedStatement statement = this.query(UserManager.QUERY_UPDATE_PLAYER);
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getPassword());
+            statement.setInt   (3, user.getId());
             statement.executeUpdate();
         }
     }
     
     /**
      * Supprime un joueur de la base de données.
-     * @param player Joueur à supprimer
+     * @param user Joueur à supprimer
      * @throws SQLException Erreur SQL
      */
-    public void deletePlayer(Player player) throws SQLException
+    public void deleteUser(User user) throws SQLException
     {
         // Préparation et exécution de la requête
-        PreparedStatement statement = this.query(PlayerManager.QUERY_UPDATE_PLAYER);
-        statement.setInt(1, player.getId());
+        PreparedStatement statement = this.query(UserManager.QUERY_UPDATE_PLAYER);
+        statement.setInt(1, user.getId());
         statement.executeUpdate();
     }
     
