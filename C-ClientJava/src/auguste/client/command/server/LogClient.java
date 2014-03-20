@@ -6,6 +6,7 @@
 
 package auguste.client.command.server;
 
+import auguste.client.entity.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,12 +15,7 @@ import org.json.JSONObject;
  * @author Evinrude
  */
 public class LogClient extends CommandServer
-{
-    public LogClient(JSONObject json)
-    {
-        super(json);
-    }
-    
+{    
     public LogClient()
     {
         super();
@@ -28,6 +24,10 @@ public class LogClient extends CommandServer
     @Override
     public void execute() throws JSONException 
     {
-        System.out.println("Bienvenu "+this.getJSON().getString("login"));
+        User user = new User();
+        user.setName(this.getJSON().getString("name"));
+        
+        this.getClient().setUser(user);
+        this.getClient().getCSL().LogClient();
     }
 }

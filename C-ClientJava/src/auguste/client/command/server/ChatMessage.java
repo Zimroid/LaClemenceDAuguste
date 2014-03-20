@@ -7,19 +7,13 @@
 package auguste.client.command.server;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  *
  * @author Evinrude
  */
 public class ChatMessage extends CommandServer
-{
-    public ChatMessage(JSONObject json)
-    {
-        super(json);
-    }
-    
+{    
     public ChatMessage()
     {
         super();
@@ -30,6 +24,6 @@ public class ChatMessage extends CommandServer
     {
         String author = this.getJSON().getString("author");
         String message= this.getJSON().getString("text");
-        System.out.println("Message received from "+author+" : "+message);
+        this.getClient().getCSL().sendChat(author, message);
     }
 }

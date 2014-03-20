@@ -22,18 +22,29 @@ public class ClientSocket extends WebSocketClient
         private static final String PORT = "47135";
         private static final String PORT_TEST = "16302";
         private static final String CONNECTION_STRING = "ws://"+ADDRESS+":"+PORT_TEST;
-        private Client client;
 	
-	public ClientSocket(URI serverURI)
+        private static ClientSocket INSTANCE;
+        private Client client;
+        
+	private ClientSocket(URI serverURI)
 	{
 		super(serverURI);
 	}
 
-	public ClientSocket() throws URISyntaxException
+	private ClientSocket() throws URISyntaxException
 	{
 		this(new URI(CONNECTION_STRING));
 		System.out.println("Client created");
 	}
+        
+        public static ClientSocket getInstance() throws URISyntaxException
+        {
+            if(INSTANCE == null)
+            {
+                INSTANCE = new ClientSocket();
+            }
+            return INSTANCE;
+        }
         
         public void setClient(Client client)
         {

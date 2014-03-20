@@ -7,7 +7,6 @@
 package auguste.client.command.client;
 
 import auguste.client.entity.Client;
-import clientjavaacrobatt.Main;
 import org.json.JSONException;
 
 /**
@@ -31,7 +30,7 @@ public class QuitGame extends CommandClient
     {
         super.execute();
         System.out.println("Exiting the application");
-        this.getClient().getCSL().setStop(true);
+        this.getClient().getCSL().stop();
         this.getClient().getClientSocket().close();
     }
 

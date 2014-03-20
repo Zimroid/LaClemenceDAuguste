@@ -6,6 +6,9 @@
 
 package auguste.client.command.server;
 
+import auguste.client.entity.Game;
+import java.util.ArrayList;
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,12 +18,7 @@ import org.json.JSONObject;
  * @author Evinrude
  */
 public class GameAvailable extends CommandServer
-{
-    public GameAvailable(JSONObject json)
-    {
-        super(json);
-    }
-    
+{    
     public GameAvailable()
     {
         super();
@@ -29,16 +27,23 @@ public class GameAvailable extends CommandServer
     @Override
     public void execute() throws JSONException 
     {
+        List<Game> games = new ArrayList<Game>();
         JSONArray game_array = this.getJSON().getJSONArray("games");
-        System.out.println("Liste des parties en cours : ");
         for(int i = 0; i<game_array.length(); i++)
         {
+            Game g = new Game();
             JSONObject game = game_array.getJSONObject(i);
             int game_id = game.getInt("id");
             String game_name = game.getString("name");
             int board_size = game.getInt("board_size");
-
-            System.out.println(game_id+" Nom :  "+game_name+" Board size :  "+board_size);
+            
+            g.setId(game_id);
+            g.setName(game_name);
+            g.setBoardSize(board_size);
+            
+            games.add(g);
         }
+        this.getClient().setGameAvailable(games);
+        this.getClient().getCSL().gameAvailable();
     }
 }

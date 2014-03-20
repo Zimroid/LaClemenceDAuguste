@@ -8,7 +8,6 @@ package auguste.client.command.client;
 
 import auguste.client.entity.Client;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  *

@@ -6,6 +6,7 @@
 
 package auguste.client.command.server;
 
+import auguste.client.entity.Client;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,18 +18,12 @@ public abstract class CommandServer
 {
     
     private JSONObject json;
+    private Client client;
     
     public abstract void execute() throws JSONException;
-    
-    public CommandServer(JSONObject json)
-    {
-        this.json = json;
-    }
-    
+        
     public CommandServer()
-    {
-        this(null);
-    }
+    {}
     
     public JSONObject getJSON()
     {
@@ -40,11 +35,21 @@ public abstract class CommandServer
         this.json = json;
     }
     
+    public Client getClient()
+    {
+        return this.client;
+    }
+    
+    public void setClient(Client client)
+    {
+        this.client = client;
+    }
+    
     public enum CommandName
     {
         CHAT_MESSAGE,
-        CONFIRM,
+        MESSAGE_CONFIRM,
         GAME_AVAILABLE,
-        CONFIRM_LOG
+        LOG_CONFIRM
     }
 }
