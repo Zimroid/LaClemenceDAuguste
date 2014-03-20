@@ -1,5 +1,5 @@
 <?php require_once("view/siteGlobalVar.php"); ?>
-<h1>Règles</h1>
+<h2>Règles</h2>
 (<a href="<?php echo $sitePath; ?>/ressources/ReglesAuguste.pdf">Télécharger les règles complètes de <b>La Clémence d'Auguste</b></a>)
 
 <h3>Déroulement d'un tour :</h3>

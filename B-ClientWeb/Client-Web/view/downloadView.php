@@ -1,4 +1,4 @@
-<h1>Téléchargement</h1>
+<h2>Téléchargements</h2>
 
 <h3>Jeu version PC</h3>
 <p>Lorem ipsum dolor ...</p>
@@ -18,5 +18,5 @@ Pour imprimer votre plateau, téléchargez tout d'abord les PDF suivants :<br/>
 </ul>
 
 Par la suite, imprimez ces différents PDF et collez-les sur des feuilles aimantées (d'au moins 1mm pour les pions). Vous pouvez trouver assez facilement ce matériel sur internet par exemple, et le prix est assez bas en général.<br/><br/>
-Découpez par la suite les différents pions, et rassemblez les 2 parties du plateau (du simple scotch suffit)
+Découpez par la suite les différents pions, et rassemblez les 2 parties du plateau (du simple scotch suffit).
 </p>

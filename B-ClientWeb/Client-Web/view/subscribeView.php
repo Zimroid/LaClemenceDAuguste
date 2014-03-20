@@ -1,4 +1,4 @@
-<h1>Inscription au jeu :</h1>
+<h2>Inscription au jeu :</h2>
 
 <!-- Inscription -->
 <label for="userSubscribe">Pseudo : </label>

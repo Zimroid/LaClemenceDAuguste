@@ -32,12 +32,12 @@
 		
 		<!-- Lien vers page d'inscription -->
 		<script>
-			document.write("<a href='' onclick='reloadContent(\"<?php echo $sitePath; ?>/index.php?script=1&page=subscribe\"); return false;' >");
+			document.write("<a href='' onclick='reloadContent(\"<?php echo $sitePath; ?>/index.php?script=1&page=subscribe\"); return false;' ><button>M'inscrire au jeu</button></a>");
 		</script>
 		<noscript>
-			<a href='<?php echo $sitePath; ?>/subscribe'>
+			<a href='<?php echo $sitePath; ?>/subscribe'><button>M'inscrire au jeu</button></a>
 		</noscript>
-		<button>M'inscrire au jeu</button></a>
+		
 <?php
 	}
 ?>
@@ -45,7 +45,9 @@
 
 <!-- Div d'affichage des messages -->
 <div id="chatMessages">
-	Bonjour et bienvenue sur Auguste ...
+	Bonjour et bienvenue sur le chat Auguste !<br>
+	Pour participer à de meilleures conversations,<br>
+	merci de rester courtois et d'éviter le langage SMS.
 </div>
 
 <!-- Div d'envoi d'un message-->

@@ -1,4 +1,4 @@
-<h1>News</h1>
+<h2>News</h2>
 
 <?php	
 	if(isset($newsList) && $newsList != null)

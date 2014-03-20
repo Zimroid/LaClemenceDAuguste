@@ -1,4 +1,4 @@
-<h1>FAQ</h1>
+<h2>FAQ</h2>
 
 <?php	
 	if($faqList != null)
