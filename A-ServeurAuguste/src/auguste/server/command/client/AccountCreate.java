@@ -16,9 +16,10 @@
 
 package auguste.server.command.client;
 
+import auguste.server.User;
 import auguste.server.command.server.MessageConfirm;
-import auguste.server.entity.Player;
-import auguste.server.manager.PlayerManager;
+import auguste.engine.entity.Player;
+import auguste.server.manager.UserManager;
 import auguste.server.util.Db;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -34,20 +35,20 @@ public class AccountCreate extends ClientCommand
     public void execute() throws JSONException, SQLException
     {
         // Création du compte si le joueur n'est pas identifié
-        if (!this.getPlayer().isLogged() && !this.getPlayer().isInGame())
+        if (!this.getUser().isLogged() && !this.getUser().isInGame())
         {
             // Création du joueur
-            Player newPlayer = new Player(
-                    Player.DEFAULT_ID,
+            User newUser = new User(
+                    User.DEFAULT_ID,
                     this.getJSON().getString("name"),
-                    Player.hashPassword(this.getJSON().getString("password"))
+                    User.hashPassword(this.getJSON().getString("password"))
             );
             
             // Sauvegarde du joueur
             try (Connection connection = Db.open())
             {
-                PlayerManager manager = new PlayerManager(connection);
-                manager.savePlayer(newPlayer);
+                UserManager manager = new UserManager(connection);
+                manager.saveUser(newUser);
                 connection.commit();
                 connection.close();
             }

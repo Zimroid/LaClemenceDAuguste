@@ -16,7 +16,8 @@
 
 package auguste.server.command.client;
 
-import auguste.server.entity.Player;
+import auguste.server.User;
+import auguste.engine.entity.Player;
 import auguste.server.exception.RuleException;
 import auguste.server.exception.UnknownCommandException;
 import java.sql.SQLException;
@@ -65,7 +66,7 @@ public abstract class ClientCommand
     
     // Attributs
     private JSONObject json;    // JSON de la commande
-    private Player     player;  // Joueur qui a émit la commande
+    private User       user;  // Joueur qui a émit la commande
     private WebSocket  socket;  // Socket ayant reçu la commande
     
     /**
@@ -82,16 +83,16 @@ public abstract class ClientCommand
      */
     public JSONObject getJSON()
     {
-        return json;
+        return this.json;
     }
 
     /**
      * Retourne le joueur ayant émit la commande.
      * @return Player ayant émit la commande
      */
-    public Player getPlayer()
+    public User getUser()
     {
-        return player;
+        return this.user;
     }
 
     /**
@@ -113,11 +114,11 @@ public abstract class ClientCommand
 
     /**
      * Modifie le joueur ayant émit la commande.
-     * @param player Player à utiliser
+     * @param user Player à utiliser
      */
-    public void setPlayer(Player player)
+    public void setUser(User user)
     {
-        this.player = player;
+        this.user = user;
     }
 
     /**
