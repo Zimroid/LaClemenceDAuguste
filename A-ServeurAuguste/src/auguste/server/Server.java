@@ -19,7 +19,6 @@ package auguste.server;
 import auguste.server.command.client.ClientCommand;
 import auguste.server.command.server.MessageError;
 import auguste.engine.entity.Game;
-import auguste.engine.entity.Player;
 import auguste.server.exception.RuleException;
 import auguste.server.exception.UnknownCommandException;
 import auguste.server.util.Log;
@@ -57,7 +56,7 @@ public class Server extends WebSocketServer
         return Server.INSTANCE;
     }
     
-    // Liste des joueurs connectés
+    // Liste des utilisateurs connectés
     private final HashMap<WebSocket, User> users = new HashMap<>();
     
     // Liste des parties en cours de création
@@ -79,7 +78,7 @@ public class Server extends WebSocketServer
     
     /**
      * Méthode appelée lors de la connexion d'un client.
-     * @param socket WebSocket concernée
+     * @param socket    WebSocket concernée
      * @param handshake Données handshake générées
      */
     @Override
@@ -89,22 +88,23 @@ public class Server extends WebSocketServer
         Log.out("Connection with " + socket.getRemoteSocketAddress());
         
         // Création de l'utilisateur anonyme et ajout dans la liste
-        User newUser = new User(User.DEFAULT_ID, User.DEFAULT_LOGIN, User.DEFAULT_PASSWORD);
-        this.users.put(socket, newUser);
+        this.users.put(socket, new User());
     }
 
     /**
      * Méthode appelée lors de la déconnexion d'un client.
-     * @param socket WebSocket concernée
-     * @param code Code décrivant la raison de la fermeture
-     * @param reason Raison de la fermeture
-     * @param byRemoteHost Fermeture provoquée par le client ?
+     * @param socket    WebSocket concernée
+     * @param code      Code décrivant la raison de la fermeture
+     * @param reason    Raison de la fermeture
+     * @param byRequest Fermeture demandée par le client ?
      */
     @Override
-    public void onClose(WebSocket socket, int code, String reason, boolean byRemoteHost)
+    public void onClose(WebSocket socket, int code, String reason, boolean byRequest)
     {
         // Signalisation
-        Log.out("Disconnected from " + socket.getRemoteSocketAddress() + " (" + code + ": " + reason + ")");
+        Log.out("Disconnected from " + socket.getRemoteSocketAddress() + " " +
+                (byRequest ? "by request" : "") +
+                " (" + code + ": " + reason + ")");
         
         // Suppression de la liste des joueurs connectés
         this.users.remove(socket);
@@ -112,14 +112,14 @@ public class Server extends WebSocketServer
 
     /**
      * Méthode appelée lors de la réception d'un message du client.
-     * @param socket WebSocket concernée
+     * @param socket  WebSocket concernée
      * @param content Contenu du message
      */
     @Override
     public void onMessage(WebSocket socket, String content)
     {
         // Signalisation
-        Log.debug("Received from " + socket.getRemoteSocketAddress() + ": \"" + content + "\"");
+        Log.out("Received from " + socket.getRemoteSocketAddress() + ": \"" + content + "\"");
         
         // Lecture de la commande
         try
@@ -127,48 +127,49 @@ public class Server extends WebSocketServer
             try
             {
                 // Instanciation et signalisation de la commande
-                JSONObject json = new JSONObject(content);
                 User user = this.users.get(socket);
-                System.out.println("Identified command: " + json.getString("command"));
+                JSONObject json = new JSONObject(content);
+                Log.out("Identified command: " + json.getString("command"));
 
                 // Définition de la commande
                 ClientCommand command = ClientCommand.get(json.getString("command"));
+                command.setSocket(socket);
+                command.setUser(user);
+                command.setJSON(json);
 
                 // Exécution de la commande
-                command.setJSON(json);
-                command.setUser(user);
-                command.setSocket(socket);
                 command.execute();
-            }
-            catch (UnknownCommandException ex)
-            {
-                // Reçu une commande inconnue
-                Log.debug("Unknown command: " + ex);
-                socket.send((new MessageError("unknown_command")).toString());
             }
             catch (RuleException ex)
             {
                 // Reçu une action qui enfreint les règles
-                Log.debug("Unauthorized move: " + ex);
+                Log.out("Unauthorized move: " + ex);
                 socket.send((new MessageError("rule_error")).toString());
+            }
+            catch (UnknownCommandException ex)
+            {
+                // Reçu une commande inconnue
+                Log.out("Unknown command: " + ex);
+                socket.send((new MessageError("unknown_command")).toString());
+            }
+            catch (SQLException ex)
+            {
+                // Erreur de communication avec la base de données
+                Log.error("SQL error: " + ex);
+                socket.send((new MessageError("unknown_error")).toString());
             }
         }
         catch (JSONException ex)
         {
             // JSON reçu faux ou illisible
-            Log.debug("JSON error: " + ex);
-        }
-        catch (SQLException ex)
-        {
-            // Erreur de communication avec la base de données
-            Log.debug("SQL error: " + ex);
+            Log.error("JSON error: " + ex);
         }
     }
 
     /**
      * Méthode appelée lorsqu'une erreur est survenue.
      * @param socket WebSocket concernée
-     * @param ex Exception émise
+     * @param ex     Exception émise
      */
     @Override
     public void onError(WebSocket socket, Exception ex)
@@ -205,8 +206,8 @@ public class Server extends WebSocketServer
     }
     
     /**
-     * Retourne la liste des joueurs actuellement connectés.
-     * @return HashMap des joueurs connectés
+     * Retourne la liste des utilisateurs actuellement connectés.
+     * @return HashMap des utilisateurs connectés
      */
     public HashMap<WebSocket, User> getUsers()
     {

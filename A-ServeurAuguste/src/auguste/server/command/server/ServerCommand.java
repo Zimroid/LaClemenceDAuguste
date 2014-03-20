@@ -42,13 +42,13 @@ public abstract class ServerCommand
      * Retourne le JSON de la commande.
      * @return JSON de la commande
      */
-    public JSONObject getJSON()
+    public final JSONObject getJSON()
     {
         return this.json;
     }
     
     @Override
-    public String toString()
+    public final String toString()
     {
         return this.json.toString();
     }

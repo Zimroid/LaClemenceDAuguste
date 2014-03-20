@@ -17,7 +17,10 @@
 package auguste.server;
 
 import auguste.server.util.Configuration;
+import auguste.server.util.Log;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Classe de lancement du serveur.
@@ -32,19 +35,41 @@ public class Main
      * Point d'entrée de l'application. Charge la configuration, vérifie
      * la présence du driver JDBC et lance le serveur.
      * @param args Arguments de la commande
-     * @throws java.io.IOException Fichier de configuration absent
-     * @throws java.lang.ClassNotFoundException Driver JDBC absent
      */
-    public static void main(String[] args) throws IOException, ClassNotFoundException
+    public static void main(String[] args)
     {
-        // Chargement de la configuration
-        Configuration.load(Main.CONFIGURATION_FILE);
-        
-        // Vérification de la présence du driver JDBC
-        Class.forName(Configuration.get("db_driver"));
-        
-        // Lancement
-        Server.getInstance().start();
+        try
+        {
+            // Chargement de la configuration
+            Configuration.load(Main.CONFIGURATION_FILE);
+            
+            // Vérification de la présence du driver JDBC
+            Class.forName(Configuration.get("db_driver"));
+            
+            // Vérification de la disponibilité de l'algorithme de hashage
+            MessageDigest.getInstance(Configuration.get("hash_algorithm"));
+            
+            // Lancement
+            Server.getInstance().start();
+        }
+        catch (IOException ex)
+        {
+            // Fichier de configuration inaccessible
+            Log.error("Configuration file unavailable");
+            Log.debug(ex.toString());
+        }
+        catch (ClassNotFoundException ex)
+        {
+            // Driver JDBC introuvable
+            Log.error("JDBC driver unavailable");
+            Log.debug(ex.toString());
+        }
+        catch (NoSuchAlgorithmException ex)
+        {
+            // Algorithme de hashage indisponible
+            Log.error("Hash algorithme unavailable");
+            Log.debug(ex.toString());
+        }
     }
     
 }

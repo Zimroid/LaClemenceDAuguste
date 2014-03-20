@@ -16,7 +16,7 @@
 
 package auguste.server.command.server;
 
-import auguste.engine.entity.Player;
+import auguste.server.User;
 import java.util.Date;
 import org.json.JSONException;
 
@@ -32,7 +32,7 @@ public class ChatMessage extends ServerCommand
      * @param message Contenu du message
      * @throws JSONException Erreur de JSON
      */
-    public ChatMessage(Player author, String message) throws JSONException
+    public ChatMessage(User author, String message) throws JSONException
     {
         // Constructeur de la classe mère
         super("chat_message");

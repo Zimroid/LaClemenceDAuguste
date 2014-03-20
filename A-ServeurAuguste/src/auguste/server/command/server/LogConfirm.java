@@ -16,7 +16,7 @@
 
 package auguste.server.command.server;
 
-import auguste.engine.entity.Player;
+import auguste.server.User;
 import org.json.JSONException;
 
 /**
@@ -27,16 +27,16 @@ public class LogConfirm extends ServerCommand
 {
     /**
      * Remplit le JSON avec les paramètres fournis.
-     * @param player Joueur connecté
+     * @param user Utilisateur connecté
      * @throws JSONException Erreur de JSON
      */
-    public LogConfirm(Player player) throws JSONException
+    public LogConfirm(User user) throws JSONException
     {
         // Constructeur de la classe mère
         super("log_confirm");
         
         // Création du JSON
-        this.getJSON().put("name", player.getName());
+        this.getJSON().put("name", user.getName());
     }
     
 }

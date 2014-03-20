@@ -30,9 +30,9 @@ public class GameLeave extends ClientCommand
     @Override
     public void execute() throws SQLException, JSONException, RuleException
     {
-        if (this.getUser().isLogged() && this.getUser().isInGame())
+        if (this.getUser().isIdentified() && this.getUser().isInGame())
         {
-            this.getUser().setGame(null);
+            //this.getUser().setGame(null);
             this.getSocket().send((new MessageConfirm("game_leave")).toString());
         }
     }

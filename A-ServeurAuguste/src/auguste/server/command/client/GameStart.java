@@ -18,7 +18,7 @@ package auguste.server.command.client;
 
 import auguste.server.Server;
 import auguste.server.command.server.GameTurn;
-import auguste.engine.entity.Player;
+import auguste.server.User;
 import auguste.server.exception.RuleException;
 import java.sql.SQLException;
 import org.json.JSONException;
@@ -32,11 +32,11 @@ public class GameStart extends ClientCommand
     @Override
     public void execute() throws SQLException, JSONException, RuleException
     {
-        if (this.getUser().isLogged() && this.getUser().isInGame())
+        if (this.getUser().isIdentified() && this.getUser().isInGame())
         {
-            for (Player player : Server.getInstance().getUsers().values())
+            for (User user : Server.getInstance().getUsers().values())
             {
-                if (player.getGame() == this.getUser().getGame()) this.getSocket().send((new GameTurn()).toString());
+                if (user.getGame() == this.getUser().getGame()) this.getSocket().send((new GameTurn()).toString());
             }
         }
     }

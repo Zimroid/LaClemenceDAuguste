@@ -29,29 +29,29 @@ import java.sql.SQLException;
  */
 public class UserManager extends Manager
 {
-    // Requête pour récupérer un joueur avec son ID
-    private static final String QUERY_PLAYER_FROM_ID =
-            "SELECT * FROM player WHERE id = ? LIMIT 1";
+    // Requête pour récupérer un utilisateur avec son ID
+    private static final String QUERY_USER_FROM_ID =
+            "SELECT * FROM user WHERE id = ? LIMIT 1";
     
-    // Requête pour récupérer un joueur avec son nom et son mot de passe
-    private static final String QUERY_PLAYER_BY_LOGIN =
-            "SELECT * FROM player WHERE name = ? AND password = ? LIMIT 1";
+    // Requête pour récupérer un utilisateur avec son nom et son mot de passe
+    private static final String QUERY_USER_BY_LOGIN =
+            "SELECT * FROM user WHERE name = ? AND password = ? LIMIT 1";
     
     // Requête pour vérifier qu'un pseudo n'est pas utilisé
     private static final String QUERY_NAME_AVAILABLE =
-            "SELECT 1 FROM player WHERE name = ? LIMIT 1";
+            "SELECT 1 FROM user WHERE name = ? LIMIT 1";
     
-    // Requête pour ajouter un joueur
-    private static final String QUERY_ADD_PLAYER =
-            "INSERT INTO player(name, password) VALUES(?, ?)";
+    // Requête pour ajouter un utilisateur
+    private static final String QUERY_ADD_USER =
+            "INSERT INTO user(name, password) VALUES(?, ?)";
     
-    // Requête pour modifier un joueur
-    private static final String QUERY_UPDATE_PLAYER =
-            "UPDATE player SET name = ?, password = ? WHERE id = ?";
+    // Requête pour modifier un utilisateur
+    private static final String QUERY_UPDATE_USER =
+            "UPDATE user SET name = ?, password = ? WHERE id = ?";
     
-    // Requête pour supprimer un joueur
-    private static final String QUERY_DELETE_PLAYER =
-            "DELETE FROM player WHERE id = ?";
+    // Requête pour supprimer un utilisateur
+    private static final String QUERY_DELETE_USER =
+            "DELETE FROM user WHERE id = ?";
 
     /**
      * Initialise la connexion à la base de données.
@@ -71,7 +71,7 @@ public class UserManager extends Manager
     public User getUser(int id) throws SQLException
     {
         // Préparation et exécution de la requête
-        PreparedStatement statement = this.query(UserManager.QUERY_PLAYER_FROM_ID);
+        PreparedStatement statement = this.query(UserManager.QUERY_USER_FROM_ID);
         statement.setInt(1, id);
         ResultSet set = statement.executeQuery();
         set.first();
@@ -82,7 +82,7 @@ public class UserManager extends Manager
 
     /**
      * Récupère un joueur via son login et son mot de passe.
-     * @param login Login du joueur
+     * @param login    Login du joueur
      * @param password Mot de passe du joueur
      * @return Instance de Player correspondant au joueur ou null si erreur
      * @throws java.sql.SQLException Erreur SQL
@@ -90,7 +90,7 @@ public class UserManager extends Manager
     public User getUser(String login, String password) throws SQLException
     {
         // Préparation et exécution de la requête
-        PreparedStatement statement = this.query(UserManager.QUERY_PLAYER_BY_LOGIN);
+        PreparedStatement statement = this.query(UserManager.QUERY_USER_BY_LOGIN);
         statement.setString(1, login);
         statement.setString(2, User.hashPassword(password));
         ResultSet set = statement.executeQuery();
@@ -128,7 +128,7 @@ public class UserManager extends Manager
         if (user.getId() == User.DEFAULT_ID)
         {
             // Préparation et exécution de la requête
-            PreparedStatement statement = this.query(UserManager.QUERY_ADD_PLAYER, true);
+            PreparedStatement statement = this.query(UserManager.QUERY_ADD_USER, true);
             statement.setString(1, user.getName());
             statement.setString(2, user.getPassword());
             statement.executeUpdate();
@@ -141,7 +141,7 @@ public class UserManager extends Manager
         else
         {
             // Préparation et exécution de la requête
-            PreparedStatement statement = this.query(UserManager.QUERY_UPDATE_PLAYER);
+            PreparedStatement statement = this.query(UserManager.QUERY_UPDATE_USER);
             statement.setString(1, user.getName());
             statement.setString(2, user.getPassword());
             statement.setInt   (3, user.getId());
@@ -157,7 +157,7 @@ public class UserManager extends Manager
     public void deleteUser(User user) throws SQLException
     {
         // Préparation et exécution de la requête
-        PreparedStatement statement = this.query(UserManager.QUERY_UPDATE_PLAYER);
+        PreparedStatement statement = this.query(UserManager.QUERY_UPDATE_USER);
         statement.setInt(1, user.getId());
         statement.executeUpdate();
     }

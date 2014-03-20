@@ -17,9 +17,9 @@
 package auguste.server.command.client;
 
 import auguste.server.User;
-import auguste.engine.entity.Player;
 import auguste.server.exception.RuleException;
 import auguste.server.exception.UnknownCommandException;
+import auguste.server.util.Log;
 import java.sql.SQLException;
 import org.java_websocket.WebSocket;
 import org.json.JSONException;
@@ -60,19 +60,20 @@ public abstract class ClientCommand
         catch(IllegalArgumentException ex)
         {
             // Commande inconnue
+            Log.debug(ex.toString());
             throw new UnknownCommandException(name);
         }
     }
     
     // Attributs
     private JSONObject json;    // JSON de la commande
-    private User       user;  // Joueur qui a émit la commande
+    private User       user;    // Joueur qui a émit la commande
     private WebSocket  socket;  // Socket ayant reçu la commande
     
     /**
      * Exécution de la commande.
-     * @throws java.sql.SQLException Erreur SQL
-     * @throws org.json.JSONException Erreur JSON
+     * @throws java.sql.SQLException                  Erreur SQL
+     * @throws org.json.JSONException                 Erreur JSON
      * @throws auguste.server.exception.RuleException Règles enfreintes
      */
     public abstract void execute() throws RuleException, JSONException, SQLException;
@@ -81,16 +82,16 @@ public abstract class ClientCommand
      * Retourne le JSONObject de la commande.
      * @return JSONObject de la json
      */
-    public JSONObject getJSON()
+    public final JSONObject getJSON()
     {
         return this.json;
     }
 
     /**
-     * Retourne le joueur ayant émit la commande.
+     * Retourne l'utilisateur ayant émit la commande.
      * @return Player ayant émit la commande
      */
-    public User getUser()
+    public final User getUser()
     {
         return this.user;
     }
@@ -99,7 +100,8 @@ public abstract class ClientCommand
      * Retourne la WebSocket ayant reçu la commande.
      * @return WebSocket ayant reçu la commande
      */
-    public WebSocket getSocket() {
+    public final WebSocket getSocket()
+    {
         return socket;
     }
 
@@ -107,16 +109,16 @@ public abstract class ClientCommand
      * Modifie le JSONObject de la commande.
      * @param command JSONObject à utiliser
      */
-    public void setJSON(JSONObject command)
+    public final void setJSON(JSONObject command)
     {
         this.json = command;
     }
 
     /**
-     * Modifie le joueur ayant émit la commande.
-     * @param user Player à utiliser
+     * Modifie l'utilisateur ayant émit la commande.
+     * @param user User à utiliser
      */
-    public void setUser(User user)
+    public final void setUser(User user)
     {
         this.user = user;
     }
@@ -125,7 +127,7 @@ public abstract class ClientCommand
      * Modifie la WebSocket ayant reçu la commande.
      * @param socket WebSocket à utiliser
      */
-    public void setSocket(WebSocket socket)
+    public final void setSocket(WebSocket socket)
     {
         this.socket = socket;
     }
@@ -133,7 +135,7 @@ public abstract class ClientCommand
     /**
     * Liste des commande émises par le client.
     */
-    private enum CommandName
+    private final enum CommandName
     {
         ACCOUNT_CREATE,
         CHAT_SEND,

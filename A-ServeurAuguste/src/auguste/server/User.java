@@ -16,7 +16,6 @@
 
 package auguste.server;
 
-import auguste.engine.entity.Player;
 import auguste.server.util.Log;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -29,15 +28,10 @@ import org.apache.commons.codec.binary.Hex;
  * @author Lzard
  */
 public class User
-{
-    // Définitions des colonnes
-    private static final String COLUMN_ID       = "id";
-    private static final String COLUMN_LOGIN    = "login";
-    private static final String COLUMN_PASSWORD = "password";
-    
+{   
     // Valeurs par défaut des champs d'un utilisateur non loggé
     public static final int    DEFAULT_ID       = 0;
-    public static final String DEFAULT_LOGIN    = "Anonymous";
+    public static final String DEFAULT_NAME     = "Anonymous";
     public static final String DEFAULT_PASSWORD = "";
     
     /**
@@ -57,58 +51,69 @@ public class User
         catch (NoSuchAlgorithmException ex)
         {
             // Algorithme indisponible
-            Log.error("MessageDigest algorithm unavailable: " + ex);
+            Log.debug(ex.toString());
             return new String();
         }
     }
     
     // Attributs
-    private int    id;       // ID du joueur
-    private String name;     // Login du joueur
-    private String password; // Mot de passe hashé du joueur
+    private int    id;       // ID de l'utilisateur
+    private String name;     // Nom de l'utilisateur
+    private String password; // Mot de passe hashé de l'utilisateur
     
     /**
      * Instanciation d'un utilisateur avec les valeurs données.
-     * @param id ID du joueur
-     * @param login Login du joueur
-     * @param password Mot de passe hashé du joueur
+     * @param id       ID de l'utilisateur
+     * @param name     Nom de l'utilisateur
+     * @param password Mot de passe hashé de l'utilisateur
      */
-    public User(int id, String login, String password)
+    public User(int id, String name, String password)
     {
         this.id       = id;
-        this.name    = login;
+        this.name     = name;
         this.password = password;
     }
     
     /**
      * Instanciation d'un utilisateur à partir d'un résultat de requête.
      * @param set ResultSet d'une requête
-     * @throws java.sql.SQLException
+     * @throws java.sql.SQLException Erreur SQL
      */
     public User(ResultSet set) throws SQLException
     {
-        this.id       = set.getInt   (User.COLUMN_ID);
-        this.name    = set.getString(User.COLUMN_LOGIN);
-        this.password = set.getString(User.COLUMN_PASSWORD);
+        this.id       = set.getInt   ("id");
+        this.name     = set.getString("name");
+        this.password = set.getString("password");
+    }
+    
+    public User()
+    {
+        this.id       = User.DEFAULT_ID;
+        this.name     = User.DEFAULT_NAME;
+        this.password = User.DEFAULT_PASSWORD;
     }
     
     /**
-     * Indique si le joueur est identifié.
-     * @return Booléen indiquant si le joueur est identifié
+     * Indique si l'utilisateur est identifié.
+     * @return Booléen indiquant si l'utilisateur est identifié
      */
-    public boolean isLogged()
+    public boolean isIdentified()
     {
         return this.id != User.DEFAULT_ID;
     }
     
+    /**
+     * Indique si l'utilisateur est en jeu.
+     * @return Booléen indiquant si l'utilisateur est en jeu
+     */
     public boolean isInGame()
     {
         return false;
     }
 
     /**
-     * Retourne l'ID du joueur.
-     * @return ID du joueur
+     * Retourne l'ID de l'utilisateur.
+     * @return ID de l'utilisateur
      */
     public int getId()
     {
@@ -116,8 +121,8 @@ public class User
     }
 
     /**
-     * Retourne le name du joueur.
-     * @return Login du joueur
+     * Retourne le nom de l'utilisateur.
+     * @return Nom de l'utlisateur
      */
     public String getName()
     {
@@ -125,8 +130,8 @@ public class User
     }
 
     /**
-     * Retourne le mot de passe hashé du joueur.
-     * @return Mot de passe du joueur
+     * Retourne le mot de passe hashé de l'utilisateur.
+     * @return Mot de passe de l'utilisateur
      */
     public String getPassword()
     {
@@ -134,7 +139,7 @@ public class User
     }
 
     /**
-     * Modifie l'ID du joueur.
+     * Modifie l'ID de l'utilisateur.
      * @param id ID à utiliser
      */
     public void setId(int id)
@@ -143,8 +148,8 @@ public class User
     }
 
     /**
-     * Modifie le name du joueur.
-     * @param name Login à utiliser
+     * Modifie le nom du joueur.
+     * @param name Nom à utiliser
      */
     public void setName(String name)
     {
@@ -152,11 +157,12 @@ public class User
     }
 
     /**
-     * Modifie le mot de passe hashé du joueur.
+     * Modifie le mot de passe hashé de l'utilisateur.
      * @param password Mot de passe à utiliser
      */
     public void setPassword(String password)
     {
         this.password = password;
     }
+    
 }

@@ -18,7 +18,6 @@ package auguste.server.command.client;
 
 import auguste.server.User;
 import auguste.server.command.server.MessageConfirm;
-import auguste.engine.entity.Player;
 import auguste.server.manager.UserManager;
 import auguste.server.util.Db;
 import java.sql.Connection;
@@ -35,7 +34,7 @@ public class AccountCreate extends ClientCommand
     public void execute() throws JSONException, SQLException
     {
         // Création du compte si le joueur n'est pas identifié
-        if (!this.getUser().isLogged() && !this.getUser().isInGame())
+        if (!this.getUser().isIdentified())
         {
             // Création du joueur
             User newUser = new User(
@@ -49,8 +48,7 @@ public class AccountCreate extends ClientCommand
             {
                 UserManager manager = new UserManager(connection);
                 manager.saveUser(newUser);
-                connection.commit();
-                connection.close();
+                Db.close(connection);
             }
             
             // Signalisation

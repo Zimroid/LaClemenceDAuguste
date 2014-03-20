@@ -52,7 +52,7 @@ public abstract class Manager
     
     /**
      * Prépare une requête avec récupération des identifiants générés.
-     * @param query Requête demandée
+     * @param query         Requête demandée
      * @param generatedKeys Retourner les identifiants ?
      * @return PreparedStatement de la requête
      * @throws SQLException Erreur SQL
