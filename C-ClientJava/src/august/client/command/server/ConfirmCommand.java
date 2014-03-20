@@ -6,8 +6,6 @@
 
 package august.client.command.server;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
