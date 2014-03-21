@@ -6,6 +6,7 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+.metadata\*
 
 /2-Tests/InterfaceTestJSON/build/
 /2-Tests/InterfaceTestJSON/dist/
