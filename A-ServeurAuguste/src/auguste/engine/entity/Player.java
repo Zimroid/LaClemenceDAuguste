@@ -18,7 +18,7 @@ package auguste.engine.entity;
 
 import auguste.engine.entity.action.Action;
 import auguste.engine.entity.pawn.Pawn;
-import auguste.server.User;
+import auguste.server.Client;
 import java.util.ArrayList;
 
 
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class Player
 {        
     // Variables métier
-    private User user;
+    private Client user;
     private final ArrayList<Pawn> pawns;
     private Team team;
     private Action action;
@@ -39,7 +39,7 @@ public class Player
      * Instanciation d'un utilisateur avec les valeurs données.
      * @param user L'utilisateur relatif au joueur
      */
-    public Player(User user)
+    public Player(Client user)
     {
         this.user = user;
         this.pawns = new ArrayList<>();
@@ -122,14 +122,14 @@ public class Player
     /**
      * @return the user
      */
-    public User getUser() {
+    public Client getUser() {
         return user;
     }
 
     /**
      * @param user the user to set
      */
-    public void setUser(User user) {
+    public void setUser(Client user) {
         this.user = user;
     }
 }

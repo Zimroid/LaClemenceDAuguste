@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Lzard.
+ * Copyright 2014 Conseil7.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package auguste.server.command.client;
 import auguste.server.Server;
 import auguste.server.command.server.LogConfirm;
 import auguste.server.command.server.MessageError;
-import auguste.server.User;
+import auguste.server.Client;
 import auguste.server.manager.UserManager;
 import auguste.server.util.Db;
 import java.sql.Connection;
@@ -36,10 +36,10 @@ public class LogIn extends ClientCommand
     public void execute() throws SQLException, JSONException
     {
         // Commande pouvant être exécutée que si l'utilisateur n'est pas identifié
-        if (!this.getUser().isLogged())
+        if (!this.getClient().isLogged())
         {
             // Connexion à la base de données et récupération du nouvel utilisateur
-            User userToLog;
+            Client userToLog;
             try (Connection connection = Db.open())
             {
                 UserManager manager = new UserManager(connection);
@@ -56,17 +56,17 @@ public class LogIn extends ClientCommand
                 // Déconnexion de l'utilisateur de même nom déjà connecté
                 Server.getInstance().logOut(userToLog);
                 
-                // Mise à jour de l'utilisateur courant
-                this.getUser().setId(userToLog.getId());
-                this.getUser().setName(userToLog.getName());
+                // Mise à jour du client courant
+                this.getClient().setId(userToLog.getId());
+                this.getClient().setName(userToLog.getName());
                 
                 // Connexion de l'utilisateur
-                Server.getInstance().logIn(this.getUser());
-                this.getUser().send((new LogConfirm(this.getUser())).toString());
+                Server.getInstance().logIn(this.getClient());
+                this.getClient().send((new LogConfirm(this.getClient())).toString());
             }
-            else this.getUser().send((new MessageError("log_error")).toString());
+            else this.getClient().send((new MessageError("log_error")).toString());
         }
-        else this.getUser().send((new MessageError("already_logged")).toString());
+        else this.getClient().send((new MessageError("already_logged")).toString());
     }
     
 }
