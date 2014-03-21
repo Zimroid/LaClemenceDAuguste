@@ -1,7 +1,7 @@
 allow from all
 
 RewriteEngine on
-RewriteRule ^$ 			index.php?page=news
+
 RewriteRule ^accueil$ 	index.php?page=news
 RewriteRule ^rules$ 	index.php?page=rules
 RewriteRule ^faq$ 		index.php?page=faq
