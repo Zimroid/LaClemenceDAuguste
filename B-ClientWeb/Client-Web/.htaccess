@@ -16,7 +16,7 @@ RewriteRule ^download$	index.php?page=download
 RewriteRule ^subscribe$	index.php?page=subscribe
 
 # cacher la version d'Apache
-ServerTokens Prod
+# ServerTokens Prod
 ServerSignature Off
 
 AddDefaultCharset "utf-8"
