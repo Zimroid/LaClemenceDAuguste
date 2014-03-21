@@ -6,8 +6,9 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
-.metadata\*
+.metadata/
 
 /2-Tests/InterfaceTestJSON/build/
 /2-Tests/InterfaceTestJSON/dist/
 B-ClientWeb/Client-Web/model/config.php
+*.prefs
