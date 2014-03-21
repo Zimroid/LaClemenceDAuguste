@@ -35,7 +35,7 @@
 			document.write("<a href='' onclick='reloadContent(\"<?php echo $sitePath; ?>/index.php?script=1&page=subscribe\"); return false;' ><button>M'inscrire au jeu</button></a>");
 		</script>
 		<noscript>
-			<a href='<?php echo $sitePath; ?>/subscribe'><button>M'inscrire au jeu</button></a>
+			<button><a href='<?php echo $sitePath; ?>/subscribe'>M'inscrire au jeu</a></button>
 		</noscript>
 		
 <?php
@@ -51,7 +51,7 @@
 <!-- Div d'envoi d'un message-->
 <div id="chatSend">
 	<form onSubmit="addMessage(); return false;" autocomplete="off" >
-		<textarea type="text" id="message" name="message" onKeyPress="toucheEntree(event)"></textarea>
+		<textarea type="text" id="message" name="message" onkeypress="toucheEntree(event)"></textarea>
 		<input type="submit" id="valid" value="Envoyer" />
 	</form>
 </div>
