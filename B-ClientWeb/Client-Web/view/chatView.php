@@ -14,22 +14,9 @@
 	{
 ?>
 		<!-- Connexion -->
-		<label for="user">Pseudo : </label>
-		<br />
 		<input type="text" name="user" id="user" placeholder="Pseudo" />
-		
-		<br />
-
-		<label for="password">Mot de passe : </label>
-		<br />
 		<input type="password" name="password" id="password" placeholder="Mot de passe" />
-		
-		<br />
-
 		<input type="button" value="Me connecter" onclick="connexion(); " />
-			
-		<br/>	
-		
 		<!-- Lien vers page d'inscription -->
 		<script>
 			document.write("<a href='' onclick='reloadContent(\"<?php echo $sitePath; ?>/index.php?script=1&page=subscribe\"); return false;' >M'inscrire au jeu</a>");

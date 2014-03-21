@@ -24,3 +24,13 @@ function gameStart()
 
     sendText(json);
 }
+
+function gameConfig()
+{
+    var json = JSON.stringify(
+    {
+        "command": "GAME_CONFIG"
+    });
+    
+    sendText(json);
+}

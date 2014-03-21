@@ -12,9 +12,9 @@ function process(evt)
 	}
 	
 	// Reussite connexion utilisateur
-	else if(command == "confirm_log")
+	else if(command == "log_confirm")
 	{
-		reloadChat(sitePath + "/index.php?script=1&page=connect&user=" + data.login);
+		reloadChat(sitePath + "/index.php?script=1&page=connect&user=" + data.name);
 	}
 	
 	// Réception message
