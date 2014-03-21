@@ -7,6 +7,7 @@
 package auguste.client.command.client;
 
 import auguste.client.entity.Client;
+import auguste.client.graphical.UpdateListener;
 import org.json.JSONException;
 
 /**
@@ -30,7 +31,10 @@ public class QuitGame extends CommandClient
     {
         super.execute();
         System.out.println("Exiting the application");
-        this.getClient().getCSL().stop();
+        for(UpdateListener ul : client.getInterfaces())
+        {
+            ul.stop();
+        }
         this.getClient().getClientSocket().close();
     }
 

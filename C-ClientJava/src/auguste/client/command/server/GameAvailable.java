@@ -7,6 +7,7 @@
 package auguste.client.command.server;
 
 import auguste.client.entity.Game;
+import auguste.client.graphical.UpdateListener;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -44,6 +45,9 @@ public class GameAvailable extends CommandServer
             games.add(g);
         }
         this.getClient().setGameAvailable(games);
-        this.getClient().getCSL().gameAvailable();
+        for(UpdateListener ul : this.getClient().getInterfaces())
+        {
+            ul.listGameUpdate();
+        }
     }
 }

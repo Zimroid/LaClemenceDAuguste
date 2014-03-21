@@ -6,6 +6,7 @@
 
 package auguste.client.command.server;
 
+import auguste.client.graphical.UpdateListener;
 import org.json.JSONException;
 
 /**
@@ -31,7 +32,11 @@ public class ConfirmCommand extends CommandServer
     @Override
     public void execute() throws JSONException
     {
-        String confirm_msg = this.getJSON().getString("type");
-        this.getClient().getCSL().confirmCommand(confirm_msg);
+        String confirmMsg = this.getJSON().getString("type");
+        this.getClient().setConfirmMessage(confirmMsg);
+        for(UpdateListener ul : this.getClient().getInterfaces())
+        {
+            ul.confirmMessageUpdate();
+        }
     }
 }

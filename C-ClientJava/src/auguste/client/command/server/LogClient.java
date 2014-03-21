@@ -7,8 +7,8 @@
 package auguste.client.command.server;
 
 import auguste.client.entity.User;
+import auguste.client.graphical.UpdateListener;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  *
@@ -28,6 +28,9 @@ public class LogClient extends CommandServer
         user.setName(this.getJSON().getString("name"));
         
         this.getClient().setUser(user);
-        this.getClient().getCSL().LogClient();
+        for(UpdateListener ul : this.getClient().getInterfaces())
+        {
+            ul.userUpdate();
+        }
     }
 }

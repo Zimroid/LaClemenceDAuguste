@@ -7,9 +7,12 @@
 package auguste.client.graphical;
 
 import auguste.client.command.manager.CommandClientManager;
+import auguste.client.entity.ChatMessageReceived;
 import auguste.client.entity.Client;
 import auguste.client.entity.Game;
+import java.text.DateFormat;
 import java.util.List;
+import java.util.Queue;
 import java.util.Scanner;
 import org.json.JSONException;
 
@@ -18,7 +21,7 @@ import org.json.JSONException;
  * par le client
  * @author Evinrude
  */
-public class CSL 
+public class CSL implements UpdateListener
 {
     private final Client client;
     private boolean stop;
@@ -54,6 +57,7 @@ public class CSL
      * Cette fonction arrête le run de CSL
      * 
      */
+    @Override
     public void stop()
     {
         this.stop = true;
@@ -61,25 +65,30 @@ public class CSL
 
     /**
      * Se déclenche sur la réception d'un message de chat par le client
-     * @param author
-     *      L'auteur du message
-     * @param message
-     *      Le corps du message
      */
-    public void sendChat(String author, String message) 
+    public void sendChat() 
     {
-        System.out.println("<<"+author+">> "+message);
+        Queue<ChatMessageReceived> allCMR = client.getChatMessageReceived();
+        for(int i = 0; i<allCMR.size(); i++)
+        {
+            ChatMessageReceived cmr = allCMR.remove();
+            
+            String author = cmr.getAuthor();
+            String message = cmr.getMessage();
+            DateFormat date = DateFormat.getDateInstance(DateFormat.HOUR_OF_DAY0_FIELD);
+            String dateFormat = date.format(cmr.getDate());
+            
+            System.out.println("<<"+author+">>["+dateFormat+"]"+message);
+        }
     }
 
     /**
      * Se déclenche sur réception d'une commande de type
      * confirmation de la part du serveur
-     * 
-     * @param confirm_msg
-     *          le message de confirmation envoyé par le serveur
      */
-    public void confirmCommand(String confirm_msg) 
+    public void confirmCommand() 
     {
+        String confirm_msg = client.getConfirmMessage();
         System.out.println("Retour du serveur : " + confirm_msg);
     }
 
@@ -99,8 +108,38 @@ public class CSL
     /**
      * Se déclenche sur connexion d'un joueur
      */
-    public void LogClient() 
+    public void logClient() 
     {
         System.out.println("Bienvenu "+client.getUser().getName());
+    }
+
+    @Override
+    public void chatUpdate() 
+    {
+        this.sendChat();
+    }
+
+    @Override
+    public void userUpdate() 
+    {
+        this.logClient();
+    }
+
+    @Override
+    public void createGameUpdate() 
+    {
+        
+    }
+
+    @Override
+    public void listGameUpdate() 
+    {
+        this.gameAvailable();
+    }
+
+    @Override
+    public void confirmMessageUpdate() 
+    {
+        this.confirmCommand();
     }
 }

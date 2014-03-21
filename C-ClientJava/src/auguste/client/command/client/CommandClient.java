@@ -18,7 +18,7 @@ public abstract class CommandClient
 {
     private JSONObject json;
     private String[] args;
-    private Client client;
+    Client client;
     protected static final String GAME_CREATE = "game_create";
     protected static final String GAME_LIST = "game_list";
     protected static final String GAME_JOIN = "game_join";

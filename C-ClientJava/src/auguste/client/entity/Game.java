@@ -49,6 +49,6 @@ public class Game
     @Override
     public String toString()
     {
-        return new String("ID : "+this.id+"  Name : "+this.name+"  Size : "+this.board_size);
+        return "ID : "+this.id+"  Name : "+this.name+"  Size : "+this.board_size;
     }
 }

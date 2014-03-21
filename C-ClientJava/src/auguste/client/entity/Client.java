@@ -3,9 +3,13 @@ package auguste.client.entity;
 import auguste.client.command.manager.CommandClientManager;
 import auguste.client.command.manager.CommandServerManager;
 import auguste.client.graphical.CSL;
+import auguste.client.graphical.UpdateListener;
 import auguste.client.reseau.ClientSocket;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import org.json.JSONException;
 
 /**
@@ -16,30 +20,28 @@ import org.json.JSONException;
 public class Client
 {
         private final ClientSocket socket;
-        private final CSL csl;
+        private final List<UpdateListener> interfaces;
         
-        private List<Game> game_available;
-        private User current_user;
+        private List<Game> gameAvailable;
+        private User currentUser;
+        private Queue<ChatMessageReceived> chatMessageReceived;
+        private String confirmMessage;
         
         public Client() throws URISyntaxException
         {
             this.socket = ClientSocket.getInstance();
-            this.csl = new CSL(this);
+            this.interfaces = new ArrayList<>();
+            this.chatMessageReceived = new LinkedList<>();
         }
         
-        public CSL getCSL()
+        public List<UpdateListener> getInterfaces()
         {
-            return this.csl;
+            return this.interfaces;
         }
         
         public ClientSocket getClientSocket()
         {
             return this.socket;
-        }
-        
-        public void runCSL() throws JSONException
-        {
-            this.csl.run();
         }
 
         /**
@@ -70,21 +72,45 @@ public class Client
         
         public List<Game> getGameAvailable()
         {
-            return this.game_available;
+            return this.gameAvailable;
         }
         
         public void setGameAvailable(List<Game> games)
         {
-            this.game_available = games;
+            this.gameAvailable = games;
         }
         
         public User getUser()
         {
-            return this.current_user;
+            return this.currentUser;
         }
         
         public void setUser(User user)
         {
-            this.current_user = user;
+            this.currentUser = user;
         }
+
+    /**
+     * @return the chatMessageReceived
+     */
+    public Queue<ChatMessageReceived> getChatMessageReceived() {
+        return chatMessageReceived;
+    }
+
+    /**
+     * @param chatMessageReceived the chatMessageReceived to set
+     */
+    public void setChatMessageReceived(Queue<ChatMessageReceived> chatMessageReceived) {
+        this.chatMessageReceived = chatMessageReceived;
+    }
+
+    public String getConfirmMessage() 
+    {
+        return this.confirmMessage;
+    }
+    
+    public void setConfirmMessage(String confirmMessage)
+    {
+        this.confirmMessage = confirmMessage;
+    }
 }
