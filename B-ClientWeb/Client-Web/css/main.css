@@ -30,7 +30,6 @@ body
 
 #chatBox
 {
-    overflow:       none;
     position:       absolute;
     width:          355px;
     height:         100%;

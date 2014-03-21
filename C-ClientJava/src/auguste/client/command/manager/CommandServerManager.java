@@ -10,6 +10,7 @@ import auguste.client.command.server.ChatMessage;
 import auguste.client.command.server.CommandServer;
 import auguste.client.command.server.ConfirmCommand;
 import auguste.client.command.server.GameAvailable;
+import auguste.client.command.server.GameConfirm;
 import auguste.client.command.server.LogClient;
 import auguste.client.entity.Client;
 import org.json.JSONException;
@@ -25,7 +26,6 @@ public class CommandServerManager
     /**
      *
      * @param client
-     *      Le client de l'application.
      * @param param
      *      La chaine qui contient la commande et ses paramètres.
      */
@@ -44,6 +44,7 @@ public class CommandServerManager
                 case LOG_CONFIRM:       command = new LogClient();      break;
                 case GAME_AVAILABLE:    command = new GameAvailable();  break;
                 case MESSAGE_CONFIRM:   command = new ConfirmCommand(); break;
+                case GAME_CONFIRM:      command = new GameConfirm();     break;
                 default:                command = null;                 break;
             }
             command.setClient(client);

@@ -16,7 +16,7 @@
 
 package auguste.server.command.server;
 
-import auguste.server.User;
+import auguste.server.Client;
 import org.json.JSONException;
 
 /**
@@ -30,7 +30,7 @@ public class LogConfirm extends ServerCommand
      * @param user Utilisateur connecté
      * @throws JSONException Erreur de JSON
      */
-    public LogConfirm(User user) throws JSONException
+    public LogConfirm(Client user) throws JSONException
     {
         // Constructeur de la classe mère
         super("log_confirm");

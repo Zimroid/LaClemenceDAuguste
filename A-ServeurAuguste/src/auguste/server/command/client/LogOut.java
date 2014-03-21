@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Lzard.
+ * Copyright 2014 Conseil7.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,8 @@
 package auguste.server.command.client;
 
 import auguste.server.command.server.MessageConfirm;
-import auguste.engine.entity.Player;
 import auguste.server.Server;
-import auguste.server.User;
+import auguste.server.Client;
 import auguste.server.command.server.MessageError;
 import org.json.JSONException;
 
@@ -33,20 +32,20 @@ public class LogOut extends ClientCommand
     public void execute() throws JSONException
     {
         // Commande pouvant être exécuté que par des utilisateurs identifiés
-        if (this.getUser().isLogged())
+        if (this.getClient().isLogged())
         {
             // Désidentification de l'utilisateur
-            Server.getInstance().logOut(this.getUser());
+            Server.getInstance().logOut(this.getClient());
             
             // Remise des informations du joueur à celles par défaut
-            this.getUser().setId(User.DEFAULT_ID);
-            this.getUser().setName(User.DEFAULT_NAME);
-            this.getUser().setPassword(User.DEFAULT_PASSWORD);
+            this.getClient().setId(Client.DEFAULT_ID);
+            this.getClient().setName(Client.DEFAULT_NAME);
+            this.getClient().setPassword(Client.DEFAULT_PASSWORD);
 
             // Signalisation
             this.getSocket().send((new MessageConfirm("log_out")).toString());
         }
-        else this.getUser().send((new MessageError("not_logged")).toString());
+        else this.getClient().send((new MessageError("not_logged")).toString());
     }
     
 }

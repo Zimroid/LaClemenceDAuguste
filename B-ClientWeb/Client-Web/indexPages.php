@@ -56,4 +56,10 @@
 	{
 		$userCtr->deconnect();
 	}
+	
+	// Page par défaut
+	else
+	{
+		$pageCtr->news();
+	}
 ?>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Conseil7.
+ * Copyright 2014 Evinrude.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,32 @@
  * limitations under the License.
  */
 
-package auguste.server.command.client;
+package auguste.client.command.server;
 
-import auguste.server.command.server.MessageConfirm;
-import auguste.server.exception.RuleException;
-import java.sql.SQLException;
+import auguste.client.entity.Game;
+import auguste.client.graphical.UpdateListener;
 import org.json.JSONException;
 
 /**
- * Commande pour quitter une partie.
- * @author Lzard
+ *
+ * @author Evinrude
  */
-public class GameLeave extends ClientCommand
+public class GameConfirm extends CommandServer
 {
-    @Override
-    public void execute() throws SQLException, JSONException, RuleException
+    public GameConfirm()
     {
-        if (this.getClient().isLogged())
+        super();
+    }
+
+    @Override
+    public void execute() throws JSONException 
+    {
+        Game game = new Game();
+        game.setName(this.getJSON().getString("game_name"));
+        this.getClient().setCurrentGame(game);
+        for(UpdateListener ul : this.getClient().getInterfaces())
         {
-            //this.getUser().setGame(null);
-            this.getSocket().send((new MessageConfirm("game_leave")).toString());
+            ul.createGameUpdate();
         }
     }
-    
 }

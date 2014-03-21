@@ -17,6 +17,7 @@ import auguste.client.command.client.LogIn;
 import auguste.client.command.client.LogOut;
 import auguste.client.command.client.QuitGame;
 import auguste.client.entity.Client;
+import java.net.URISyntaxException;
 import org.json.JSONException;
 
 /**
@@ -25,7 +26,7 @@ import org.json.JSONException;
  */
 public class CommandClientManager 
 {
-    public static void executeCommand(Client client, String[] params) throws JSONException
+    public static void executeCommand(Client client, String[] params) throws JSONException, URISyntaxException
     {
         String command_name = params[0];
                     
@@ -34,15 +35,15 @@ public class CommandClientManager
         {
             switch(CommandClient.CommandName.valueOf(command_name.toUpperCase()))
             {
-                case EXIT:          command = new QuitGame(client);     break;
-                case CHAT_SEND:     command = new ChatSend(client);     break;
-                case ACCOUNT_CREATE:command = new AccountCreate(client);break;
-                case LOG_IN:        command = new LogIn(client);        break;
-                case LOG_OUT:       command = new LogOut(client);       break;
-                case GAME_CREATE:   command = new GameCreate(client);   break;
-                case GAME_LIST:     command = new GameList(client);     break;
-                case GAME_JOIN:     command = new GameJoin(client);     break;
-                case GAME_START:    command = new GameStart(client);    break;
+                case EXIT:          command = new QuitGame();     break;
+                case CHAT_SEND:     command = new ChatSend();     break;
+                case ACCOUNT_CREATE:command = new AccountCreate();break;
+                case LOG_IN:        command = new LogIn();        break;
+                case LOG_OUT:       command = new LogOut();       break;
+                case GAME_CREATE:   command = new GameCreate();   break;
+                case GAME_LIST:     command = new GameList();     break;
+                case GAME_JOIN:     command = new GameJoin();     break;
+                case GAME_START:    command = new GameStart();    break;
                 default:            command = null;
             }
 
@@ -52,7 +53,7 @@ public class CommandClientManager
         }
         catch(IllegalArgumentException e)
         {
-            System.out.println("Commande inconnue");
+            System.out.println("Commande inconnue : " + e.getMessage());
         }
         catch(NullPointerException e)
         {

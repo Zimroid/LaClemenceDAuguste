@@ -6,7 +6,7 @@
 
 package auguste.client.command.client;
 
-import auguste.client.entity.Client;
+import java.net.URISyntaxException;
 import org.json.JSONException;
 
 /**
@@ -14,13 +14,8 @@ import org.json.JSONException;
  * @author Evinrude
  */
 public class AccountCreate extends CommandClient
-{
-    public AccountCreate(Client client)
-    {
-        super(client);
-    }
-    
-    public AccountCreate()
+{    
+    public AccountCreate() throws URISyntaxException
     {
         super();
     }

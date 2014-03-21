@@ -16,7 +16,7 @@
 
 package auguste.server.command.client;
 
-import auguste.server.User;
+import auguste.server.Client;
 import auguste.server.exception.RuleException;
 import auguste.server.exception.UnknownCommandException;
 import auguste.server.util.Log;
@@ -47,6 +47,7 @@ public abstract class ClientCommand
             {
                 case ACCOUNT_CREATE: command = new AccountCreate(); break;
                 case CHAT_SEND:      command = new ChatSend();      break;
+                case GAME_CONFIG:    command = new GameConfig();    break;
                 case GAME_CREATE:    command = new GameCreate();    break;
                 case GAME_JOIN:      command = new GameJoin();      break;
                 case GAME_LEAVE:     command = new GameLeave();     break;
@@ -67,12 +68,11 @@ public abstract class ClientCommand
     
     // Attributs
     private JSONObject json;    // JSON de la commande
-    private User       user;    // Joueur qui a émit la commande
+    private Client     client;  // Client qui a émit la commande
     private WebSocket  socket;  // Socket ayant reçu la commande
     
     /**
      * Exécution de la commande.
-     * @throws auguste.server.exception.CommandException Erreur de commande
      * @throws auguste.server.exception.RuleException    Règles enfreintes
      * @throws org.json.JSONException                    Erreur JSON
      * @throws java.sql.SQLException                     Erreur SQL
@@ -89,12 +89,12 @@ public abstract class ClientCommand
     }
 
     /**
-     * Retourne l'utilisateur ayant émit la commande.
-     * @return Player ayant émit la commande
+     * Retourne le client ayant émit la commande.
+     * @return Client ayant émit la commande
      */
-    public final User getUser()
+    public final Client getClient()
     {
-        return this.user;
+        return this.client;
     }
 
     /**
@@ -116,12 +116,12 @@ public abstract class ClientCommand
     }
 
     /**
-     * Modifie l'utilisateur ayant émit la commande.
-     * @param user User à utiliser
+     * Modifie le client ayant émit la commande.
+     * @param client Client à utiliser
      */
-    public final void setUser(User user)
+    public final void setClient(Client client)
     {
-        this.user = user;
+        this.client = client;
     }
 
     /**
@@ -140,6 +140,7 @@ public abstract class ClientCommand
     {
         ACCOUNT_CREATE,
         CHAT_SEND,
+        GAME_CONFIG,
         GAME_CREATE,
         GAME_JOIN,
         GAME_LEAVE,

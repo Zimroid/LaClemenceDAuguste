@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Lzard.
+ * Copyright 2014 Conseil7.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package auguste.server.command.client;
 
 import auguste.server.Server;
 import auguste.server.command.server.GameTurn;
-import auguste.server.User;
+import auguste.server.Client;
 import auguste.server.exception.RuleException;
 import java.sql.SQLException;
 import org.json.JSONException;
@@ -32,9 +32,9 @@ public class GameStart extends ClientCommand
     @Override
     public void execute() throws SQLException, JSONException, RuleException
     {
-        if (this.getUser().isLogged() && this.getUser().isInGame())
+        if (this.getClient().isLogged())
         {
-            /*for (User user : Server.getInstance().getUsers().values())
+            /*for (Client user : Server.getInstance().getUsers().values())
             {
                 if (user.getGame() == this.getUser().getGame()) this.getSocket().send((new GameTurn()).toString());
             }*/
