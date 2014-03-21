@@ -9,6 +9,8 @@ package auguste.client.reseau;
 import auguste.client.entity.Client;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -21,10 +23,10 @@ public class ClientSocket extends WebSocketClient
         private static final String ADDRESS = "130.79.214.172";
         private static final String PORT = "47135";
         private static final String PORT_TEST = "16302";
-        private static final String CONNECTION_STRING = "ws://"+ADDRESS+":"+PORT_TEST;
+        private static final String CONNECTION_STRING = "ws://"+ADDRESS+":"+PORT;
 	
         private static ClientSocket INSTANCE;
-        private Client client;
+        private static Client client;
         
 	private ClientSocket(URI serverURI)
 	{
@@ -45,11 +47,6 @@ public class ClientSocket extends WebSocketClient
             }
             return INSTANCE;
         }
-        
-        public void setClient(Client client)
-        {
-            this.client = client;
-        }
 
 	@Override
 	public void onClose(int arg0, String arg1, boolean arg2)
@@ -66,7 +63,14 @@ public class ClientSocket extends WebSocketClient
 	@Override
 	public void onMessage(String arg0)
 	{
-            this.client.messageServerReceive(arg0);
+            try 
+            {
+                Client.getInstance().messageServerReceive(arg0);
+            } 
+            catch (URISyntaxException ex) 
+            {
+                Logger.getLogger(ClientSocket.class.getName()).log(Level.SEVERE, null, ex);
+            }
 	}
 
 	@Override

@@ -6,8 +6,8 @@
 
 package auguste.client.command.client;
 
-import auguste.client.entity.Client;
 import auguste.client.graphical.UpdateListener;
+import java.net.URISyntaxException;
 import org.json.JSONException;
 
 /**
@@ -16,12 +16,7 @@ import org.json.JSONException;
  */
 public class QuitGame extends CommandClient
 {
-    public QuitGame(Client client)
-    {
-        super(client);
-    }
-    
-    public QuitGame()
+    public QuitGame() throws URISyntaxException
     {
         super();
     }
@@ -29,7 +24,10 @@ public class QuitGame extends CommandClient
     @Override
     public void execute()
     {
-        super.execute();
+        if(this.getClient().getUser() != null)
+        {
+            this.getClient().getClientSocket().send(this.getJSON().toString());
+        }
         System.out.println("Exiting the application");
         for(UpdateListener ul : client.getInterfaces())
         {
@@ -41,6 +39,9 @@ public class QuitGame extends CommandClient
     @Override
     public void buildJSON() throws JSONException 
     {
-        this.getJSON().put(COMMAND, LOG_OUT);
+        if(this.getClient().getUser() != null)
+        {
+            this.getJSON().put(COMMAND, LOG_OUT);
+        }
     }
 }

@@ -1,5 +1,6 @@
 		<script>
 			var sitePath = "<?php echo $sitePath; ?>";
+			var game_id = 0;
 		</script>
 		
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/jquery/js/jquery-1.11.0.min.js"></script>

@@ -4,7 +4,7 @@
  */
 
 // Envoi d'un message
-function addMessage()
+function addMessage(id)
 {
     var message = $("#message").val();
     message = htmlspecialchars(message);
@@ -14,6 +14,7 @@ function addMessage()
         var json = JSON.stringify(
 		{
             "command": "CHAT_SEND",
+            "game_id": id,
             "message": message
         });
 
@@ -36,7 +37,7 @@ function toucheEntree(event)
 {
 	if ((event.keyCode == 13) && (event.shiftKey)) this.value += '\n';
 	else if (event.keyCode == 13) {
-		addMessage();
+		addMessage(0);
 		event.preventDefault();
 	}
 }

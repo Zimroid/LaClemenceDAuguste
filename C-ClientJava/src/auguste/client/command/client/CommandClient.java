@@ -8,6 +8,7 @@ package auguste.client.command.client;
 
 import org.json.JSONObject;
 import auguste.client.entity.Client;
+import java.net.URISyntaxException;
 import org.json.JSONException;
 
 /**
@@ -32,20 +33,10 @@ public abstract class CommandClient
     
     public abstract void buildJSON() throws JSONException;
     
-    public CommandClient()
-    {
-        this(null);
-    }
-    
-    public CommandClient(Client client)
+    public CommandClient() throws URISyntaxException
     {
         this.json = new JSONObject();
-        this.client = client;
-    }
-    
-    public void setClient(Client client)
-    {
-        this.client = client;
+        this.client = Client.getInstance();
     }
     
     public Client getClient()

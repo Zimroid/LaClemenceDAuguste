@@ -6,7 +6,7 @@
 
 package auguste.client.command.client;
 
-import auguste.client.entity.Client;
+import java.net.URISyntaxException;
 import org.json.JSONException;
 
 /**
@@ -15,12 +15,7 @@ import org.json.JSONException;
  */
 public class LogOut extends CommandClient
 {
-    public LogOut(Client client)
-    {
-        super(client);
-    }
-    
-    public LogOut()
+    public LogOut() throws URISyntaxException
     {
         super();
     }
@@ -28,6 +23,7 @@ public class LogOut extends CommandClient
     @Override
     public void buildJSON() throws JSONException 
     {
+        this.getClient().setUser(null);
         this.getJSON().put(COMMAND, LOG_OUT);        
     }
 }
