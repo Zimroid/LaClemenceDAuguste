@@ -19,7 +19,6 @@ package auguste.server.command.client;
 import auguste.server.Room;
 import auguste.server.Server;
 import auguste.server.command.server.ChatMessage;
-import auguste.server.command.server.MessageError;
 import org.json.JSONException;
 
 /**
@@ -36,43 +35,28 @@ public class ChatSend extends ClientCommand
         {
             // Identification de la room concernée
             Integer gameId = Integer.valueOf(this.getJSON().getInt("game_id"));
+            Room room = Server.getInstance().getRoom(gameId);
             
-            // Vérification du canal de destination
-            if (gameId.intValue() == 0)
+            // Vérification de l'existance de la salle
+            if (room != null)
             {
-                // Envoi du message à tous les utilisateurs
-                Server.getInstance().broadcast(
-                        (new ChatMessage(
-                                this.getClient(),
-                                0,
-                                this.getJSON().getString("message")
-                        )).toString()
-                );
-            }
-            else
-            {
-                // Vérification de l'existence de la salle
-                if (Server.getInstance().getRooms().containsKey(gameId))
+                // Vérification de la présence dans la salle
+                if (this.getClient().isInRoom(room))
                 {
-                    // Récupération de la salle et vérification de la présence de l'utilisateur
-                    Room room = Server.getInstance().getRooms().get(gameId);
-                    if (this.getClient().getRooms().contains(room))
-                    {
-                        // Envoi du message à la room gameId
-                        room.broadcast(
-                                (new ChatMessage(
-                                        this.getClient(),
-                                        gameId,
-                                        this.getJSON().getString("message")
-                                )).toString()
-                        );
-                    }
-                    else this.getClient().send((new MessageError("not_in_this_room")).toString());
+                    // Envoi du message à la salle
+                    room.broadcast(
+                            (new ChatMessage(
+                                    this.getClient(),
+                                    gameId,
+                                    this.getJSON().getString("message")
+                            )).toString()
+                    );
                 }
-                else this.getClient().send((new MessageError("inexistent_room")).toString());
+                else this.getClient().error("not_in_this_room");
             }
+            else this.getClient().error("inexistent_room");
         }
-        else this.getClient().send((new MessageError("must_be_logged")).toString());
+        else this.getClient().error("must_be_logged");
     }
     
 }

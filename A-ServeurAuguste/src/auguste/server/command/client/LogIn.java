@@ -18,7 +18,6 @@ package auguste.server.command.client;
 
 import auguste.server.Server;
 import auguste.server.command.server.LogConfirm;
-import auguste.server.command.server.MessageError;
 import auguste.server.Client;
 import auguste.server.manager.UserManager;
 import auguste.server.util.Db;
@@ -64,9 +63,9 @@ public class LogIn extends ClientCommand
                 Server.getInstance().logIn(this.getClient());
                 this.getClient().send((new LogConfirm(this.getClient())).toString());
             }
-            else this.getClient().send((new MessageError("log_error")).toString());
+            else this.getClient().error("log_error");
         }
-        else this.getClient().send((new MessageError("already_logged")).toString());
+        else this.getClient().error("already_logged");
     }
     
 }

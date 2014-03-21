@@ -16,10 +16,7 @@
 
 package auguste.server.command.client;
 
-import auguste.server.command.server.MessageConfirm;
 import auguste.server.Server;
-import auguste.server.Client;
-import auguste.server.command.server.MessageError;
 import org.json.JSONException;
 
 /**
@@ -36,16 +33,11 @@ public class LogOut extends ClientCommand
         {
             // Désidentification de l'utilisateur
             Server.getInstance().logOut(this.getClient());
-            
-            // Remise des informations du joueur à celles par défaut
-            this.getClient().setId(Client.DEFAULT_ID);
-            this.getClient().setName(Client.DEFAULT_NAME);
-            this.getClient().setPassword(Client.DEFAULT_PASSWORD);
 
             // Signalisation
-            this.getSocket().send((new MessageConfirm("log_out")).toString());
+            this.getClient().confirm("log_out");
         }
-        else this.getClient().send((new MessageError("not_logged")).toString());
+        else this.getClient().error("not_logged");
     }
     
 }

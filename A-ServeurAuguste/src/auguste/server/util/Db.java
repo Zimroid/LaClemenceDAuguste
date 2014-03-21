@@ -40,7 +40,7 @@ public class Db
                 Configuration.get("db_password")
         );
         connection.setAutoCommit(false);
-        Log.debug("Connection to database opened");
+        Log.debug("Connection to database");
         return connection;
     }
     
@@ -54,7 +54,6 @@ public class Db
     {
         connection.commit();
         connection.close();
-        Log.debug("Connection to database closed");
     }
     
 }

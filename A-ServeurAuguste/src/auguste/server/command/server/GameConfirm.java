@@ -16,6 +16,7 @@
 
 package auguste.server.command.server;
 
+import auguste.server.Room;
 import org.json.JSONException;
 
 /**
@@ -26,16 +27,19 @@ public class GameConfirm extends ServerCommand
 {
     /**
      * Remplit le JSON avec les paramètres fournis.
-     * @param name Nom de la partie
+     * @param room Salle de la partie
      * @throws JSONException Erreur de JSON
      */
-    public GameConfirm(String name) throws JSONException
+    public GameConfirm(Room room) throws JSONException
     {
         // Constructeur de la classe mère
         super("game_confirm");
         
         // Création du JSON
-        this.getJSON().put("game_name", name);
+        this.getJSON().put("game_id",       room.getGameId());
+        this.getJSON().put("game_name",     room.getGameName());
+        this.getJSON().put("player_number", room.getPlayerNumber());
+        this.getJSON().put("board_size",    room.getBoardSize());
     }
     
 }

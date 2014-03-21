@@ -16,9 +16,6 @@
 
 package auguste.server.command.client;
 
-import auguste.server.Server;
-import auguste.server.command.server.GameTurn;
-import auguste.server.Client;
 import auguste.server.exception.RuleException;
 import java.sql.SQLException;
 import org.json.JSONException;

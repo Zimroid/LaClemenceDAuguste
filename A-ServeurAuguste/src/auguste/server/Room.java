@@ -16,7 +16,9 @@
 
 package auguste.server;
 
+import auguste.server.command.server.GameConfirm;
 import java.util.ArrayList;
+import org.json.JSONException;
 
 /**
  * Classe représentant une instance de salle de jeu.
@@ -24,11 +26,28 @@ import java.util.ArrayList;
  */
 public class Room
 {
-    // Propriétaire de la salle
-    private Client owner;
+    private final int gameId; // ID de la partie
+    
+    private Client owner; // Propriétaire de la salle
+    
+    // Configuration de la game
+    private String gameName;
+    private int    playerNumber = 6;
+    private int    boardSize    = 8;
     
     // Liste des clients affectés à la salle
     private final ArrayList<Client> clients = new ArrayList<>();
+    
+    /**
+     * Création d'une salle avec le nom donné.
+     * @param gameId   ID de la salle
+     * @param gameName Nom de la salle
+     */
+    public Room(int gameId, String gameName)
+    {
+        this.gameId   = gameId;
+        this.gameName = gameName;
+    }
     
     /**
      * Envoi d'un message à tous les clients de la salle.
@@ -40,6 +59,25 @@ public class Room
         {
             client.send(message);
         }
+    }
+    
+    /**
+     * Envoi d'une commande game_confirm à tous les clients.
+     * @throws org.json.JSONException Erreur JSON
+     */
+    public void confirm() throws JSONException
+    {
+        this.broadcast((new GameConfirm(this)).toString());
+    }
+    
+    /**
+     * Indique si le client donné est propriétaire de la salle.
+     * @param client Client à vérifier
+     * @return Client donné est le propriétaire
+     */
+    public boolean isOwner(Client client)
+    {
+        return client.getId() == this.owner.getId();
     }
     
     /**
@@ -61,12 +99,39 @@ public class Room
     }
     
     /**
-     * Retourne le client propriétaire de la salle.
-     * @return Propriétaire de la salle
+     * Retourne l'ID de la partie.
+     * @return ID de la partie
      */
-    public Client getOwner()
+    public int getGameId()
     {
-        return this.owner;
+        return this.gameId;
+    }
+    
+    /**
+     * Retourne le nom de la partie.
+     * @return Nom de la partie
+     */
+    public String getGameName()
+    {
+        return this.gameName;
+    }
+    
+    /**
+     * Retourne le nombre de joueurs maximum.
+     * @return Nombre de joueurs maximum
+     */
+    public int getPlayerNumber()
+    {
+        return this.playerNumber;
+    }
+    
+    /**
+     * Retourne la taille du plateau.
+     * @return Taille du plateau
+     */
+    public int getBoardSize()
+    {
+        return this.boardSize;
     }
     
     /**
@@ -76,6 +141,33 @@ public class Room
     public void setOwner(Client client)
     {
         this.owner = client;
+    }
+    
+    /**
+     * Modifie le nom de la partie.
+     * @param gameName Nouveau nom
+     */
+    public void setGameName(String gameName)
+    {
+        this.gameName = gameName;
+    }
+    
+    /**
+     * Modifie le nombre de joueurs maximum.
+     * @param playerNumber Nouveau nombre
+     */
+    public void setPlayerNumber(int playerNumber)
+    {
+        this.playerNumber = playerNumber;
+    }
+    
+    /**
+     * Modifie la taille du plateau de jeu.
+     * @param boardSize Nouvelle taille
+     */
+    public void setBoardSize(int boardSize)
+    {
+        this.boardSize = boardSize;
     }
     
 }

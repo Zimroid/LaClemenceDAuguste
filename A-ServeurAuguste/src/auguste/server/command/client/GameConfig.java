@@ -16,6 +16,8 @@
 
 package auguste.server.command.client;
 
+import auguste.server.Room;
+import auguste.server.Server;
 import org.json.JSONException;
 
 /**
@@ -27,11 +29,32 @@ public class GameConfig extends ClientCommand
     @Override
     public void execute() throws JSONException
     {
-        // Création de la partie si le joueur est connecté est n'est pas en game
+        // Vérification de l'identification de l'utilisateur
         if (this.getClient().isLogged())
         {
-            
+            // Récupération de la salle et vérification de son existence
+            Room room = Server.getInstance().getRoom(this.getJSON().getInt("game_id"));
+            if (room != null)
+            {
+                // Vérification de la présence de l'utilisateur
+                if (this.getClient().isInRoom(room))
+                {
+                    // Vérification du propriétaire
+                    if (room.isOwner(this.getClient()))
+                    {
+                        // Modification de la configuration et confirmation
+                        room.setGameName(this.getJSON().getString("game_name"));
+                        room.setPlayerNumber(this.getJSON().getInt("player_number"));
+                        room.setBoardSize(this.getJSON().getInt("board_size"));
+                        room.confirm();
+                    }
+                    else this.getClient().error("not_owner_of_this_room");
+                }
+                else this.getClient().error("not_in_this_room");
+            }
+            else this.getClient().error("inexistant_room");
         }
+        else this.getClient().error("not_logged");
     }
     
 }

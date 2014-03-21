@@ -16,6 +16,8 @@
 
 package auguste.server;
 
+import auguste.server.command.server.MessageConfirm;
+import auguste.server.command.server.MessageError;
 import auguste.server.util.Log;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -24,6 +26,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import org.apache.commons.codec.binary.Hex;
 import org.java_websocket.WebSocket;
+import org.json.JSONException;
 
 /**
  * Classe représentant un client connecté au serveur.
@@ -120,12 +123,89 @@ public class Client
     }
     
     /**
+     * Envoi d'un message de confirmation basique au client.
+     * @param type Type de confirmation
+     * @throws JSONException Erreur JSON
+     */
+    public void confirm(String type) throws JSONException
+    {
+        this.send(
+                (new MessageConfirm(type)).toString()
+        );
+    }
+    
+    /**
+     * Envoi d'un message d'erreur basique au client.
+     * @param type Type d'erreur
+     * @throws JSONException Erreur JSON
+     */
+    public void error(String type) throws JSONException
+    {
+        this.send(
+                (new MessageError(type)).toString()
+        );
+    }
+    
+    /**
+     * Joindre le client à une salle.
+     * @param room Salle à joindre
+     */
+    public void joinRoom(Room room)
+    {
+        this.rooms.add(room);
+        room.addClient(this);
+    }
+    
+    /**
+     * Le client quitte une salle.
+     * @param room Salle à quitter
+     */
+    public void leaveRoom(Room room)
+    {
+        this.rooms.remove(room);
+        room.removeClient(this);
+    }
+    
+    /**
+     * Forcer le client à quitter toutes les salles.
+     */
+    public void leaveAllRooms()
+    {
+        for (Room room : this.rooms)
+        {
+            this.rooms.remove(room);
+            room.removeClient(this);
+        }
+    }
+    
+    /**
+     * Désidentifie le client.
+     */
+    public void logOut()
+    {
+        this.leaveAllRooms();
+        this.id = Client.DEFAULT_ID;
+        this.name = Client.DEFAULT_NAME;
+        this.password = Client.DEFAULT_NAME;
+    }
+    
+    /**
      * Indique si le client est identifié.
      * @return Booléen indiquant si le client est identifié
      */
     public boolean isLogged()
     {
         return this.id != Client.DEFAULT_ID;
+    }
+    
+    /**
+     * Indique si le client est dans la salle précisée.
+     * @param room Salle à vérifier
+     * @return Présence du client
+     */
+    public boolean isInRoom(Room room)
+    {
+        return this.rooms.contains(room);
     }
 
     /**
@@ -180,15 +260,6 @@ public class Client
     public void setPassword(String password)
     {
         this.password = password;
-    }
-    
-    /**
-     * Retourne la liste des salles dans laquelle est le client
-     * @return Liste des salles du client
-     */
-    public ArrayList<Room> getRooms()
-    {
-        return this.rooms;
     }
     
 }

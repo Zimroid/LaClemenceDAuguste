@@ -17,8 +17,6 @@
 package auguste.server.command.client;
 
 import auguste.server.Client;
-import auguste.server.command.server.MessageConfirm;
-import auguste.server.command.server.MessageError;
 import auguste.server.manager.UserManager;
 import auguste.server.util.Db;
 import java.sql.Connection;
@@ -55,15 +53,15 @@ public class AccountCreate extends ClientCommand
                 if (manager.getNameAvailable(newUser.getName()))
                 {
                     manager.saveUser(newUser);
-                    this.getClient().send((new MessageConfirm("account_create")).toString());
+                    this.getClient().confirm("account_create");
                 }
-                else this.getClient().send((new MessageError("name_unavailable")).toString());
+                else this.getClient().error("name_unavailable");
                 
                 // Fermeture de la connexion
                 Db.close(connection);
             }
         }
-        else this.getClient().send((new MessageError("already_logged")).toString());
+        else this.getClient().confirm("already_logged");
     }
     
 }

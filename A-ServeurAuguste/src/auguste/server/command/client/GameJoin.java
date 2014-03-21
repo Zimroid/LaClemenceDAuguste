@@ -16,8 +16,8 @@
 
 package auguste.server.command.client;
 
+import auguste.server.Room;
 import auguste.server.Server;
-import auguste.server.command.server.MessageConfirm;
 import auguste.server.exception.RuleException;
 import java.sql.SQLException;
 import org.json.JSONException;
@@ -31,11 +31,25 @@ public class GameJoin extends ClientCommand
     @Override
     public void execute() throws SQLException, JSONException, RuleException
     {
+        // Vérification de l'identification
         if (this.getClient().isLogged())
         {
-            //this.getUser().setGame(Server.getInstance().getGames().get(this.getJSON().getString("game_name")));
-            this.getSocket().send((new MessageConfirm("game_join")).toString());
+            // Récupération de la salle et vérification de son existence
+            Room room = Server.getInstance().getRoom(this.getJSON().getInt("game_id"));
+            if (room != null)
+            {
+                // Vérification de la non-présence de l'utilisateur
+                if (!this.getClient().isInRoom(room))
+                {
+                    // Ajout du client à la salle
+                    this.getClient().joinRoom(room);
+                    room.confirm();
+                }
+                else this.getClient().error("already_in_this_room");
+            }
+            else this.getClient().error("inexistant_room");
         }
+        else this.getClient().error("not_logged");
     }
     
 }

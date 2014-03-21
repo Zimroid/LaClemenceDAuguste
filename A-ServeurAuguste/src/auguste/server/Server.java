@@ -17,7 +17,6 @@
 package auguste.server;
 
 import auguste.server.command.client.ClientCommand;
-import auguste.server.command.server.MessageError;
 import auguste.server.exception.RuleException;
 import auguste.server.exception.UnknownCommandException;
 import auguste.server.util.Log;
@@ -64,6 +63,9 @@ public class Server extends WebSocketServer
     // Liste des salles disponibles
     private final HashMap<Integer, Room> rooms = new HashMap<>();
     
+    // Salle générale
+    private final Room generalRoom = new Room(0, "");
+    
     /**
      * Instanciation du serveur. Effectue un simple appel au constructeur de la
      * classe mère en utilisant l'adresse donnée.
@@ -73,6 +75,9 @@ public class Server extends WebSocketServer
     {
         // Appel à la fonction mère
         super(address);
+        
+        // Ajout de la salle générale
+        this.rooms.put(0, this.generalRoom);
         
         // Confirmation de la connexion
         Log.out("Server initialized on " + address);
@@ -108,7 +113,11 @@ public class Server extends WebSocketServer
                 (byRequest ? "by request" : "") +
                 " (" + code + ": " + reason + ")");
         
-        // Suppression de la liste des joueurs connectés
+        // Désidentification du client
+        Client client = this.clients.get(socket);
+        if (client.isLogged()) this.logOut(client);
+        
+        // Suppression de la liste des utilisateurs connectés
         this.clients.remove(socket);
     }
 
@@ -126,17 +135,19 @@ public class Server extends WebSocketServer
         // Lecture de la commande
         try
         {
+            // Identification du client
+            Client client = this.clients.get(socket);
+            
             try
             {
                 // Instanciation et signalisation de la commande
-                Client user = this.clients.get(socket);
                 JSONObject json = new JSONObject(content);
                 Log.out("Identified command: " + json.getString("command"));
 
                 // Définition de la commande
                 ClientCommand command = ClientCommand.get(json.getString("command"));
                 command.setSocket(socket);
-                command.setClient(user);
+                command.setClient(client);
                 command.setJSON(json);
 
                 // Exécution de la commande
@@ -146,19 +157,19 @@ public class Server extends WebSocketServer
             {
                 // Reçu une action qui enfreint les règles
                 Log.out("Unauthorized move: " + ex);
-                socket.send((new MessageError("rule_error")).toString());
+                client.error("rule_error");
             }
             catch (UnknownCommandException ex)
             {
                 // Reçu une commande inconnue
                 Log.out("Unknown command: " + ex);
-                socket.send((new MessageError("unknown_command")).toString());
+                client.error("unknown_command");
             }
             catch (SQLException ex)
             {
                 // Erreur de communication avec la base de données
                 Log.error("SQL error: " + ex);
-                socket.send((new MessageError("unknown_error")).toString());
+                client.error("unknown_error");
             }
         }
         catch (JSONException ex)
@@ -187,6 +198,7 @@ public class Server extends WebSocketServer
      */
     public void logIn(Client user)
     {
+        user.joinRoom(this.generalRoom);
         this.users.put(user.getId(), user);
     }
     
@@ -196,18 +208,10 @@ public class Server extends WebSocketServer
      */
     public void logOut(Client user)
     {
-        this.users.remove(user.getId());
-    }
-    
-    /**
-     * Envoi d'un message à tous les utilisateurs identifiés.
-     * @param message Message à envoyer
-     */
-    public void broadcast(String message)
-    {
-        for (Client client : this.users.values())
+        if (this.users.containsKey(user.getId()))
         {
-            client.send(message);
+            this.users.get(user.getId()).logOut();
+            this.users.remove(user.getId());
         }
     }
     
@@ -218,6 +222,30 @@ public class Server extends WebSocketServer
     public HashMap<Integer, Room> getRooms()
     {
         return this.rooms;
+    }
+    
+    /**
+     * Retourne une salle via son ID.
+     * @param id ID de la salle
+     * @return Salle correspondante
+     */
+    public Room getRoom(int id)
+    {
+        Integer gameId = Integer.valueOf(id);
+        if (this.rooms.containsKey(gameId)) return this.rooms.get(gameId);
+        else                                return null;
+    }
+    
+    /**
+     * Créée une nouvelle salle.
+     * @param name Nom de la salle
+     * @return Salle créée
+     */
+    public Room createRoom(String name)
+    {
+        Room newRoom = new Room(this.rooms.size(), name);
+        this.rooms.put(newRoom.getGameId(), newRoom);
+        return newRoom;
     }
     
 }
