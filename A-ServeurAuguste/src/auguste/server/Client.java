@@ -21,16 +21,17 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import org.apache.commons.codec.binary.Hex;
 import org.java_websocket.WebSocket;
 
 /**
- * Classe représentant un utilisateur connecté au serveur.
+ * Classe représentant un client connecté au serveur.
  * @author Lzard
  */
-public class User
+public class Client
 {   
-    // Valeurs par défaut des champs d'un utilisateur non loggé
+    // Valeurs par défaut des champs d'un client non identifié
     public static final int    DEFAULT_ID       = 0;
     public static final String DEFAULT_NAME     = "Anonymous";
     public static final String DEFAULT_PASSWORD = "";
@@ -62,17 +63,20 @@ public class User
     private String name;      // Nom de l'utilisateur
     private String password;  // Mot de passe hashé de l'utilisateur
     
-    // WebSocket de l'utilisateur
+    // WebSocket du client
     private final WebSocket socket;
+    
+    // Salles auxquelles le client est affecté du client
+    private final ArrayList<Room> rooms = new ArrayList<>();
     
     /**
      * Instanciation d'un utilisateur avec les valeurs données.
      * @param id       ID de l'utilisateur
      * @param name     Nom de l'utilisateur
      * @param password Mot de passe hashé de l'utilisateur
-     * @param socket   Socket de l'utilisateur
+     * @param socket   Socket du client
      */
-    public User(int id, String name, String password, WebSocket socket)
+    public Client(int id, String name, String password, WebSocket socket)
     {
         this.id       = id;
         this.name     = name;
@@ -83,10 +87,10 @@ public class User
     /**
      * Instanciation d'un utilisateur à partir d'un résultat de requête.
      * @param set    ResultSet d'une requête
-     * @param socket Socket de l'utilisateur
+     * @param socket Socket du client
      * @throws java.sql.SQLException Erreur SQL
      */
-    public User(ResultSet set, WebSocket socket) throws SQLException
+    public Client(ResultSet set, WebSocket socket) throws SQLException
     {
         this.id       = set.getInt   ("id");
         this.name     = set.getString("name");
@@ -95,20 +99,20 @@ public class User
     }
     
     /**
-     * Instanciation d'un utilisateur avec les valeurs par défaut
-     * @param socket
+     * Instanciation d'un client avec les valeurs par défaut
+     * @param socket Socket du client
      */
-    public User(WebSocket socket)
+    public Client(WebSocket socket)
     {
-        this.id       = User.DEFAULT_ID;
-        this.name     = User.DEFAULT_NAME;
-        this.password = User.DEFAULT_PASSWORD;
+        this.id       = Client.DEFAULT_ID;
+        this.name     = Client.DEFAULT_NAME;
+        this.password = Client.DEFAULT_PASSWORD;
         this.socket   = socket;
     }
     
     /**
-     * Envoi d'un message à la socket de l'utilisateur.
-     * @param message Message à envoyer.
+     * Envoi d'un message à la socket du client.
+     * @param message Message à envoyer
      */
     public void send(String message)
     {
@@ -116,21 +120,12 @@ public class User
     }
     
     /**
-     * Indique si l'utilisateur est identifié.
-     * @return Booléen indiquant si l'utilisateur est identifié
+     * Indique si le client est identifié.
+     * @return Booléen indiquant si le client est identifié
      */
     public boolean isLogged()
     {
-        return this.id != User.DEFAULT_ID;
-    }
-    
-    /**
-     * Indique si l'utilisateur est en jeu.
-     * @return Booléen indiquant si l'utilisateur est en jeu
-     */
-    public boolean isInGame()
-    {
-        return false;
+        return this.id != Client.DEFAULT_ID;
     }
 
     /**
@@ -170,7 +165,7 @@ public class User
     }
 
     /**
-     * Modifie le nom du joueur.
+     * Modifie le nom de l'utilisateur.
      * @param name Nom à utiliser
      */
     public void setName(String name)
@@ -185,6 +180,15 @@ public class User
     public void setPassword(String password)
     {
         this.password = password;
+    }
+    
+    /**
+     * Retourne la liste des salles dans laquelle est le client
+     * @return Liste des salles du client
+     */
+    public ArrayList<Room> getRooms()
+    {
+        return this.rooms;
     }
     
 }

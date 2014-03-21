@@ -18,7 +18,6 @@ package auguste.server;
 
 import auguste.server.command.client.ClientCommand;
 import auguste.server.command.server.MessageError;
-import auguste.engine.entity.Game;
 import auguste.server.exception.RuleException;
 import auguste.server.exception.UnknownCommandException;
 import auguste.server.util.Log;
@@ -56,14 +55,14 @@ public class Server extends WebSocketServer
         return Server.INSTANCE;
     }
     
-    // Liste des utilisateurs connectés
-    private final HashMap<WebSocket, User> users = new HashMap<>();
+    // Liste des clients connectés
+    private final HashMap<WebSocket, Client> clients = new HashMap<>();
     
     // Liste des utilisateurs identifiés
-    private final HashMap<Integer, User> loggedUsers = new HashMap<>();
+    private final HashMap<Integer, Client> users = new HashMap<>();
     
-    // Liste des parties en cours de création
-    private final HashMap<String, Game> games = new HashMap<>();
+    // Liste des salles disponibles
+    private final HashMap<Integer, Room> rooms = new HashMap<>();
     
     /**
      * Instanciation du serveur. Effectue un simple appel au constructeur de la
@@ -90,8 +89,8 @@ public class Server extends WebSocketServer
         // Signalisation
         Log.out("Connection with " + socket.getRemoteSocketAddress());
         
-        // Création de l'utilisateur anonyme et ajout dans la liste
-        this.users.put(socket, new User(socket));
+        // Création du client et ajout dans la liste
+        this.clients.put(socket, new Client(socket));
     }
 
     /**
@@ -110,7 +109,7 @@ public class Server extends WebSocketServer
                 " (" + code + ": " + reason + ")");
         
         // Suppression de la liste des joueurs connectés
-        this.users.remove(socket);
+        this.clients.remove(socket);
     }
 
     /**
@@ -130,14 +129,14 @@ public class Server extends WebSocketServer
             try
             {
                 // Instanciation et signalisation de la commande
-                User user = this.users.get(socket);
+                Client user = this.clients.get(socket);
                 JSONObject json = new JSONObject(content);
                 Log.out("Identified command: " + json.getString("command"));
 
                 // Définition de la commande
                 ClientCommand command = ClientCommand.get(json.getString("command"));
                 command.setSocket(socket);
-                command.setUser(user);
+                command.setClient(user);
                 command.setJSON(json);
 
                 // Exécution de la commande
@@ -186,18 +185,39 @@ public class Server extends WebSocketServer
      * Ajoute un utilisateur à la liste des utilisateurs connectés.
      * @param user Utilisateur à connecter
      */
-    public void logIn(User user)
+    public void logIn(Client user)
     {
-        this.loggedUsers.put(user.getId(), user);
+        this.users.put(user.getId(), user);
     }
     
     /**
      * Supprime un utilisateur de la liste des utilisateurs connectés.
      * @param user Utilisateur à déconnecter
      */
-    public void logOut(User user)
+    public void logOut(Client user)
     {
-        this.loggedUsers.remove(user.getId());
+        this.users.remove(user.getId());
+    }
+    
+    /**
+     * Envoi d'un message à tous les utilisateurs identifiés.
+     * @param message Message à envoyer
+     */
+    public void broadcast(String message)
+    {
+        for (Client client : this.users.values())
+        {
+            client.send(message);
+        }
+    }
+    
+    /**
+     * Retourne la liste des salles crées sur le serveur.
+     * @return Liste des salles du serveur
+     */
+    public HashMap<Integer, Room> getRooms()
+    {
+        return this.rooms;
     }
     
 }

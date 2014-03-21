@@ -16,7 +16,7 @@
 
 package auguste.server.manager;
 
-import auguste.server.User;
+import auguste.server.Client;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -68,7 +68,7 @@ public class UserManager extends Manager
      * @return Instance de Player correspondant à l'ID
      * @throws java.sql.SQLException Erreur SQL
      */
-    public User getUser(int id) throws SQLException
+    public Client getUser(int id) throws SQLException
     {
         // Préparation et exécution de la requête
         PreparedStatement statement = this.query(UserManager.QUERY_USER_FROM_ID);
@@ -77,7 +77,7 @@ public class UserManager extends Manager
         set.first();
 
         // Retour du joueur
-        return new User(set, null);
+        return new Client(set, null);
     }
 
     /**
@@ -87,16 +87,16 @@ public class UserManager extends Manager
      * @return Instance de Player correspondant au joueur ou null si erreur
      * @throws java.sql.SQLException Erreur SQL
      */
-    public User getUser(String login, String password) throws SQLException
+    public Client getUser(String login, String password) throws SQLException
     {
         // Préparation et exécution de la requête
         PreparedStatement statement = this.query(UserManager.QUERY_USER_BY_LOGIN);
         statement.setString(1, login);
-        statement.setString(2, User.hashPassword(password));
+        statement.setString(2, Client.hashPassword(password));
         ResultSet set = statement.executeQuery();
 
         // Si aucun résultat, retourne null, sinon retourne le joueur
-        if (set.first()) return new User(set, null);
+        if (set.first()) return new Client(set, null);
         else             return null;
     }
     
@@ -122,10 +122,10 @@ public class UserManager extends Manager
      * @param user Joueur à sauvegarder
      * @throws java.sql.SQLException Erreur SQL
      */
-    public void saveUser(User user) throws SQLException
+    public void saveUser(Client user) throws SQLException
     {
         // Si c'est un nouveau joueur, on l'insère, sinon on le met à jour
-        if (user.getId() == User.DEFAULT_ID)
+        if (user.getId() == Client.DEFAULT_ID)
         {
             // Préparation et exécution de la requête
             PreparedStatement statement = this.query(UserManager.QUERY_ADD_USER, true);
@@ -154,7 +154,7 @@ public class UserManager extends Manager
      * @param user Joueur à supprimer
      * @throws SQLException Erreur SQL
      */
-    public void deleteUser(User user) throws SQLException
+    public void deleteUser(Client user) throws SQLException
     {
         // Préparation et exécution de la requête
         PreparedStatement statement = this.query(UserManager.QUERY_UPDATE_USER);
