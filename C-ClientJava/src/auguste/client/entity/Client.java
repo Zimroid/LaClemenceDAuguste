@@ -2,7 +2,6 @@ package auguste.client.entity;
 
 import auguste.client.command.manager.CommandClientManager;
 import auguste.client.command.manager.CommandServerManager;
-import auguste.client.graphical.CSL;
 import auguste.client.graphical.UpdateListener;
 import auguste.client.reseau.ClientSocket;
 import java.net.URISyntaxException;
@@ -21,17 +20,30 @@ public class Client
 {
         private final ClientSocket socket;
         private final List<UpdateListener> interfaces;
+        private static Client INSTANCE;
         
         private List<Game> gameAvailable;
         private User currentUser;
         private Queue<ChatMessageReceived> chatMessageReceived;
         private String confirmMessage;
+        private Game currentGame;
         
-        public Client() throws URISyntaxException
+        private Client() throws URISyntaxException
         {
             this.socket = ClientSocket.getInstance();
             this.interfaces = new ArrayList<>();
             this.chatMessageReceived = new LinkedList<>();
+            this.currentGame = new Game();
+            this.currentGame.setId(0);
+        }
+        
+        public static Client getInstance() throws URISyntaxException
+        {
+            if(INSTANCE == null)
+            {
+                INSTANCE = new Client();
+            }
+            return INSTANCE;
         }
         
         public List<UpdateListener> getInterfaces()
@@ -51,7 +63,7 @@ public class Client
          */
         public void messageServerReceive(String param)
         {
-            CommandServerManager.executeCommand(this, param);
+            CommandServerManager.executeCommand(INSTANCE, param);
         }
 
         /**
@@ -59,10 +71,11 @@ public class Client
          * @param params
          *      Tableau de chaine contenant la commande à envoyer ainsi que les paramètre de cette dernière
          * @throws JSONException
+         * @throws java.net.URISyntaxException
          */
-        public void messageServerSend(String[] params) throws JSONException
+        public void messageServerSend(String[] params) throws JSONException, URISyntaxException
         {
-            CommandClientManager.executeCommand(this, params);
+            CommandClientManager.executeCommand(INSTANCE, params);
         }
         
         public void onMessageFromInterfaceReceived()
@@ -112,5 +125,19 @@ public class Client
     public void setConfirmMessage(String confirmMessage)
     {
         this.confirmMessage = confirmMessage;
+    }
+
+    /**
+     * @return the currentGame
+     */
+    public Game getCurrentGame() {
+        return currentGame;
+    }
+
+    /**
+     * @param currentGame the currentGame to set
+     */
+    public void setCurrentGame(Game currentGame) {
+        this.currentGame = currentGame;
     }
 }

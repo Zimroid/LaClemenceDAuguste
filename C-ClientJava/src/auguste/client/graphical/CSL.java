@@ -10,7 +10,8 @@ import auguste.client.command.manager.CommandClientManager;
 import auguste.client.entity.ChatMessageReceived;
 import auguste.client.entity.Client;
 import auguste.client.entity.Game;
-import java.text.DateFormat;
+import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
@@ -28,19 +29,19 @@ public class CSL implements UpdateListener
     
     /**
      *
-     * @param client
-     *      Le client de l'application
+     * @throws java.net.URISyntaxException
      */
-    public CSL(Client client)
+    public CSL() throws URISyntaxException
     {
-        this.client = client;
+        this.client = Client.getInstance();
     }
     
     /**
      * Cette fonction permet de récupérer des commandes client depuis la console
      * @throws JSONException
+     * @throws java.net.URISyntaxException
      */
-    public void run() throws JSONException
+    public void run() throws JSONException, URISyntaxException
     {
         stop = false;
 
@@ -75,7 +76,7 @@ public class CSL implements UpdateListener
             
             String author = cmr.getAuthor();
             String message = cmr.getMessage();
-            DateFormat date = DateFormat.getDateInstance(DateFormat.HOUR_OF_DAY0_FIELD);
+            SimpleDateFormat date = new SimpleDateFormat("hh:mm:ss");
             String dateFormat = date.format(cmr.getDate());
             
             System.out.println("<<"+author+">>["+dateFormat+"]"+message);
@@ -128,7 +129,8 @@ public class CSL implements UpdateListener
     @Override
     public void createGameUpdate() 
     {
-        
+        Game game = client.getCurrentGame();
+        System.out.println("Partie "+game.getName()+" créée.");
     }
 
     @Override

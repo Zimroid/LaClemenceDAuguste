@@ -7,6 +7,7 @@
 package auguste.client.command.client;
 
 import auguste.client.entity.Client;
+import java.net.URISyntaxException;
 import org.json.JSONException;
 
 /**
@@ -15,12 +16,7 @@ import org.json.JSONException;
  */
 public class GameStart extends CommandClient
 {
-    public GameStart(Client client)
-    {
-        super(client);
-    }
-    
-    public GameStart()
+    public GameStart() throws URISyntaxException
     {
         super();
     }

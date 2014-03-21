@@ -10,9 +10,8 @@ public class Main
 {        
 	public static void main(String[] args) throws URISyntaxException, IOException, JSONException
 	{
-		Client c = new Client();
-                c.getClientSocket().setClient(c);
-                c.getInterfaces().add(new CSL(c));
+		Client c = Client.getInstance();
+                c.getInterfaces().add(new CSL());
                 c.getClientSocket().connect();
                 for(UpdateListener ul : c.getInterfaces())
                 {
