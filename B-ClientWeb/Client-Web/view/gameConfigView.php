@@ -9,10 +9,45 @@
 
 	<fieldset>
 		<legend>Nom de la partie</legend>
-		<label>Team 1</label>
-		<label>Team 2</label>
-		<label>A affecter</label>
+		<button onClick="newTeam()">Nouvelle team</button>
+		<div id="allTeams" name="allTeams">
+			<div id="team1" name="team">
+				<p id="title1" name="title1">Team 1</p>
+				<button onClick="newPlayer(1)">Nouveau joueur</button>
+				<select name="team1" id="player1">
+					<option selected="selected">Joueur</option>
+					<option>créateur de la partie</option>
+				</select>
+				<label for="legion_number">Nombre de légions</label>
+				<input type="number" min="1" step="1" value="1" name="legion_number" id="legion_number" />
+				<select name="team1" id="pawn1">
+					<option selected="selected">Forme du pion</option>
+					<option>Carré</option>
+					<option>Cercle</option>
+					<option>Triangle</option>
+				</select>
+				<select name="team1" id="color1">
+					<option selected="selected">Couleur du pion</option>
+					<option>Bleu</option>
+					<option>Rouge</option>
+					<option>Vert</option>
+				</select>
+				<select name="team1" id="position1">
+					<option selected="selected">Position sur le plateau</option>
+					<option>Bas droit</option>
+					<option>Bas gauche</option>
+					<option>Haut droit</option>
+					<option>Haut gauche</option>
+				</select>
+			</div>
+			<div id="team2" name="team">
+				<p id="title2" name="title2">Team 2</p>
+				<button onClick="newPlayer(2)">Nouveau joueur</button>
+			</div>
+		</div>
+		<form id="noTeam" name="noTeam">
+			<p>A affecter</p>
+		</form>
 	</fieldset>
-
 	<input type="submit" id="valid" value="GO !" />
 </form>
