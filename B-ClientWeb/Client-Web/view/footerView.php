@@ -10,6 +10,7 @@
 		
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/websocket.js"></script>
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/websocketIndex.js"></script>
+		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/jscolor/jscolor.js"></script>
 		
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/chat.js"></script>
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/user.js"></script>

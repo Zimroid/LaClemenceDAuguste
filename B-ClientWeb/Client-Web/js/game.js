@@ -64,7 +64,7 @@ function newPlayer(nbr)
     var lblLegionNbr = document.createElement("label");
     var legionNbr = document.createElement("input");
     var selPawn = document.createElement("select");
-    var selColor = document.createElement("select");
+    var selColor = document.createElement("input");
     var selPosition = document.createElement("select");
 
     

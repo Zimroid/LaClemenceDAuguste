@@ -6,7 +6,8 @@
 		<meta charset="utf-8" />
         <meta name="viewport" content="width=device-width">
         <meta name="description" content="Application La Clémence d'Auguste réalisée par le Conseil Sept">
-        	
+        
+        <link rel="icon" type="image/png" href="css/images/home.png" />
 		<link rel="stylesheet" href="<?php echo $sitePath; ?>/css/chat.css" type="text/css">
 		<link rel="stylesheet" href="<?php echo $sitePath; ?>/css/main.css" type="text/css">
 		<link rel="stylesheet" href="<?php echo $sitePath; ?>/css/menu.css" type="text/css">

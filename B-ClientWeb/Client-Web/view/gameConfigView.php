@@ -26,12 +26,8 @@
 					<option>Cercle</option>
 					<option>Triangle</option>
 				</select>
-				<select name="team1" id="color1">
-					<option selected="selected">Couleur du pion</option>
-					<option>Bleu</option>
-					<option>Rouge</option>
-					<option>Vert</option>
-				</select>
+				<label for="color1">Couleur du pion</label>
+				<input name="team1" id="color1" class="color">
 				<select name="team1" id="position1">
 					<option selected="selected">Position sur le plateau</option>
 					<option>Bas droit</option>
@@ -46,7 +42,7 @@
 			</div>
 		</div>
 		<form id="noTeam" name="noTeam">
-			<p>A affecter</p>
+			<p>À affecter</p>
 		</form>
 	</fieldset>
 	<input type="submit" id="valid" value="GO !" />

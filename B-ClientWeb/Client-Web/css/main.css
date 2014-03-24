@@ -9,6 +9,10 @@ body
     margin: 0px;
 }
 
+input.color {
+	width: 55px;
+}
+
 #menu
 {
     width:          190px;
