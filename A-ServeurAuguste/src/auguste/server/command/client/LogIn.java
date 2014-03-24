@@ -18,7 +18,7 @@ package auguste.server.command.client;
 
 import auguste.server.Server;
 import auguste.server.command.server.LogConfirm;
-import auguste.server.Client;
+import auguste.server.User;
 import auguste.server.manager.UserManager;
 import auguste.server.util.Db;
 import java.sql.Connection;
@@ -26,7 +26,7 @@ import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
- * Commande d'identification d'un joueur.
+ * Commande d'authentification d'un joueur.
  * @author Lzard
  */
 public class LogIn extends ClientCommand
@@ -34,11 +34,11 @@ public class LogIn extends ClientCommand
     @Override
     public void execute() throws SQLException, JSONException
     {
-        // Commande pouvant être exécutée que si l'utilisateur n'est pas identifié
-        if (!this.getClient().isLogged())
+        // Commande pouvant être exécutée que si l'utilisateur n'est pas authentifié
+        if (this.getUser() == null)
         {
             // Connexion à la base de données et récupération du nouvel utilisateur
-            Client userToLog;
+            User userToLog;
             try (Connection connection = Db.open())
             {
                 UserManager manager = new UserManager(connection);
@@ -49,23 +49,23 @@ public class LogIn extends ClientCommand
                 Db.close(connection);
             }
 
-            // Identification du joueur
+            // authentification du joueur
             if (userToLog != null)
             {
                 // Déconnexion de l'utilisateur de même nom déjà connecté
                 Server.getInstance().logOut(userToLog);
                 
                 // Mise à jour du client courant
-                this.getClient().setId(userToLog.getId());
-                this.getClient().setName(userToLog.getName());
+                this.getUser().setId(userToLog.getId());
+                this.getUser().setName(userToLog.getName());
                 
                 // Connexion de l'utilisateur
-                Server.getInstance().logIn(this.getClient());
-                this.getClient().send((new LogConfirm(this.getClient())).toString());
+                Server.getInstance().logIn(this.getSocket(), this.getUser());
+                this.send((new LogConfirm(this.getUser())).toString());
             }
-            else this.getClient().error("log_error");
+            else this.error("log_error");
         }
-        else this.getClient().error("already_logged");
+        else this.error("already_logged");
     }
     
 }

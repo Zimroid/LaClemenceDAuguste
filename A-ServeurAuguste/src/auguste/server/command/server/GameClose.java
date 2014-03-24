@@ -14,30 +14,32 @@
  * limitations under the License.
  */
 
-package auguste.server.exception;
+package auguste.server.command.server;
+
+import auguste.server.Room;
+import auguste.server.Server;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
- * Exception lancée lorsqu'une commande n'est pas reconnue.
+ * Commande indiquant la fermeture d'une salle.
  * @author Lzard
  */
-public class UnknownCommandException extends Exception
+public class GameClose extends ServerCommand
 {
-    // Commande non-reconnue
-    private final String command;
-    
     /**
-     * Enregistre la commande non reconnue.
-     * @param command
+     * Remplit le JSON avec les paramètres fournis.
+     * @param room Salle fermée
+     * @throws JSONException Erreur de JSON
      */
-    public UnknownCommandException(String command)
+    public GameClose(Room room) throws JSONException
     {
-        this.command = command;
-    }
-    
-    @Override
-    public String toString()
-    {
-        return this.command;
+        // Constructeur de la classe mère
+        super("game_close");
+        
+        // Création du JSON
+        this.getJSON().put("game_id", room.getId());
     }
     
 }

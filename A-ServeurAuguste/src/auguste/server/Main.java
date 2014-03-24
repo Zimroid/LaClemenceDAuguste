@@ -28,12 +28,13 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Main
 {
-    // Fichier de configuration
+    // Chemin du fichier de configuration
     private static final String CONFIGURATION_FILE = "properties.conf";
     
     /**
      * Point d'entrée de l'application. Charge la configuration, vérifie
-     * la présence du driver JDBC et lance le serveur.
+     * la présence du driver JDBC et la disponibilité de l'algorithme de
+     * hashage puis lance le serveur.
      * @param args Arguments de la commande
      */
     public static void main(String[] args)
@@ -52,23 +53,23 @@ public class Main
             // Lancement
             Server.getInstance().start();
         }
-        catch (IOException ex)
+        catch (IOException e)
         {
             // Fichier de configuration inaccessible
             Log.error("Configuration file unavailable");
-            Log.debug(ex.toString());
+            Log.debug(e.toString());
         }
-        catch (ClassNotFoundException ex)
+        catch (ClassNotFoundException e)
         {
             // Driver JDBC introuvable
             Log.error("JDBC driver unavailable");
-            Log.debug(ex.toString());
+            Log.debug(e.toString());
         }
-        catch (NoSuchAlgorithmException ex)
+        catch (NoSuchAlgorithmException e)
         {
             // Algorithme de hashage indisponible
-            Log.error("Hash algorithme unavailable");
-            Log.debug(ex.toString());
+            Log.error("Hash algorithm unavailable");
+            Log.debug(e.toString());
         }
     }
     

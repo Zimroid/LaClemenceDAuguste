@@ -22,7 +22,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * Classe utilitaire permettant de charger la configuration du serveur.
+ * Classe utilitaire permettant de charger et de lire la configuration du
+ * serveur.
  * @author Lzard
  */
 public class Configuration
@@ -47,7 +48,7 @@ public class Configuration
     }
     
     /**
-     * Renvoie la configuration demandée.
+     * Renvoie la configuration demandée sous forme de chaîne de caractères.
      * @param key Clé de la configuration
      * @return Valeur correspondant à la clé ou chaîne vide si clé inconnue
      */

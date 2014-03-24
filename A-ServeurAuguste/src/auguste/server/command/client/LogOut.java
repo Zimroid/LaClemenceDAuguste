@@ -17,6 +17,7 @@
 package auguste.server.command.client;
 
 import auguste.server.Server;
+import auguste.server.exception.AuthentificationException;
 import org.json.JSONException;
 
 /**
@@ -26,18 +27,16 @@ import org.json.JSONException;
 public class LogOut extends ClientCommand
 {
     @Override
-    public void execute() throws JSONException
+    public void execute() throws JSONException, AuthentificationException
     {
-        // Commande pouvant être exécuté que par des utilisateurs identifiés
-        if (this.getClient().isLogged())
-        {
-            // Désidentification de l'utilisateur
-            Server.getInstance().logOut(this.getClient());
+        // Commande pouvant être exécuté que par des utilisateurs authentifiés
+        this.checkAuth();
+        
+        // Désauthentification de l'utilisateur
+        Server.getInstance().logOut(this.getUser());
 
-            // Signalisation
-            this.getClient().confirm("log_out");
-        }
-        else this.getClient().error("not_logged");
+        // Signalisation
+        this.confirm("log_out");
     }
     
 }

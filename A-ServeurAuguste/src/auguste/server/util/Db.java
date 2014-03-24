@@ -21,7 +21,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Classe utilitaire de connexion à la base de données.
+ * Classe utilitaire de connexion à la base de données. Ouvre et ferme les
+ * connexions, et désactive le commit automatique.
  * @author Lzard
  */
 public class Db
@@ -29,7 +30,7 @@ public class Db
     /**
      * Ouvre et retourne une connexion à la base de données. Désactive le commit
      * automatique.
-     * @return Une instance de Connection ou null en cas d'erreur
+     * @return Une instance de Connection
      * @throws java.sql.SQLException Erreur SQL
      */
     public static Connection open() throws SQLException
@@ -40,12 +41,12 @@ public class Db
                 Configuration.get("db_password")
         );
         connection.setAutoCommit(false);
-        Log.debug("Connection to database");
+        Log.out("Connection to database");
         return connection;
     }
     
     /**
-     * Commit des modifications etemerture d'une connexion avec la base de
+     * Commit des modifications et femerture d'une connexion avec la base de
      * données.
      * @param connection Connexion à fermer
      * @throws SQLException Erreur SQL

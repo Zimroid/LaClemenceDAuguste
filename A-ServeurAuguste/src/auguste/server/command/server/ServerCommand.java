@@ -16,6 +16,7 @@
 
 package auguste.server.command.server;
 
+import auguste.server.Room;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,6 +40,18 @@ public abstract class ServerCommand
     }
     
     /**
+     * Insère dans le JSON le nom de la commande et l'ID de la salle.
+     * @param name Nom de la commande
+     * @param room Salle à destination
+     * @throws JSONException
+     */
+    public ServerCommand(String name, Room room) throws JSONException
+    {
+        this.getJSON().put("command", name);
+        this.getJSON().put("game_id", room.getId());
+    }
+    
+    /**
      * Retourne le JSON de la commande.
      * @return JSON de la commande
      */
@@ -48,7 +61,7 @@ public abstract class ServerCommand
     }
     
     @Override
-    public final String toString()
+    public String toString()
     {
         return this.json.toString();
     }

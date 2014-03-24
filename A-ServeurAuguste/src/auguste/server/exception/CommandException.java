@@ -14,23 +14,30 @@
  * limitations under the License.
  */
 
-package auguste.server.command.client;
-
-import auguste.server.command.server.GameAvailables;
-import auguste.server.exception.RuleException;
-import java.sql.SQLException;
-import org.json.JSONException;
+package auguste.server.exception;
 
 /**
- * Commande pour récupérer la liste des parties disponibles.
+ * Exception lancée lorsqu'une commande n'est pas reconnue.
  * @author Lzard
  */
-public class GameList extends ClientCommand
+public class CommandException extends Exception
 {
-    @Override
-    public void execute() throws SQLException, JSONException, RuleException
+    // Commande non-reconnue
+    private final String command;
+    
+    /**
+     * Enregistre la commande non-reconnue.
+     * @param command Commande non-reconnue
+     */
+    public CommandException(String command)
     {
-        this.send((new GameAvailables()).toString());
+        this.command = command;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.command;
     }
     
 }

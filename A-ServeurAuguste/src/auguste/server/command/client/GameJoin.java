@@ -18,7 +18,8 @@ package auguste.server.command.client;
 
 import auguste.server.Room;
 import auguste.server.Server;
-import auguste.server.exception.RuleException;
+import auguste.server.exception.AuthentificationException;
+import auguste.server.exception.RoomException;
 import java.sql.SQLException;
 import org.json.JSONException;
 
@@ -29,27 +30,22 @@ import org.json.JSONException;
 public class GameJoin extends ClientCommand
 {
     @Override
-    public void execute() throws SQLException, JSONException, RuleException
+    public void execute() throws RoomException, SQLException, JSONException, AuthentificationException
     {
-        // Vérification de l'identification
-        if (this.getClient().isLogged())
+        // Vérification de l'authentification de l'utilisateur
+        this.checkAuth();
+        
+        // Récupération de la salle
+        Room room = Server.getInstance().getRoom(this.getJSON().getInt("join_game"));
+
+        // Vérification de la non-présence de l'utilisateur
+        if (!room.isInRoom(this.getUser()))
         {
-            // Récupération de la salle et vérification de son existence
-            Room room = Server.getInstance().getRoom(this.getJSON().getInt("game_id"));
-            if (room != null)
-            {
-                // Vérification de la non-présence de l'utilisateur
-                if (!this.getClient().isInRoom(room))
-                {
-                    // Ajout du client à la salle
-                    this.getClient().joinRoom(room);
-                    room.confirm();
-                }
-                else this.getClient().error("already_in_this_room");
-            }
-            else this.getClient().error("inexistant_room");
+            // Ajout du client à la salle
+            room.addUser(this.getSocket(), this.getUser());
+            room.confirm();
         }
-        else this.getClient().error("not_logged");
+        else this.error("already_in_this_room");
     }
     
 }

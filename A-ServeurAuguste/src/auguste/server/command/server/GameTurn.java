@@ -16,6 +16,7 @@
 
 package auguste.server.command.server;
 
+import auguste.server.Room;
 import org.json.JSONException;
 
 /**
@@ -26,12 +27,13 @@ public class GameTurn extends ServerCommand
 {
     /**
      * Remplit le JSON avec les paramètres fournis.
+     * @param room Salle de la partie
      * @throws JSONException Erreur de JSON
      */
-    public GameTurn() throws JSONException
+    public GameTurn(Room room) throws JSONException
     {
         // Constructeur de la classe mère
-        super("game_turn");
+        super("game_turn", room);
     }
     
 }

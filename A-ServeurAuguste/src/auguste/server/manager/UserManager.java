@@ -16,7 +16,7 @@
 
 package auguste.server.manager;
 
-import auguste.server.Client;
+import auguste.server.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,10 +29,6 @@ import java.sql.SQLException;
  */
 public class UserManager extends Manager
 {
-    // Requête pour récupérer un utilisateur avec son ID
-    private static final String QUERY_USER_FROM_ID =
-            "SELECT * FROM user WHERE id = ? LIMIT 1";
-    
     // Requête pour récupérer un utilisateur avec son nom et son mot de passe
     private static final String QUERY_USER_BY_LOGIN =
             "SELECT * FROM user WHERE name = ? AND password = ? LIMIT 1";
@@ -55,53 +51,35 @@ public class UserManager extends Manager
 
     /**
      * Initialise la connexion à la base de données.
-     * @param connection
+     * @param connection Connexion à la base
      */
     public UserManager(Connection connection)
     {
         super(connection);
     }
-    
-    /**
-     * Récupération d'un joueur via son ID.
-     * @param id ID du joueur
-     * @return Instance de Player correspondant à l'ID
-     * @throws java.sql.SQLException Erreur SQL
-     */
-    public Client getUser(int id) throws SQLException
-    {
-        // Préparation et exécution de la requête
-        PreparedStatement statement = this.query(UserManager.QUERY_USER_FROM_ID);
-        statement.setInt(1, id);
-        ResultSet set = statement.executeQuery();
-        set.first();
-
-        // Retour du joueur
-        return new Client(set, null);
-    }
 
     /**
-     * Récupère un joueur via son login et son mot de passe.
-     * @param login    Login du joueur
-     * @param password Mot de passe du joueur
-     * @return Instance de Player correspondant au joueur ou null si erreur
+     * Récupère un utilisateur via son nom et son mot de passe.
+     * @param login    Nom de l'utilisateur
+     * @param password Mot de passe de l'utilisateur
+     * @return Instance d'User correspondant à l'utilisateur trouvée ou null
      * @throws java.sql.SQLException Erreur SQL
      */
-    public Client getUser(String login, String password) throws SQLException
+    public User getUser(String login, String password) throws SQLException
     {
         // Préparation et exécution de la requête
         PreparedStatement statement = this.query(UserManager.QUERY_USER_BY_LOGIN);
         statement.setString(1, login);
-        statement.setString(2, Client.hashPassword(password));
+        statement.setString(2, User.hashPassword(password));
         ResultSet set = statement.executeQuery();
 
-        // Si aucun résultat, retourne null, sinon retourne le joueur
-        if (set.first()) return new Client(set, null);
+        // Si aucun résultat, retourne null, sinon retourne l'utilisateur
+        if (set.first()) return new User(set);
         else             return null;
     }
     
     /**
-     * Retourne si un nom de joueur est disponible.
+     * Indique si un nom d'utilisateur est disponible.
      * @param name Nom à vérifier
      * @return Booléen indiquant la disponibilité du nom
      * @throws SQLException Erreur SQL
@@ -118,25 +96,20 @@ public class UserManager extends Manager
     }
 
     /**
-     * Sauvegarde d'un joueur dans la base de données.
-     * @param user Joueur à sauvegarder
+     * Sauvegarde d'un utilisateur dans la base de données.
+     * @param user Utilisateur à sauvegarder
      * @throws java.sql.SQLException Erreur SQL
      */
-    public void saveUser(Client user) throws SQLException
+    public void saveUser(User user) throws SQLException
     {
         // Si c'est un nouveau joueur, on l'insère, sinon on le met à jour
-        if (user.getId() == Client.DEFAULT_ID)
+        if (user.getId() == User.UNREGISTERED_ID)
         {
             // Préparation et exécution de la requête
-            PreparedStatement statement = this.query(UserManager.QUERY_ADD_USER, true);
+            PreparedStatement statement = this.query(UserManager.QUERY_ADD_USER);
             statement.setString(1, user.getName());
             statement.setString(2, user.getPassword());
             statement.executeUpdate();
-            
-            // Récupération de l'ID du nouveau joueur
-            ResultSet keysSet = statement.getGeneratedKeys();
-            keysSet.first();
-            user.setId(keysSet.getInt(1));
         }
         else
         {
@@ -150,11 +123,11 @@ public class UserManager extends Manager
     }
     
     /**
-     * Supprime un joueur de la base de données.
-     * @param user Joueur à supprimer
+     * Supprime un utilisateur de la base de données.
+     * @param user Utilisateur à supprimer
      * @throws SQLException Erreur SQL
      */
-    public void deleteUser(Client user) throws SQLException
+    public void deleteUser(User user) throws SQLException
     {
         // Préparation et exécution de la requête
         PreparedStatement statement = this.query(UserManager.QUERY_UPDATE_USER);

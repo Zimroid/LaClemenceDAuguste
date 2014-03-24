@@ -12,3 +12,8 @@ Thumbs.db
 /2-Tests/InterfaceTestJSON/dist/
 B-ClientWeb/Client-Web/model/config.php
 *.prefs
+A-ServeurAuguste/nbproject/private/private.properties
+A-ServeurAuguste/nbproject/private/private.xml
+A-ServeurAuguste/nbproject/build-impl.xml
+A-ServeurAuguste/nbproject/genfiles.properties
+A-ServeurAuguste/nbproject/private/private.properties

@@ -18,6 +18,7 @@ package auguste.server.command.client;
 
 import auguste.server.Room;
 import auguste.server.Server;
+import auguste.server.exception.AuthentificationException;
 import org.json.JSONException;
 
 /**
@@ -27,19 +28,18 @@ import org.json.JSONException;
 public class GameCreate extends ClientCommand
 {
     @Override
-    public void execute() throws JSONException
+    public void execute() throws JSONException, AuthentificationException
     {
-        // Création de la salle si l'utilisateur est identifié et confirmation
-        if (this.getClient().isLogged())
-        {
-            Room newRoom = Server.getInstance().createRoom(
-                    this.getJSON().getString("game_name")
-            );
-            newRoom.addClient(this.getClient());
-            newRoom.setOwner(this.getClient());
-            newRoom.confirm();
-        }
-        else this.getClient().error("not_logged");
+        // Vérification de l'authentification de l'utilisateur
+        this.checkAuth();
+        
+        // Création de la salle
+        Room newRoom = Server.getInstance().createRoom(
+                this.getJSON().getString("game_name")
+        );
+        newRoom.addUser(this.getSocket(), this.getUser());
+        newRoom.setOwner(this.getUser());
+        newRoom.confirm();
     }
     
 }

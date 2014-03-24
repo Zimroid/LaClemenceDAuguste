@@ -16,8 +16,13 @@
 
 package auguste.server;
 
+import auguste.server.command.server.GameClose;
 import auguste.server.command.server.GameConfirm;
-import java.util.ArrayList;
+import auguste.server.util.Log;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import org.java_websocket.WebSocket;
 import org.json.JSONException;
 
 /**
@@ -26,43 +31,44 @@ import org.json.JSONException;
  */
 public class Room
 {
-    private final int gameId; // ID de la partie
+    private final int id; // Identifiant de la salle
     
-    private Client owner; // Propriétaire de la salle
+    private User owner; // Propriétaire de la salle
     
-    // Configuration de la game
+    // Configuration de la partie
     private String gameName;
     private int    playerNumber = 6;
     private int    boardSize    = 8;
     
     // Liste des clients affectés à la salle
-    private final ArrayList<Client> clients = new ArrayList<>();
+    private final HashMap<WebSocket, User> users = new HashMap<>();
     
     /**
-     * Création d'une salle avec le nom donné.
-     * @param gameId   ID de la salle
+     * Création d'une salle avec le nom et l'identifiant donné.
+     * @param id ID de la salle
      * @param gameName Nom de la salle
      */
-    public Room(int gameId, String gameName)
+    public Room(int id, String gameName)
     {
-        this.gameId   = gameId;
+        this.id = id;
         this.gameName = gameName;
     }
     
     /**
-     * Envoi d'un message à tous les clients de la salle.
+     * Envoi d'un message à tous les utilisateurs de la salle.
      * @param message Message à envoyer
      */
     public void broadcast(String message)
     {
-        for (Client client : this.clients)
+        Log.debug("Broadcast (room " + this.getId() + "): " + message);
+        for (WebSocket socket : this.users.keySet())
         {
-            client.send(message);
+            socket.send(message);
         }
     }
     
     /**
-     * Envoi d'une commande game_confirm à tous les clients.
+     * Envoi d'une commande game_confirm à tous les utilisateurs de la salle.
      * @throws org.json.JSONException Erreur JSON
      */
     public void confirm() throws JSONException
@@ -71,40 +77,75 @@ public class Room
     }
     
     /**
-     * Indique si le client donné est propriétaire de la salle.
-     * @param client Client à vérifier
-     * @return Client donné est le propriétaire
+     * Envoi d'une commande game_close à tous les utilisateurs de la salle.
+     * @throws JSONException
      */
-    public boolean isOwner(Client client)
+    public void close() throws JSONException
     {
-        return client.getId() == this.owner.getId();
+        this.broadcast((new GameClose(this)).toString());
     }
     
     /**
-     * Ajoute un client à la salle.
-     * @param client
+     * Ajoute un utilisateur à la salle.
+     * @param socket WebSocket de l'utilisateur
+     * @param user   Utilisateur à ajouter
      */
-    public void addClient(Client client)
+    public void addUser(WebSocket socket, User user)
     {
-        this.clients.add(client);
+        synchronized (this.users)
+        {
+            this.users.put(socket, user);
+        }
     }
     
     /**
-     * Retire un client de la salle.
-     * @param client
+     * Retire un utilisateur de la salle.
+     * @param user Utilisateur à retirer
      */
-    public void removeClient(Client client)
+    public void removeUser(User user)
     {
-        this.clients.remove(client);
+        synchronized (this.users)
+        {
+            this.users.values().removeAll(Collections.singleton(user));
+        }
     }
     
     /**
-     * Retourne l'ID de la partie.
-     * @return ID de la partie
+     * Retourne la liste des utilisateurs de la salle.
+     * @return Collection des utilisateurs de la salle
      */
-    public int getGameId()
+    public Collection<User> getUserCollection()
     {
-        return this.gameId;
+        return this.users.values();
+    }
+    
+    /**
+     * Indique si un utilisateur est présent dans la salle.
+     * @param user Utilisateur à vérifier
+     * @return Booléen indiquant la présence de l'utilisateur
+     */
+    public boolean isInRoom(User user)
+    {
+        return this.users.containsValue(user);
+    }
+    
+    /**
+     * Indique si l'utilisateur donné est propriétaire de la salle.
+     * @param user User à vérifier
+     * @return User donné est le propriétaire
+     */
+    public boolean isOwner(User user)
+    {
+        return user.getId() == this.owner.getId();
+    }
+    
+    /**
+     * Retourne l'ID de la salle.
+     * @return ID de la salle
+     */
+    public int getId()
+    {
+        return this.id;
     }
     
     /**
@@ -136,11 +177,11 @@ public class Room
     
     /**
      * Définie le propriétaire de la salle.
-     * @param client Nouveau propriétaire
+     * @param user Nouveau propriétaire
      */
-    public void setOwner(Client client)
+    public void setOwner(User user)
     {
-        this.owner = client;
+        this.owner = user;
     }
     
     /**

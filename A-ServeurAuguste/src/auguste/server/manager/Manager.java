@@ -22,7 +22,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Classe abstraite des Managers de données.
+ * Classe abstraite des managers de données à faire persister.
  * @author Lzard
  */
 public abstract class Manager
@@ -51,9 +51,9 @@ public abstract class Manager
     }
     
     /**
-     * Prépare une requête avec récupération des identifiants générés.
+     * Prépare une requête avec récupération des clés identifiantes générées.
      * @param query         Requête demandée
-     * @param generatedKeys Retourner les identifiants ?
+     * @param generatedKeys Retourner les clés identifiantes ?
      * @return PreparedStatement de la requête
      * @throws SQLException Erreur SQL
      */

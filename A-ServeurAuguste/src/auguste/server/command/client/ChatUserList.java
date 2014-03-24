@@ -16,21 +16,28 @@
 
 package auguste.server.command.client;
 
-import auguste.server.command.server.GameAvailables;
+import auguste.server.command.server.ChatUsers;
+import auguste.server.exception.AuthentificationException;
 import auguste.server.exception.RuleException;
 import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
- * Commande pour récupérer la liste des parties disponibles.
+ * Commande de demande des utilisateurs d'une salle ou de tous les utilisateurs
+ * authentifiés.
  * @author Lzard
  */
-public class GameList extends ClientCommand
+public class ChatUserList extends ClientCommand
 {
     @Override
-    public void execute() throws SQLException, JSONException, RuleException
+    public void execute() throws SQLException, JSONException, RuleException, AuthentificationException
     {
-        this.send((new GameAvailables()).toString());
+        // Vérification de l'authentification
+        this.checkAuth();
+        
+        // Envoi de la liste
+        if (this.getRoom() != null) this.send((new ChatUsers(this.getRoom())).toString());
+        else                        this.send((new ChatUsers()).toString());
     }
     
 }

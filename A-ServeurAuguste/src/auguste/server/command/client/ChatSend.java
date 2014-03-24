@@ -16,9 +16,9 @@
 
 package auguste.server.command.client;
 
-import auguste.server.Room;
 import auguste.server.Server;
 import auguste.server.command.server.ChatMessage;
+import auguste.server.exception.AuthentificationException;
 import org.json.JSONException;
 
 /**
@@ -28,35 +28,33 @@ import org.json.JSONException;
 public class ChatSend extends ClientCommand
 {
     @Override
-    public void execute() throws JSONException
+    public void execute() throws AuthentificationException, JSONException
     {
-        // Envoi du message si l'utilisateur est identifié
-        if (this.getClient().isLogged())
+        // Vérification de l'authentification
+        this.checkAuth();
+
+        // Choix de la salle
+        if (this.getRoom() != null)
         {
-            // Identification de la room concernée
-            Integer gameId = Integer.valueOf(this.getJSON().getInt("game_id"));
-            Room room = Server.getInstance().getRoom(gameId);
-            
-            // Vérification de l'existance de la salle
-            if (room != null)
-            {
-                // Vérification de la présence dans la salle
-                if (this.getClient().isInRoom(room))
-                {
-                    // Envoi du message à la salle
-                    room.broadcast(
-                            (new ChatMessage(
-                                    this.getClient(),
-                                    gameId,
-                                    this.getJSON().getString("message")
-                            )).toString()
-                    );
-                }
-                else this.getClient().error("not_in_this_room");
-            }
-            else this.getClient().error("inexistent_room");
+            // Envoi du message à la salle
+            this.getRoom().broadcast(
+                    (new ChatMessage(
+                            this.getUser(),
+                            this.getRoom(),
+                            this.getJSON().getString("message")
+                    )).toString()
+            );
         }
-        else this.getClient().error("must_be_logged");
+        else
+        {
+            // Envoi du message à tous les utilisateurs
+            Server.getInstance().broadcast(
+                    (new ChatMessage(
+                            this.getUser(),
+                            this.getJSON().getString("message")
+                    )).toString()
+            );
+        }
     }
     
 }

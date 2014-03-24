@@ -17,6 +17,7 @@
 package auguste.server.util;
 
 import java.io.PrintStream;
+import java.util.Date;
 
 /**
  * Classe utilitaire pour logger les messages du serveur.
@@ -35,7 +36,7 @@ public class Log
      */
     public static void out(String message)
     {
-        Log.OUT.println(message);
+        Log.OUT.println((new Date()).toString() + " -- " + message);
     }
     
     /**
@@ -44,7 +45,7 @@ public class Log
      */
     public static void error(String message)
     {
-        Log.ERROR.println(message);
+        Log.ERROR.println((new Date()).toString() + " -- " + message);
     }
     
     /**
@@ -53,7 +54,7 @@ public class Log
      */
     public static void debug(String message)
     {
-        if (Configuration.get("debug").equals("true")) Log.DEBUG.println(message);
+        if (Configuration.get("debug").equals("true")) Log.DEBUG.println((new Date()).toString() + " -- " + message);
     }
     
 }

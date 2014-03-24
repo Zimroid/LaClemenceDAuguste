@@ -16,7 +16,8 @@
 
 package auguste.server.command.server;
 
-import auguste.server.Client;
+import auguste.server.Room;
+import auguste.server.User;
 import java.util.Date;
 import org.json.JSONException;
 
@@ -29,18 +30,34 @@ public class ChatMessage extends ServerCommand
     /**
      * Remplit le JSON avec les paramètres fournis.
      * @param author  Auteur du message
-     * @param gameId  ID de la game concernée
      * @param message Contenu du message
      * @throws JSONException Erreur de JSON
      */
-    public ChatMessage(Client author, int gameId, String message) throws JSONException
+    public ChatMessage(User author, String message) throws JSONException
     {
         // Constructeur de la classe mère
         super("chat_message");
         
         // Création du JSON
         this.getJSON().put("author",  author.getName());
-        this.getJSON().put("game_id", gameId);
+        this.getJSON().put("date",    (new Date()).getTime());
+        this.getJSON().put("text",    message);
+    }
+
+    /**
+     * Remplit le JSON avec les paramètres fournis.
+     * @param author  Auteur du message
+     * @param room    Salle à destination du message
+     * @param message Contenu du message
+     * @throws JSONException Erreur de JSON
+     */
+    public ChatMessage(User author, Room room, String message) throws JSONException
+    {
+        // Constructeur de la classe mère
+        super("chat_message", room);
+        
+        // Création du JSON
+        this.getJSON().put("author",  author.getName());
         this.getJSON().put("date",    (new Date()).getTime());
         this.getJSON().put("text",    message);
     }

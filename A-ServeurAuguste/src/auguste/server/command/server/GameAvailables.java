@@ -17,28 +17,36 @@
 package auguste.server.command.server;
 
 import auguste.server.Room;
+import auguste.server.Server;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
- * Commande de confirmation de création/modification d'une partie.
+ * Commande d'envoi de la liste des salles crées.
  * @author Lzard
  */
-public class GameConfirm extends ServerCommand
+public class GameAvailables extends ServerCommand
 {
     /**
      * Remplit le JSON avec les paramètres fournis.
-     * @param room Salle de la partie
      * @throws JSONException Erreur de JSON
      */
-    public GameConfirm(Room room) throws JSONException
+    public GameAvailables() throws JSONException
     {
         // Constructeur de la classe mère
-        super("game_confirm", room);
+        super("game_availables");
+        
+        // Création du JSONObject contenant la liste des salles
+        JSONArray roomList = new JSONArray();
+        for (Room room : Server.getInstance().getRoomList())
+        {
+            JSONObject roomEntry = new JSONObject();
+            roomEntry.put("name", room.getGameName());
+            roomList.put(roomEntry);
+        }
         
         // Création du JSON
-        this.getJSON().put("game_name",     room.getGameName());
-        this.getJSON().put("player_number", room.getPlayerNumber());
-        this.getJSON().put("board_size",    room.getBoardSize());
+        this.getJSON().put("list", roomList);
     }
-    
 }
