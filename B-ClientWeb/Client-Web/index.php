@@ -3,6 +3,8 @@
 	ob_start('ob_gzhandler');
 	register_shutdown_function('ob_end_flush');
 	header('Content-Type: text/html; charset=utf-8');
+	session_start();
+	ob_start();
 	
 	require_once("controller/pageController.php");
 	require_once("controller/userController.php");
@@ -41,4 +43,5 @@
 		// Affichage pied-de-page
 		include_once("view/footerView.php");
 	}
+	ob_end_flush();
 ?>

@@ -20,7 +20,7 @@ class userController
 	// Deconnexion
 	public function deconnect()
 	{
-		$_SESSION["username"] = null;
+		unset($_SESSION["username"]);
 		include 'view/chatView.php';
 	}
 }

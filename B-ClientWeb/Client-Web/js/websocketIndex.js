@@ -6,9 +6,10 @@ function process(evt)
 	var command = data.command;
 	
 	// Erreur connexion utilisateur
-	if(command == "error_log")
+	if(command == "message_error")
 	{
 		console.log("Erreur connexion utilisateur ...");
+		alert(data.type);
 	}
 	
 	// Reussite connexion utilisateur
@@ -35,7 +36,7 @@ function process(evt)
 	}
 	
 	// Réussite action
-	else if(command == "confirm")
+	else if(command == "message_confirm")
 	{
 		var type = data.type;
 		

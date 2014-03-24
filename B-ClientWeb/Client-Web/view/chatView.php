@@ -14,9 +14,9 @@
 	{
 ?>
 		<!-- Connexion -->
-		<input type="text" name="user" id="user" placeholder="Pseudo" />
-		<input type="password" name="password" id="password" placeholder="Mot de passe" />
-		<input type="button" value="Me connecter" onclick="connexion(); " />
+		<input type="text" name="user" id="user" placeholder="Pseudo" onkeypress="if (event.keyCode == 13) connexion()" />
+		<input type="password" name="password" id="password" placeholder="Mot de passe" onkeypress="if (event.keyCode == 13) connexion()" />
+		<input type="button" value="Me connecter" onclick="connexion(); " /><br>
 		<!-- Lien vers page d'inscription -->
 		<script>
 			document.write("<a href='' onclick='reloadContent(\"<?php echo $sitePath; ?>/index.php?script=1&page=subscribe\"); return false;' >M'inscrire au jeu</a>");

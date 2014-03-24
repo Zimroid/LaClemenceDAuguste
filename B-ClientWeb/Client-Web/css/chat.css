@@ -7,6 +7,11 @@
     padding-top:    0.5em;
 }
 
+#chatHeader input[type="text"], #chatHeader input[type="password"]
+{
+    width:          100px;
+}
+
 #chatMessages
 {
     overflow-y:     auto;
