@@ -11,7 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- *
+ * Classe qui représente le comportement d'une commande de création de partie.
  * @author Evinrude
  */
 public class GameCreate extends CommandClient
@@ -21,6 +21,10 @@ public class GameCreate extends CommandClient
         super();
     }
 
+    /**
+     * 
+     * @throws JSONException
+     */
     @Override
     public void buildJSON() throws JSONException 
     {

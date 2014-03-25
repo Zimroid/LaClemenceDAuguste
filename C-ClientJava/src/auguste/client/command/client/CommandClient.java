@@ -12,7 +12,8 @@ import java.net.URISyntaxException;
 import org.json.JSONException;
 
 /**
- *
+ * Classe qui représente le comportement d'une commande que le client envoie
+ * au serveur
  * @author Evinrude
  */
 public abstract class CommandClient
@@ -39,31 +40,53 @@ public abstract class CommandClient
         this.client = Client.getInstance();
     }
     
+    /**
+     *
+     * @return Le client concerné par la commande.
+     */
     public Client getClient()
     {
         return this.client;
     }
     
+    /**
+     *
+     * @param s Le premier argument est le nom de la commande, le reste change en fonction de la commande concernée.
+     */
     public void setArguments(String[] s)
     {
         this.args = s;
     }
     
+    /**
+     *
+     * @return Le JSON contruit par la commande.
+     */
     public JSONObject getJSON()
     {
         return this.json;
     }
     
+    /**
+     *
+     * @return Les arguments de la commande.
+     */
     public String[] getArguments()
     {
         return this.args;
     }
     
+    /**
+     * Envoie le JSON vers le serveur.
+     */
     public void execute() 
     {
         this.getClient().getClientSocket().send(this.getJSON().toString());
     }
     
+    /**
+     * Liste des commandes disponible sur le client.
+     */
     public enum CommandName
     {
         ACCOUNT_CREATE,

@@ -10,7 +10,7 @@ import java.net.URISyntaxException;
 import org.json.JSONException;
 
 /**
- *
+ * Classe qui représente le comportement d'une commande de création de compte.
  * @author Evinrude
  */
 public class AccountCreate extends CommandClient
@@ -20,6 +20,13 @@ public class AccountCreate extends CommandClient
         super();
     }
 
+    /**
+     * Construit un JSON avec en paramètre :
+     * command : account_create,
+     * name: login du compte,
+     * password : le mot de passe du compte
+     * @throws JSONException
+     */
     @Override
     public void buildJSON() throws JSONException
     {

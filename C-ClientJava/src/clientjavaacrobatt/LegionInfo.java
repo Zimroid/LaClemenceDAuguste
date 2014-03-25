@@ -1,5 +1,7 @@
 package clientjavaacrobatt;
 
+import auguste.client.engine.Player;
+
 /**
  * This is a light version of Legion : 
  * it help only to construct @see GameInfo without the help of @see Legion 

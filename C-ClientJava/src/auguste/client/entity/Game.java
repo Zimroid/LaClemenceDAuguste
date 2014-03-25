@@ -6,8 +6,15 @@
 
 package auguste.client.entity;
 
+import auguste.client.engine.Pawn;
+import auguste.client.engine.Player;
+import auguste.client.engine.Team;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
+ * Classe qui représente une partie
  * @author Evinrude
  */
 public class Game
@@ -15,7 +22,28 @@ public class Game
     private int id;
     private String name;
     private int board_size;
+    private int legion_number;
+    private List<Team> teams;
     
+    /**
+     * Crée une partie en spécifiant son id.
+     * @param id
+     */
+    public Game(int id)
+    {
+        this.id = id;
+        this.teams = new ArrayList<>();
+    }
+    
+    /**
+     * Crée une partie non configurée.
+     */
+    public Game()
+    {
+        this(0);
+    }
+    
+    // *** Getters et setters *** //
     public void setId(int id)
     {
         this.id = id;
@@ -50,5 +78,48 @@ public class Game
     public String toString()
     {
         return "ID : "+this.id+"  Name : "+this.name+"  Size : "+this.board_size;
+    }
+
+    /**
+     * @return the teams
+     */
+    public List<Team> getTeams() {
+        return teams;
+    }
+
+    /**
+     * @param teams the teams to set
+     */
+    public void setTeams(List<Team> teams) {
+        this.teams = teams;
+    }
+    
+    private void setPawns()
+    {
+        List<Pawn> pawns = new ArrayList<>();
+        for(Team team : this.teams)
+        {
+            Color teamColor = team.getColor();
+            int teamShape = team.getTeamShape();
+            
+            for(Player player : team.getPlayers())
+            {                
+                player.generatePawns();
+            }
+        }
+    }
+
+    /**
+     * @return the legion_number
+     */
+    public int getLegion_number() {
+        return legion_number;
+    }
+
+    /**
+     * @param legion_number the legion_number to set
+     */
+    public void setLegion_number(int legion_number) {
+        this.legion_number = legion_number;
     }
 }

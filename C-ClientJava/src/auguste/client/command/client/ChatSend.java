@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import org.json.JSONException;
 
 /**
- *
+ * Classe qui représente le comportement d'une commande d'envoi de message
  * @author Evinrude
  */
 public class ChatSend extends CommandClient
@@ -23,6 +23,13 @@ public class ChatSend extends CommandClient
         super();
     }
 
+    /**
+     * Construit un JSON avec en paramètre : 
+     * command : chat_send,
+     * message : le corps du message,
+     * game_id : l'id de la partie concernée
+     * @throws JSONException
+     */
     @Override
     public void buildJSON() throws JSONException
     {
