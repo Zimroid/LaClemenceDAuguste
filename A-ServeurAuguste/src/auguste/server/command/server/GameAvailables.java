@@ -42,7 +42,8 @@ public class GameAvailables extends ServerCommand
         for (Room room : Server.getInstance().getRoomList())
         {
             JSONObject roomEntry = new JSONObject();
-            roomEntry.put("name", room.getGameName());
+            roomEntry.put("game_id", room.getId());
+            roomEntry.put("game_name", room.getGameName());
             roomList.put(roomEntry);
         }
         

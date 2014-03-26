@@ -43,6 +43,7 @@ public class ChatUsers extends ServerCommand
         for (User user : Server.getInstance().getUserSet())
         {
             JSONObject userEntry = new JSONObject();
+            userEntry.put("id", user.getId());
             userEntry.put("name", user.getName());
             userList.put(userEntry);
         }

@@ -17,10 +17,7 @@
 package auguste.server.command.server;
 
 import auguste.server.Room;
-import auguste.server.Server;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Commande indiquant la fermeture d'une salle.
