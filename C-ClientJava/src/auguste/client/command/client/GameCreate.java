@@ -16,6 +16,13 @@ import org.json.JSONObject;
  */
 public class GameCreate extends CommandClient
 {
+    private static final String GAME_NAME = "game_name";
+    private static final String TURN_TIMER = "turn_timer";
+    private static final String BOARD_SIZE = "board_size";
+    private static final String CARDS = "cards";
+    private static final String NUMBER_OF_TEAM = "number_of_team";
+    private static final String LEGION_PER_PLAYER = "legion_per_player";
+    
     public GameCreate() throws URISyntaxException
     {
         super();
@@ -28,26 +35,26 @@ public class GameCreate extends CommandClient
     @Override
     public void buildJSON() throws JSONException 
     {
-        String game_name = this.getArguments()[1];
+        String game_name = this.getArguments().get(GAME_NAME);
         boolean cards = false;
         int turn_timer = 20;
         int board_size = 8;
         int number_of_team = 2;
         int legion_per_player = 8;
         
-        if(this.getArguments().length>2)
+        if(this.getArguments().containsKey(TURN_TIMER))
         {
-            turn_timer = Integer.parseInt(this.getArguments()[2]);            
+            turn_timer = Integer.parseInt(this.getArguments().get(TURN_TIMER));            
         }
         
-        if(this.getArguments().length>3)
+        if(this.getArguments().containsKey(BOARD_SIZE))
         {
-            board_size = Integer.parseInt(this.getArguments()[3]);
+            board_size = Integer.parseInt(this.getArguments().get(BOARD_SIZE));
         }
         
-        if(this.getArguments().length>4)
+        if(this.getArguments().containsKey(CARDS))
         {
-            switch(this.getArguments()[4])
+            switch(this.getArguments().get(CARDS))
             {
                 case "1":
                     cards=true;
@@ -57,14 +64,14 @@ public class GameCreate extends CommandClient
             }
         }
         
-        if(this.getArguments().length>5)
+        if(this.getArguments().containsKey(NUMBER_OF_TEAM))
         {
-            number_of_team = Integer.parseInt(this.getArguments()[5]);
+            number_of_team = Integer.parseInt(this.getArguments().get(NUMBER_OF_TEAM));
         }
         
-        if(this.getArguments().length>6)
+        if(this.getArguments().containsKey(LEGION_PER_PLAYER))
         {
-            legion_per_player = Integer.parseInt(this.getArguments()[6]);
+            legion_per_player = Integer.parseInt(this.getArguments().get(LEGION_PER_PLAYER));
         }
 
         JSONObject json = this.getJSON();

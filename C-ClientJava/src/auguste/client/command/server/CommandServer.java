@@ -16,7 +16,6 @@ import org.json.JSONObject;
  */
 public abstract class CommandServer 
 {
-    
     private JSONObject json;
     private Client client;
     

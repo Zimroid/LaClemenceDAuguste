@@ -29,7 +29,7 @@ import java.util.Map;
 public class Team 
 {
     private List<Player> players;
-    private Color color;
+    private int color;
     private int teamShape;
     private final int id;
     private Map<Integer,Player> tabPlayers;
@@ -65,14 +65,14 @@ public class Team
     /**
      * @return the color
      */
-    public Color getColor() {
+    public int getColor() {
         return color;
     }
 
     /**
      * @param color the color to set
      */
-    public void setColor(Color color) {
+    public void setColor(int color) {
         this.color = color;
     }
 

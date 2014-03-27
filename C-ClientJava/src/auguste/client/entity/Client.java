@@ -6,8 +6,10 @@ import auguste.client.graphical.UpdateListener;
 import auguste.client.reseau.ClientSocket;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import org.json.JSONException;
 
@@ -27,6 +29,8 @@ public class Client
         private Queue<ChatMessageReceived> chatMessageReceived;
         private String confirmMessage;
         private Game currentGame;
+        
+        private Map<String,String> command;
         
         private Client() throws URISyntaxException
         {
@@ -68,19 +72,14 @@ public class Client
 
         /**
          * Cette méthode contruit un message à envoyer à un serveur et l'envoie.
-         * @param params
-         *      Tableau de chaine contenant la commande à envoyer ainsi que les paramètre de cette dernière
+         * @param command
+         *      Map qui contient au moins le nom de la commande et les paramètres associés
          * @throws JSONException
          * @throws java.net.URISyntaxException
          */
-        public void messageServerSend(String[] params) throws JSONException, URISyntaxException
+        public void sendCommand(Map<String,String> command) throws JSONException, URISyntaxException
         {
-            CommandClientManager.executeCommand(INSTANCE, params);
-        }
-        
-        public void onMessageFromInterfaceReceived()
-        {
-            
+            CommandClientManager.executeCommand(INSTANCE, command);
         }
         
         public List<Game> getGameAvailable()

@@ -32,7 +32,7 @@ public class Player
     private String name;
     private Game game;
     private int pawnShape;
-    private Color color;
+    private int color;
     private final List<Pawn> pawns;
     private Map<Integer,Pawn> tabPawn;
     
@@ -107,14 +107,14 @@ public class Player
     /**
      * @return the color
      */
-    public Color getColor() {
+    public int getColor() {
         return color;
     }
 
     /**
      * @param color the color to set
      */
-    public void setColor(Color color) {
+    public void setColor(int color) {
         this.color = color;
     }
     

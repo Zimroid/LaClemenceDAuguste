@@ -134,6 +134,36 @@ public class Board
         }
     }
     
+    public List<Cell> getDeplacableCells(UW uw)
+    {
+        return this.getDeplacableCells(this.getCell(uw));
+    }
+    
+    public List<Cell> getDeplacableCells(Cell origin)
+    {
+        List<Cell> res = new ArrayList<>();
+        
+        for(Cell neighbor : this.getNeighbors(origin))
+        {
+            if(!neighbor.isOccuped())
+            {
+                if(!res.contains(neighbor))
+                {
+                    res.add(neighbor);
+                }
+            }
+            else
+            {
+                if(neighbor.getPawn().getPlayer().getId() == origin.getPawn().getPlayer().getId())
+                {
+                    res.addAll(this.getDeplacableCells(neighbor));
+                }
+            }
+        }
+        
+        return res;
+    }
+    
     private void fillTab(List<List<Cell>> board)
     {
         for(List<Cell> line : board)
@@ -186,6 +216,28 @@ public class Board
                     res = c;
                 }
             }
+        }
+        
+        return res;
+    }
+    
+    public static List<Cell> convertForServer(List<Cell> cells)
+    {
+        List<Cell> res = new ArrayList<>();
+        for(Cell c : cells)
+        {
+            res.add(Cell.convertToServer(c));
+        }
+        return res;
+    }
+    
+    public static List<Cell> convertFromServer(List<Cell> cells)
+    {
+        List<Cell> res = new ArrayList<>();
+        
+        for(Cell c : cells)
+        {
+            res.add(Cell.convertFromServer(c));
         }
         
         return res;

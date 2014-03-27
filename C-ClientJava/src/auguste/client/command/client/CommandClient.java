@@ -9,6 +9,8 @@ package auguste.client.command.client;
 import org.json.JSONObject;
 import auguste.client.entity.Client;
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Map;
 import org.json.JSONException;
 
 /**
@@ -18,8 +20,8 @@ import org.json.JSONException;
  */
 public abstract class CommandClient
 {
-    private JSONObject json;
-    private String[] args;
+    private final JSONObject json;
+    private Map<String,String> args;
     Client client;
     protected static final String GAME_CREATE = "game_create";
     protected static final String GAME_LIST = "game_list";
@@ -53,7 +55,7 @@ public abstract class CommandClient
      *
      * @param s Le premier argument est le nom de la commande, le reste change en fonction de la commande concernée.
      */
-    public void setArguments(String[] s)
+    public void setArguments(Map<String,String> s)
     {
         this.args = s;
     }
@@ -71,7 +73,7 @@ public abstract class CommandClient
      *
      * @return Les arguments de la commande.
      */
-    public String[] getArguments()
+    public Map<String,String> getArguments()
     {
         return this.args;
     }

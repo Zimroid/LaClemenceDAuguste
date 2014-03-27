@@ -6,7 +6,6 @@
 
 package auguste.client.command.client;
 
-import auguste.client.entity.Client;
 import java.net.URISyntaxException;
 import org.json.JSONException;
 

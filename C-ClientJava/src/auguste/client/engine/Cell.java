@@ -103,4 +103,42 @@ public class Cell
             return ".";
         }
     }
+    
+    public static Cell convertToServer(Cell cell)
+    {
+        Cell res;
+        
+        if(cell.getUW().getU()>0)
+        {
+            int u = cell.getUW().getU();
+            int w = cell.getUW().getW() - cell.getUW().getU();
+            UW coor = new UW(u,w);
+            res = new Cell(coor);
+        }
+        else
+        {
+            res = cell;
+        }
+        
+        return res;
+    }
+    
+    public static Cell convertFromServer(Cell cell)
+    {
+        Cell res;
+        
+        if(cell.getUW().getU()>0)
+        {
+            int u = cell.getUW().getU();
+            int w = cell.getUW().getW() + cell.getUW().getU();
+            UW coor = new UW(u,w);
+            res = new Cell(coor);
+        }
+        else
+        {
+            res = cell;
+        }
+        
+        return res;
+    }
 }

@@ -6,13 +6,14 @@
 
 package auguste.client.graphical;
 
-import auguste.client.command.manager.CommandClientManager;
 import auguste.client.entity.ChatMessageReceived;
 import auguste.client.entity.Client;
 import auguste.client.entity.Game;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
 import org.json.JSONException;
@@ -50,8 +51,75 @@ public class CSL implements UpdateListener
             Scanner sc = new Scanner(System.in);
             String line = sc.nextLine();
             String[] words = line.split(" ");
-            CommandClientManager.executeCommand(this.client, words);
+            Map<String,String> command;
+            switch(words[0])
+            {
+                case "log_in":
+                    command = login(words);
+                    break;
+                case "account_create":
+                    command = accountCreate(words);
+                    break;
+                case "exit":
+                    command = exit();
+                    break;
+                case "chat_send":
+                    command = msg(words);
+                    break;
+                default:
+                    command = null;
+                    break;
+            }
+            this.client.sendCommand(command);
         }
+    }
+    
+    private Map<String,String> login(String[] args)
+    {
+        Map<String,String> res = new HashMap<>();
+        
+        res.put("command", args[0]);
+        res.put("login", args[1]);
+        res.put("password", args[2]);
+        
+        return res;
+    }
+    
+    private Map<String,String> accountCreate(String[] args)
+    {
+        Map<String,String> res = new HashMap<>();
+        
+        res.put("command", args[0]);
+        res.put("login", args[1]);
+        res.put("password", args[2]);
+        
+        return res;
+    }
+    
+    private Map<String,String> exit()
+    {
+        Map<String,String> res = new HashMap<>();
+        
+        res.put("command", "log_out");
+        this.stop();
+        return res;
+    }
+    
+    private Map<String,String> msg(String[] args)
+    {
+        Map<String,String> res = new HashMap<>();
+        
+        String message = "";
+        
+        for(int i = 1; i < args.length; i++)
+        {
+            message += args[i];
+        }
+        
+        res.put("command", args[0]);
+        res.put("message", message);
+        
+        return res;
     }
     
     /**
@@ -131,6 +199,7 @@ public class CSL implements UpdateListener
     {
         Game game = client.getCurrentGame();
         System.out.println("Partie "+game.getName()+" créée.");
+        System.out.println("Id de la partie : "+game.getId());
     }
 
     @Override

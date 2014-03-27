@@ -36,6 +36,9 @@ public class GameConfirm extends CommandServer
     {
         Game game = new Game();
         game.setName(this.getJSON().getString("game_name"));
+        game.setId(this.getJSON().getInt("game_id"));
+        game.setLegion_number(this.getJSON().getInt("player_number"));
+        game.setBoardSize(this.getJSON().getInt("board_size"));
         this.getClient().setCurrentGame(game);
         for(UpdateListener ul : this.getClient().getInterfaces())
         {

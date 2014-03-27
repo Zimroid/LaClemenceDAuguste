@@ -7,6 +7,9 @@
 package auguste.client.command.client;
 
 import java.net.URISyntaxException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import org.apache.commons.codec.binary.Hex;
 import org.json.JSONException;
 
 /**
@@ -23,11 +26,29 @@ public class LogIn extends CommandClient
     @Override
     public void buildJSON() throws JSONException 
     {
-        String login = this.getArguments()[1];
-        String password = this.getArguments()[2];
+        String login = this.getArguments().get("login");
+        String password = this.getArguments().get("password");
+        password = hashPassword(password);
         
         this.getJSON().put(COMMAND, LOG_IN);
         this.getJSON().put("name",login);
         this.getJSON().put("password",password);
+    }
+    
+    private static String hashPassword(String password)
+    {
+        try
+        {
+            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            digest.reset();
+            digest.update(password.getBytes());
+            return new String(Hex.encodeHex(digest.digest()));
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            // Algorithme indisponible
+            System.out.println(e.getMessage());
+            return new String();
+        }
     }
 }

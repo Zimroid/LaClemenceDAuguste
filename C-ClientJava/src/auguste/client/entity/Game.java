@@ -6,6 +6,7 @@
 
 package auguste.client.entity;
 
+import auguste.client.engine.Board;
 import auguste.client.engine.Pawn;
 import auguste.client.engine.Player;
 import auguste.client.engine.Team;
@@ -24,6 +25,8 @@ public class Game
     private int board_size;
     private int legion_number;
     private List<Team> teams;
+    private Board board;
+    private Client client;
     
     /**
      * Crée une partie en spécifiant son id.
@@ -99,7 +102,7 @@ public class Game
         List<Pawn> pawns = new ArrayList<>();
         for(Team team : this.teams)
         {
-            Color teamColor = team.getColor();
+            int teamColor = team.getColor();
             int teamShape = team.getTeamShape();
             
             for(Player player : team.getPlayers())
@@ -107,6 +110,11 @@ public class Game
                 player.generatePawns();
             }
         }
+    }
+    
+    public void start()
+    {
+        
     }
 
     /**

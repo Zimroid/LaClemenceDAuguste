@@ -23,10 +23,9 @@ public class ClientSocket extends WebSocketClient
         private static final String ADDRESS = "130.79.214.172";
         private static final String PORT = "47135";
         private static final String PORT_TEST = "16302";
-        private static final String CONNECTION_STRING = "ws://"+ADDRESS+":"+PORT;
+        private static final String CONNECTION_STRING = "ws://"+ADDRESS+":"+PORT_TEST;
 	
         private static ClientSocket INSTANCE;
-        private static Client client;
         
 	private ClientSocket(URI serverURI)
 	{
@@ -57,7 +56,7 @@ public class ClientSocket extends WebSocketClient
 	@Override
 	public void onError(Exception e)
 	{
-		e.printStackTrace();
+            System.out.println(e.getMessage());
 	}
 
 	@Override

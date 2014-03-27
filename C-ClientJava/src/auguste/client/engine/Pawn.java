@@ -16,6 +16,9 @@
 
 package auguste.client.engine;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  *
  * @author Evinrude
@@ -66,5 +69,16 @@ public class Pawn
     public String getStringRepresentation()
     {
         return "*";
+    }
+    
+    public JSONObject toJSON() throws JSONException
+    {
+        JSONObject json = new JSONObject();
+        
+        json.put("pawn_id", this.getId());
+        json.put("pawn_u", this.getUW().getU());
+        json.put("pawn_w", this.getUW().getW());
+        
+        return json;
     }
 }
