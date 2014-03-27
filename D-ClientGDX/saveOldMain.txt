@@ -1,0 +1,267 @@
+package auguste.client.graphical;
+
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+
+/*
+ * Affichage de l'écran d'accueil
+ */
+public class GraphicalMain extends Game { //implements ApplicationListener {
+	public static String APP_NAME = "Auguste";
+    /*private float largeur_ecran;
+    private float hauteur_ecran;
+	
+    // Sprites
+    private SpriteBatch batch;
+	private Sprite boutonSprite;
+    private Sprite boutonClicSprite;
+    private Sprite fondSprite;
+    
+    // Bouton est cliqué
+    private boolean clicCreate;
+    private boolean clicJoin;
+    
+    // Police
+    private BitmapFont font;
+    
+    // Positions boutons
+    private float xPosCreate;
+    private float yPosCreate;
+    private float xPosJoin;
+    private float yPosJoin;
+    private float xDecalage;
+    private float yDecalage;
+   
+    // Taille boutons
+    private float xSizeBtn;
+    private float ySizeBtn;
+    */
+	
+    /*
+     * Unité X pour taille écran variable
+     */
+    /*public float xUnite(float x)
+    {
+          return x*largeur_ecran/1500f;
+    }
+   
+    /*
+     *  Unité Y pour taille écran variable
+     *//*
+    public float yUnite(float y)
+    {
+          return y*hauteur_ecran/800;
+    }
+   
+   */
+    @Override
+    public void create() {
+    	/*// Obtenir la taille de l'écran actuelle
+    	largeur_ecran = Gdx.graphics.getWidth();
+    	hauteur_ecran = Gdx.graphics.getHeight();
+        
+    	// Création batch
+    	batch = new SpriteBatch();
+         
+    	// Définition texture
+    	fondSprite = new Sprite(new Texture(Gdx.files.internal("images/purple.png")));
+    	boutonSprite = new Sprite(new Texture(Gdx.files.internal("images/red.png")));
+    	boutonClicSprite = new Sprite(new Texture(Gdx.files.internal("images/green.png")));
+          
+    	// Définition tailles boutons
+    	xSizeBtn = 250;
+    	ySizeBtn = 100;
+    	
+    	// Définitions tailles sprites
+    	fondSprite.setSize(xUnite(1500), yUnite(800));
+    	boutonSprite.setSize	(xSizeBtn, ySizeBtn);
+    	boutonClicSprite.setSize(xSizeBtn, ySizeBtn);
+    	
+    	// Positions boutons        
+        xPosCreate = xUnite(625);
+        yPosCreate = yUnite(450);        
+        xPosJoin   = xUnite(625);
+        yPosJoin   = yUnite(250);
+        
+        // Décallage texte par rapport au bouton
+        xDecalage = xUnite(40);
+    	yDecalage = yUnite(40);
+    	
+    	// Définition police
+    	font = new BitmapFont();
+    	font.setColor(Color.DARK_GRAY);
+    	font.setScale(xUnite(1), yUnite(1)); */
+    	
+    	MenuScreen ms = new MenuScreen(this);
+    	setScreen(ms);
+    	
+    }
+
+    /*
+     *  Traitement des actions utilisateurs (clic sur un bouton)
+     */
+    /*
+	public void userInteract()
+    {
+    	Gdx.input.setInputProcessor( new InputProcessor() {
+
+			@Override
+	        public boolean touchUp(int x, int y, int pointer, int bouton) {
+	        	// Clic bouton create
+				if(x > xPosCreate && x < (xPosCreate + xSizeBtn) && y < (yUnite(800) - yPosCreate) && y > (yUnite(800) - yPosCreate - ySizeBtn))
+	            {
+					GamePage gp = new GamePage(this.);
+					setScreen(gp);
+	            }
+				
+				// Clic bouton create
+				else if(x > xPosJoin && x < (xPosJoin + xSizeBtn) && y < (yUnite(800) - yPosJoin) && y > (yUnite(800) - yPosJoin - ySizeBtn))
+		        {
+					
+		        }
+				
+				clicCreate = false;
+				clicJoin   = false;
+	       
+	        	return false;
+			}
+	
+			@Override
+			public boolean touchDown(int x, int y, int pointer, int bouton) {
+				// Clic bouton create
+				if(x > xPosCreate && x < (xPosCreate + xSizeBtn) && y < (yUnite(800) - yPosCreate) && y > (yUnite(800) - yPosCreate - ySizeBtn))
+	            {
+					clicCreate = true;
+	            }
+				
+				// Clic bouton create
+				else if(x > xPosJoin && x < (xPosJoin + xSizeBtn) && y < (yUnite(800) - yPosJoin) && y > (yUnite(800) - yPosJoin - ySizeBtn))
+		        {
+					clicJoin = true;
+		        }
+				
+				return false;
+			}
+                
+			@Override
+			public boolean touchDragged(int arg0, int arg1, int arg2) {
+				return false;
+			}
+			
+			@Override
+			public boolean scrolled(int arg0) {
+				return false;
+			}
+			
+			@Override
+			public boolean mouseMoved(int arg0, int arg1) {
+				return false;
+			}
+			
+			@Override
+			public boolean keyUp(int arg0) {
+				return false;
+			}
+			
+			@Override
+			public boolean keyTyped(char arg0) {
+				return false;
+			}
+			
+			@Override
+			public boolean keyDown(int arg0) {
+				return false;
+			}
+    	});
+    }
+    
+    /*
+     * Affichage du menu
+     */
+    /*
+    public void drawMenu()
+    {
+    	batch.begin();
+   
+		// Arriere Plan
+    	fondSprite.draw(batch);
+         
+        // Textes boutons
+    	String createLbl = "Create";
+    	String joinLbl   = "Join";
+        
+    	// Bouton création
+    	if(!clicCreate)
+		{
+			boutonSprite.setPosition(xPosCreate, yPosCreate);
+		 	boutonSprite.draw(batch);
+		}
+		else
+		{
+			boutonClicSprite.setPosition(xPosCreate, yPosCreate);
+		 	boutonClicSprite.draw(batch);                         
+		}
+    	
+    	// Bouton rejoindre
+    	if(!clicJoin)
+		{
+			boutonSprite.setPosition(xPosJoin, yPosJoin);
+		 	boutonSprite.draw(batch);
+		}
+		else
+		{
+			boutonClicSprite.setPosition(xPosJoin, yPosJoin);
+		 	boutonClicSprite.draw(batch);                         
+		}
+    	
+    	// Ajout des textes des boutons
+    	font.draw(batch, createLbl, xPosCreate + xDecalage, yPosCreate + yDecalage);
+    	font.draw(batch, joinLbl,   xPosJoin   + xDecalage, yPosJoin   + yDecalage);
+       
+    	batch.end();
+	}
+        *//*
+    @Override
+    public void dispose() {
+          //font.dispose();
+          //batch.dispose();
+    }
+
+    @Override
+    public void pause() {
+         
+    }
+
+    @Override
+    public void render()
+    {         
+          //Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+          //Gdx.gl.glClearColor(1, 1, 1, 1);
+          
+          //drawMenu();
+          //userInteract();
+    }
+   
+    @Override
+    public void resize(int arg0, int arg1) {
+    }
+
+    @Override
+    public void resume() {
+    }
+*/
+}

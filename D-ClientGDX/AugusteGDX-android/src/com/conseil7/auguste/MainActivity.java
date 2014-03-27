@@ -1,7 +1,7 @@
 package com.conseil7.auguste;
 
 import android.os.Bundle;
-import auguste.client.graphical.GraphicalMain;
+import auguste.client.graphical.MainGr;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -13,6 +13,6 @@ public class MainActivity extends AndroidApplication {
         
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
         
-        initialize(new GraphicalMain(), cfg);
+        initialize(new MainGr(), cfg);
     }
 }
