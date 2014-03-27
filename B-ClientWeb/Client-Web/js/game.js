@@ -44,12 +44,14 @@ function newTeam()
     var NPButton = document.createElement("button");
     var br = document.createElement("br");
 
-    divTeam.id = "team" + (numberTeams.length + 1);
-    divTeam.name = "team";
-    ptitle.id = "title" + (numberTeams.length + 1);
-    ptitle.name = ptitle.id;
+    divTeam.setAttribute("id","team" + (numberTeams.length + 1));
+    divTeam.setAttribute("name","team");
+    ptitle.setAttribute("id","title" + (numberTeams.length + 1));
+    ptitle.setAttribute("name",ptitle.id);
     ptitle.innerHTML = "Team " + (numberTeams.length + 1);
-    NPButton.setAttribute("onclick","newPlayer(" + (numberTeams.length + 1) + ")");
+    NPButton.setAttribute("id","button" + (numberTeams.length + 1));
+    NPButton.setAttribute("name","button" + (numberTeams.length + 1));
+    NPButton.setAttribute("onclick","newPlayer(" + (numberTeams.length + 1) + ",1)");
     NPButton.innerHTML = "Nouveau joueur";
 
     divTeam.appendChild(ptitle);
@@ -58,9 +60,10 @@ function newTeam()
     divTeams.appendChild(divTeam);
 }
 
-function newPlayer(nbr)
+function newPlayer(team,joueur)
 {
-    var divTeam = document.getElementById("team" + nbr);
+	var NPButton = document.getElementById("button" + team);
+    var divTeam = document.getElementById("team" + team);
     var selPlayer = document.createElement("select");
     var optPlayerDefault = document.createElement("option");
     // TODO gérer les joueurs connectés
@@ -81,34 +84,34 @@ function newPlayer(nbr)
     var optPosition4 = document.createElement("option");
     var br = document.createElement("br");
 
-	// TODO gérer la non-réplication des id
-	selPlayer.id = "player" + nbr;
-    selPlayer.name = "player" + nbr;
-    optPlayerDefault.selected = "selected";
+	NPButton.setAttribute("onclick","newPlayer(" + team + "," + (joueur + 1) + ")");
+	selPlayer.setAttribute("id","player" + team + '_' + joueur);
+    selPlayer.setAttribute("name","player" + team + '_' + joueur);
+    optPlayerDefault.setAttribute("selected","selected");
     optPlayerDefault.innerHTML = "Joueur";
-    lblLegionNbr.setAttribute('for','legion_number' + nbr);
+    lblLegionNbr.setAttribute('for','legion_number' + team + '_' + joueur);
     lblLegionNbr.innerHTML = "Nombre de légions";
-    legionNbr.type = "number";
-    legionNbr.min = "1";
-    legionNbr.step = "1";
+    legionNbr.setAttribute("type","number");
+    legionNbr.setAttribute("min","1");
+    legionNbr.setAttribute("step","1");
     legionNbr.value = "1";
-    legionNbr.id = "legion_number" + nbr;
-    legionNbr.name = "legion_number" + nbr;
-    selPawn.id = "pawn" + nbr;
-    selPawn.name = "pawn" + nbr;
-    optPawnDefault.selected = "selected";
+    legionNbr.setAttribute("id","legion_number" + team + '_' + joueur);
+    legionNbr.setAttribute("name","legion_number" + team + '_' + joueur);
+    selPawn.setAttribute("id","pawn" + team + '_' + joueur);
+    selPawn.setAttribute("name","pawn" + team + '_' + joueur);
+    optPawnDefault.setAttribute("selected","selected");
     optPawnDefault.innerHTML = "Forme du pion";
     optPawn1.innerHTML = "Carré";
     optPawn2.innerHTML = "Cercle";
     optPawn3.innerHTML = "Triangle";
-    lblSelColor.setAttribute('for','color' + nbr);
+    lblSelColor.setAttribute('for','color' + team + '_' + joueur);
     lblSelColor.innerHTML = "Couleur du pion";
-    color.id = "color" + nbr;
-    color.name = "color" + nbr;
+    color.setAttribute("id","color" + team + '_' + joueur);
+    color.setAttribute("name","color" + team + '_' + joueur);
     color.setAttribute("class","color");
-    selPosition.id = "position" + nbr;
-    selPosition.name = "position" + nbr;
-    optPositionDefault.selected = "selected";
+    selPosition.setAttribute("id","position" + team + '_' + joueur);
+    selPosition.setAttribute("name","position" + team + '_' + joueur);
+    optPositionDefault.setAttribute("selected","selected");
     optPositionDefault.innerHTML = "Position sur le plateau";
     optPosition1.innerHTML = "Bas droit";
     optPosition2.innerHTML = "Bas gauche";

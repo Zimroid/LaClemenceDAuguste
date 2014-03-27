@@ -20,19 +20,47 @@
 	// Pages de jeu
 	else if(isset($_GET['page']) && $_GET['page'] == 'newGame')
 	{
-		$pageCtr->newGame();
+		if (isset($_SESSION['username']))
+		{
+			$pageCtr->newGame();
+		}
+		else
+		{
+			$pageCtr->subscribe();
+		}
 	}
 	else if(isset($_GET['page']) && $_GET['page'] == 'joinGame')
 	{
-		$pageCtr->joinGame();
+		if (isset($_SESSION['username']))
+		{
+			$pageCtr->joinGame();
+		}
+		else
+		{
+			$pageCtr->subscribe();
+		}
 	}
 	else if(isset($_GET['page']) && $_GET['page'] == 'gameConfig')
 	{
-		$pageCtr->gameConfig();
+		if (isset($_SESSION['username']))
+		{
+			$pageCtr->gameConfig();
+		}
+		else
+		{
+			$pageCtr->subscribe();
+		}
 	}
 	else if(isset($_GET['page']) && $_GET['page'] == 'game')
 	{
-		$pageCtr->game();
+		if (isset($_SESSION['username']))
+		{
+			$pageCtr->game();
+		}
+		else
+		{
+			$pageCtr->subscribe();
+		}
 	}
 	
 	// Page DL
