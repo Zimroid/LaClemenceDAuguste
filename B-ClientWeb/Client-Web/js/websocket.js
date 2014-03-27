@@ -5,9 +5,14 @@ websocket.onmessage = function(evt) { onMessage(evt) };
 websocket.onerror   = function(evt) { onError(evt)   };
 websocket.onopen    = function(evt) { onOpen(evt)    };
 
+
 function onOpen(evt)
 {
 	console.log("Web socket opened !");
+	if ((typeof username != 'undefined') && (typeof userpass != 'undefined'))
+	{
+		connexion(false,username,userpass);
+	}
 }
 
 function onError(evt)

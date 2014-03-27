@@ -34,11 +34,11 @@
 					<option>Bas gauche</option>
 					<option>Haut droit</option>
 					<option>Haut gauche</option>
-				</select><br>
+				</select>
 			</div>
 			<div id="team2" name="team">
 				<p id="title2" name="title2">Team 2</p>
-				<button id="button2" name="button2" onClick="newPlayer(2,1)">Nouveau joueur</button><br>
+				<button id="button2" name="button2" onClick="newPlayer(2,1)">Nouveau joueur</button>
 			</div>
 		</div>
 		<form id="noTeam" name="noTeam">

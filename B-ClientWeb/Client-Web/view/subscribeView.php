@@ -10,7 +10,7 @@
 <label for="confirmSubscribe">Confirmation : </label>
 <input type="password" name="confSubscribe" id="confirmSubscribe" placeholder="Confirmer">
 <br/>
-<input type="button" value="M'inscrire" onclick="inscription(); " />
+<input type="button" value="M'inscrire" onclick="inscription(true); " />
 	
 <p>
 Ajouter vérification :

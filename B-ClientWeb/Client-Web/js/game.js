@@ -42,7 +42,6 @@ function newTeam()
     var numberTeams = document.getElementsByName("team");
     var ptitle = document.createElement("p");
     var NPButton = document.createElement("button");
-    var br = document.createElement("br");
 
     divTeam.setAttribute("id","team" + (numberTeams.length + 1));
     divTeam.setAttribute("name","team");
@@ -56,7 +55,6 @@ function newTeam()
 
     divTeam.appendChild(ptitle);
     divTeam.appendChild(NPButton);
-    divTeam.appendChild(br);
     divTeams.appendChild(divTeam);
 }
 
@@ -82,7 +80,6 @@ function newPlayer(team,joueur)
     var optPosition2 = document.createElement("option");
     var optPosition3 = document.createElement("option");
     var optPosition4 = document.createElement("option");
-    var br = document.createElement("br");
 
 	NPButton.setAttribute("onclick","newPlayer(" + team + "," + (joueur + 1) + ")");
 	selPlayer.setAttribute("id","player" + team + '_' + joueur);
@@ -135,7 +132,6 @@ function newPlayer(team,joueur)
     divTeam.appendChild(lblSelColor);
     divTeam.appendChild(color);
     divTeam.appendChild(selPosition);
-    divTeam.appendChild(br);
     
     jscolor.init();
 }
