@@ -19,7 +19,7 @@
     position:       relative;
     bottom:         0;
     height:         calc(100% - 9em);
-    text-overflow:  ellipsis;
+    word-wrap:      break-word;
     padding-left:   1em;
     padding-top:    0.5em;
 }

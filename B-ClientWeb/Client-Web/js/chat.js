@@ -37,7 +37,7 @@ function toucheEntree(event)
 {
 	if ((event.keyCode == 13) && (event.shiftKey)) this.value += '\n';
 	else if (event.keyCode == 13) {
-		addMessage(0);
+		addMessage();
 		event.preventDefault();
 	}
 }
