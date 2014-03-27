@@ -48,7 +48,7 @@ public abstract class ServerCommand
     public ServerCommand(String name, Room room) throws JSONException
     {
         this.getJSON().put("command", name);
-        this.getJSON().put("game_id", room.getId());
+        this.getJSON().put("room_id", room.getId());
     }
     
     /**

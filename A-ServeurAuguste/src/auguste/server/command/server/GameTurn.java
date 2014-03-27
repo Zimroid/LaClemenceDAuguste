@@ -26,7 +26,7 @@ import org.json.JSONException;
 public class GameTurn extends ServerCommand
 {
     /**
-     * Remplit le JSON avec les paramètres fournis.
+     * Remplit le JSON avec les paramètres du tour.
      * @param room Salle de la partie
      * @throws JSONException Erreur de JSON
      */

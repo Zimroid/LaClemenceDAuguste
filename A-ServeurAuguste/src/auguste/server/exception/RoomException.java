@@ -23,37 +23,42 @@ package auguste.server.exception;
  */
 public class RoomException extends Exception
 {
-    private final int     id;         // ID de la salle
-    private final boolean inexistant; // Salle inexistante ?
+    // Types de l'exceptions
+    public static final int INEXISTANT_ROOM  = 0;
+    public static final int NOT_IN_THIS_ROOM = 1;
+    public static final int UNAVAILABLE_ROOM = 2;
+    public static final int ABSENT_USER      = 3;
+    
+    private final RoomExceptionType type; // Type de l'exception
     
     /**
-     * Enregistre la salle demandée et inexistante.
-     * @param id         ID de la salle
-     * @param inexistant Salle inexistante ?
+     * Enregistre le type de l'exception.
+     * @param type Type d'exception
      */
-    public RoomException(int id, boolean inexistant)
+    public RoomException(RoomExceptionType type)
     {
-        this.id         = id;
-        this.inexistant = inexistant;
+        super(type.toString().toLowerCase().replace('_', ' '));
+        this.type = type;
     }
     
     /**
-     * Indique si la salle demandée existe ou non.
-     * @return Booléen indiquant la non-existance de la salle
+     * Indique le type de l'erreur.
+     * @return Type de l'erreur
      */
-    public boolean inexistant()
+    public RoomExceptionType getType()
     {
-        return this.inexistant;
+        return this.type;
     }
     
-    @Override
-    public String toString()
+    /**
+     * Types de RoomException possibles.
+     */
+    public enum RoomExceptionType
     {
-        return String.valueOf(this.id) + (this.inexistant ? " (inexistant)" : "");
-    }
-
-    public boolean exist() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        INEXISTANT_ROOM,
+        NOT_IN_THIS_ROOM,
+        UNAVAILABLE_ROOM,
+        ABSENT_USER
     }
     
 }

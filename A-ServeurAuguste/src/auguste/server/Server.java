@@ -20,13 +20,13 @@ import auguste.server.command.client.ClientCommand;
 import auguste.server.exception.AuthentificationException;
 import auguste.server.exception.CommandException;
 import auguste.server.exception.RoomException;
+import auguste.server.exception.RoomException.RoomExceptionType;
 import auguste.server.exception.RuleException;
 import auguste.server.util.Configuration;
 import auguste.server.util.Log;
 import java.net.InetSocketAddress;
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -63,7 +63,7 @@ public class Server extends WebSocketServer
     // Liste des utilisateurs authentifiés
     private final HashMap<WebSocket, User> users = new HashMap<>();
     
-    // Liste des salles disponibles
+    // Liste des salles existantes
     private final HashMap<Integer, Room> rooms = new HashMap<>();
     
     /**
@@ -78,24 +78,24 @@ public class Server extends WebSocketServer
         super(address);
         
         // Confirmation de la connexion
-        Log.out("Server initialized on " + address);
+        Log.out("Server available at " + address);
     }
     
     /**
      * Méthode appelée lors de la connexion d'un client.
-     * @param socket    WebSocket concernée
+     * @param socket    WebSocket créée
      * @param handshake Données handshake générées
      */
     @Override
     public void onOpen(WebSocket socket, ClientHandshake handshake)
     {
         // Signalisation
-        Log.out(socket.getRemoteSocketAddress() + ": Connection");
+        Log.out(socket.getRemoteSocketAddress() + ": Open");
     }
 
     /**
      * Méthode appelée lors de la déconnexion d'un client.
-     * @param socket    WebSocket concernée
+     * @param socket    WebSocket fermée
      * @param code      Code décrivant la raison de la fermeture
      * @param reason    Raison de la fermeture
      * @param byRequest Fermeture demandée par le client ?
@@ -104,12 +104,12 @@ public class Server extends WebSocketServer
     public void onClose(WebSocket socket, int code, String reason, boolean byRequest)
     {
         // Signalisation
-        Log.out(socket.getRemoteSocketAddress() + ": Disconnection " +
-                (byRequest ? "by request " : "") +
-                (reason.length() > 0 ? "\"" + reason + "\" " : "") +
-                "(" + code + ")");
+        Log.out(socket.getRemoteSocketAddress() + ": Close " +
+                (byRequest ? "by client" : "") +
+                (reason.length() > 0 ? ": \"" + reason + "\"" : "") +
+                " (" + code + ")");
         
-        // Suppression de la socket de la liste des utilisateurs authentifiés
+        // Désauthentification de l'utilisateur si nécessaire
         if (this.users.containsKey(socket)) this.logOut(this.users.get(socket));
     }
 
@@ -124,10 +124,7 @@ public class Server extends WebSocketServer
     public void onMessage(WebSocket socket, String message)
     {
         // Signalisation
-        Log.out(socket.getRemoteSocketAddress() + ": Reçu \"" + message + "\"");
-
-        // Identification de l'utilisateur
-        User user = this.users.get(socket);
+        Log.out(socket.getRemoteSocketAddress() + ": Receive " + message);
         
         // Lecture de la commande
         try
@@ -140,27 +137,11 @@ public class Server extends WebSocketServer
                 // Définition de la commande
                 ClientCommand command = ClientCommand.get(json.getString("command"));
                 command.setSocket(socket);
-                command.setUser(user);
                 command.setJSON(json);
                 
-                // Définition de la salle concernée
-                if (json.has("game_id"))
-                {
-                    int roomId = json.getInt("room_id");
-                    if (this.rooms.containsKey(json.getInt("game_id")))
-                    {
-                        Room room = this.rooms.get(roomId);
-                        if (room.isInRoom(user))
-                        {
-                            command.setRoom(
-                                    this.rooms.get(roomId)
-                            );
-                        }
-                        else throw new RoomException(roomId, false);
-                    }
-                    else throw new RoomException(roomId, true);
-                }
-                else command.setRoom(null);
+                // Vérification de l'authentification et de la salle
+                if (command.checkAuth()) command.setUser(this.users.get(socket));
+                if (command.checkRoom()) command.setRoom(this.rooms.get(json.getInt("room_id")));
                 
                 // Exécution
                 command.execute();
@@ -169,43 +150,59 @@ public class Server extends WebSocketServer
             {
                 // Commande inconnue
                 Log.out("Unknown command");
-                Log.debug(e.toString());
+                Log.debug(e);
                 ClientCommand.sendError(socket, "unknown_command");
             }
             catch (AuthentificationException e)
             {
                 // Tentative d'utiliser une commande sans être authentifié
-                Log.out("Must be authentified");
-                Log.debug(e.toString());
+                Log.out("Must be logged");
+                Log.debug(e);
                 ClientCommand.sendError(socket, "must_be_logged");
             }
             catch (RoomException e)
             {
-                // Salle inexistante
-                Log.out("Inexistant room");
-                Log.debug(e.toString());
-                if (e.inexistant()) ClientCommand.sendError(socket, "inexistant_room");
-                else                ClientCommand.sendError(socket, "not_in_this_room");
+                // Salle demandée inexistante
+                switch (e.getType())
+                {
+                    case INEXISTANT_ROOM:
+                        Log.out("Inexistant room");
+                        ClientCommand.sendError(socket, "inexistant_room"); 
+                        break;
+                    case NOT_IN_THIS_ROOM:
+                        Log.out("Not in this room");
+                        ClientCommand.sendError(socket, "not_in_this_room");
+                        break;
+                    case UNAVAILABLE_ROOM:
+                        Log.out("Room unavailable");
+                        ClientCommand.sendError(socket, "unavailable_room");
+                        break;
+                    case ABSENT_USER:
+                        Log.out("Absent user");
+                        ClientCommand.sendError(socket, "absent_user");
+                        break;
+                }
+                Log.debug(e);
             }
             catch (RuleException e)
             {
                 // Action contre les règles
                 Log.out("Unauthorized move");
-                Log.debug(e.toString());
+                Log.debug(e);
                 ClientCommand.sendError(socket, "rule_error");
             }
             catch (JSONException e)
             {
-                // JSON reçu éronné
+                // JSON reçu éronné ou incomplet
                 Log.error("JSON error");
-                Log.debug(e.toString());
+                Log.debug(e);
                 ClientCommand.sendError(socket, "json_error");
             }
             catch (SQLException e)
             {
                 // Erreur SQL
                 Log.error("SQL error");
-                Log.debug(e.toString());
+                Log.debug(e);
                 ClientCommand.sendError(socket, "server_error");
             }
         }
@@ -213,7 +210,7 @@ public class Server extends WebSocketServer
         {
             // Erreur lors de la création de JSON
             Log.error("JSON error");
-            Log.debug(e.toString());
+            Log.debug(e);
         }
     }
 
@@ -226,9 +223,9 @@ public class Server extends WebSocketServer
     public void onError(WebSocket socket, Exception e)
     {
         // Signalisation
-        if (socket != null) Log.error(socket.getRemoteSocketAddress() + ": Error");
-        else                Log.error("Error");
-        Log.debug(e.toString());
+        if (socket != null) Log.error(socket.getRemoteSocketAddress() + ": Client error");
+        else                Log.error("Server error");
+        Log.debug(e);
     }
     
     /**
@@ -237,11 +234,8 @@ public class Server extends WebSocketServer
      */
     public void broadcast(String message)
     {
-        Log.debug("Broadcast: " + message);
-        for (WebSocket socket : this.users.keySet())
-        {
-            socket.send(message);
-        }
+        Log.debug("Broadcast " + message);
+        for (WebSocket socket : this.users.keySet()) socket.send(message);
     }
     
     /**
@@ -259,22 +253,15 @@ public class Server extends WebSocketServer
     
     /**
      * Supprime un utilisateur de la liste des utilisateurs authentifiés et des
-     * utilisateurs de chaque salle.
+     * listes des utilisateurs de chaque salle.
      * @param user Utilisateur à supprimer
      */
     public void logOut(User user)
     {
         synchronized (this.users)
         {
-            for (Room room : this.getRoomList())
-            {
-                if (room.isInRoom(user))
-                {
-                    if (room.isOwner(user)) this.closeRoom(room);
-                    else                    room.removeUser(user);
-                }
-            }
-            this.users.values().removeAll(Collections.singleton(user));
+            for (Room room : user.getRooms()) room.removeUser(user);
+            this.users.values().remove(user);
         }
     }
     
@@ -282,75 +269,67 @@ public class Server extends WebSocketServer
      * Retourne la liste des utilisateurs authentifiés.
      * @return Collection d'utilisateurs authentifiés
      */
-    public Collection<User> getUserSet()
+    public Collection<User> getLoggedUsers()
     {
         return this.users.values();
     }
     
     /**
-     * Créée une nouvelle salle.
-     * @param name Nom de la salle
-     * @return Salle créée
+     * Créée une nouvelle salle. Recherche un identifiant disponible et
+     * l'attribue à cette nouvelle salle.
+     * @param name Nom de la nouvelle salle
+     * @return Salle instanciée
      */
     public Room createRoom(String name)
     {
-        int id;     // ID de la nouvelle salle
-        Room room; // Nouvelle salle
+        int roomId; // Identifiant de la nouvelle salle
+        Room room;  // Nouvelle salle
         
         synchronized (this.rooms)
         {
-            // Recherche d'un ID disponible
-            id = 1;
-            while (this.rooms.containsKey(id)) id++;
+            // Recherche d'un identifiant disponible
+            roomId = 1;
+            while (this.rooms.containsKey(roomId)) roomId++;
 
             // Création de la salle
-            room = new Room(id, name);
-            this.rooms.put(id, room);
+            room = new Room(roomId, name);
+            this.rooms.put(roomId, room);
         }
         
-        // Retour de son ID
         return room;
     }
     
     /**
-     * Supprime une salle en cours.
-     * @param room
+     * Ferme une salle.
+     * @param room Salle à fermer
+     * @throws org.json.JSONException Erreur JSON
      */
-    public void closeRoom(Room room)
+    public void closeRoom(Room room) throws JSONException
     {
         synchronized (this.rooms)
         {
-            try
-            {
-                room.close();
-                this.rooms.values().removeAll(Collections.singleton(room));
-            }
-            catch (JSONException e)
-            {
-                // Erreur de création de JSON
-                Log.error("JSON Error");
-                Log.debug(e.toString());
-            }
+            room.close();
+            this.rooms.values().remove(room);
         }
     }
     
     /**
-     * Retourne une salle via son ID.
-     * @param id ID de la salle
-     * @return Salle correspondante
-     * @throws auguste.server.exception.RoomException ID de salle inexistante
+     * Retourne une salle via son identifiant.
+     * @param id Identifiant de la salle
+     * @return Salle correspondant à l'identifiant
+     * @throws auguste.server.exception.RoomException Identifiant inexistant
      */
     public Room getRoom(int id) throws RoomException
     {
         if (this.rooms.containsKey(id)) return this.rooms.get(id);
-        else                            throw new RoomException(id, true);
+        else throw new RoomException(RoomExceptionType.INEXISTANT_ROOM);
     }
     
     /**
      * Retourne la liste des salles crées.
      * @return Collection des salles
      */
-    public Collection<Room> getRoomList()
+    public Collection<Room> getAvailablesRooms()
     {
         return this.rooms.values();
     }

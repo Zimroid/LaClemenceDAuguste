@@ -16,21 +16,19 @@
 
 package auguste.server.command.client;
 
-import auguste.server.exception.AuthentificationException;
 import org.json.JSONException;
 
 /**
- * Commande de configuration d'une partie.
+ * Commande de configuration d'une partie. Vérifie si l'utilisateur est le
+ * propriétaire de la salle, puis modifie la configuration et envoi une
+ * confirmation à tous les utilisateurs.
  * @author Lzard
  */
 public class GameConfig extends ClientCommand
 {
     @Override
-    public void execute() throws JSONException, AuthentificationException
+    public void execute() throws JSONException
     {
-        // Vérification de l'authentification de l'utilisateur
-        this.checkAuth();
-        
         // Vérification du propriétaire
         if (this.getRoom().isOwner(this.getUser()))
         {

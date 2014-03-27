@@ -28,6 +28,12 @@ import org.json.JSONException;
 public class GameList extends ClientCommand
 {
     @Override
+    public boolean checkRoom()
+    {
+        return false;
+    }
+    
+    @Override
     public void execute() throws SQLException, JSONException, RuleException
     {
         this.send((new GameAvailables()).toString());

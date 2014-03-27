@@ -24,30 +24,42 @@ import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
- * Commande de création d'un compte.
+ * Commande de création d'un compte. Instancie un objet User avec les paramètres
+ * donnés, ouvre une connexion à la base de données, vérifie la disponibilité
+ * du nom puis ajoute l'utilisateur.
  * @author Lzard
  */
 public class AccountCreate extends ClientCommand
 {
     @Override
+    public boolean checkAuth()
+    {
+        return false;
+    }
+    
+    @Override
+    public boolean checkRoom()
+    {
+        return false;
+    }
+    
+    @Override
     public void execute() throws JSONException, SQLException
     {
-        // Création du compte si le joueur n'est pas authentifié
         if (this.getUser() == null)
         {
             // Création du joueur
             User newUser = new User(
-                    User.UNREGISTERED_ID,
                     this.getJSON().getString("name"),
                     User.hashPassword(this.getJSON().getString("password"))
             );
-            
+
             // Sauvegarde du joueur
             try (Connection connection = Db.open())
             {
                 // Initialisation du manager
                 UserManager manager = new UserManager(connection);
-                
+
                 // Vérification de la disponibilité du nom
                 if (manager.getNameAvailable(newUser.getName()))
                 {
@@ -55,7 +67,7 @@ public class AccountCreate extends ClientCommand
                     this.confirm("account_create");
                 }
                 else this.error("name_unavailable");
-                
+
                 // Fermeture de la connexion
                 Db.close(connection);
             }

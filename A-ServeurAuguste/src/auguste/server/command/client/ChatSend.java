@@ -18,21 +18,25 @@ package auguste.server.command.client;
 
 import auguste.server.Server;
 import auguste.server.command.server.ChatMessage;
-import auguste.server.exception.AuthentificationException;
 import org.json.JSONException;
 
 /**
- * Commande d'envoi d'un message.
+ * Commande d'envoi d'un message. Envoi du message à la salle précisée ou au
+ * canal général sinon.
  * @author Lzard
  */
 public class ChatSend extends ClientCommand
 {
     @Override
-    public void execute() throws AuthentificationException, JSONException
+    public boolean checkRoom()
     {
-        // Vérification de l'authentification
-        this.checkAuth();
-
+        // Vérification de la salle si elle est précisée
+        return this.getJSON().has("room_id");
+    }
+    
+    @Override
+    public void execute() throws JSONException
+    {
         // Choix de la salle
         if (this.getRoom() != null)
         {

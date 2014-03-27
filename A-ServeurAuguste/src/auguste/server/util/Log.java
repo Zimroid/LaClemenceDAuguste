@@ -57,4 +57,14 @@ public class Log
         if (Configuration.get("debug").equals("true")) Log.DEBUG.println((new Date()).toString() + " -- " + message);
     }
     
+    /**
+     * Ecriture d'un message décrivant l'exception fournie si la fonctionnalité
+     * est activée.
+     * @param e Exception à logger
+     */
+    public static void debug(Exception e)
+    {
+        Log.debug(e.getMessage());
+    }
+    
 }

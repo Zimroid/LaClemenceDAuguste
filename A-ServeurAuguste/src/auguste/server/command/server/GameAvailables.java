@@ -39,10 +39,10 @@ public class GameAvailables extends ServerCommand
         
         // Création du JSONObject contenant la liste des salles
         JSONArray roomList = new JSONArray();
-        for (Room room : Server.getInstance().getRoomList())
+        for (Room room : Server.getInstance().getAvailablesRooms())
         {
             JSONObject roomEntry = new JSONObject();
-            roomEntry.put("game_id", room.getId());
+            roomEntry.put("room_id", room.getId());
             roomEntry.put("game_name", room.getGameName());
             roomList.put(roomEntry);
         }

@@ -22,22 +22,13 @@ package auguste.server.exception;
  */
 public class CommandException extends Exception
 {
-    // Commande non-reconnue
-    private final String command;
-    
     /**
      * Enregistre la commande non-reconnue.
      * @param command Commande non-reconnue
      */
     public CommandException(String command)
     {
-        this.command = command;
-    }
-    
-    @Override
-    public String toString()
-    {
-        return this.command;
+        super("Unknown command " + command);
     }
     
 }

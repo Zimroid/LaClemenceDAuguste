@@ -30,7 +30,7 @@ import org.json.JSONObject;
 public class ChatUsers extends ServerCommand
 {
     /**
-     * Remplit le JSON avec les paramètres fournis.
+     * Remplit le JSON avec les utilisateurs authentifiés.
      * @throws JSONException Erreur de JSON
      */
     public ChatUsers() throws JSONException
@@ -38,9 +38,9 @@ public class ChatUsers extends ServerCommand
         // Constructeur de la classe mère
         super("chat_users");
         
-        // Création du JSONObject contenant la liste des utilisateurs
+        // Création du JSONArray décrivant la liste des utilisateurs
         JSONArray userList = new JSONArray();
-        for (User user : Server.getInstance().getUserSet())
+        for (User user : Server.getInstance().getLoggedUsers())
         {
             JSONObject userEntry = new JSONObject();
             userEntry.put("id", user.getId());
@@ -48,12 +48,12 @@ public class ChatUsers extends ServerCommand
             userList.put(userEntry);
         }
         
-        // Création du JSON
+        // Ajout de la liste au JSON
         this.getJSON().put("list", userList);
     }
     
     /**
-     * Remplit le JSON avec les paramètres fournis.
+     * Remplit le JSON avec les utilisateurs de la salle demandée.
      * @param room Salle demandée
      * @throws JSONException Erreur de JSON
      */
@@ -62,16 +62,17 @@ public class ChatUsers extends ServerCommand
         // Constructeur de la classe mère
         super("chat_users");
         
-        // Création du JSONObject contenant la liste des utilisateurs
+        // Création du JSONArray décrivant la liste des utilisateurs
         JSONArray userList = new JSONArray();
-        for (User user : room.getUserCollection())
+        for (User user : room.getUsers())
         {
             JSONObject userEntry = new JSONObject();
+            userEntry.put("id", user.getId());
             userEntry.put("name", user.getName());
             userList.put(userEntry);
         }
         
-        // Création du JSON
+        // Ajout de la liste au JSON
         this.getJSON().put("list", userList);
     }
 

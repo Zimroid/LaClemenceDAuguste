@@ -16,27 +16,23 @@
 
 package auguste.server.command.client;
 
-import auguste.server.exception.AuthentificationException;
-import auguste.server.exception.RuleException;
-import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
- * Commande pour quitter une partie.
+ * Commande pour quitter une partie. Retire l'utilisateur de la salle puis
+ * envoi une confirmation aux utilisateurs de la salle et à l'utilisateur
+ * ayant envoyé la commande.
  * @author Lzard
  */
 public class GameLeave extends ClientCommand
 {
     @Override
-    public void execute() throws SQLException, JSONException, RuleException, AuthentificationException
+    public void execute() throws JSONException
     {
-        // Vérification de l'authentification
-        this.checkAuth();
-        
         // Retrait de l'utilisateur de la salle
         this.getRoom().removeUser(this.getUser());
-        this.getRoom().confirm();
         this.confirm("room_left");
+        this.getRoom().confirm();
     }
     
 }

@@ -17,26 +17,27 @@
 package auguste.server;
 
 import auguste.server.util.Configuration;
-import auguste.server.util.Log;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import org.apache.commons.codec.binary.Hex;
 
 /**
- * Classe représentant un utilisateur authentifié et connecté au serveur. Gère
- * les données relatives à l'utilisateur.
+ * Classe représentant un utilisateur connecté au serveur et authentifié. Gère
+ * les données relatives à l'utilisateur. Contient la liste des salles
+ * auxquelles l'utilisateur appartient.
  * @author Lzard
  */
 public class User
 {
-    public final static int UNREGISTERED_ID = 0; // ID d'un utilisateur non-enregistré
+    private final static int UNREGISTERED_ID = 0; // ID d'un utilisateur non-enregistré
     
     /**
-     * Hashage de mot de passe.
-     * @param password Mot de passe à hacher
-     * @return Mot de passe hashé ou chaîne vide en cas d'erreur
+     * Renvoie la chaine de caractères fournie en paramètre hashée.
+     * @param password Mot de passe à hasher
+     * @return Mot de passe hashé ou chaîne vide si algorithme indisponible
      */
     public static String hashPassword(String password)
     {
@@ -49,35 +50,34 @@ public class User
         }
         catch (NoSuchAlgorithmException e)
         {
-            // Algorithme indisponible
-            Log.error("Hash algorithm unavailable");
-            Log.debug(e.toString());
-            return new String();
+            return password;
         }
     }
     
     // Attributs
-    private int    id;        // ID de l'utilisateur
-    private String name;      // Nom de l'utilisateur
-    private String password;  // Mot de passe hashé de l'utilisateur
+    private int    id;       // Identifiant de l'utilisateur
+    private String name;     // Nom de l'utilisateur
+    private String password; // Mot de passe hashé de l'utilisateur
+    
+    // Salles de l'utilisateur
+    private final ArrayList<Room> rooms = new ArrayList<>();
     
     /**
-     * Instanciation d'un utilisateur à partir de données brutes.
-     * @param id       ID de l'utilisateur
+     * Création d'un nouvel utilisateur.
      * @param name     Nom de l'utilisateur
      * @param password Mot de passe hashé de l'utilisateur
      */
-    public User(int id, String name, String password)
+    public User(String name, String password)
     {
-        this.id       = id;
+        this.id       = User.UNREGISTERED_ID;
         this.name     = name;
         this.password = password;
     }
     
     /**
      * Instanciation d'un utilisateur à partir d'un résultat de requête.
-     * @param set    ResultSet d'une requête
-     * @throws java.sql.SQLException Erreur SQL
+     * @param set ResultSet d'une requête
+     * @throws java.sql.SQLException Champ(s) absent(s) du résultat
      */
     public User(ResultSet set) throws SQLException
     {
@@ -87,12 +87,21 @@ public class User
     }
 
     /**
-     * Retourne l'ID de l'utilisateur.
-     * @return ID de l'utilisateur
+     * Retourne l'identifiant de l'utilisateur.
+     * @return Identifiant de l'utilisateur
      */
     public int getId()
     {
-        return id;
+        return this.id;
+    }
+    
+    /**
+     * Indique si l'utilisateur est enregistré.
+     * @return Booléen indiquant si l'utilisateur est enregistré
+     */
+    public boolean isSaved()
+    {
+        return this.id == User.UNREGISTERED_ID;
     }
 
     /**
@@ -101,7 +110,7 @@ public class User
      */
     public String getName()
     {
-        return name;
+        return this.name;
     }
 
     /**
@@ -110,12 +119,12 @@ public class User
      */
     public String getPassword()
     {
-        return password;
+        return this.password;
     }
 
     /**
-     * Modifie l'ID de l'utilisateur.
-     * @param id ID à utiliser
+     * Modifie l'identifiant de l'utilisateur.
+     * @param id Identifiant à utiliser
      */
     public void setId(int id)
     {
@@ -138,6 +147,15 @@ public class User
     public void setPassword(String password)
     {
         this.password = password;
+    }
+    
+    /**
+     * Liste des salles liées à l'utilisateur.
+     * @return ArrayList des salles 
+     */
+    public synchronized ArrayList<Room> getRooms()
+    {
+        return this.rooms;
     }
     
 }

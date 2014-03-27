@@ -27,6 +27,12 @@ import org.json.JSONException;
 public class LogOut extends ClientCommand
 {
     @Override
+    public boolean checkRoom()
+    {
+        return false;
+    }
+    
+    @Override
     public void execute() throws JSONException, AuthentificationException
     {
         // Commande pouvant être exécuté que par des utilisateurs authentifiés

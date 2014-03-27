@@ -28,10 +28,10 @@ import org.json.JSONException;
 public class ChatMessage extends ServerCommand
 {
     /**
-     * Remplit le JSON avec les paramètres fournis.
+     * Remplit le JSON avec les paramètres du message.
      * @param author  Auteur du message
      * @param message Contenu du message
-     * @throws JSONException Erreur de JSON
+     * @throws JSONException Erreur JSON
      */
     public ChatMessage(User author, String message) throws JSONException
     {
@@ -39,17 +39,17 @@ public class ChatMessage extends ServerCommand
         super("chat_message");
         
         // Création du JSON
-        this.getJSON().put("author",  author.getName());
-        this.getJSON().put("date",    (new Date()).getTime());
-        this.getJSON().put("text",    message);
+        this.getJSON().put("author", author.getName());
+        this.getJSON().put("date",   (new Date()).getTime());
+        this.getJSON().put("text",   message);
     }
 
     /**
-     * Remplit le JSON avec les paramètres fournis.
+     * Remplit le JSON avec les paramètres du message.
      * @param author  Auteur du message
      * @param room    Salle à destination du message
      * @param message Contenu du message
-     * @throws JSONException Erreur de JSON
+     * @throws JSONException Erreur JSON
      */
     public ChatMessage(User author, Room room, String message) throws JSONException
     {
@@ -57,9 +57,9 @@ public class ChatMessage extends ServerCommand
         super("chat_message", room);
         
         // Création du JSON
-        this.getJSON().put("author",  author.getName());
-        this.getJSON().put("date",    (new Date()).getTime());
-        this.getJSON().put("text",    message);
+        this.getJSON().put("author", author.getName());
+        this.getJSON().put("date",   (new Date()).getTime());
+        this.getJSON().put("text",   message);
     }
 
 }

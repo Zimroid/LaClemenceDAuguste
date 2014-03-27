@@ -57,19 +57,19 @@ public class Main
         {
             // Fichier de configuration inaccessible
             Log.error("Configuration file unavailable");
-            Log.debug(e.toString());
+            Log.debug(e.getMessage());
         }
         catch (ClassNotFoundException e)
         {
             // Driver JDBC introuvable
             Log.error("JDBC driver unavailable");
-            Log.debug(e.toString());
+            Log.debug(e.getMessage());
         }
         catch (NoSuchAlgorithmException e)
         {
             // Algorithme de hashage indisponible
             Log.error("Hash algorithm unavailable");
-            Log.debug(e.toString());
+            Log.debug(e.getMessage());
         }
     }
     

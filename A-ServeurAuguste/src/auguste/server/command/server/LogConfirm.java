@@ -26,7 +26,7 @@ import org.json.JSONException;
 public class LogConfirm extends ServerCommand
 {
     /**
-     * Remplit le JSON avec les paramètres fournis.
+     * Remplit le JSON avec les données de l'utilisateur.
      * @param user Utilisateur connecté
      * @throws JSONException Erreur de JSON
      */

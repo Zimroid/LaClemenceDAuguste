@@ -25,7 +25,7 @@ import org.json.JSONException;
 public class MessageConfirm extends ServerCommand
 {
     /**
-     * Remplit le JSON avec les paramètres fournis.
+     * Remplit le JSON avec le type de confirmation.
      * @param type Type de confirmation
      * @throws JSONException Erreur de JSON
      */

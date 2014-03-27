@@ -18,25 +18,27 @@ package auguste.server.command.client;
 
 import auguste.server.Room;
 import auguste.server.Server;
-import auguste.server.exception.AuthentificationException;
 import auguste.server.exception.RoomException;
-import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
- * Commande pour rejoindre une partie.
+ * Commande pour rejoindre une partie. Identifie la salle et, si elle existe et
+ * que l'utilisateur ne l'a pas déjà rejoint, y ajoute l'utilisateur.
  * @author Lzard
  */
 public class GameJoin extends ClientCommand
 {
     @Override
-    public void execute() throws RoomException, SQLException, JSONException, AuthentificationException
+    public boolean checkRoom()
     {
-        // Vérification de l'authentification de l'utilisateur
-        this.checkAuth();
-        
+        return false;
+    }
+    
+    @Override
+    public void execute() throws RoomException, JSONException
+    {
         // Récupération de la salle
-        Room room = Server.getInstance().getRoom(this.getJSON().getInt("join_game"));
+        Room room = Server.getInstance().getRoom(this.getJSON().getInt("room_id"));
 
         // Vérification de la non-présence de l'utilisateur
         if (!room.isInRoom(this.getUser()))

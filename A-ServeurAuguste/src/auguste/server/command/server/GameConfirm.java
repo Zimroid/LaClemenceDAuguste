@@ -26,9 +26,9 @@ import org.json.JSONException;
 public class GameConfirm extends ServerCommand
 {
     /**
-     * Remplit le JSON avec les paramètres fournis.
+     * Remplit le JSON avec la configuration de la partie.
      * @param room Salle de la partie
-     * @throws JSONException Erreur de JSON
+     * @throws JSONException Erreur JSON
      */
     public GameConfirm(Room room) throws JSONException
     {

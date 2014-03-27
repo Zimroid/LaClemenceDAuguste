@@ -17,24 +17,26 @@
 package auguste.server.command.client;
 
 import auguste.server.command.server.ChatUsers;
-import auguste.server.exception.AuthentificationException;
-import auguste.server.exception.RuleException;
-import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
  * Commande de demande des utilisateurs d'une salle ou de tous les utilisateurs
- * authentifiés.
+ * authentifiés. Envoi la liste des utilisateurs d'une salle si précisée ou de
+ * tous les utilisateurs authentifiés.
  * @author Lzard
  */
 public class ChatUserList extends ClientCommand
 {
     @Override
-    public void execute() throws SQLException, JSONException, RuleException, AuthentificationException
+    public boolean checkRoom()
     {
-        // Vérification de l'authentification
-        this.checkAuth();
-        
+        // Vérification de la salle si elle est précisée
+        return this.getJSON().has("room_id");
+    }
+    
+    @Override
+    public void execute() throws JSONException
+    {
         // Envoi de la liste
         if (this.getRoom() != null) this.send((new ChatUsers(this.getRoom())).toString());
         else                        this.send((new ChatUsers()).toString());

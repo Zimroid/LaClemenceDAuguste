@@ -17,8 +17,8 @@
 package auguste.server.command.client;
 
 import auguste.server.Server;
-import auguste.server.command.server.LogConfirm;
 import auguste.server.User;
+import auguste.server.command.server.LogConfirm;
 import auguste.server.manager.UserManager;
 import auguste.server.util.Db;
 import java.sql.Connection;
@@ -26,11 +26,25 @@ import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
- * Commande d'authentification d'un joueur.
+ * Commande d'authentification d'un joueur. Si l'utilisateur n'est pas
+ * identifié, ouvre une connexion à la base de données et vérifie qu'un
+ * utilisateur enregistré correspond au login donné.
  * @author Lzard
  */
 public class LogIn extends ClientCommand
-{    
+{
+    @Override
+    public boolean checkAuth()
+    {
+        return false;
+    }
+    
+    @Override
+    public boolean checkRoom()
+    {
+        return false;
+    }
+    
     @Override
     public void execute() throws SQLException, JSONException
     {
@@ -49,19 +63,15 @@ public class LogIn extends ClientCommand
                 Db.close(connection);
             }
 
-            // authentification du joueur
+            // Authentification du joueur
             if (userToLog != null)
             {
                 // Déconnexion de l'utilisateur de même nom déjà connecté
                 Server.getInstance().logOut(userToLog);
                 
-                // Mise à jour du client courant
-                this.getUser().setId(userToLog.getId());
-                this.getUser().setName(userToLog.getName());
-                
                 // Connexion de l'utilisateur
-                Server.getInstance().logIn(this.getSocket(), this.getUser());
-                this.send((new LogConfirm(this.getUser())).toString());
+                Server.getInstance().logIn(this.getSocket(), userToLog);
+                this.send((new LogConfirm(userToLog)).toString());
             }
             else this.error("log_error");
         }

@@ -60,16 +60,16 @@ public class UserManager extends Manager
 
     /**
      * Récupère un utilisateur via son nom et son mot de passe.
-     * @param login    Nom de l'utilisateur
+     * @param name     Nom de l'utilisateur
      * @param password Mot de passe de l'utilisateur
-     * @return Instance d'User correspondant à l'utilisateur trouvée ou null
+     * @return Instance d'User correspondant à l'utilisateur trouvé ou null
      * @throws java.sql.SQLException Erreur SQL
      */
-    public User getUser(String login, String password) throws SQLException
+    public User getUser(String name, String password) throws SQLException
     {
         // Préparation et exécution de la requête
         PreparedStatement statement = this.query(UserManager.QUERY_USER_BY_LOGIN);
-        statement.setString(1, login);
+        statement.setString(1, name);
         statement.setString(2, User.hashPassword(password));
         ResultSet set = statement.executeQuery();
 
@@ -103,7 +103,7 @@ public class UserManager extends Manager
     public void saveUser(User user) throws SQLException
     {
         // Si c'est un nouveau joueur, on l'insère, sinon on le met à jour
-        if (user.getId() == User.UNREGISTERED_ID)
+        if (!user.isSaved())
         {
             // Préparation et exécution de la requête
             PreparedStatement statement = this.query(UserManager.QUERY_ADD_USER);
@@ -130,7 +130,7 @@ public class UserManager extends Manager
     public void deleteUser(User user) throws SQLException
     {
         // Préparation et exécution de la requête
-        PreparedStatement statement = this.query(UserManager.QUERY_UPDATE_USER);
+        PreparedStatement statement = this.query(UserManager.QUERY_DELETE_USER);
         statement.setInt(1, user.getId());
         statement.executeUpdate();
     }

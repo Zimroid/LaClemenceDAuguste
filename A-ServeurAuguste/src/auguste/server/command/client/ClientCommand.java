@@ -23,6 +23,7 @@ import auguste.server.command.server.MessageError;
 import auguste.server.exception.AuthentificationException;
 import auguste.server.exception.CommandException;
 import auguste.server.exception.RoomException;
+import auguste.server.exception.RoomException.RoomExceptionType;
 import auguste.server.exception.RuleException;
 import auguste.server.util.Log;
 import java.sql.SQLException;
@@ -37,14 +38,14 @@ import org.json.JSONObject;
 public abstract class ClientCommand
 {
     /**
-     * Retourne l'objet commande correspondant au nom de la commande.
+     * Retourne l'objet commande correspondant au nom donné.
      * @param name Nom de la commande
      * @return Objet commande correspondant
      * @throws CommandException Nom de commande inconnu
      */
     public static ClientCommand get(String name) throws CommandException
     {
-        // authentification et instanciation de la commande
+        // Identification et instanciation de la commande
         try
         {
             ClientCommand command = null;
@@ -67,20 +68,31 @@ public abstract class ClientCommand
         catch(IllegalArgumentException e)
         {
             // Commande inconnue
-            Log.debug(e.toString());
             throw new CommandException(name);
         }
     }
     
     /**
-     * Envoi d'un message de confirmation au client spécifié.
-     * @param socket Client destinataire
+     * Envoi d'un message à la socket donnée. Signalisation de l'envoi.
+     * @param socket  Socket destinataire
+     * @param message Message à envoyer
+     */
+    public static void send(WebSocket socket, String message)
+    {
+        Log.out(socket.getRemoteSocketAddress() + ": Send " + message);
+        socket.send(message);
+    }
+    
+    /**
+     * Envoi d'un message de confirmation à la socket spécifiée.
+     * @param socket Socket destinataire
      * @param type   Type du message de confirmation
      * @throws JSONException Erreur lors de la création du JSON
      */
     public static void sendConfirm(WebSocket socket, String type) throws JSONException
     {
-        socket.send(
+        ClientCommand.send(
+                socket,
                 (new MessageConfirm(type)).toString()
         );
     }
@@ -93,16 +105,19 @@ public abstract class ClientCommand
      */
     public static void sendError(WebSocket socket, String type) throws JSONException
     {
-        socket.send(
+        ClientCommand.send(
+                socket,
                 (new MessageError(type)).toString()
         );
     }
     
-    // Attributs
-    private JSONObject json;    // JSON de la commande
-    private User       user;    // User qui a émit la commande
+    // Attributs de la commande
     private WebSocket  socket;  // Socket ayant reçu la commande
-    private Room       room;    // Salle concernée par la commande
+    private JSONObject json;    // JSON de la commande
+    
+    // Données de la commande
+    private User user = null; // Utilisateur qui a émit la commande
+    private Room room = null; // Salle concernée par la commande
     
     /**
      * Exécution de la commande.
@@ -120,7 +135,7 @@ public abstract class ClientCommand
      */
     public void send(String message)
     {
-        this.getSocket().send(message);
+        ClientCommand.send(this.getSocket(), message);
     }
     
     /**
@@ -144,20 +159,38 @@ public abstract class ClientCommand
     }
 
     /**
-     * Vérifie que l'utilisateur ayant émit la commande est authentifié.
-     * @throws AuthentificationException Utilisateur non-authentifié
-     * @throws JSONException             Erreur JSON
+     * Vérifier ou non que l'utilisateur ayant émit la commande est authentifié.
+     * @return Booléen indiquant si l'authentification doit être vérifiée ou non
      */
-    public void checkAuth() throws AuthentificationException, JSONException
+    public boolean checkAuth()
     {
-        if (this.getUser() == null) throw new AuthentificationException(this.getJSON().getString("command"));
+        return true;
+    }
+    
+    /**
+     * Indique s'il faut vérifier la présence d'un room_id et si l'utilisateur
+     * doit être présent dans cette salle.
+     * @return Booléen indiquant si l'utilisateur doit être dans la salle
+     */
+    public boolean checkRoom()
+    {
+        return true;
+    }
+
+    /**
+     * Retourne la WebSocket ayant reçu la commande.
+     * @return WebSocket ayant reçu la commande
+     */
+    public WebSocket getSocket()
+    {
+        return this.socket;
     }
     
     /**
      * Retourne le JSONObject de la commande.
      * @return JSONObject de la json
      */
-    public final JSONObject getJSON()
+    public JSONObject getJSON()
     {
         return this.json;
     }
@@ -166,63 +199,60 @@ public abstract class ClientCommand
      * Retourne le user ayant émit la commande.
      * @return User ayant émit la commande
      */
-    public final User getUser()
+    public User getUser()
     {
         return this.user;
-    }
-
-    /**
-     * Retourne la WebSocket ayant reçu la commande.
-     * @return WebSocket ayant reçu la commande
-     */
-    public final WebSocket getSocket()
-    {
-        return this.socket;
     }
     
     /**
      * Retourne la salle concernée par la commande.
      * @return Salle de la commande
      */
-    public final Room getRoom()
+    public Room getRoom()
     {
         return this.room;
-    }
-
-    /**
-     * Modifie le JSONObject de la commande.
-     * @param command JSONObject à utiliser
-     */
-    public final void setJSON(JSONObject command)
-    {
-        this.json = command;
-    }
-
-    /**
-     * Modifie le user ayant émit la commande.
-     * @param client User à utiliser
-     */
-    public final void setUser(User client)
-    {
-        this.user = client;
     }
 
     /**
      * Modifie la WebSocket ayant reçu la commande.
      * @param socket WebSocket à utiliser
      */
-    public final void setSocket(WebSocket socket)
+    public void setSocket(WebSocket socket)
     {
         this.socket = socket;
+    }
+
+    /**
+     * Modifie le JSONObject de la commande.
+     * @param command JSONObject à utiliser
+     */
+    public void setJSON(JSONObject command)
+    {
+        this.json = command;
+    }
+
+    /**
+     * Modifie le user ayant émit la commande.
+     * @param user Utilisateur à utiliser
+     * @throws auguste.server.exception.AuthentificationException Non-authentifié
+     * @throws org.json.JSONException                             Champ "command" absent du JSON
+     */
+    public void setUser(User user) throws AuthentificationException, JSONException
+    {
+        if (user == null) throw new AuthentificationException(this.json.getString("command"));
+        this.user = user;
     }
     
     /**
      * Modifie la salle concernée par la commande.
      * @param room Salle à utiliser
+     * @throws auguste.server.exception.RoomException Utilisateur absent de la salle
      */
-    public final void setRoom(Room room)
+    public void setRoom(Room room) throws RoomException
     {
-        this.room = room;
+        if (room == null) throw new RoomException(RoomExceptionType.INEXISTANT_ROOM);
+        else if (!room.isInRoom(user)) throw new RoomException(RoomExceptionType.NOT_IN_THIS_ROOM);
+        else this.room = room;
     }
     
     /**

@@ -18,21 +18,25 @@ package auguste.server.command.client;
 
 import auguste.server.Room;
 import auguste.server.Server;
-import auguste.server.exception.AuthentificationException;
+import auguste.server.exception.RoomException;
 import org.json.JSONException;
 
 /**
- * Commande de création d'une partie.
+ * Commande de création d'une partie. Instancie la salle, ajoute l'utilisateur
+ * et le définie comme propriétaire, puis confirme la salle à l'utilisateur.
  * @author Lzard
  */
 public class GameCreate extends ClientCommand
 {
     @Override
-    public void execute() throws JSONException, AuthentificationException
+    public boolean checkRoom()
     {
-        // Vérification de l'authentification de l'utilisateur
-        this.checkAuth();
-        
+        return false;
+    }
+    
+    @Override
+    public void execute() throws RoomException, JSONException
+    {
         // Création de la salle
         Room newRoom = Server.getInstance().createRoom(
                 this.getJSON().getString("game_name")

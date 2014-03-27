@@ -23,22 +23,13 @@ package auguste.server.exception;
  */
 public class AuthentificationException extends Exception
 {
-    // Commande demandée
-    private final String command;
-    
     /**
      * Enregistre la commande demandée qui nécessite d'être authentifié.
      * @param command Commande demandée
      */
     public AuthentificationException(String command)
     {
-        this.command = command;
-    }
-    
-    @Override
-    public String toString()
-    {
-        return this.command;
+        super("Must be logged to use " + command);
     }
     
 }
