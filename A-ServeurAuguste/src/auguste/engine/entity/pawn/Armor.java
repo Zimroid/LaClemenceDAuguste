@@ -17,6 +17,7 @@
 package auguste.engine.entity.pawn;
 
 import auguste.engine.entity.Cell;
+import auguste.engine.entity.Legion;
 
 /**
  * Classe représentant une armure.
@@ -26,11 +27,10 @@ public class Armor extends Pawn
 {
 
     /**
-    * Instanciation d'une armure avec la case sur laquelle elle est située.
-    * @param cell Case sur laquelle est située l'armure
+    * Instanciation d'une armure
     */
-    public Armor(Cell cell)
+    public Armor()
     {
-        super(cell);
+        super(null);
     }
 }

@@ -16,6 +16,7 @@
 
 package auguste.engine.entity;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 /**
@@ -70,9 +71,115 @@ public class Board
     }
     
     /**
+     * @param p pos
+     * @return the cell
+     */
+    public Cell getCell(Point p)
+    {
+        Cell res = null;
+        for(Cell c : cells)
+        {
+            if(c.getP() == p)
+            {
+                res = c;
+                break;
+            }
+        }
+        return res;
+    }
+    
+    /**
      * Crée les cases du plateau
      */
     private void fillCells() {
-        // TODO
+        for(int y = -(size - 1); y < size; y++ ) {
+            for(int x = -(size - 1); x < (size - Math.abs(y)); x++) {
+                this.cells.add(new Cell(this,new Point(x,y)));
+            }
+        }
+    }
+    
+    /**
+     * Transforme un point utilisant l'ancienne méthode (0,0 en haut à gauche, 2,0 en haut à droite)
+     * @param p Le point à transformer
+     * @return Le point transformé
+     */
+    public Point oldFromNew(Point p)
+    {
+        return new Point(p.y + (size -1),p.x + (size -1));
+    }
+    
+    /**
+     * Transforme un point utilisant la nouvelle méthode (-2,-2 en haut à gauche, -2,0 en haut à droite)
+     * @param p Le point à transformer
+     * @return Le point transformé
+     */
+    public Point newFromOld(Point p)
+    {
+        return new Point(p.y - (size -1),p.x - (size -1));
+    }
+    
+    /**
+     * Renvoie une position avec X rotations horaires
+     * @param pos Le point à transformer
+     * @param nbRotations Le nombre de rotations
+     * @return Le point transformé
+     */
+    public Point getRotatedPosition(Point pos, int nbRotations)
+    {
+        Point res = getRotatedPositionOld(oldFromNew(pos), nbRotations);
+        
+        return newFromOld(res);
+    }
+    
+    /**
+     * Renvoie une position avec X rotations horaires de coins (Point utilisant ancienne méthode)
+     * @param pos Le point à transformer
+     * @param nbRotations Le nombre de rotations
+     * @return Le point transformé
+     */
+    public Point getRotatedPositionOld(Point pos, int nbRotations)
+    {
+        Point res;
+        if (nbRotations == 0)
+        {
+                res = pos;
+        }
+        else
+        {
+                int x, y;
+
+                if(pos.x < size - 1 && pos.y <= size - 1)
+                {
+                        int destLine =  2 * (size - 1) - Math.abs(size - pos.x - 1);
+                        x = destLine - pos.y;
+                        y = pos.x;
+                }
+                else if (pos.x >= size - 1 && pos.y < size - 1)
+                {
+                        int startLine = 2 * (size - 1) - Math.abs(size - pos.y - 1);
+                        int destLine =  2 * (size - 1) - Math.abs(size - pos.x - 1);
+                        x = destLine - (startLine - pos.x);
+                        y = pos.x;
+                }
+                else if (pos.x > size - 1 && pos.y >= size - 1)
+                {
+                        int startLine = 2 * (size - 1) - Math.abs(size - pos.y - 1);
+                        x = 2 * (size - 1) - pos.y;
+                        y = 2 * (size - 1) - (startLine - pos.x);
+                }
+                else if (pos.x + pos.y - size + 1 >= size && pos.y > size - 1)
+                {
+                        x = 2 * (size - 1) - pos.y;
+                        y = size - 1 + pos.x - x;
+                }
+                else
+                {
+                        x = pos.x;
+                        y = (size - 1 + pos.x) - (2 * (size - 1) - pos.y);
+                }
+                res = getRotatedPositionOld(new Point(x, y), nbRotations - 1);
+        }
+        return res;
     }
 }

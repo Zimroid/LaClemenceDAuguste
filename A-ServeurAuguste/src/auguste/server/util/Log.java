@@ -36,7 +36,7 @@ public class Log
      */
     public static void out(String message)
     {
-        Log.OUT.println((new Date()).toString() + " -- " + message);
+        Log.OUT.println("OUT " + (new Date()).toString() + " -- " + message);
     }
     
     /**
@@ -45,7 +45,7 @@ public class Log
      */
     public static void error(String message)
     {
-        Log.ERROR.println((new Date()).toString() + " -- " + message);
+        Log.ERROR.println("ERR" + (new Date()).toString() + " -- " + message);
     }
     
     /**
@@ -54,7 +54,7 @@ public class Log
      */
     public static void debug(String message)
     {
-        if (Configuration.get("debug").equals("true")) Log.DEBUG.println((new Date()).toString() + " -- " + message);
+        if (Configuration.get("debug").equals("true")) Log.DEBUG.println("DBG " + (new Date()).toString() + " -- " + message);
     }
     
     /**

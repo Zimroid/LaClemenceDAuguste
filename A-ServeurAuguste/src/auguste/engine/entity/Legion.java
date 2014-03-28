@@ -16,6 +16,7 @@
 
 package auguste.engine.entity;
 
+import auguste.engine.entity.action.Action;
 import auguste.engine.entity.action.card.Soothsayer;
 import auguste.engine.entity.pawn.Pawn;
 import java.awt.Color;
@@ -30,11 +31,13 @@ public class Legion
     
     // Variables de classe
     private Color color;
+    private int position;
     
     // Variables métier
     private Player player;
     private final ArrayList<Pawn> pawns;
     private Soothsayer soothsayer = null;
+    private Action action = null;
     
     /**
     * Instanciation d'une légion avec le joueur la gérant.
@@ -46,6 +49,15 @@ public class Legion
         this.player = player;
         this.color = color;
         this.pawns = new ArrayList<>();
+    }
+    
+    /**
+    * Instanciation d'une légion avec le joueur la gérant.
+    * @param player Joueur gérant la légion
+    */
+    public Legion(Player player)
+    {
+        this(player,null);
     }
 
     /**
@@ -105,6 +117,22 @@ public class Legion
     }
 
     /**
+     * @return the action
+     */
+    public Action getAction()
+    {
+        return action;
+    }
+
+    /**
+     * @param action the action to set
+     */
+    public void setAction(Action action)
+    {
+        this.action = action;
+    }
+
+    /**
      * @return the soothsayer
      */
     public Soothsayer getSoothsayer()
@@ -118,5 +146,25 @@ public class Legion
     public void setSoothsayer(Soothsayer soothsayer)
     {
         this.soothsayer = soothsayer;
+    }
+
+    /**
+     * @return the position
+     */
+    public int getPosition() {
+        return position;
+    }
+
+    /**
+     * @param position the position to set
+     */
+    public void setPosition(int position) {
+        this.position = position;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "Légion (" + this.getPosition() + ") - " + this.getPlayer();
     }
 }

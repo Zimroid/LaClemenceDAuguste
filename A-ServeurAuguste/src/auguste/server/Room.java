@@ -35,16 +35,10 @@ import org.json.JSONException;
  */
 public class Room
 {
-    // Etats possibles pour la salle
-    private static final int WAITING   = 0;
-    private static final int RUNNING   = 1;
-    private static final int FINISHING = 2;
-    private static final int CLOSING   = 3;
-    
     private final int id; // Identifiant de la salle
     
-    private User owner;                // Propriétaire de la salle
-    private int  state = Room.WAITING; // Etat de la salle
+    private User owner;                          // Propriétaire de la salle
+    private GameState state = GameState.WAITING; // Etat de la salle
     
     // Configuration de la partie
     private String gameName;
@@ -92,7 +86,7 @@ public class Room
     {
         synchronized (this.users)
         {
-            this.state = Room.CLOSING;
+            this.state = GameState.CLOSING;
             this.broadcast((new GameClose(this)).toString());
             for (User user : this.users.values()) this.removeUser(user);
         }
@@ -124,6 +118,11 @@ public class Room
     public String getGameName()
     {
         return this.gameName;
+    }
+    
+    public GameState getGameState()
+    {
+        return this.state;
     }
     
     /**
@@ -168,10 +167,10 @@ public class Room
         {
             try
             {
-                WebSocket[] sockets = (WebSocket[]) this.users.keySet().toArray();
+                Object[] sockets = this.users.keySet().toArray();
                 this.setOwner(
                         this.users.get(
-                                sockets[(new Random()).nextInt(sockets.length)]
+                                (WebSocket) sockets[(new Random()).nextInt(sockets.length)]
                         )
                 );
             }
@@ -215,7 +214,7 @@ public class Room
      */
     public void addUser(WebSocket socket, User user) throws RoomException
     {
-        if (this.state == Room.CLOSING) throw new RoomException(RoomExceptionType.UNAVAILABLE_ROOM);
+        if (this.state == GameState.CLOSING) throw new RoomException(RoomExceptionType.UNAVAILABLE_ROOM);
         synchronized (this.users)
         {
             user.getRooms().add(this);
@@ -254,6 +253,14 @@ public class Room
     public boolean isInRoom(User user)
     {
         return this.users.containsValue(user);
+    }
+    
+    public enum GameState
+    {
+        WAITING,
+        RUNNING,
+        FINISHING,
+        CLOSING
     }
     
 }

@@ -26,11 +26,10 @@ public class Laurel extends Pawn
 {
 
     /**
-    * Instanciation d'un laurier avec la case sur laquelle il est situé.
-    * @param cell Case sur laquelle est situé le laurier
+    * Instanciation d'un laurier.
     */
-    public Laurel(Cell cell)
+    public Laurel()
     {
-        super(cell);
+        super(null);
     }
 }

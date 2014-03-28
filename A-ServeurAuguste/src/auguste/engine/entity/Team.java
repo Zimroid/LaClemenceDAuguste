@@ -27,6 +27,7 @@ import java.util.ArrayList;
  */
 public class Team
 {
+    private int num;
     
     // Variables métier
     private final ArrayList<Player> players;
@@ -56,6 +57,7 @@ public class Team
     public void addPlayer(Player player)
     {
         this.players.add(player);
+        if(player.getTeam() != this) player.setTeam(this);
     }
 
     /**
@@ -112,5 +114,25 @@ public class Team
     public void setHorseman(Horseman horseman)
     {
         this.horseman = horseman;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "Equipe (" + this.num + ")";
+    }
+
+    /**
+     * @return the num
+     */
+    public int getNum() {
+        return num;
+    }
+
+    /**
+     * @param num the num to set
+     */
+    public void setNum(int num) {
+        this.num = num;
     }
 }
