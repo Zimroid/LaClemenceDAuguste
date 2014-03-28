@@ -16,13 +16,7 @@
 
 package auguste.engine.entity;
 
-<<<<<<< HEAD
-import auguste.engine.entity.action.Action;
-import auguste.engine.entity.pawn.Pawn;
 import auguste.server.User;
-=======
-import auguste.server.Client;
->>>>>>> Serveur logique capable d'initialiser les games
 import java.util.ArrayList;
 
 
@@ -33,13 +27,8 @@ import java.util.ArrayList;
 public class Player
 {        
     // Variables métier
-<<<<<<< HEAD
     private User user;
-    private final ArrayList<Pawn> pawns;
-=======
-    private Client user;
     private final ArrayList<Legion> legions;
->>>>>>> Serveur logique capable d'initialiser les games
     private Team team;
     private Game game = null;
     
