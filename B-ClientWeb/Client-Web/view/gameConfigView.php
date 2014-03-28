@@ -44,7 +44,7 @@
 			</div>
 		</div>
 		<form id="noTeam" name="noTeam">
-			<p>À affecter</p>
+			<p >Spectateurs</p>
 		</form>
 	</fieldset>
 	<input type="submit" id="valid" value="GO !" />
