@@ -28,19 +28,19 @@ public class GameAvailable extends CommandServer
     @Override
     public void execute() throws JSONException 
     {
-        List<Game> games = new ArrayList<Game>();
-        JSONArray game_array = this.getJSON().getJSONArray("games");
+        List<Game> games = new ArrayList<>();
+        JSONArray game_array = this.getJSON().getJSONArray("list");
         for(int i = 0; i<game_array.length(); i++)
         {
             Game g = new Game();
             JSONObject game = game_array.getJSONObject(i);
-            int game_id = game.getInt("id");
-            String game_name = game.getString("name");
-            int board_size = game.getInt("board_size");
+            int game_id = game.getInt("room_id");
+            String game_name = game.getString("game_name");
+            //int board_size = game.getInt("board_size");
             
             g.setId(game_id);
             g.setName(game_name);
-            g.setBoardSize(board_size);
+            //g.setBoardSize(board_size);
             
             games.add(g);
         }

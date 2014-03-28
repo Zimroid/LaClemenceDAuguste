@@ -48,7 +48,7 @@ public abstract class CommandServer
     {
         CHAT_MESSAGE,
         MESSAGE_CONFIRM,
-        GAME_AVAILABLE,
+        GAME_AVAILABLES,
         LOG_CONFIRM,
         GAME_CONFIRM
     }

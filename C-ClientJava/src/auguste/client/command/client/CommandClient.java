@@ -9,7 +9,6 @@ package auguste.client.command.client;
 import org.json.JSONObject;
 import auguste.client.entity.Client;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Map;
 import org.json.JSONException;
 
@@ -27,12 +26,15 @@ public abstract class CommandClient
     protected static final String GAME_LIST = "game_list";
     protected static final String GAME_JOIN = "game_join";
     protected static final String GAME_START = "game_start";
+    protected static final String GAME_LEAVE = "game_leave";
     protected static final String COMMAND = "command";
     protected static final String EXIT = "exit";
     protected static final String CHAT_SEND = "chat_send";
     protected static final String ACCOUNT_CREATE = "account_create";
     protected static final String LOG_IN = "log_in";
     protected static final String LOG_OUT = "log_out";
+    
+    protected static final String ROOM_ID = "room_id";
     
     public abstract void buildJSON() throws JSONException;
     
@@ -97,6 +99,7 @@ public abstract class CommandClient
         GAME_JOIN,
         GAME_LIST,
         GAME_START,
+        GAME_LEAVE,
         LOG_IN,
         LOG_OUT,
         EXIT

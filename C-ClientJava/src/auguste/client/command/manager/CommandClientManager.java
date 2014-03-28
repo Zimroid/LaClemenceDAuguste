@@ -11,6 +11,7 @@ import auguste.client.command.client.ChatSend;
 import auguste.client.command.client.CommandClient;
 import auguste.client.command.client.GameCreate;
 import auguste.client.command.client.GameJoin;
+import auguste.client.command.client.GameLeave;
 import auguste.client.command.client.GameList;
 import auguste.client.command.client.GameStart;
 import auguste.client.command.client.LogIn;
@@ -36,15 +37,16 @@ public class CommandClientManager
         {
             switch(CommandClient.CommandName.valueOf(command_name.toUpperCase()))
             {
-                case EXIT:          command = new QuitGame();     break;
-                case CHAT_SEND:     command = new ChatSend();     break;
-                case ACCOUNT_CREATE:command = new AccountCreate();break;
-                case LOG_IN:        command = new LogIn();        break;
-                case LOG_OUT:       command = new LogOut();       break;
-                case GAME_CREATE:   command = new GameCreate();   break;
-                case GAME_LIST:     command = new GameList();     break;
-                case GAME_JOIN:     command = new GameJoin();     break;
-                case GAME_START:    command = new GameStart();    break;
+                case EXIT:          command = new QuitGame();       break;
+                case CHAT_SEND:     command = new ChatSend();       break;
+                case ACCOUNT_CREATE:command = new AccountCreate();  break;
+                case LOG_IN:        command = new LogIn();          break;
+                case LOG_OUT:       command = new LogOut();         break;
+                case GAME_CREATE:   command = new GameCreate();     break;
+                case GAME_LIST:     command = new GameList();       break;
+                case GAME_JOIN:     command = new GameJoin();       break;
+                case GAME_START:    command = new GameStart();      break;
+                case GAME_LEAVE:    command = new GameLeave();      break;
                 default:            command = null;
             }
 

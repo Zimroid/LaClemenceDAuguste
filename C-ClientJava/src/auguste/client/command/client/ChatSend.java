@@ -6,10 +6,7 @@
 
 package auguste.client.command.client;
 
-import auguste.client.entity.Client;
 import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.JSONException;
 
 /**
@@ -35,17 +32,17 @@ public class ChatSend extends CommandClient
     {
         String msg = this.getArguments().get("message");
         int gameId = 0;
-        try 
+        
+        if(this.getArguments().containsKey("room_id"))
         {
-            gameId = Client.getInstance().getCurrentGame().getId();
-        } 
-        catch (URISyntaxException ex) 
-        {
-            Logger.getLogger(ChatSend.class.getName()).log(Level.SEVERE, null, ex);
+            gameId = Integer.parseInt(this.getArguments().get("room_id"));
         }
         
         this.getJSON().put(COMMAND, CHAT_SEND);
         this.getJSON().put("message", msg);
-        this.getJSON().put("game_id",gameId);
+        if(gameId != 0)
+        {
+            this.getJSON().put(ROOM_ID,gameId);
+        }
     }
 }

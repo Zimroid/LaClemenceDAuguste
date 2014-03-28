@@ -29,7 +29,7 @@ public class Board
 {
     private List<List<Cell>> cells;
     private final int size;
-    private final Map<UW, Cell> tabCells; 
+    private final Map<UW, Cell> tabCells;
     
     public Board(int size)
     {
@@ -241,6 +241,19 @@ public class Board
         }
         
         return res;
+    }
+    
+    public void applyTenaille(List<Tenaille> tenailles)
+    {
+        for(Tenaille tenaille : tenailles)
+        {
+            List<Pawn> victimes = tenaille.applyTenaille();
+            for(Pawn pawn : victimes)
+            {
+                Player player = pawn.getPlayer();
+                player.getPawns().remove(pawn);
+            }
+        }
     }
 
     /**

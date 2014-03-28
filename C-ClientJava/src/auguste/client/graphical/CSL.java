@@ -66,12 +66,34 @@ public class CSL implements UpdateListener
                 case "chat_send":
                     command = msg(words);
                     break;
+                case "game_list":
+                    command = listGame();
+                    break;
+                case "game_create":
+                    command = gameCreate(words);
+                    break;
+                case "game_join":
+                    command = gameJoin(words);
+                    break;
+                case "game_leave":
+                    command = gameLeave(words);
+                    break;
                 default:
                     command = null;
                     break;
             }
             this.client.sendCommand(command);
         }
+    }
+    
+    private Map<String,String> gameCreate(String[] args)
+    {
+        Map<String,String> res = new HashMap<>();
+        
+        res.put("command", args[0]);
+        res.put("game_name", args[1]);
+        
+        return res;
     }
     
     private Map<String,String> login(String[] args)
@@ -96,12 +118,21 @@ public class CSL implements UpdateListener
         return res;
     }
     
+    private Map<String,String> gameJoin(String[] args)
+    {
+        Map<String,String> res = new HashMap<>();
+        
+        res.put("command", args[0]);
+        res.put("game_id", args[1]);
+        
+        return res;
+    }
+    
     private Map<String,String> exit()
     {
         Map<String,String> res = new HashMap<>();
         
-        res.put("command", "log_out");
-        this.stop();
+        res.put("command", "exit");
         return res;
     }
     
@@ -111,13 +142,33 @@ public class CSL implements UpdateListener
         
         String message = "";
         
-        for(int i = 1; i < args.length; i++)
+        for(int i = 2; i < args.length; i++)
         {
             message += args[i];
         }
         
         res.put("command", args[0]);
+        res.put("room_id", args[1]);
         res.put("message", message);
+        
+        return res;
+    }
+    
+    private Map<String,String> gameLeave(String[] args)
+    {
+        Map<String,String> res = new HashMap<>();
+        
+        res.put("command", "game_leave");
+        res.put("room_id", args[1]);
+        
+        return res;
+    }
+    
+    private Map<String,String> listGame()
+    {
+        Map<String,String> res = new HashMap<>();
+        
+        res.put("command", "game_list");
         
         return res;
     }
@@ -177,9 +228,9 @@ public class CSL implements UpdateListener
     /**
      * Se déclenche sur connexion d'un joueur
      */
-    public void logClient() 
+    public void logClient()
     {
-        System.out.println("Bienvenu "+client.getUser().getName());
+        System.out.println("Bienvenue "+client.getUser().getName());
     }
 
     @Override

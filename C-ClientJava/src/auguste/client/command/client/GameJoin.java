@@ -24,6 +24,6 @@ public class GameJoin extends CommandClient
     public void buildJSON() throws JSONException 
     {
         this.getJSON().put(COMMAND,GAME_JOIN);
-        this.getJSON().put("game_name",this.getArguments().get("game_name"));
+        this.getJSON().put(ROOM_ID,this.getArguments().get("game_id"));
     }
 }

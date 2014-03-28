@@ -42,9 +42,9 @@ public class CommandServerManager
             {
                 case CHAT_MESSAGE:      command = new ChatMessage();    break;
                 case LOG_CONFIRM:       command = new LogClient();      break;
-                case GAME_AVAILABLE:    command = new GameAvailable();  break;
+                case GAME_AVAILABLES:   command = new GameAvailable();  break;
                 case MESSAGE_CONFIRM:   command = new ConfirmCommand(); break;
-                case GAME_CONFIRM:      command = new GameConfirm();     break;
+                case GAME_CONFIRM:      command = new GameConfirm();    break;
                 default:                command = null;                 break;
             }
             command.setClient(client);

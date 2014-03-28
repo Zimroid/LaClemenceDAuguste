@@ -6,7 +6,6 @@ import auguste.client.graphical.UpdateListener;
 import auguste.client.reseau.ClientSocket;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +28,6 @@ public class Client
         private Queue<ChatMessageReceived> chatMessageReceived;
         private String confirmMessage;
         private Game currentGame;
-        
-        private Map<String,String> command;
         
         private Client() throws URISyntaxException
         {
