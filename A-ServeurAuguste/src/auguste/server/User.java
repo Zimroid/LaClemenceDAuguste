@@ -101,7 +101,7 @@ public class User
      */
     public boolean isSaved()
     {
-        return this.id == User.UNREGISTERED_ID;
+        return this.id != User.UNREGISTERED_ID;
     }
 
     /**
