@@ -16,8 +16,6 @@
 
 package auguste.engine.entity;
 
-import auguste.engine.entity.action.Action;
-import auguste.engine.entity.pawn.Pawn;
 import auguste.server.User;
 import java.util.ArrayList;
 
@@ -30,9 +28,8 @@ public class Player
 {        
     // Variables métier
     private User user;
-    private final ArrayList<Pawn> pawns;
+    private final ArrayList<Legion> legions;
     private Team team;
-    private Action action;
     private Game game = null;
     
     /**
@@ -42,33 +39,31 @@ public class Player
     public Player(User user)
     {
         this.user = user;
-        this.pawns = new ArrayList<>();
+        this.legions = new ArrayList<>();
     }
-    
-    
 
     /**
-     * @return the pawns
+     * @return the legions
      */
-    public ArrayList<Pawn> getPawns()
+    public ArrayList<Legion> getLegions()
     {
-        return pawns;
+        return legions;
     }
     
     /**
-     * @param pawn the pawn to add
+     * @param legion the legion to add
      */
-    public void addPawn(Pawn pawn)
+    public void addLegion(Legion legion)
     {
-        this.pawns.add(pawn);
+        this.legions.add(legion);
     }
     
     /**
-     * @param pawn the pawn to remove
+     * @param legion the legion to remove
      */
-    public void removePawn(Pawn pawn)
+    public void removeLegion(Legion legion)
     {
-        this.pawns.remove(pawn);
+        this.legions.remove(legion);
     }
 
     /**
@@ -85,22 +80,7 @@ public class Player
     public void setTeam(Team team)
     {
         this.team = team;
-    }
-
-    /**
-     * @return the action
-     */
-    public Action getAction()
-    {
-        return action;
-    }
-
-    /**
-     * @param action the action to set
-     */
-    public void setAction(Action action)
-    {
-        this.action = action;
+        if(!this.team.getPlayers().contains(this)) this.team.addPlayer(this);
     }
 
     /**
@@ -131,5 +111,11 @@ public class Player
      */
     public void setUser(User user) {
         this.user = user;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "Joueur (" + this.user.getName() + ") - " + this.getTeam();
     }
 }

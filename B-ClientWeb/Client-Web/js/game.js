@@ -53,7 +53,7 @@ function newTeam()
     divTeams.append(ptitle, NPButton, divTeam);
 }
 
-function newPlayer(team,joueur)
+function newPlayer(team, joueur)
 {
 	//div de la team du nouveau joueur
     var divTeam = $("#team" + team);
@@ -79,7 +79,7 @@ function newPlayer(team,joueur)
     //input pour la color
     var inpColor = $("<input name='color' class='" + team + " color' />");
     //select pour la position sur le plateau
-    var selPosit = $("<select name='position' id='" + team = "'></select>");
+    var selPosit = $("<select name='position' id='" + team + "'></select>");
     //options pour le selPosit
     var optPosit = $("<option selected='selected'>Position sur le plateau</option>");
     var optPosit2 = $("<option name='0'>Haut gauche</option>");

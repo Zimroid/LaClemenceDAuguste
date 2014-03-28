@@ -17,7 +17,7 @@
 		<form onsubmit="return false;" autocomplete="off">
 			<input type="text" name="user" id="user" placeholder="Pseudo" onkeypress="if (event.keyCode == 13) connexion(true,'','')" />
 			<input type="password" name="password" id="password" placeholder="Mot de passe" onkeypress="if (event.keyCode == 13) connexion(true,'','')" />
-			<input type="button" value="Me connecter" onclick="connexion(true,'',''); " /><br>
+			<input type="button" value="Me connecter" onclick="connexion(true,'','');" /><br>
 		</form>
 		<!-- Lien vers page d'inscription -->
 		<script>

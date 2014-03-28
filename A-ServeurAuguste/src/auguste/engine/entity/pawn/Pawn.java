@@ -31,12 +31,12 @@ public class Pawn
     private Cell cell;
     
     /**
-    * Instanciation d'un pion avec la case sur laquelle il est situé.
-    * @param cell Case sur laquelle est situé le pion
+    * Instanciation d'un pion avec la légion.
+    * @param legion La légion du pion
     */
-    public Pawn(Cell cell)
+    public Pawn(Legion legion)
     {
-        this.cell = cell;
+        this.legion = legion;
     }
 
     /**

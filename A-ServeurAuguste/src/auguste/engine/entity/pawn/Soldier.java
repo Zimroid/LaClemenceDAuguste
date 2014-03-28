@@ -16,7 +16,7 @@
 
 package auguste.engine.entity.pawn;
 
-import auguste.engine.entity.Cell;
+import auguste.engine.entity.Legion;
 
 /**
  * Classe représentant un soldat.
@@ -26,11 +26,25 @@ public class Soldier extends Pawn
 {
 
     /**
-    * Instanciation d'un soldat avec la case sur laquelle il est situé.
-    * @param cell Case sur laquelle est situé le soldat
+    * Instanciation d'un soldat.
     */
-    public Soldier(Cell cell)
+    public Soldier()
     {
-        super(cell);
+        super(null);
+    }
+    
+    /**
+    * Instanciation d'un soldat avec légion.
+     * @param l Legion du pion
+    */
+    public Soldier(Legion l)
+    {
+        super(l);
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "Soldat - " + this.getLegion();
     }
 }

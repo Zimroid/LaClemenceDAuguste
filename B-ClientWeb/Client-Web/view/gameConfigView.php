@@ -1,5 +1,5 @@
 <h2>Panneau de configuration de la partie</h2>
-<form onSubmit="gameStart(); return false;" autocomplete="off" >
+<form autocomplete="off" >
 	<!--<textarea type="text" id="message" name="message" onKeyPress="toucheEntree(event)"></textarea>-->
 	<input type="hidden" id="game_id" />
 	<label for="player_number">Nombre de joueurs :</label>
@@ -44,7 +44,7 @@
 			</div>
 		</div>
 		<form id="noTeam" name="noTeam">
-			<p>À affecter</p>
+			<p>Spectateurs</p>
 		</form>
 	</fieldset>
 	<input type="submit" id="valid" value="GO !" />
