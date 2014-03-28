@@ -13,15 +13,15 @@ function connexion(bool,us,pa)
 	// connexion normale
 	if (bool)
 	{
-		user = $("#user").val();
-		pass = $("#password").val();
+		user = htmlspecialchars($("#user").val());
+		pass = htmlspecialchars($("#password").val());
 		pass = CryptoJS.SHA1(pass)+'';
 		$.ajax('controller/pass.php?pass='+pass);
 	}
 	// reconnexion au chargement
 	else {
-		user = us;
-		pass = pa;
+		user = htmlspecialchars(us);
+		pass = htmlspecialchars(pa);
 	}
 	
     if(user != "" && pass != "")
@@ -35,22 +35,26 @@ function connexion(bool,us,pa)
 
         sendText(json);
     }
+    else
+    {
+    	alert("Un des champs n'est pas rempli.");
+    }
 }
 
 // Inscription au jeu
-function inscription(bool)
+function inscription()
 {
-	var user = $("#userSubscribe").val();
-	var pass = $("#passwordSubscribe").val();
-	var conf = $("#confirmSubscribe").val();
-	if (bool)
-	{
-		pass = CryptoJS.SHA1(pass)+'';
-		conf = CryptoJS.SHA1(conf)+'';
-	}
+	var user = htmlspecialchars($("#userSubscribe").val());
+	var pass = htmlspecialchars($("#passwordSubscribe").val());
+	var conf = htmlspecialchars($("#confirmSubscribe").val());
 	
     if(user != "" && pass != "" && conf != "" && pass == conf)
     {
+    	$("#user").val(user);
+        $("#password").val(pass);
+        pass = CryptoJS.SHA1(pass)+'';
+		conf = CryptoJS.SHA1(conf)+'';
+		
         var json = JSON.stringify(
 		{
 			"command": "ACCOUNT_CREATE",
@@ -59,6 +63,14 @@ function inscription(bool)
         });
 
         sendText(json);
+    }
+    else if (pass != conf)
+    {
+    	alert("Les deux champs de mot de passe ne sont pas identiques.");
+    }
+    else
+    {
+    	alert("Un des champs n'est pas rempli.");
     }
 }
 

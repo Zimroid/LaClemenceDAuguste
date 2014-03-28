@@ -45,6 +45,12 @@ function process(evt)
 		{
 			reloadChat(sitePath + "/index.php?script=1&page=deconnect");
 		}
+		// Connexion auto à la création de compte
+		else if(type == "account_create")
+		{
+			connexion(true,'','');
+			reloadContent(sitePath + "/index.php?script=1&page=news");
+		}
 	}
 
 	// Si on nous confirme la création d'une partie
