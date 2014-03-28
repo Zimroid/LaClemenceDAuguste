@@ -14,22 +14,34 @@
  * limitations under the License.
  */
 
-package auguste.engine.entity.pawn;
+package auguste.engine;
 
-import auguste.engine.entity.Cell;
+import auguste.engine.entity.Game;
 
 /**
- * Classe représentant un laurier.
+ *
  * @author Zwyk
  */
-public class Laurel extends Pawn
-{
-
-    /**
-    * Instanciation d'un laurier.
-    */
-    public Laurel()
+public class GameTimer extends Thread {
+    
+    private final Game game;
+    private final int duration;
+    
+    public GameTimer(Game g, int d)
     {
-        super(null);
+        this.game = g;
+        this.duration = d;
+    }
+    
+    @Override
+    public synchronized void run()
+    {
+        try
+        {
+            this.wait(duration);
+        } catch (InterruptedException ex)
+        {
+        }
+        game.getListener().onTurnEnd();
     }
 }

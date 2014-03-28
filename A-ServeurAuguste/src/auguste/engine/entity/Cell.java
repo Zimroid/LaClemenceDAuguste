@@ -32,19 +32,17 @@ public class Cell
     // Variables métier
     private Pawn pawn;
     private final Board board;
-    private final Legion tent;
+    private Legion tent = null;
     
     /**
     * Instanciation d'une légion avec le joueur la gérant.
     * @param board Plateau auquel appartient la case
     * @param p Position de la case
-    * @param tent Si la case possède une tente la légion la possédant, sinon null
     */
-    public Cell(Board board, Point p, Legion tent)
+    public Cell(Board board, Point p)
     {
         this.board = board;
         this.p = p;
-        this.tent = tent;
     }
 
     /**
@@ -84,5 +82,12 @@ public class Cell
      */
     public Legion getTent() {
         return tent;
+    }
+
+    /**
+     * @param tent the tent to set
+     */
+    public void setTent(Legion tent) {
+        this.tent = tent;
     }
 }

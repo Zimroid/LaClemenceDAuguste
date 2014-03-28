@@ -14,22 +14,14 @@
  * limitations under the License.
  */
 
-package auguste.engine.entity.pawn;
-
-import auguste.engine.entity.Cell;
+package auguste.engine;
 
 /**
- * Classe représentant un laurier.
- * @author Zwyk
+ * Interface d'écoute de l'état de la partie. Les objets implémentant cette
+ * interface gèrent la fin d'un tour et la mise à jour des clients.
+ * @author Lzard
  */
-public class Laurel extends Pawn
+public interface GameListener
 {
-
-    /**
-    * Instanciation d'un laurier.
-    */
-    public Laurel()
-    {
-        super(null);
-    }
+    public void onTurnEnd();
 }

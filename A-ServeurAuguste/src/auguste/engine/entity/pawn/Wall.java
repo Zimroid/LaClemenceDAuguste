@@ -26,11 +26,10 @@ public class Wall extends Pawn
 {
 
     /**
-    * Instanciation d'un mur avec la case sur laquelle il est situé.
-    * @param cell Case sur laquelle est situé le mur
+    * Instanciation d'un mur.
     */
-    public Wall(Cell cell)
+    public Wall()
     {
-        super(cell);
+        super(null);
     }
 }

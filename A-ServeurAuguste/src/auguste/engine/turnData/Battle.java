@@ -14,22 +14,51 @@
  * limitations under the License.
  */
 
-package auguste.engine.entity.pawn;
+package auguste.engine.turnData;
 
-import auguste.engine.entity.Cell;
+import java.awt.Point;
 
 /**
- * Classe représentant un laurier.
+ *
  * @author Zwyk
  */
-public class Laurel extends Pawn
-{
+public class Battle {
+    private Point p1;
+    private Point p2;
+    
+    public Battle(Point p1, Point p2)
+    {
+        this.p1 = p1;
+        this.p2 = p2;
+    }
+    
 
     /**
-    * Instanciation d'un laurier.
-    */
-    public Laurel()
-    {
-        super(null);
+     * @return the p1
+     */
+    public Point getP1() {
+        return p1;
     }
+
+    /**
+     * @param p1 the p1 to set
+     */
+    public void setP1(Point p1) {
+        this.p1 = p1;
+    }
+
+    /**
+     * @return the p2
+     */
+    public Point getP2() {
+        return p2;
+    }
+
+    /**
+     * @param p2 the p2 to set
+     */
+    public void setP2(Point p2) {
+        this.p2 = p2;
+    }
+
 }
