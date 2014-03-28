@@ -49,11 +49,11 @@ public class MenuScreen implements Screen {
         // Définition du skin
         skin = new Skin();
         
-        // Génération texture (fond)
+        // Génération texture pixmap
         Pixmap pixmap = new Pixmap(100, 100, Format.RGBA8888);
-        pixmap.setColor(Color.GREEN);
+        pixmap.setColor(Color.BLUE);
         pixmap.fill();
-        skin.add("white", new Texture(pixmap));
+        skin.add("btn", new Texture(pixmap));
  
         // Ajout de la police
         BitmapFont bfont = new BitmapFont();
@@ -62,10 +62,10 @@ public class MenuScreen implements Screen {
  
         // Configuration d'un design de textButton
         TextButtonStyle textButtonStyle = new TextButtonStyle();
-        textButtonStyle.up 		= skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.down 	= skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
-        textButtonStyle.over 	= skin.newDrawable("white", Color.LIGHT_GRAY);
+        textButtonStyle.up 		= skin.newDrawable("btn", Color.DARK_GRAY);
+        textButtonStyle.down 	= skin.newDrawable("btn", Color.DARK_GRAY);
+        textButtonStyle.checked = skin.newDrawable("btn", Color.BLUE);
+        textButtonStyle.over 	= skin.newDrawable("btn", Color.LIGHT_GRAY);
         textButtonStyle.font 	= skin.getFont("default");
         skin.add("Basic", textButtonStyle);
  
@@ -77,15 +77,14 @@ public class MenuScreen implements Screen {
         // Clic sur le bouton
         textButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                //System.out.println("Clicked! Is checked: " + button.isChecked());
-                textButton.setText("Starting new game");
-                g.setScreen( new GameScreen());
+                textButton.setText("Game");
+                //g.setScreen( new GameScreen());
             }
         });
     }
  
     public void render (float delta) {
-        Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
+        Gdx.gl.glClearColor(0.7f, 0.7f, 0.7f, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
