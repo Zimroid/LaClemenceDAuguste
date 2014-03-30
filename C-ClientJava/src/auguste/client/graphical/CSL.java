@@ -6,6 +6,7 @@
 
 package auguste.client.graphical;
 
+import auguste.client.command.client.CommandClient;
 import auguste.client.entity.ChatMessageReceived;
 import auguste.client.entity.Client;
 import auguste.client.entity.Game;
@@ -54,29 +55,32 @@ public class CSL implements UpdateListener
             Map<String,String> command;
             switch(words[0])
             {
-                case "log_in":
+                case CommandClient.LOG_IN:
                     command = login(words);
                     break;
-                case "account_create":
+                case CommandClient.ACCOUNT_CREATE:
                     command = accountCreate(words);
                     break;
-                case "exit":
+                case CommandClient.EXIT:
                     command = exit();
                     break;
-                case "chat_send":
+                case CommandClient.CHAT_SEND:
                     command = msg(words);
                     break;
-                case "game_list":
+                case CommandClient.GAME_LIST:
                     command = listGame();
                     break;
-                case "game_create":
+                case CommandClient.GAME_CREATE:
                     command = gameCreate(words);
                     break;
-                case "game_join":
+                case CommandClient.GAME_JOIN:
                     command = gameJoin(words);
                     break;
-                case "game_leave":
+                case CommandClient.GAME_LEAVE:
                     command = gameLeave(words);
+                    break;
+                case CommandClient.GAME_CONFIG:
+                    command = gameConfig(words);
                     break;
                 default:
                     command = null;
@@ -90,8 +94,8 @@ public class CSL implements UpdateListener
     {
         Map<String,String> res = new HashMap<>();
         
-        res.put("command", args[0]);
-        res.put("game_name", args[1]);
+        res.put(CommandClient.COMMAND, args[0]);
+        res.put(CommandClient.GAME_NAME, args[1]);
         
         return res;
     }
@@ -100,9 +104,9 @@ public class CSL implements UpdateListener
     {
         Map<String,String> res = new HashMap<>();
         
-        res.put("command", args[0]);
-        res.put("login", args[1]);
-        res.put("password", args[2]);
+        res.put(CommandClient.COMMAND, args[0]);
+        res.put(CommandClient.NAME, args[1]);
+        res.put(CommandClient.PASSWORD, args[2]);
         
         return res;
     }
@@ -111,9 +115,9 @@ public class CSL implements UpdateListener
     {
         Map<String,String> res = new HashMap<>();
         
-        res.put("command", args[0]);
-        res.put("login", args[1]);
-        res.put("password", args[2]);
+        res.put(CommandClient.COMMAND, args[0]);
+        res.put(CommandClient.NAME, args[1]);
+        res.put(CommandClient.PASSWORD, args[2]);
         
         return res;
     }
@@ -122,8 +126,8 @@ public class CSL implements UpdateListener
     {
         Map<String,String> res = new HashMap<>();
         
-        res.put("command", args[0]);
-        res.put("game_id", args[1]);
+        res.put(CommandClient.COMMAND, args[0]);
+        res.put(CommandClient.ROOM_ID, args[1]);
         
         return res;
     }
@@ -132,7 +136,7 @@ public class CSL implements UpdateListener
     {
         Map<String,String> res = new HashMap<>();
         
-        res.put("command", "exit");
+        res.put(CommandClient.COMMAND, "exit");
         return res;
     }
     
@@ -147,9 +151,9 @@ public class CSL implements UpdateListener
             message += args[i];
         }
         
-        res.put("command", args[0]);
-        res.put("room_id", args[1]);
-        res.put("message", message);
+        res.put(CommandClient.COMMAND, args[0]);
+        res.put(CommandClient.ROOM_ID, args[1]);
+        res.put(CommandClient.MESSAGE, message);
         
         return res;
     }
@@ -158,8 +162,8 @@ public class CSL implements UpdateListener
     {
         Map<String,String> res = new HashMap<>();
         
-        res.put("command", "game_leave");
-        res.put("room_id", args[1]);
+        res.put(CommandClient.COMMAND, "game_leave");
+        res.put(CommandClient.ROOM_ID, args[1]);
         
         return res;
     }
@@ -168,7 +172,7 @@ public class CSL implements UpdateListener
     {
         Map<String,String> res = new HashMap<>();
         
-        res.put("command", "game_list");
+        res.put(CommandClient.COMMAND, "game_list");
         
         return res;
     }
@@ -246,9 +250,9 @@ public class CSL implements UpdateListener
     }
 
     @Override
-    public void createGameUpdate() 
+    public void createGameUpdate(int id) 
     {
-        Game game = client.getCurrentGame();
+        Game game = client.getGame(id);
         System.out.println("Partie "+game.getName()+" créée.");
         System.out.println("Id de la partie : "+game.getId());
     }
@@ -263,5 +267,26 @@ public class CSL implements UpdateListener
     public void confirmMessageUpdate() 
     {
         this.confirmCommand();
+    }
+
+    private Map<String, String> gameConfig(String[] words) 
+    {
+        Map<String,String> params = new HashMap<>();
+        
+        for(int i = 1; i<words.length; i++)
+        {
+            String[] param = words[i].split(":");
+            params.put(param[0], param[1]);
+        }
+        
+        Map<String,String> res = new HashMap<>();
+        
+        res.put(CommandClient.COMMAND, CommandClient.GAME_CONFIG);
+        res.put(CommandClient.ROOM_ID, params.get(CommandClient.ROOM_ID));
+        res.put(CommandClient.GAME_NAME, params.get(CommandClient.GAME_NAME));
+        res.put(CommandClient.PLAYER_NUMBER, params.get(CommandClient.PLAYER_NUMBER));
+        res.put(CommandClient.BOARD_SIZE, params.get(CommandClient.BOARD_SIZE));
+        
+        return res;
     }
 }

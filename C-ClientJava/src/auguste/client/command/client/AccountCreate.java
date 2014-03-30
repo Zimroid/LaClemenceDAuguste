@@ -33,12 +33,12 @@ public class AccountCreate extends CommandClient
     @Override
     public void buildJSON() throws JSONException
     {
-        String login = this.getArguments().get("login");
-        String password = this.getArguments().get("password");
+        String login = this.getArguments().get(NAME);
+        String password = this.getArguments().get(PASSWORD);
         password = hashPassword(password);
         this.getJSON().put(COMMAND,ACCOUNT_CREATE);
-        this.getJSON().put("name", login);
-        this.getJSON().put("password",password);
+        this.getJSON().put(NAME, login);
+        this.getJSON().put(PASSWORD,password);
     }
     
     private static String hashPassword(String password)

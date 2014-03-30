@@ -9,6 +9,7 @@ package auguste.client.command.manager;
 import auguste.client.command.client.AccountCreate;
 import auguste.client.command.client.ChatSend;
 import auguste.client.command.client.CommandClient;
+import auguste.client.command.client.GameConfig;
 import auguste.client.command.client.GameCreate;
 import auguste.client.command.client.GameJoin;
 import auguste.client.command.client.GameLeave;
@@ -47,6 +48,7 @@ public class CommandClientManager
                 case GAME_JOIN:     command = new GameJoin();       break;
                 case GAME_START:    command = new GameStart();      break;
                 case GAME_LEAVE:    command = new GameLeave();      break;
+                case GAME_CONFIG:   command = new GameConfig();     break;
                 default:            command = null;
             }
 

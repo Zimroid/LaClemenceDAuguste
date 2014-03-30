@@ -16,13 +16,6 @@ import org.json.JSONObject;
  */
 public class GameCreate extends CommandClient
 {
-    private static final String GAME_NAME = "game_name";
-    private static final String TURN_TIMER = "turn_timer";
-    private static final String BOARD_SIZE = "board_size";
-    private static final String CARDS = "cards";
-    private static final String NUMBER_OF_TEAM = "number_of_team";
-    private static final String LEGION_PER_PLAYER = "legion_per_player";
-    
     public GameCreate() throws URISyntaxException
     {
         super();
@@ -71,8 +64,6 @@ public class GameCreate extends CommandClient
 
         JSONObject json = this.getJSON();
         json.put(COMMAND,GAME_CREATE);
-        json.put("game_name",game_name);
-        
-        System.out.println(json.toString());
+        json.put(GAME_NAME,game_name);
     }
 }
