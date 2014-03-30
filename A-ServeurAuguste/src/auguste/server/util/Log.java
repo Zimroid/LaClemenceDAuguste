@@ -20,7 +20,7 @@ import java.io.PrintStream;
 import java.util.Date;
 
 /**
- * Classe utilitaire pour logger les messages du serveur.
+ * Classe utilitaire pour enregistrer les messages du serveur.
  * @author Lzard
  */
 public class Log
@@ -36,30 +36,31 @@ public class Log
      */
     public static void out(String message)
     {
-        Log.OUT.println("OUT " + (new Date()).toString() + " -- " + message);
+        Log.OUT.println("OUT   " + (new Date()).toString() + " -- " + message);
     }
     
     /**
-     * Ecriture d'un message d'erreur.
-     * @param message Message à logger
+     * Ecriture d'un message d'erreur à logger.
+     * @param message Message d'erreur à logger
      */
     public static void error(String message)
     {
-        Log.ERROR.println("ERR" + (new Date()).toString() + " -- " + message);
+        Log.ERROR.println("ERROR " + (new Date()).toString() + " -- " + message);
     }
     
     /**
-     * Ecriture d'un message de débuggage si la fonctionnalité est activée.
-     * @param message Message à logger
+     * Ecriture d'un message de débuggage à logger si la fonctionnalité est
+     * activée.
+     * @param message Message de débuggage à logger
      */
     public static void debug(String message)
     {
-        if (Configuration.get("debug").equals("true")) Log.DEBUG.println("DBG " + (new Date()).toString() + " -- " + message);
+        if (Configuration.getBoolean("debug")) Log.DEBUG.println("DEBuG " + (new Date()).toString() + " -- " + message);
     }
     
     /**
-     * Ecriture d'un message décrivant l'exception fournie si la fonctionnalité
-     * est activée.
+     * Ecriture d'un message de débuggage à logger décrivant l'exception fournie
+     * si la fonctionnalité est activée.
      * @param e Exception à logger
      */
     public static void debug(Exception e)

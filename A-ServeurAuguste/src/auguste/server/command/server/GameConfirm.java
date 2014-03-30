@@ -20,7 +20,8 @@ import auguste.server.Room;
 import org.json.JSONException;
 
 /**
- * Commande de confirmation de création/modification d'une partie.
+ * Commande de confirmation de création/modification d'une partie. Envoi la
+ * configuration de la partie.
  * @author Lzard
  */
 public class GameConfirm extends ServerCommand
@@ -35,10 +36,8 @@ public class GameConfirm extends ServerCommand
         // Constructeur de la classe mère
         super("game_confirm", room);
         
-        // Création du JSON
-        this.getJSON().put("game_name",     room.getGameName());
-        this.getJSON().put("player_number", room.getPlayerNumber());
-        this.getJSON().put("board_size",    room.getBoardSize());
+        // Remplissage du JSON
+        room.fillConfiguration(this.getJSON());
     }
     
 }

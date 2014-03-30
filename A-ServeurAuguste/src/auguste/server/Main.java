@@ -23,7 +23,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Classe de lancement du serveur.
+ * Classe statique de lancement du serveur.
  * @author Lzard
  */
 public class Main
@@ -34,7 +34,7 @@ public class Main
     /**
      * Point d'entrée de l'application. Charge la configuration, vérifie
      * la présence du driver JDBC et la disponibilité de l'algorithme de
-     * hashage puis lance le serveur.
+     * hashage si besoin, puis lance le serveur.
      * @param args Arguments de la commande
      */
     public static void main(String[] args)
@@ -44,11 +44,15 @@ public class Main
             // Chargement de la configuration
             Configuration.load(Main.CONFIGURATION_FILE);
             
-            // Vérification de la présence du driver JDBC
-            Class.forName(Configuration.get("db_driver"));
-            
-            // Vérification de la disponibilité de l'algorithme de hashage
-            MessageDigest.getInstance(Configuration.get("hash_algorithm"));
+            // Vérification du mode hors-ligne
+            if (!Configuration.getBoolean("offline"))
+            {
+                // Vérification de la présence du driver JDBC
+                Class.forName(Configuration.get("db_driver"));
+
+                // Vérification de la disponibilité de l'algorithme de hashage
+                MessageDigest.getInstance(Configuration.get("hash_algorithm"));
+            }
             
             // Lancement
             Server.getInstance().start();
@@ -57,19 +61,19 @@ public class Main
         {
             // Fichier de configuration inaccessible
             Log.error("Configuration file unavailable");
-            Log.debug(e.getMessage());
+            Log.debug(e);
         }
         catch (ClassNotFoundException e)
         {
             // Driver JDBC introuvable
             Log.error("JDBC driver unavailable");
-            Log.debug(e.getMessage());
+            Log.debug(e);
         }
         catch (NoSuchAlgorithmException e)
         {
             // Algorithme de hashage indisponible
             Log.error("Hash algorithm unavailable");
-            Log.debug(e.getMessage());
+            Log.debug(e);
         }
     }
     

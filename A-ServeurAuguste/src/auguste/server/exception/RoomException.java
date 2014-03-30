@@ -17,35 +17,29 @@
 package auguste.server.exception;
 
 /**
- * Exception lancée lorsqu'une commande concerne une salle dont l'utilisateur ne
- * fait pas parti ou n'existe pas.
+ * Exception lancée lorsqu'une commande a provoqué une erreur liée à une salle.
  * @author Lzard
  */
 public class RoomException extends Exception
 {
-    // Types de l'exceptions
-    public static final int INEXISTANT_ROOM  = 0;
-    public static final int NOT_IN_THIS_ROOM = 1;
-    public static final int UNAVAILABLE_ROOM = 2;
-    public static final int ABSENT_USER      = 3;
-    
-    private final RoomExceptionType type; // Type de l'exception
+    // Type de l'exception
+    private final Type type;
     
     /**
      * Enregistre le type de l'exception.
      * @param type Type d'exception
      */
-    public RoomException(RoomExceptionType type)
+    public RoomException(Type type)
     {
-        super(type.toString().toLowerCase().replace('_', ' '));
+        super("Room error: " + type.toString().toLowerCase().replace('_', ' '));
         this.type = type;
     }
     
     /**
-     * Indique le type de l'erreur.
+     * Indique le type de l'exception.
      * @return Type de l'erreur
      */
-    public RoomExceptionType getType()
+    public Type getType()
     {
         return this.type;
     }
@@ -53,7 +47,7 @@ public class RoomException extends Exception
     /**
      * Types de RoomException possibles.
      */
-    public enum RoomExceptionType
+    public enum Type
     {
         INEXISTANT_ROOM,
         NOT_IN_THIS_ROOM,

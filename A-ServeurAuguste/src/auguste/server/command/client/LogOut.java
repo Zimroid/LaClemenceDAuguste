@@ -21,7 +21,7 @@ import auguste.server.exception.AuthentificationException;
 import org.json.JSONException;
 
 /**
- * Commande de déconnexion d'un joueur.
+ * Commande de désauthentification d'un client.
  * @author Lzard
  */
 public class LogOut extends ClientCommand
@@ -35,13 +35,10 @@ public class LogOut extends ClientCommand
     @Override
     public void execute() throws JSONException, AuthentificationException
     {
-        // Commande pouvant être exécuté que par des utilisateurs authentifiés
-        this.checkAuth();
-        
         // Désauthentification de l'utilisateur
-        Server.getInstance().logOut(this.getUser());
+        Server.getInstance().logOut(this.getSocket());
 
-        // Signalisation
+        // Confirmation
         this.confirm("log_out");
     }
     

@@ -23,7 +23,7 @@ import auguste.server.command.server.MessageError;
 import auguste.server.exception.AuthentificationException;
 import auguste.server.exception.CommandException;
 import auguste.server.exception.RoomException;
-import auguste.server.exception.RoomException.RoomExceptionType;
+import auguste.server.exception.RoomException.Type;
 import auguste.server.exception.RuleException;
 import auguste.server.util.Log;
 import java.sql.SQLException;
@@ -87,9 +87,8 @@ public abstract class ClientCommand
      * Envoi d'un message de confirmation à la socket spécifiée.
      * @param socket Socket destinataire
      * @param type   Type du message de confirmation
-     * @throws JSONException Erreur lors de la création du JSON
      */
-    public static void sendConfirm(WebSocket socket, String type) throws JSONException
+    public static void sendConfirm(WebSocket socket, String type)
     {
         ClientCommand.send(
                 socket,
@@ -101,9 +100,8 @@ public abstract class ClientCommand
      * Envoi d'un message d'erreur au client spécifié.
      * @param socket Client destinataire
      * @param type   Type du message d'erreur
-     * @throws JSONException Erreur lors de la création du JSON
      */
-    public static void sendError(WebSocket socket, String type) throws JSONException
+    public static void sendError(WebSocket socket, String type)
     {
         ClientCommand.send(
                 socket,
@@ -250,8 +248,8 @@ public abstract class ClientCommand
      */
     public void setRoom(Room room) throws RoomException
     {
-        if (room == null) throw new RoomException(RoomExceptionType.INEXISTANT_ROOM);
-        else if (!room.isInRoom(user)) throw new RoomException(RoomExceptionType.NOT_IN_THIS_ROOM);
+        if (room == null) throw new RoomException(Type.INEXISTANT_ROOM);
+        else if (!room.isInRoom(user)) throw new RoomException(Type.NOT_IN_THIS_ROOM);
         else this.room = room;
     }
     

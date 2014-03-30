@@ -18,3 +18,7 @@ A-ServeurAuguste/nbproject/build-impl.xml
 A-ServeurAuguste/nbproject/genfiles.properties
 A-ServeurAuguste/nbproject/private/private.properties
 B-ClientWeb/Client-Web/model/config.php
+*.properties
+*.properties
+*.properties
+*.class

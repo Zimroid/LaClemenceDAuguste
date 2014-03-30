@@ -16,6 +16,7 @@
 
 package auguste.server.command.server;
 
+import auguste.server.util.Log;
 import org.json.JSONException;
 
 /**
@@ -27,15 +28,21 @@ public class MessageConfirm extends ServerCommand
     /**
      * Remplit le JSON avec le type de confirmation.
      * @param type Type de confirmation
-     * @throws JSONException Erreur de JSON
      */
-    public MessageConfirm(String type) throws JSONException
+    public MessageConfirm(String type)
     {
         // Constructeur de la classe mère
         super("message_confirm");
         
-        // Création du JSON
-        this.getJSON().put("type", type);
+        // Remplissage du JSON
+        try
+        {
+            this.getJSON().put("type", type);
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
     }
     
 }

@@ -27,7 +27,7 @@ public class Board
 {
     
     // Variables de classe
-    private final int size;
+    private int size;
     
     // Variables métier
     private final Game game;
@@ -92,8 +92,8 @@ public class Board
      * Crée les cases du plateau
      */
     private void fillCells() {
-        for(int y = -(size - 1); y < size; y++ ) {
-            for(int x = -(size - 1); x < (size - Math.abs(y)); x++) {
+        for(int y = -(size - 1); y < getSize(); y++ ) {
+            for(int x = -(size - 1); x < (getSize() - Math.abs(y)); x++) {
                 this.cells.add(new Cell(this,new Point(x,y)));
             }
         }
@@ -106,7 +106,7 @@ public class Board
      */
     public Point oldFromNew(Point p)
     {
-        return new Point(p.y + (size -1),p.x + (size -1));
+        return new Point(p.y + (getSize() -1),p.x + (getSize() -1));
     }
     
     /**
@@ -116,7 +116,7 @@ public class Board
      */
     public Point newFromOld(Point p)
     {
-        return new Point(p.y - (size -1),p.x - (size -1));
+        return new Point(p.y - (getSize() -1),p.x - (getSize() -1));
     }
     
     /**
@@ -149,37 +149,44 @@ public class Board
         {
                 int x, y;
 
-                if(pos.x < size - 1 && pos.y <= size - 1)
+                if(pos.x < getSize() - 1 && pos.y <= getSize() - 1)
                 {
-                        int destLine =  2 * (size - 1) - Math.abs(size - pos.x - 1);
+                        int destLine =  2 * (getSize() - 1) - Math.abs(getSize() - pos.x - 1);
                         x = destLine - pos.y;
                         y = pos.x;
                 }
-                else if (pos.x >= size - 1 && pos.y < size - 1)
+                else if (pos.x >= getSize() - 1 && pos.y < getSize() - 1)
                 {
-                        int startLine = 2 * (size - 1) - Math.abs(size - pos.y - 1);
-                        int destLine =  2 * (size - 1) - Math.abs(size - pos.x - 1);
+                        int startLine = 2 * (getSize() - 1) - Math.abs(getSize() - pos.y - 1);
+                        int destLine =  2 * (getSize() - 1) - Math.abs(getSize() - pos.x - 1);
                         x = destLine - (startLine - pos.x);
                         y = pos.x;
                 }
-                else if (pos.x > size - 1 && pos.y >= size - 1)
+                else if (pos.x > getSize() - 1 && pos.y >= getSize() - 1)
                 {
-                        int startLine = 2 * (size - 1) - Math.abs(size - pos.y - 1);
-                        x = 2 * (size - 1) - pos.y;
-                        y = 2 * (size - 1) - (startLine - pos.x);
+                        int startLine = 2 * (getSize() - 1) - Math.abs(getSize() - pos.y - 1);
+                        x = 2 * (getSize() - 1) - pos.y;
+                        y = 2 * (getSize() - 1) - (startLine - pos.x);
                 }
-                else if (pos.x + pos.y - size + 1 >= size && pos.y > size - 1)
+                else if (pos.x + pos.y - getSize() + 1 >= getSize() && pos.y > getSize() - 1)
                 {
-                        x = 2 * (size - 1) - pos.y;
-                        y = size - 1 + pos.x - x;
+                        x = 2 * (getSize() - 1) - pos.y;
+                        y = getSize() - 1 + pos.x - x;
                 }
                 else
                 {
                         x = pos.x;
-                        y = (size - 1 + pos.x) - (2 * (size - 1) - pos.y);
+                        y = (getSize() - 1 + pos.x) - (2 * (getSize() - 1) - pos.y);
                 }
                 res = getRotatedPositionOld(new Point(x, y), nbRotations - 1);
         }
         return res;
+    }
+
+    /**
+     * @param size the size to set
+     */
+    public void setSize(int size) {
+        this.size = size;
     }
 }

@@ -16,16 +16,20 @@
 
 package auguste.server;
 
+import auguste.engine.GameListener;
+import auguste.engine.entity.Game;
 import auguste.server.command.server.GameClose;
 import auguste.server.command.server.GameConfirm;
 import auguste.server.exception.RoomException;
-import auguste.server.exception.RoomException.RoomExceptionType;
+import auguste.server.exception.RoomException.Type;
 import auguste.server.util.Log;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Random;
 import org.java_websocket.WebSocket;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Classe représentant une instance de salle de jeu. Gère la configuration de la
@@ -33,30 +37,28 @@ import org.json.JSONException;
  * la partie et les utilisateurs entrant et sortant.
  * @author Lzard
  */
-public class Room
+public class Room implements GameListener
 {
-    private final int id; // Identifiant de la salle
+    private final int  id;   // Identifiant de la salle
+    private final Game game; // Partie de la salle
     
     private User owner;                          // Propriétaire de la salle
-    private GameState state = GameState.WAITING; // Etat de la salle
-    
-    // Configuration de la partie
-    private String gameName;
-    private int    playerNumber = 6;
-    private int    boardSize    = 8;
+    private String name;                         // Nom de la partie
+    private State state = State.WAITING;         // Etat de la partie
     
     // Liste des clients affectés à la salle
     private final HashMap<WebSocket, User> users = new HashMap<>();
     
     /**
      * Création d'une salle avec le nom et l'identifiant donné.
-     * @param id       Identifiant de la salle
-     * @param gameName Nom de la salle
+     * @param id   Identifiant de la salle
+     * @param name Nom de la salle
      */
-    public Room(int id, String gameName)
+    public Room(int id, String name)
     {
-        this.id       = id;
-        this.gameName = gameName;
+        this.id   = id;
+        this.name = name;
+        this.game = new Game(this, 300000);
     }
     
     /**
@@ -65,8 +67,43 @@ public class Room
      */
     public void broadcast(String message)
     {
-        Log.out("Broadcast to room " + this.getId() + " " + message);
+        Log.out("Broadcast to users of room " + this.getId() + " " + message);
         for (WebSocket socket : this.users.keySet()) socket.send(message);
+    }
+    
+    /**
+     * Configure la salle et sa partie avec les paramètres du JSON fournie.
+     * @param json JSONObject à lire
+     */
+    public void readConfiguration(JSONObject json)
+    {
+        try
+        {
+            if (json.has("game_name")) this.name = json.getString("game_name");
+            if (json.has("board_size")) this.game.getBoard().setSize(json.getInt("board_size"));
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
+    }
+    
+    /**
+     * Remplit le JSON fournie avec la configuration de la partie de la salle.
+     * @param json JSONObject à remplir
+     */
+    public void fillConfiguration(JSONObject json)
+    {
+        try
+        {
+            json.put("game_name", this.name);
+            json.put("board_size", this.game.getBoard().getSize());
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
+        
     }
     
     /**
@@ -79,27 +116,31 @@ public class Room
     }
     
     /**
-     * Envoi d'une commande game_close à tous les utilisateurs de la salle.
-     * @throws JSONException Erreur de création du JSON
+     * Lance la partie.
      */
-    public void close() throws JSONException
+    public void start()
     {
-        synchronized (this.users)
-        {
-            this.state = GameState.CLOSING;
-            this.broadcast((new GameClose(this)).toString());
-            for (User user : this.users.values()) this.removeUser(user);
-        }
+    }
+    
+    @Override
+    public void onTurnEnd()
+    {
     }
     
     /**
-     * Indique si l'utilisateur donné est propriétaire de la salle.
-     * @param user Utilisateur à vérifier
-     * @return Booléen indiquant si l'utilisateur est le propriétaire
+     * Fermeture de la salle. Modification de l'état de la salle, envoi d'une
+     * commande game_close à tous les utilisateurs de la salle et suppression
+     * des utilisateurs.
      */
-    public boolean isOwner(User user)
+    public void close()
     {
-        return user == this.owner;
+        synchronized (this.users)
+        {
+            this.state = State.CLOSING;
+            this.broadcast((new GameClose(this)).toString());
+            for (WebSocket socket : this.users.keySet()) this.removeUser(socket);
+            Server.getInstance().removeRoom(this);
+        }
     }
     
     /**
@@ -112,39 +153,35 @@ public class Room
     }
     
     /**
-     * Retourne le nom de la partie.
-     * @return Nom de la partie
+     * Indique si l'utilisateur donné est propriétaire de la salle.
+     * @param user Utilisateur à vérifier
+     * @return Booléen indiquant si l'utilisateur est le propriétaire
      */
-    public String getGameName()
+    public boolean isOwner(User user)
     {
-        return this.gameName;
+        return this.owner.equals(user);
     }
     
-    public GameState getGameState()
+    /**
+     * Retourne l'état de la partie.
+     * @return Etat de la partie
+     */
+    public State getState()
     {
         return this.state;
     }
     
     /**
-     * Retourne le nombre de joueurs maximum.
-     * @return Nombre de joueurs maximum
+     * Retourne le nom de la partie.
+     * @return Nom de la partie
      */
-    public int getPlayerNumber()
+    public String getName()
     {
-        return this.playerNumber;
+        return this.name;
     }
     
     /**
-     * Retourne la taille du plateau.
-     * @return Taille du plateau
-     */
-    public int getBoardSize()
-    {
-        return this.boardSize;
-    }
-    
-    /**
-     * Définie le propriétaire de la salle.
+     * Modifie le propriétaire de la salle.
      * @param user Nouveau propriétaire
      * @throws auguste.server.exception.RoomException Utilisateur absent de la salle
      */
@@ -152,7 +189,7 @@ public class Room
     {
         synchronized (this.users)
         {
-            if (!this.users.containsValue(user)) throw new RoomException(RoomExceptionType.ABSENT_USER);
+            if (!this.users.containsValue(user) && user != null) throw new RoomException(Type.ABSENT_USER);
             this.owner = user;
         }
     }
@@ -167,42 +204,31 @@ public class Room
         {
             try
             {
-                Object[] sockets = this.users.keySet().toArray();
-                this.setOwner(
-                        this.users.get(
-                                (WebSocket) sockets[(new Random()).nextInt(sockets.length)]
-                        )
-                );
+                if (this.users.isEmpty()) this.setOwner(null);
+                else
+                {
+                    Object[] sockets = this.users.keySet().toArray();
+                    this.setOwner(
+                            this.users.get(
+                                    (WebSocket) sockets[(new Random()).nextInt(sockets.length)]
+                            )
+                    );
+                }
             }
-            catch (RoomException e) {}
+            catch (RoomException e)
+            {
+                Log.debug(e);
+            }
         }
     }
     
     /**
      * Modifie le nom de la partie.
-     * @param gameName Nouveau nom
+     * @param name Nouveau nom
      */
-    public void setGameName(String gameName)
+    public void setName(String name)
     {
-        this.gameName = gameName;
-    }
-    
-    /**
-     * Modifie le nombre de joueurs maximum.
-     * @param playerNumber Nouveau nombre
-     */
-    public void setPlayerNumber(int playerNumber)
-    {
-        this.playerNumber = playerNumber;
-    }
-    
-    /**
-     * Modifie la taille du plateau de jeu.
-     * @param boardSize Nouvelle taille
-     */
-    public void setBoardSize(int boardSize)
-    {
-        this.boardSize = boardSize;
+        this.name = name;
     }
     
     /**
@@ -214,10 +240,15 @@ public class Room
      */
     public void addUser(WebSocket socket, User user) throws RoomException
     {
-        if (this.state == GameState.CLOSING) throw new RoomException(RoomExceptionType.UNAVAILABLE_ROOM);
+        // Vérification de l'état de la salle
+        if (this.state == State.CLOSING) throw new RoomException(Type.UNAVAILABLE_ROOM);
+        
+        // Ajout de la salle à l'utilisateur
+        user.getRooms().add(this);
+        
+        // Ajout de l'utilisateur à la salle
         synchronized (this.users)
         {
-            user.getRooms().add(this);
             this.users.put(socket, user);
         }
     }
@@ -228,12 +259,39 @@ public class Room
      */
     public void removeUser(User user)
     {
-        synchronized (this.users)
+        // Vérification de l'existance de l'utilisateur
+        if (this.users.containsValue(user))
         {
+            // Retrait de la salle de la liste des salles de l'utilisateur
             user.getRooms().remove(this);
-            this.users.values().remove(user);
+
+            // Retrait de l'utilisateur de la salle
+            for (Entry<WebSocket, User> set : this.users.entrySet())
+            {
+                if (set.getValue().equals(user))
+                {
+                    synchronized (this.users)
+                    {
+                        this.users.remove(set.getKey());
+                    }
+                }
+            }
+
+            // Fermeture de la salle s'il n'y a plus d'utilisateurs
+            if (this.getUsers().isEmpty()) this.close();
+
+            // Changement de propriétaire si l'utilisateure retiré l'était
             if (user == this.owner) this.changeOwner();
         }
+    }
+    
+    /**
+     * Retire un utilisateur de la salle à partir de sa socket.
+     * @param socket Socket de l'utilisateur à retirer
+     */
+    public void removeUser(WebSocket socket)
+    {
+        if (this.users.containsKey(socket)) this.removeUser(this.users.get(socket));
     }
     
     /**
@@ -255,7 +313,10 @@ public class Room
         return this.users.containsValue(user);
     }
     
-    public enum GameState
+    /**
+     * Etats possibles d'une partie.
+     */
+    public enum State
     {
         WAITING,
         RUNNING,

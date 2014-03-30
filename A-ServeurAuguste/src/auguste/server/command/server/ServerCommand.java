@@ -17,6 +17,7 @@
 package auguste.server.command.server;
 
 import auguste.server.Room;
+import auguste.server.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,23 +33,35 @@ public abstract class ServerCommand
     /**
      * Insère dans le JSON le nom de la commande.
      * @param name Nom de la commande
-     * @throws org.json.JSONException Erreur de JSON
      */
-    public ServerCommand(String name) throws JSONException
+    public ServerCommand(String name)
     {
-        this.getJSON().put("command", name);
+        try
+        {
+            this.getJSON().put("command", name);
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
     }
     
     /**
-     * Insère dans le JSON le nom de la commande et l'ID de la salle.
+     * Insère dans le JSON le nom de la commande et l'identifiant de la salle.
      * @param name Nom de la commande
      * @param room Salle à destination
-     * @throws JSONException
      */
-    public ServerCommand(String name, Room room) throws JSONException
+    public ServerCommand(String name, Room room)
     {
-        this.getJSON().put("command", name);
-        this.getJSON().put("room_id", room.getId());
+        try
+        {
+            this.getJSON().put("command", name);
+            this.getJSON().put("room_id", room.getId());
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
     }
     
     /**

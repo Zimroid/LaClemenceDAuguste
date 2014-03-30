@@ -51,22 +51,21 @@ public class LogIn extends ClientCommand
         // Commande pouvant être exécutée que si l'utilisateur n'est pas authentifié
         if (this.getUser() == null)
         {
-            // Connexion à la base de données et récupération du nouvel utilisateur
+            // Connexion à la base de données et récupération de l'utilisateur
             User userToLog;
             try (Connection connection = Db.open())
             {
                 UserManager manager = new UserManager(connection);
                 userToLog = manager.getUser(
                         this.getJSON().getString("name"),
-                        this.getJSON().getString("password")
+                        User.hashPassword(this.getJSON().getString("password"))
                 );
-                Db.close(connection);
             }
 
-            // Authentification du joueur
+            // Authentification du client
             if (userToLog != null)
             {
-                // Déconnexion de l'utilisateur de même nom déjà connecté
+                // Déconnexion des utilisateurs de même nom déjà connecté
                 Server.getInstance().logOut(userToLog);
                 
                 // Connexion de l'utilisateur
