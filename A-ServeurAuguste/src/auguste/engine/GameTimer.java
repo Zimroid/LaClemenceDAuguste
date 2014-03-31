@@ -25,9 +25,9 @@ import auguste.engine.entity.Game;
 public class GameTimer extends Thread {
     
     private final Game game;
-    private final int duration;
+    private final long duration;
     
-    public GameTimer(Game g, int d)
+    public GameTimer(Game g, long d)
     {
         this.game = g;
         this.duration = d;

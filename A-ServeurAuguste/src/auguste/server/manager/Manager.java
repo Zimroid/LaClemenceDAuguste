@@ -22,7 +22,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Classe abstraite des managers de données à faire persister.
+ * Classe abstraite des gestionnaires de données à faire persister. Utilise une
+ * connexion à la base de données pour effectuer des requêtes dans le but de
+ * faire persister un type d'objet précis.
  * @author Lzard
  */
 public abstract class Manager
@@ -31,7 +33,8 @@ public abstract class Manager
     private final Connection connection;
     
     /**
-     * Initialisation de la connexion à la base de données.
+     * Initialisation de la connexion à la base de données. Le gestionnaire
+     * utilisera la connexion fournie.
      * @param connection Connexion à la base de données
      */
     public Manager(Connection connection)
@@ -40,24 +43,24 @@ public abstract class Manager
     }
 
     /**
-     * Prépare une requête à la connexion.
-     * @param query Requête demandée
+     * Prépare une requête à la base de donnée connectée.
+     * @param query Requête à préparer
      * @return PreparedStatement de la requête
-     * @throws java.sql.SQLException Erreur SQL
+     * @throws java.sql.SQLException Erreur dans la requête SQL
      */
-    public PreparedStatement query(String query) throws SQLException
+    protected PreparedStatement query(String query) throws SQLException
     {
         return this.connection.prepareStatement(query);
     }
     
     /**
      * Prépare une requête avec récupération des clés identifiantes générées.
-     * @param query         Requête demandée
+     * @param query         Requête à préparer
      * @param generatedKeys Retourner les clés identifiantes ?
      * @return PreparedStatement de la requête
-     * @throws SQLException Erreur SQL
+     * @throws SQLException Erreur dans la requête SQL
      */
-    public PreparedStatement query(String query, boolean generatedKeys) throws SQLException
+    protected PreparedStatement query(String query, boolean generatedKeys) throws SQLException
     {
         if (generatedKeys) return this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         else               return this.query(query);

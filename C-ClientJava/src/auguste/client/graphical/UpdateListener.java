@@ -24,7 +24,7 @@ public interface UpdateListener
 {
     public void chatUpdate();
     public void userUpdate();
-    public void createGameUpdate();
+    public void createGameUpdate(int id);
     public void listGameUpdate();
     public void confirmMessageUpdate();
     public void stop();

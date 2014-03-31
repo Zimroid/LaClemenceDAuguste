@@ -1,10 +1,5 @@
 <header>
-	<script>
-		document.write("<a href='' onclick='reloadContent(\"<?php echo $sitePath; ?>/index.php?script=1&page=news\"); return false;' ><h1 id='title'><?php echo $siteName; ?></h1></a>");
-	</script>
-	<noscript>
-		<a href='<?php echo $sitePath; ?>'><h1 id="title"><?php echo $siteName; ?></h1></a>
-	</noscript>
+	<a id='titleScript' href='<?php echo $sitePath; ?>'><h1 id="title"><?php echo $siteName; ?></h1></a>
 </header>
 
 <!-- MENU -->
@@ -12,63 +7,28 @@
 	<div class="navDivider"></div>
 	<ul class="navNav">
 		<li class="liHome">
-			<script>
-				document.write("<a href='' onclick='reloadContent(\"<?php echo $sitePath; ?>/index.php?script=1&page=news\"); return false;' >Accueil</a>");
-			</script>
-			<noscript>
-				<a href='<?php echo $sitePath; ?>'>Accueil</a>
-			</noscript>
+			<a id='homeScript' href='<?php echo $sitePath; ?>'>Accueil</a>
 		</li>
 		<li class="liRules">
-			<script>
-				document.write("<a href='' onclick='reloadContent(\"<?php echo $sitePath; ?>/index.php?script=1&page=rules\"); return false;' >Règles</a>");
-			</script>
-			<noscript>
-				<a href="<?php echo $sitePath; ?>/rules">Règles</a>
-			</noscript>
+			<a id='rulesScript' href="<?php echo $sitePath; ?>/index.php?page=rules">Règles</a>
 		</li>
 		<li class="liFAQ">
-			<script>
-				document.write("<a href='' onclick='reloadContent(\"<?php echo $sitePath; ?>/index.php?script=1&page=faq\"); return false;' >FAQ</a>");
-			</script>
-			<noscript>
-				<a href="<?php echo $sitePath; ?>/faq">FAQ</a>
-			</noscript>
+			<a id='faqScript' href="<?php echo $sitePath; ?>/index.php?page=faq">FAQ</a>
 		</li>
 		<li class="liContact">
-			<script>
-				document.write("<a href='' onclick='reloadContent(\"<?php echo $sitePath; ?>/index.php?script=1&page=contact\"); return false;' >Contact</a>");
-			</script>
-			<noscript>
-				<a href="<?php echo $sitePath; ?>/contact">Contact</a>
-			</noscript>
+			<a id='contactScript' href="<?php echo $sitePath; ?>/index.php?page=contact">Contact</a>
 		</li>
 		<li class="liDownload">
-			<script>
-				document.write("<a href='' onclick='reloadContent(\"<?php echo $sitePath; ?>/index.php?script=1&page=download\"); return false;' >Téléchargement</a>");
-			</script>
-			<noscript>
-				<a href='<?php echo $sitePath; ?>/download'>Téléchargement</a>
-			</noscript>
+			<a id='downloadScript' href='<?php echo $sitePath; ?>/index.php?page=download'>Téléchargements</a>
 		</li>
 	</ul>
 	<div class="navDivider"></div>
 	<ul class="navGame">
 		<li class="liCreate">
-			<script>
-				document.write("<a href='' onclick='reloadContent(\"<?php echo $sitePath; ?>/index.php?script=1&page=newGame\"); return false;' >Créer une partie</a>");
-			</script>
-			<noscript>
-				<a href="<?php echo $sitePath; ?>/newGame">Créer une partie</a>
-			</noscript>
+			<a id='newGameScript' href="<?php echo $sitePath; ?>/index.php?page=newGame">Créer une partie</a>
 		</li>
 		<li class="liJoin">
-			<script>
-				document.write("<a href='' onclick='reloadContent(\"<?php echo $sitePath; ?>/index.php?script=1&page=joinGame\"); return false;' >Rejoindre une partie</a>");
-			</script>
-			<noscript>
-				<a href="<?php echo $sitePath; ?>/joinGame">Rejoindre une partie</a>
-			</noscript>
+			<a id='joinGameScript' href="<?php echo $sitePath; ?>/index.php?page=joinGame">Rejoindre une partie</a>
 		</li>
 	</ul>
 </nav>

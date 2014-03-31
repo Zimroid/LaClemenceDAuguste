@@ -17,6 +17,7 @@
 package auguste.server;
 
 import auguste.server.util.Configuration;
+import auguste.server.util.Log;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
@@ -26,13 +27,14 @@ import org.apache.commons.codec.binary.Hex;
 
 /**
  * Classe représentant un utilisateur connecté au serveur et authentifié. Gère
- * les données relatives à l'utilisateur. Contient la liste des salles
+ * les données relatives à cet utilisateur. Contient la liste des salles
  * auxquelles l'utilisateur appartient.
  * @author Lzard
  */
 public class User
 {
-    private final static int UNREGISTERED_ID = 0; // ID d'un utilisateur non-enregistré
+    // ID d'un utilisateur non-enregistré
+    private final static int UNREGISTERED_ID = 0;
     
     /**
      * Renvoie la chaine de caractères fournie en paramètre hashée.
@@ -50,6 +52,7 @@ public class User
         }
         catch (NoSuchAlgorithmException e)
         {
+            Log.debug(e);
             return password;
         }
     }
@@ -150,12 +153,22 @@ public class User
     }
     
     /**
-     * Liste des salles liées à l'utilisateur.
+     * Liste des salles auxquelles l'utilisateur appartient.
      * @return ArrayList des salles 
      */
     public synchronized ArrayList<Room> getRooms()
     {
         return this.rooms;
+    }
+    
+    /**
+     * Compare deux utilisateurs.
+     * @param user Utilisateur à comparé
+     * @return Booléen indiquant s'il s'agit du même utilisateur
+     */
+    public boolean equals(User user)
+    {
+        return user.getId() != User.UNREGISTERED_ID && user.getId() == this.getId();
     }
     
 }

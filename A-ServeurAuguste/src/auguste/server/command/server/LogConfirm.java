@@ -17,26 +17,34 @@
 package auguste.server.command.server;
 
 import auguste.server.User;
+import auguste.server.util.Log;
 import org.json.JSONException;
 
 /**
- * Commande de confirmation d'authentification.
+ * Commande de confirmation d'authentification. Envoi les données et paramètres
+ * de l'utilisateur.
  * @author Lzard
  */
 public class LogConfirm extends ServerCommand
 {
     /**
      * Remplit le JSON avec les données de l'utilisateur.
-     * @param user Utilisateur connecté
-     * @throws JSONException Erreur de JSON
+     * @param user Utilisateur authentifié
      */
-    public LogConfirm(User user) throws JSONException
+    public LogConfirm(User user)
     {
         // Constructeur de la classe mère
         super("log_confirm");
         
-        // Création du JSON
-        this.getJSON().put("name", user.getName());
+        // Remplissage du JSON
+        try
+        {
+            this.getJSON().put("name", user.getName());
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
     }
     
 }

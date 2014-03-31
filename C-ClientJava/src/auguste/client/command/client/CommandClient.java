@@ -22,19 +22,33 @@ public abstract class CommandClient
     private final JSONObject json;
     private Map<String,String> args;
     Client client;
-    protected static final String GAME_CREATE = "game_create";
-    protected static final String GAME_LIST = "game_list";
-    protected static final String GAME_JOIN = "game_join";
-    protected static final String GAME_START = "game_start";
-    protected static final String GAME_LEAVE = "game_leave";
-    protected static final String COMMAND = "command";
-    protected static final String EXIT = "exit";
-    protected static final String CHAT_SEND = "chat_send";
-    protected static final String ACCOUNT_CREATE = "account_create";
-    protected static final String LOG_IN = "log_in";
-    protected static final String LOG_OUT = "log_out";
     
-    protected static final String ROOM_ID = "room_id";
+    // Noms de commandes possibles
+    public static final String GAME_CREATE = "game_create";
+    public static final String GAME_LIST = "game_list";
+    public static final String GAME_JOIN = "game_join";
+    public static final String GAME_START = "game_start";
+    public static final String GAME_LEAVE = "game_leave";
+    public static final String GAME_CONFIG = "game_config";
+    public static final String COMMAND = "command";
+    public static final String EXIT = "exit";
+    public static final String CHAT_SEND = "chat_send";
+    public static final String ACCOUNT_CREATE = "account_create";
+    public static final String LOG_IN = "log_in";
+    public static final String LOG_OUT = "log_out";
+    
+    // Noms de paramètres possibles
+    public static final String ROOM_ID = "room_id";
+    public static final String PLAYER_NUMBER = "player_number";
+    public static final String MESSAGE = "message";
+    public static final String NAME = "name";
+    public static final String PASSWORD = "password";
+    public static final String GAME_NAME = "game_name";
+    public static final String TURN_TIMER = "turn_timer";
+    public static final String BOARD_SIZE = "board_size";
+    public static final String CARDS = "cards";
+    public static final String NUMBER_OF_TEAM = "number_of_team";
+    public static final String LEGION_PER_PLAYER = "legion_per_player";
     
     public abstract void buildJSON() throws JSONException;
     
@@ -96,6 +110,7 @@ public abstract class CommandClient
         ACCOUNT_CREATE,
         CHAT_SEND,
         GAME_CREATE,
+        GAME_CONFIG,
         GAME_JOIN,
         GAME_LIST,
         GAME_START,

@@ -24,6 +24,6 @@ public class GameStart extends CommandClient
     public void buildJSON() throws JSONException 
     {
         this.getJSON().put(COMMAND,GAME_START);
-        this.getJSON().put(ROOM_ID, this.getClient().getCurrentGame().getId());
+        this.getJSON().put(ROOM_ID, this.getArguments().get(ROOM_ID));
     }
 }

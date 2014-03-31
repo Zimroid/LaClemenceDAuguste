@@ -23,48 +23,68 @@ import java.util.Properties;
 
 /**
  * Classe utilitaire permettant de charger et de lire la configuration du
- * serveur.
+ * serveur. La configuration est d'abord chargée via la méthode statique load,
+ * puis lue avec les méthodes get, getBoolean, getInt et getLong.
  * @author Lzard
  */
 public class Configuration
 {
     // Properties de la configuration du serveur
-    private static final Properties CONFIGURATION = new Properties();
+    private static final Properties PROPERTIES = new Properties();
     
     /**
-     * Charge la configuration de base du serveur.
+     * Charge la configuration de base du serveur depuis le fichier de
+     * configuration spécifié.
      * @param file Chemin du fichier de configuration
      * @throws java.io.FileNotFoundException Fichier non trouvé
      * @throws java.io.IOException           Fichier illisible
      */
     public static void load(String file) throws FileNotFoundException, IOException
     {
-        // Chargement de la configuration depuis un fichier
         try (FileInputStream stream = new FileInputStream(file))
         {
-            Configuration.CONFIGURATION.load(stream);
-            stream.close();
+            Configuration.PROPERTIES.load(stream);
         }
     }
     
     /**
-     * Renvoie la configuration demandée sous forme de chaîne de caractères.
-     * @param key Clé de la configuration
+     * Renvoie le paramètre demandé sous forme de chaîne de caractères.
+     * @param key Clé du paramètre
      * @return Valeur correspondant à la clé ou chaîne vide si clé inconnue
      */
     public static String get(String key)
     {
-        return Configuration.CONFIGURATION.getProperty(key, "");
+        return Configuration.PROPERTIES.getProperty(key, "");
     }
     
     /**
-     * Renvoie la configuration demandée sous forme d'entier.
+     * Renvoie le paramètre demandé sous forme de booléen.
+     * @param key Clé du paramètre
+     * @return Valeur correspondant à la clé ou false si clé inconnue
+     */
+    public static boolean getBoolean(String key)
+    {
+        return Configuration.PROPERTIES.getProperty(key, "false").equals("true");
+    }
+    
+    /**
+     * Renvoie le paramètre demandée sous forme d'entier.
      * @param key Clé de la configuration
      * @return Valeur correspondant à la clé ou 0 si clé inconnue
      */
     public static int getInt(String key)
     {
-        return Integer.valueOf(Configuration.CONFIGURATION.getProperty(key, "0"));
+        return Integer.valueOf(Configuration.PROPERTIES.getProperty(key, "0"));
+    }
+    
+    /**
+     * Renvoie le paramètre demandée sous forme d'entier long.
+     * @param key Clé de la configuration
+     * @return Valeur correspondant à la clé ou 0 si clé inconnue
+     */
+    public static long getLong(String key)
+    {
+        return Long.valueOf(Configuration.PROPERTIES.getProperty(key, "0"));
     }
     
 }

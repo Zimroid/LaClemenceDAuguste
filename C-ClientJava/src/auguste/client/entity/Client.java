@@ -27,15 +27,14 @@ public class Client
         private User currentUser;
         private Queue<ChatMessageReceived> chatMessageReceived;
         private String confirmMessage;
-        private Game currentGame;
+        private List<Game> games;
         
         private Client() throws URISyntaxException
         {
             this.socket = ClientSocket.getInstance();
             this.interfaces = new ArrayList<>();
             this.chatMessageReceived = new LinkedList<>();
-            this.currentGame = new Game();
-            this.currentGame.setId(0);
+            this.games = new ArrayList<>();
         }
         
         public static Client getInstance() throws URISyntaxException
@@ -126,14 +125,41 @@ public class Client
     /**
      * @return the currentGame
      */
-    public Game getCurrentGame() {
-        return currentGame;
+    public List<Game> getGames() {
+        return this.games;
     }
-
-    /**
-     * @param currentGame the currentGame to set
-     */
-    public void setCurrentGame(Game currentGame) {
-        this.currentGame = currentGame;
+    
+    public void addGame(Game game)
+    {
+        this.gameAvailable.add(game);
+    }
+    
+    public void removeGame(int id)
+    {
+        this.games.remove(this.getGame(id));
+    }
+    
+    public Game getGame(int id)
+    {
+        Game res = null;
+        
+        for(Game game : this.games)
+        {
+            if(game.getId() == id)
+            {
+                res = game;
+            }
+        }
+        
+        return res;
+    }
+    
+    public void updateGame(Game game)
+    {
+        if(this.getGame(game.getId()) != null)
+        {
+            this.removeGame(game.getId());
+        }
+        this.addGame(game);
     }
 }

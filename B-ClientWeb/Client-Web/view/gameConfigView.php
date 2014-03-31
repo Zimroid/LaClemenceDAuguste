@@ -1,5 +1,5 @@
 <h2>Panneau de configuration de la partie</h2>
-<form autocomplete="off" >
+<form autocomplete="off" onsubmit="return false;" >
 	<!--<textarea type="text" id="message" name="message" onKeyPress="toucheEntree(event)"></textarea>-->
 	<input type="hidden" id="game_id" />
 	<label for="player_number">Nombre de joueurs :</label>
@@ -14,7 +14,7 @@
 			<div id="team1" name="team">
 				<p id="title1" name="title1">Team 1</p>
 				<button id="button1" name="button1" onClick="newPlayer(1,2)">Nouveau joueur</button>
-				<div name="player" id="player1">
+				<div name="player" id="player1_1">
 					<select name="player" class="1">
 						<option selected="selected">Joueur</option>
 						<option>Admin</option>
@@ -29,7 +29,7 @@
 					</select>
 					<label for="color">Couleur du pion</label>
 					<input name="color" class="1 color" />
-					<select name="position" id="1">
+					<select name="position" class="1">
 						<option selected="selected">Position sur le plateau</option>
 						<option>Bas droit</option>
 						<option>Bas gauche</option>

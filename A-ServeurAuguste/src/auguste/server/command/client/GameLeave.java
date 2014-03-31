@@ -31,8 +31,8 @@ public class GameLeave extends ClientCommand
     {
         // Retrait de l'utilisateur de la salle
         this.getRoom().removeUser(this.getUser());
-        this.confirm("room_left");
         this.getRoom().confirm();
+        this.confirm("room_left");
     }
     
 }

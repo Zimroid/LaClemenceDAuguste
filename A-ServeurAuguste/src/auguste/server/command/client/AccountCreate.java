@@ -46,6 +46,7 @@ public class AccountCreate extends ClientCommand
     @Override
     public void execute() throws JSONException, SQLException
     {
+        // Commande pouvant être exécutée que si l'utilisateur n'est pas authentifié
         if (this.getUser() == null)
         {
             // Création du joueur
@@ -61,15 +62,13 @@ public class AccountCreate extends ClientCommand
                 UserManager manager = new UserManager(connection);
 
                 // Vérification de la disponibilité du nom
-                if (manager.getNameAvailable(newUser.getName()))
+                if (manager.getNameAvailability(newUser.getName()))
                 {
                     manager.saveUser(newUser);
+                    connection.commit();
                     this.confirm("account_create");
                 }
                 else this.error("name_unavailable");
-
-                // Fermeture de la connexion
-                Db.close(connection);
             }
         }
         else this.error("already_logged");

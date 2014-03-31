@@ -17,37 +17,50 @@
 package auguste.server.command.server;
 
 import auguste.server.Room;
+import auguste.server.Room.State;
 import auguste.server.Server;
+import auguste.server.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Commande d'envoi de la liste des salles crées.
+ * Commande d'envoi de la liste des salles crées disponibles.
  * @author Lzard
  */
 public class GameAvailables extends ServerCommand
 {
     /**
      * Remplit le JSON avec les paramètres fournis.
-     * @throws JSONException Erreur de JSON
      */
-    public GameAvailables() throws JSONException
+    public GameAvailables()
     {
         // Constructeur de la classe mère
         super("game_availables");
         
-        // Création du JSONObject contenant la liste des salles
-        JSONArray roomList = new JSONArray();
-        for (Room room : Server.getInstance().getAvailablesRooms())
+        // Remplissage du JSON
+        try
         {
-            JSONObject roomEntry = new JSONObject();
-            roomEntry.put("room_id", room.getId());
-            roomEntry.put("game_name", room.getGameName());
-            roomList.put(roomEntry);
+            // Création du JSONObject contenant la liste des salles
+            JSONArray roomList = new JSONArray();
+            for (Room room : Server.getInstance().getRooms())
+            {
+                // Salle ignorée si en cours de fermeture
+                if (room.getState() != State.CLOSING)
+                {
+                    JSONObject roomEntry = new JSONObject();
+                    roomEntry.put("room_id", room.getId());
+                    roomEntry.put("game_name", room.getName());
+                    roomList.put(roomEntry);
+                }
+            }
+
+            // Création du JSON
+            this.getJSON().put("list", roomList);
         }
-        
-        // Création du JSON
-        this.getJSON().put("list", roomList);
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
     }
 }

@@ -19,61 +19,77 @@ package auguste.server.command.server;
 import auguste.server.Room;
 import auguste.server.Server;
 import auguste.server.User;
+import auguste.server.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Commande de transfert de la liste des utilisateurs authentifiés.
+ * Commande de transfert de la liste des utilisateurs authentifiés actuellement
+ * connectés au serveur ou à une salle.
  * @author Lzard
  */
 public class ChatUsers extends ServerCommand
 {
     /**
      * Remplit le JSON avec les utilisateurs authentifiés.
-     * @throws JSONException Erreur de JSON
      */
-    public ChatUsers() throws JSONException
+    public ChatUsers()
     {
         // Constructeur de la classe mère
         super("chat_users");
         
-        // Création du JSONArray décrivant la liste des utilisateurs
-        JSONArray userList = new JSONArray();
-        for (User user : Server.getInstance().getLoggedUsers())
+        // Remplissage du JSON
+        try
         {
-            JSONObject userEntry = new JSONObject();
-            userEntry.put("id", user.getId());
-            userEntry.put("name", user.getName());
-            userList.put(userEntry);
+            // Création du JSONArray décrivant la liste des utilisateurs
+            JSONArray userList = new JSONArray();
+            for (User user : Server.getInstance().getUsers())
+            {
+                JSONObject userEntry = new JSONObject();
+                userEntry.put("id", user.getId());
+                userEntry.put("name", user.getName());
+                userList.put(userEntry);
+            }
+
+            // Ajout de la liste au JSON
+            this.getJSON().put("list", userList);
         }
-        
-        // Ajout de la liste au JSON
-        this.getJSON().put("list", userList);
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
     }
     
     /**
      * Remplit le JSON avec les utilisateurs de la salle demandée.
      * @param room Salle demandée
-     * @throws JSONException Erreur de JSON
      */
-    public ChatUsers(Room room) throws JSONException
+    public ChatUsers(Room room)
     {
         // Constructeur de la classe mère
         super("chat_users");
         
-        // Création du JSONArray décrivant la liste des utilisateurs
-        JSONArray userList = new JSONArray();
-        for (User user : room.getUsers())
+        // Remplissage du JSON
+        try
         {
-            JSONObject userEntry = new JSONObject();
-            userEntry.put("id", user.getId());
-            userEntry.put("name", user.getName());
-            userList.put(userEntry);
+            // Création du JSONArray décrivant la liste des utilisateurs de la salle
+            JSONArray userList = new JSONArray();
+            for (User user : room.getUsers())
+            {
+                JSONObject userEntry = new JSONObject();
+                userEntry.put("id", user.getId());
+                userEntry.put("name", user.getName());
+                userList.put(userEntry);
+            }
+
+            // Ajout de la liste au JSON
+            this.getJSON().put("list", userList);
         }
-        
-        // Ajout de la liste au JSON
-        this.getJSON().put("list", userList);
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
     }
 
 }

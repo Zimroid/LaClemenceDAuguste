@@ -14,35 +14,31 @@
  * limitations under the License.
  */
 
-package auguste.client.command.server;
+package auguste.client.command.client;
 
-import auguste.client.entity.Game;
-import auguste.client.graphical.UpdateListener;
+import java.net.URISyntaxException;
 import org.json.JSONException;
 
 /**
  *
  * @author Evinrude
  */
-public class GameConfirm extends CommandServer
+public class GameConfig extends CommandClient
 {
-    public GameConfirm()
+    public GameConfig() throws URISyntaxException
     {
         super();
     }
 
     @Override
-    public void execute() throws JSONException 
+    public void buildJSON() throws JSONException
     {
-        Game game = new Game();
-        game.setName(this.getJSON().getString("game_name"));
-        game.setId(this.getJSON().getInt("room_id"));
-        game.setLegion_number(this.getJSON().getInt("player_number"));
-        game.setBoardSize(this.getJSON().getInt("board_size"));
-        this.getClient().updateGame(game);
-        for(UpdateListener ul : this.getClient().getInterfaces())
-        {
-            ul.createGameUpdate(game.getId());
-        }
+        this.getJSON().put(COMMAND, GAME_CONFIG);
+        this.getJSON().put(ROOM_ID, this.getArguments().get(ROOM_ID));
+        this.getJSON().put(PLAYER_NUMBER,this.getArguments().get(PLAYER_NUMBER));
+        this.getJSON().put(GAME_NAME, this.getArguments().get(GAME_NAME));
+        this.getJSON().put(BOARD_SIZE, this.getArguments().get(BOARD_SIZE));
+        
+        System.out.println(this.getJSON().toString());
     }
 }

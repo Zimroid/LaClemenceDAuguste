@@ -40,25 +40,27 @@ function newTeam()
     //div contenant toutes les team (sans les observateurs)
     var divTeams = $("#allTeams");
     //toutes les div de nom team 
-    var allTeams = $(".team");
+    var allTeams = $("[name='team']");
     //numéro de la nouvelle team
     var numberTeam = allTeams.length + 1;
     //div pour la team avec son numéro
     var divTeam = $("<div id='team" + numberTeam + "' name='team'>");
     //titre de la div
-    var ptitle = $("<p id='title" + numberTeam + "' name='title" + numberTeam + "'>Team" + numberTeam + "</p>");
+    var ptitle = $("<p id='title" + numberTeam + "' name='title" + numberTeam + "'>Team " + numberTeam + "</p>");
     //bouton pour la création d'un nouveau joueur dans la team
-    var NPButton = $("<button id='button" + numberTeam + "' name='button" + numberTeam + "' onClick='newPlayer(" + numberTeam + ",1)>Nouveau joueur</button>");
+    var NPButton = $("<button id='button" + numberTeam + "' name='button" + numberTeam + "' onclick='newPlayer(" + numberTeam + ",1)'>Nouveau joueur</button>");
 
     divTeams.append(ptitle, NPButton, divTeam);
 }
 
-function newPlayer(team, joueur)
+function newPlayer(team, player)
 {
+	//button de création du nouveau joueur
+	var NPButton = $("#button" + team).attr("onclick","newPlayer(" + team + "," + (player + 1) + ")");
 	//div de la team du nouveau joueur
     var divTeam = $("#team" + team);
     //div de config pour le nouveau player
-    var divPlay = $("<div name='player' id='player'" + player);
+    var divPlay = $("<div name='player' id='player" + team + "_" + player + "'></div>");
     //select du joueur dont on fait la config
     var selPlay = $("<select name='player' class='" + team + "'></select>");
     //options pour selPl
@@ -73,21 +75,24 @@ function newPlayer(team, joueur)
     //options pour le selForm
     var optForm = $("<option selected='selected'>Forme du pion</option>");
     var optForm2 = $("<option>Carré</option>");
-    var optForm3 = $("<option>Triangle</option>");
+    var optForm3 = $("<option>Cercle</option>");
+    var optForm4 = $("<option>Triangle</option>");
     //label pour la color
     var lblColor = $("<label for='color'>Couleur du pion</label>");
     //input pour la color
     var inpColor = $("<input name='color' class='" + team + " color' />");
     //select pour la position sur le plateau
-    var selPosit = $("<select name='position' id='" + team + "'></select>");
+    var selPosit = $("<select name='position' class='" + team + "'></select>");
     //options pour le selPosit
     var optPosit = $("<option selected='selected'>Position sur le plateau</option>");
-    var optPosit2 = $("<option name='0'>Haut gauche</option>");
-    var optPosit3 = $("<option name='1'>Haut droit</option>");
+    var optPosit2 = $("<option name='0'>Bas droit</option>");
+    var optPosit3 = $("<option name='1'>Bas gauche</option>");
+    var optPosit4 = $("<option name='2'>Haut droit</option>");
+    var optPosit5 = $("<option name='3'>Haut gauche</option>");
 
     selPlay.append(optPlay, optPlay2);
-    selForm.append(optForm, optForm2, optForm3);
-    selPosit.append(optPosit, optPosit2, optPosit3);
+    selForm.append(optForm, optForm2, optForm3, optForm4);
+    selPosit.append(optPosit, optPosit2, optPosit3, optPosit4, optPosit5);
     divPlay.append(selPlay, lblLegion, inpLegion, selForm, lblColor, inpColor, selPosit);
     divTeam.append(divPlay);
     

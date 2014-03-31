@@ -36,7 +36,7 @@ import java.util.ArrayList;
 public class Game
 {
     // Variables de classe
-    private int turnDuration;
+    private long turnDuration;
     private final ArrayList<Team> teams;
     private final ArrayList<Legion> legions;
     
@@ -50,7 +50,6 @@ public class Game
     private final ArrayList<Battle> battles;
     
     // Variables métier
-    private Player master;
     private final ArrayList<Player> players;
     private Board board;
     
@@ -58,12 +57,10 @@ public class Game
     * Instanciation d'une partie avec son gérant.
     * @param listener Game listener
     * @param turnDuration durée d'un tour
-    * @param master Joueur gérant la partie
     */
-    public Game(GameListener listener, int turnDuration, Player master)
+    public Game(GameListener listener, long turnDuration)
     {
         this.listener = listener;
-        this.master = master;
         this.turnDuration = turnDuration;
         this.teams = new ArrayList<>();
         this.players = new ArrayList<>();
@@ -72,7 +69,6 @@ public class Game
         this.moves = new ArrayList<>();
         this.tenailles = new ArrayList<>();
         this.battles = new ArrayList<>();
-        this.players.add(master);
         this.timer = new GameTimer(this,turnDuration);
     }
     
@@ -272,22 +268,6 @@ public class Game
     }
 
     /**
-     * @return the master
-     */
-    public Player getMaster()
-    {
-        return master;
-    }
-
-    /**
-     * @param master the master to set
-     */
-    public void setMaster(Player master)
-    {
-        this.master = master;
-    }
-
-    /**
      * @return the players
      */
     public ArrayList<Player> getPlayers()
@@ -379,14 +359,14 @@ public class Game
     /**
      * @return the turnDuration
      */
-    public int getTurnDuration() {
+    public long getTurnDuration() {
         return turnDuration;
     }
 
     /**
      * @param turnDuration the turnDuration to set
      */
-    public void setTurnDuration(int turnDuration) {
+    public void setTurnDuration(long turnDuration) {
         this.turnDuration = turnDuration;
     }
 }

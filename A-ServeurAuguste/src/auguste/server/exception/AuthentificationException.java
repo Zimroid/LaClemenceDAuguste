@@ -17,8 +17,8 @@
 package auguste.server.exception;
 
 /**
- * Exception lancée lorsque l'utilisateur tente d'effectuer une action qu'il ne
- * peut effectuer sans être authentifié.
+ * Exception lancée lorsqu'un client non-authentifié tente d'effectuer une
+ * action qu'il ne peut effectuer sans être authentifié.
  * @author Lzard
  */
 public class AuthentificationException extends Exception
@@ -29,7 +29,7 @@ public class AuthentificationException extends Exception
      */
     public AuthentificationException(String command)
     {
-        super("Must be logged to use " + command);
+        super("Authentification error: must be logged to use " + command);
     }
     
 }

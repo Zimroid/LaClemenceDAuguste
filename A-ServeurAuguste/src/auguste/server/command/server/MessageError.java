@@ -16,6 +16,7 @@
 
 package auguste.server.command.server;
 
+import auguste.server.util.Log;
 import org.json.JSONException;
 
 /**
@@ -27,15 +28,21 @@ public class MessageError extends ServerCommand
     /**
      * Remplit le JSON avec le type d'erreur.
      * @param type Type de l'erreur
-     * @throws JSONException Erreur de JSON
      */
-    public MessageError(String type) throws JSONException
+    public MessageError(String type)
     {
         // Constructeur de la classe mère
         super("message_error");
         
         // Création du JSON
-        this.getJSON().put("type", type);
+        try
+        {
+            this.getJSON().put("type", type);
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
     }
     
 }

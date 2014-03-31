@@ -17,7 +17,7 @@
 package auguste.server.exception;
 
 /**
- * Exception lancée lorsqu'une commande n'est pas reconnue.
+ * Exception lancée lorsqu'une commande émise par un client n'est pas reconnue.
  * @author Lzard
  */
 public class CommandException extends Exception
@@ -28,7 +28,7 @@ public class CommandException extends Exception
      */
     public CommandException(String command)
     {
-        super("Unknown command " + command);
+        super("Command error: unknown command " + command);
     }
     
 }

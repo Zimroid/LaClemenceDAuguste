@@ -26,13 +26,15 @@ public class LogIn extends CommandClient
     @Override
     public void buildJSON() throws JSONException 
     {
-        String login = this.getArguments().get("login");
-        String password = this.getArguments().get("password");
+        String login = this.getArguments().get(NAME);
+        String password = this.getArguments().get(PASSWORD);
         password = hashPassword(password);
         
         this.getJSON().put(COMMAND, LOG_IN);
-        this.getJSON().put("name",login);
-        this.getJSON().put("password",password);
+        this.getJSON().put(NAME,login);
+        this.getJSON().put(PASSWORD,password);
+        
+        System.out.println(this.getJSON().toString());
     }
     
     private static String hashPassword(String password)
