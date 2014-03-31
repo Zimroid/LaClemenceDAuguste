@@ -1,19 +1,15 @@
 allow from all
 
-RewriteEngine on
+# RewriteEngine on
 
-RewriteRule ^accueil$ 	index.php?page=news
-RewriteRule ^rules$ 	index.php?page=rules
-RewriteRule ^faq$ 		index.php?page=faq
-RewriteRule ^contact$ 	index.php?page=contact
-
-RewriteRule ^newGame$	index.php?page=newGame
-RewriteRule ^joinGame$ 	index.php?page=joinGame
-
-RewriteRule ^download$	index.php?page=download
-
-
-RewriteRule ^subscribe$	index.php?page=subscribe
+# RewriteRule ^accueil$ 	index.php?page=news
+# RewriteRule ^rules$ 	index.php?page=rules
+# RewriteRule ^faq$ 		index.php?page=faq
+# RewriteRule ^contact$ 	index.php?page=contact
+# RewriteRule ^newGame$	index.php?page=newGame
+# RewriteRule ^joinGame$ 	index.php?page=joinGame
+# RewriteRule ^download$	index.php?page=download
+# RewriteRule ^subscribe$	index.php?page=subscribe
 
 # cacher la version d'Apache
 # ServerTokens Prod
@@ -52,3 +48,6 @@ Options -Indexes
 	# les proxys ne doivent pas décompresser le contenu à la place de l'internaute
 	Header append Vary User-Agent env=!dont-vary
 </IfModule>
+
+Header unset ETag
+FileETag none

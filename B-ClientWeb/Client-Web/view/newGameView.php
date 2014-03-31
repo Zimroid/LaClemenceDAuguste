@@ -2,4 +2,4 @@
 
 <label for="gameName">Nom de la partie : </label>
 <input type="text" name="gameName" id="gameName" />
-<button onClick="gameCreate();">Créer</button>
+<button onclick="gameCreate()" >On crée pas parce que ça fait crasher le serveur</button>

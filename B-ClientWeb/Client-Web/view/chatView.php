@@ -20,12 +20,7 @@
 			<input type="button" value="Me connecter" onclick="connexion(true,'','');" /><br>
 		</form>
 		<!-- Lien vers page d'inscription -->
-		<script>
-			document.write("<a href='' onclick='reloadContent(\"<?php echo $sitePath; ?>/index.php?script=1&page=subscribe\"); return false;' >M'inscrire au jeu</a>");
-		</script>
-		<noscript>
-			<a href='<?php echo $sitePath; ?>/subscribe'>M'inscrire au jeu</a>
-		</noscript>
+		<a id='subscribeScript' href='<?php echo $sitePath; ?>/subscribe'>M'inscrire au jeu</a>
 		
 <?php
 	}
