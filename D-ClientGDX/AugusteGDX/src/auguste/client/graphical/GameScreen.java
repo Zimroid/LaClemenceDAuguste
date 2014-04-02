@@ -5,21 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.VertexAttributes.Usage;
-import com.badlogic.gdx.graphics.g2d.PolygonRegion;
-import com.badlogic.gdx.graphics.g2d.PolygonSprite;
-import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.maps.Map;
-import com.badlogic.gdx.maps.objects.PolygonMapObject;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -148,47 +137,11 @@ public class GameScreen implements Screen {
 			{
 				// Position x de la case
 				float xCase = xLine + xSpace * numCase;
-				
-				// Version 2.0 à tester ...
-				Hexagon tempHex = new Hexagon(0, 0, xCase, yLine, radius, Color.WHITE, HEXAGON_BORDER_SIZE);
-				tempHex.drawCase(shrd);
-				
+
 				// Dessine un hexagone
-				drawHexagon(xCase, yLine, radius, Color.WHITE);
+				Hexagon tempHex = new Hexagon(0, 0, xCase, yLine, radius, Color.WHITE, HEXAGON_BORDER_SIZE);
+				tempHex.drawCase(shrd);				
 			}
 		}
-	}
-	
-	// Dessine un hexagone en fonction de son centre (x,y) et de son rayon r et de sa couleur de fond
-	public void drawHexagon(float x, float y, float r, Color color)
-	{
-		// Si hexagone secondaire, dessin hexagone primaire
-		if(color != Color.BLACK)
-		{
-			drawHexagon(x, y, r, Color.BLACK);	// Dessin premier hexagone (fond)
-			shrd.setColor(color);				// Changement de couleur
-			r = r - HEXAGON_BORDER_SIZE;		// Réduction taille hexagone
-		}
-		
-		// (Racine de 3) / 2
-		float rac = (float) (Math.sqrt(3)/2);
-		
-		// Positions points hexagone
-		float x1 = x, 			y1 = y - r;
-		float x2 = x + rac * r, y2 = y - 0.5f * r;
-		float x3 = x + rac * r, y3 = y + 0.5f * r;
-		float x4 = x, 			y4 = y + r;
-		float x5 = x - rac * r, y5 = y + 0.5f * r;
-		float x6 = x - rac * r, y6 = y - 0.5f * r;
-		
-		shrd.begin(ShapeType.Filled);
-		shrd.setColor(color);
-		shrd.triangle(x, y,	x1, y1,	x2, y2);
-		shrd.triangle(x, y,	x2, y2,	x3, y3);
-		shrd.triangle(x, y,	x3, y3,	x4, y4);
-		shrd.triangle(x, y,	x4, y4,	x5, y5);
-		shrd.triangle(x, y,	x5, y5,	x6, y6);
-		shrd.triangle(x, y,	x6, y6, x1, y1);
-		shrd.end();
 	}
 }
