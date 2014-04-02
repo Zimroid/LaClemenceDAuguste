@@ -25,7 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class GameScreen implements Screen {
 	private final float RAC = (float) (Math.sqrt(3)/2); // (Racine de 3) / 2
-	private final float HEXAGON_BORDER_SIZE = 3;		// Bordure noire des hexagones
+	private final float HEXAGON_BORDER_SIZE = 3;		// Taille bordure noire des hexagones
 	
 	Skin skin;
     Stage stage;
@@ -33,7 +33,6 @@ public class GameScreen implements Screen {
     Game g;
     
     ShapeRenderer shrd;
-    ShapeRenderer renderer;
     
     /*
      * Constructeurs
@@ -62,7 +61,6 @@ public class GameScreen implements Screen {
         
         // Designer
         shrd = new ShapeRenderer();
-        renderer = new ShapeRenderer();
     }
 	
 	@Override
@@ -150,6 +148,10 @@ public class GameScreen implements Screen {
 			{
 				// Position x de la case
 				float xCase = xLine + xSpace * numCase;
+				
+				// Version 2.0 à tester ...
+				Hexagon tempHex = new Hexagon(0, 0, xCase, yLine, radius, Color.WHITE, HEXAGON_BORDER_SIZE);
+				tempHex.drawCase(shrd);
 				
 				// Dessine un hexagone
 				drawHexagon(xCase, yLine, radius, Color.WHITE);
