@@ -60,14 +60,24 @@ function process(evt)
 		reloadContent(sitePath + "/index.php?script=1&page=gameConfig");
 	}
 
-	// Si on nous envois un plateau de jeu
+	// Si on nous envoie un plateau de jeu
 	// ATTENTION NOM DE COMMANDE NON DEFINITIVE !!!
 	else if(command == "game_turn")
 	{
-		// Qu'on soit n'importe ou on recharge la page principal pour arriver en jeu (cas pour un nouveau tour, un début de partie voir une reconnexion)
+		// Qu'on soit n'importe où, ou qu'on recharge la page principale pour arriver en jeu (cas pour un nouveau tour, un début de partie voir une reconnexion)
 		reloadContent(sitePath + "/index.php?script=1&page=game");
 	}
 
+	// Liste des parties créées
+	
+	
+	// Si on demande la liste des parties
+	else if(command == "game_availables")
+	{
+		for (var i = 0 ; i < data.list.length ; i++) {
+			$("#joinGameView").append("<li class='game' onclick='gameJoin(" + data.list[i].room_id + ")'>" + data.list[i].game_name + "</li>");
+		}
+	}
 	
 	else
 	{

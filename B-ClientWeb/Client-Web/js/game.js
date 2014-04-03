@@ -35,6 +35,28 @@ function gameConfig()
     sendText(json);
 }
 
+function gameList()
+{
+	$(".game").remove();
+	var json = JSON.stringify(
+    {
+        "command": "GAME_LIST"
+    });
+    
+    sendText(json);
+}
+
+function gameJoin(game)
+{
+	var json = JSON.stringify(
+    {
+        "command": "GAME_JOIN",
+        "room_id": game
+    });
+    
+    sendText(json);
+}
+
 function newTeam()
 {
     //div contenant toutes les team (sans les observateurs)
@@ -80,7 +102,7 @@ function newPlayer(team, player)
     //label pour la color
     var lblColor = $("<label for='color'>Couleur du pion</label>");
     //input pour la color
-    var inpColor = $("<input name='color' class='" + team + " color' />");
+    var inpColor = $("<input name='color' class='color " + team + "' />");
     //select pour la position sur le plateau
     var selPosit = $("<select name='position' class='" + team + "'></select>");
     //options pour le selPosit
