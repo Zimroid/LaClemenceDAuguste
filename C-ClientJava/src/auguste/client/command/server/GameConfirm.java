@@ -26,6 +26,11 @@ import org.json.JSONException;
  */
 public class GameConfirm extends CommandServer
 {
+    public static final String GAME_NAME =      "game_name";
+    public static final String ROOM_ID =        "room_id";
+    public static final String PLAYER_NUMBER =  "player_number";
+    public static final String BOARD_SIZE =     "board_size";
+    
     public GameConfirm()
     {
         super();
@@ -35,10 +40,10 @@ public class GameConfirm extends CommandServer
     public void execute() throws JSONException 
     {
         Game game = new Game();
-        game.setName(this.getJSON().getString("game_name"));
-        game.setId(this.getJSON().getInt("room_id"));
-        game.setLegion_number(this.getJSON().getInt("player_number"));
-        game.setBoardSize(this.getJSON().getInt("board_size"));
+        game.setName(this.getJSON().getString(GAME_NAME));
+        game.setId(this.getJSON().getInt(ROOM_ID));
+        game.setLegion_number(this.getJSON().getInt(PLAYER_NUMBER));
+        game.setBoardSize(this.getJSON().getInt(BOARD_SIZE));
         this.getClient().updateGame(game);
         for(UpdateListener ul : this.getClient().getInterfaces())
         {

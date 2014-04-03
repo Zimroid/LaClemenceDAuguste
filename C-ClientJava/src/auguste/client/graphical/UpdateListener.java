@@ -27,5 +27,6 @@ public interface UpdateListener
     public void createGameUpdate(int id);
     public void listGameUpdate();
     public void confirmMessageUpdate();
+    public void gameTurnUpdate(int id);
     public void stop();
 }

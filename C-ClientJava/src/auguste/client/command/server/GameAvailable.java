@@ -20,6 +20,10 @@ import org.json.JSONObject;
  */
 public class GameAvailable extends CommandServer
 {    
+    public static final String LIST =       "list";
+    public static final String ROOM_ID =    "room_id";
+    public static final String GAME_NAME =  "game_name";
+    
     public GameAvailable()
     {
         super();
@@ -29,18 +33,16 @@ public class GameAvailable extends CommandServer
     public void execute() throws JSONException 
     {
         List<Game> games = new ArrayList<>();
-        JSONArray game_array = this.getJSON().getJSONArray("list");
+        JSONArray game_array = this.getJSON().getJSONArray(LIST);
         for(int i = 0; i<game_array.length(); i++)
         {
             Game g = new Game();
             JSONObject game = game_array.getJSONObject(i);
-            int game_id = game.getInt("room_id");
-            String game_name = game.getString("game_name");
-            //int board_size = game.getInt("board_size");
+            int game_id = game.getInt(ROOM_ID);
+            String game_name = game.getString(GAME_NAME);
             
             g.setId(game_id);
             g.setName(game_name);
-            //g.setBoardSize(board_size);
             
             games.add(g);
         }

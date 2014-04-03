@@ -17,6 +17,10 @@ import org.json.JSONException;
  */
 public class ChatMessage extends CommandServer
 {    
+    public static final String AUTHOR =     "author";
+    public static final String TEXT =       "text";
+    public static final String DATE =       "date";
+    
     public ChatMessage()
     {
         super();
@@ -25,9 +29,9 @@ public class ChatMessage extends CommandServer
     @Override
     public void execute() throws JSONException 
     {
-        String author = this.getJSON().getString("author");
-        String message= this.getJSON().getString("text");
-        Date date = new Date(this.getJSON().getLong("date"));
+        String author = this.getJSON().getString(AUTHOR);
+        String message= this.getJSON().getString(TEXT);
+        Date date = new Date(this.getJSON().getLong(DATE));
         
         ChatMessageReceived cmr = new ChatMessageReceived();
         cmr.setAuthor(author);

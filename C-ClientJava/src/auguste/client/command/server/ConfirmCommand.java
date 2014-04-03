@@ -16,6 +16,7 @@ import org.json.JSONException;
  */
 public class ConfirmCommand extends CommandServer
 {
+    public static final String TYPE =   "type";
 
     /**
      *  Constructeur de la classe
@@ -32,7 +33,7 @@ public class ConfirmCommand extends CommandServer
     @Override
     public void execute() throws JSONException
     {
-        String confirmMsg = this.getJSON().getString("type");
+        String confirmMsg = this.getJSON().getString(TYPE);
         this.getClient().setConfirmMessage(confirmMsg);
         for(UpdateListener ul : this.getClient().getInterfaces())
         {
