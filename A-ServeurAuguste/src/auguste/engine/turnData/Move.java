@@ -22,12 +22,12 @@ import java.awt.Point;
  *
  * @author Zwyk
  */
-public class Movement {
+public class Move {
     private Point p1;
     private Point p2;
     private boolean dies;
     
-    public Movement(Point p1, Point p2, boolean dies)
+    public Move(Point p1, Point p2, boolean dies)
     {
         this.p1 = p1;
         this.p2 = p2;

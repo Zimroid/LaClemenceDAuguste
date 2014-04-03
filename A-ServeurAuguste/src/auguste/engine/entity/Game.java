@@ -19,12 +19,13 @@ package auguste.engine.entity;
 import auguste.engine.GameListener;
 import auguste.engine.GameTimer;
 import auguste.engine.entity.action.Action;
+import auguste.engine.entity.action.Movement;
 import auguste.engine.entity.pawn.Armor;
 import auguste.engine.entity.pawn.Laurel;
 import auguste.engine.entity.pawn.Pawn;
 import auguste.engine.entity.pawn.Soldier;
 import auguste.engine.turnData.Battle;
-import auguste.engine.turnData.Movement;
+import auguste.engine.turnData.Move;
 import auguste.engine.turnData.Tenaille;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -45,12 +46,11 @@ public class Game
     
     // Variables pour l'affichage client
     private final GameListener listener;
-    private final ArrayList<auguste.engine.entity.action.Movement> moves;
+    private final ArrayList<Move> moves;
     private final ArrayList<Tenaille> tenailles;
     private final ArrayList<Battle> battles;
     
     // Variables métier
-    private Player master;
     private final ArrayList<Player> players;
     private Board board;
     
@@ -58,12 +58,10 @@ public class Game
     * Instanciation d'une partie avec son gérant.
     * @param listener Game listener
     * @param turnDuration durée d'un tour
-    * @param master Joueur gérant la partie
     */
-    public Game(GameListener listener, int turnDuration, Player master)
+    public Game(GameListener listener, int turnDuration)
     {
         this.listener = listener;
-        this.master = master;
         this.turnDuration = turnDuration;
         this.teams = new ArrayList<>();
         this.players = new ArrayList<>();
@@ -72,7 +70,6 @@ public class Game
         this.moves = new ArrayList<>();
         this.tenailles = new ArrayList<>();
         this.battles = new ArrayList<>();
-        this.addPlayer(master);
         this.timer = new GameTimer(this,turnDuration);
     }
     
@@ -113,7 +110,91 @@ public class Game
     */
     public void applyMoves()
     {
+        ArrayList<Movement> moveActions = new ArrayList<>();
+        for(Action a : actions)
+        {
+            if(a.getMovement() != null)
+            {
+                moveActions.add(a.getMovement());
+            }
+        }
         
+        Pawn p;
+        Cell c;
+        Move move;
+        
+        for(Movement m : moveActions)
+        {
+            p = m.getPawn();
+            c = m.getCell();
+
+            move = null;
+
+            if(c.getPawn() == null && correctMove(m))
+            {
+                move = new Move(p.getCell().getP(),c.getP(),false);
+                p.getCell().setPawn(null);
+                for(Movement m2 : moveActions)
+                {
+                    if(m2.getCell() == c)
+                    {
+                        p.setCell(null);
+                        move.setDies(true);
+                    }
+                    else
+                    {
+                        p.setCell(c);
+                        c.setPawn(p);
+                    }
+                }
+            }
+
+            if(move != null) moves.add(move);
+        }
+    }
+    
+    /**
+     * Calcule si le mouvement est correct ou non
+     * @param m Mouvement
+     * @return Mouvement correct ou non
+     */
+    private boolean correctMove(Movement m)
+    {
+        boolean res = true;
+        
+        return res;
+    }
+    
+    private ArrayList<Cell> nearlyCells(Cell c)
+    {
+        ArrayList<Cell> res = new ArrayList<>();
+        
+        return res;
+    }
+    
+    private ArrayList<Cell> emptyCellsNearGroup(ArrayList<Pawn> group)
+    {
+        ArrayList<Cell> res = new ArrayList<>();
+        
+        return res;
+    }
+    
+    
+    private ArrayList<Pawn> nearlyFriends(Pawn p)
+    {
+        ArrayList<Pawn> res = new ArrayList<>();
+        ArrayList<Cell> cells = nearlyCells(p.getCell());
+        Pawn tPawn;
+        for(Cell c : cells)
+        {
+            tPawn = c.getPawn();
+            if(tPawn.getLegion() == p.getLegion())
+            {
+                res.add(p);
+            }
+        }
+        
+        return res;
     }
     
     /**
@@ -275,22 +356,6 @@ public class Game
     }
 
     /**
-     * @return the master
-     */
-    public Player getMaster()
-    {
-        return master;
-    }
-
-    /**
-     * @param master the master to set
-     */
-    public void setMaster(Player master)
-    {
-        this.master = master;
-    }
-
-    /**
      * @return the players
      */
     public ArrayList<Player> getPlayers()
@@ -351,7 +416,7 @@ public class Game
     /**
      * @return the moves
      */
-    public ArrayList<auguste.engine.entity.action.Movement> getMoves() {
+    public ArrayList<Move> getMoves() {
         return moves;
     }
 
