@@ -24,7 +24,8 @@ import auguste.engine.entity.Legion;
  */
 public class Soldier extends Pawn
 {
-
+    private boolean armored = false;
+    
     /**
     * Instanciation d'un soldat.
     */
@@ -46,5 +47,19 @@ public class Soldier extends Pawn
     public String toString()
     {
         return "Soldat - " + this.getLegion();
+    }
+
+    /**
+     * @return the armored
+     */
+    public boolean isArmored() {
+        return armored;
+    }
+
+    /**
+     * @param armored the armored to set
+     */
+    public void setArmored(boolean armored) {
+        this.armored = armored;
     }
 }

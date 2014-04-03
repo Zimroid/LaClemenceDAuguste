@@ -125,36 +125,47 @@ public class Game
         Cell c;
         Move move;
         boolean moveOk;
+        Movement m;
+        Pawn tp;
         
-        for(Movement m : moveActions)
+        for(Action a : actions)
         {
-            p = m.getPawn();
-            c = m.getCell();
-            move = null;
-
-            if(c.getPawn() == null && correctMove(m))
+            m = a.getMovement();
+            if(a.getMovement() != null)
             {
-                move = new Move(p.getCell().getP(),c.getP(),false);
-                p.getCell().setPawn(null);
-                moveOk = true;
-                for(Movement m2 : moveActions)
+                p = m.getPawn();
+                c = m.getCell();
+                move = null;
+                tp = c.getPawn();
+                if(p != null && p.getLegion() == a.getLegion() && (tp == null || (p instanceof Soldier && ((Soldier)p).isArmored() == false && tp instanceof Armor)) && correctMove(m))
                 {
-                    if(m2 != m && m2.getCell() == c)
+                    move = new Move(p.getCell().getP(),c.getP(),false);
+                    p.getCell().setPawn(null);
+                    moveOk = true;
+                    for(Movement m2 : moveActions)
                     {
-                        p.setCell(null);
-                        move.setDies(true);
-                        moveOk = false;
-                        break;
+                        if(m2 != m && m2.getCell() == c)
+                        {
+                            p.setCell(null);
+                            move.setDies(true);
+                            moveOk = false;
+                            break;
+                        }
+                    }
+                    if(moveOk)
+                    {
+                        p.setCell(c);
+                        if(tp != null && tp instanceof Armor)
+                        {
+                            tp.setCell(null);
+                            ((Soldier)p).setArmored(true);
+                        }
+                        c.setPawn(p);
                     }
                 }
-                if(moveOk)
-                {
-                    p.setCell(c);
-                    c.setPawn(p);
-                }
-            }
 
-            if(move != null) moves.add(move);
+                if(move != null) moves.add(move);
+            }
         }
     }
     
@@ -165,10 +176,10 @@ public class Game
      */
     private boolean correctMove(Movement m)
     {
-        return nearlyEmptyCells(friendlyGroup(m.getPawn())).contains(m.getCell());
+        return nearlyEmptyCells(friendlyGroup(m.getPawn()),true).contains(m.getCell());
     }
     
-    private ArrayList<Cell> nearlyEmptyCells(ArrayList<Pawn> group)
+    private ArrayList<Cell> nearlyEmptyCells(ArrayList<Pawn> group, boolean armorIsOk)
     {
         ArrayList<Cell> res = new ArrayList<>();
         
@@ -176,13 +187,12 @@ public class Game
         {
             for(Cell c : nearlyCells(p.getCell()))
             {
-                if(c.getPawn() == null && !res.contains(c))
+                if((c.getPawn() == null || (armorIsOk && c.getPawn() instanceof Armor)) && !res.contains(c))
                 {
                     res.add(c);
                 }
             }
         }
-        
         return res;
     }
     
@@ -360,6 +370,9 @@ public class Game
         {
             switch(board.getSize())
             {
+                case 5:
+                    initCell(-1,-1,new Armor(),i);
+                    break;
                 case 7:
                     initCell(-4,-2,new Armor(),i);
                     initCell(-2,-1,new Armor(),i);
