@@ -36,7 +36,7 @@ import java.util.ArrayList;
 public class Game
 {
     // Variables de classe
-    private long turnDuration;
+    private int turnDuration;
     private final ArrayList<Team> teams;
     private final ArrayList<Legion> legions;
     
@@ -45,11 +45,12 @@ public class Game
     
     // Variables pour l'affichage client
     private final GameListener listener;
-    private final ArrayList<Movement> moves;
+    private final ArrayList<auguste.engine.entity.action.Movement> moves;
     private final ArrayList<Tenaille> tenailles;
     private final ArrayList<Battle> battles;
     
     // Variables métier
+    private Player master;
     private final ArrayList<Player> players;
     private Board board;
     
@@ -57,10 +58,12 @@ public class Game
     * Instanciation d'une partie avec son gérant.
     * @param listener Game listener
     * @param turnDuration durée d'un tour
+    * @param master Joueur gérant la partie
     */
-    public Game(GameListener listener, long turnDuration)
+    public Game(GameListener listener, int turnDuration, Player master)
     {
         this.listener = listener;
+        this.master = master;
         this.turnDuration = turnDuration;
         this.teams = new ArrayList<>();
         this.players = new ArrayList<>();
@@ -69,6 +72,7 @@ public class Game
         this.moves = new ArrayList<>();
         this.tenailles = new ArrayList<>();
         this.battles = new ArrayList<>();
+        this.addPlayer(master);
         this.timer = new GameTimer(this,turnDuration);
     }
     
@@ -138,6 +142,9 @@ public class Game
         {
             switch(board.getSize())
             {
+                case 3:
+                    initCell(-2,-2,new Soldier(l),l.getPosition(),true);
+                    break;
                 case 7:
                     initCell(-6,-6,new Soldier(l),l.getPosition(),true);
                     initCell(-6,-5,new Soldier(l),l.getPosition(),true);
@@ -268,6 +275,22 @@ public class Game
     }
 
     /**
+     * @return the master
+     */
+    public Player getMaster()
+    {
+        return master;
+    }
+
+    /**
+     * @param master the master to set
+     */
+    public void setMaster(Player master)
+    {
+        this.master = master;
+    }
+
+    /**
      * @return the players
      */
     public ArrayList<Player> getPlayers()
@@ -278,9 +301,13 @@ public class Game
     /**
      * @param player the player to add
      */
-    public void addPlayer(Player player)
+    public final void addPlayer(Player player)
     {
         this.players.add(player);
+        if(!this.teams.contains(player.getTeam()))
+        {
+            this.teams.add(player.getTeam());
+        }
     }
     
     /**
@@ -324,7 +351,7 @@ public class Game
     /**
      * @return the moves
      */
-    public ArrayList<Movement> getMoves() {
+    public ArrayList<auguste.engine.entity.action.Movement> getMoves() {
         return moves;
     }
 
@@ -359,14 +386,14 @@ public class Game
     /**
      * @return the turnDuration
      */
-    public long getTurnDuration() {
+    public int getTurnDuration() {
         return turnDuration;
     }
 
     /**
      * @param turnDuration the turnDuration to set
      */
-    public void setTurnDuration(long turnDuration) {
+    public void setTurnDuration(int turnDuration) {
         this.turnDuration = turnDuration;
     }
 }
