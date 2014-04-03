@@ -42,6 +42,6 @@ public class GameTimer extends Thread {
         } catch (InterruptedException ex)
         {
         }
-        game.getListener().onTurnEnd();
+        if(game.getListener() != null) game.getListener().onTurnEnd();
     }
 }

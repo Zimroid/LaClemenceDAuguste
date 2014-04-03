@@ -75,6 +75,11 @@ public class Game
         this.timer = new GameTimer(this,turnDuration);
     }
     
+    public Game(int turnDuration)
+    {
+        this(null, turnDuration);
+    }
+    
     /**
     * Ajoute une action.
      * @param a Action

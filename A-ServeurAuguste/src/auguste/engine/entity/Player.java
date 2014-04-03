@@ -38,7 +38,12 @@ public class Player
      */
     public Player(User user)
     {
+        this();
         this.user = user;
+    }
+    
+    public Player()
+    {
         this.legions = new ArrayList<>();
     }
 
