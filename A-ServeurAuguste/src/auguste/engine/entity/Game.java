@@ -29,6 +29,8 @@ import auguste.engine.turnData.Move;
 import auguste.engine.turnData.Tenaille;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Classe représentant une partie.
@@ -122,30 +124,33 @@ public class Game
         Pawn p;
         Cell c;
         Move move;
+        boolean moveOk;
         
         for(Movement m : moveActions)
         {
             p = m.getPawn();
             c = m.getCell();
-
             move = null;
 
             if(c.getPawn() == null && correctMove(m))
             {
                 move = new Move(p.getCell().getP(),c.getP(),false);
                 p.getCell().setPawn(null);
+                moveOk = true;
                 for(Movement m2 : moveActions)
                 {
-                    if(m2.getCell() == c)
+                    if(m2 != m && m2.getCell() == c)
                     {
                         p.setCell(null);
                         move.setDies(true);
+                        moveOk = false;
+                        break;
                     }
-                    else
-                    {
-                        p.setCell(c);
-                        c.setPawn(p);
-                    }
+                }
+                if(moveOk)
+                {
+                    p.setCell(c);
+                    c.setPawn(p);
                 }
             }
 
@@ -160,25 +165,63 @@ public class Game
      */
     private boolean correctMove(Movement m)
     {
-        boolean res = true;
-        
-        return res;
+        return nearlyEmptyCells(friendlyGroup(m.getPawn())).contains(m.getCell());
     }
     
-    private ArrayList<Cell> nearlyCells(Cell c)
+    private ArrayList<Cell> nearlyEmptyCells(ArrayList<Pawn> group)
     {
         ArrayList<Cell> res = new ArrayList<>();
         
-        return res;
-    }
-    
-    private ArrayList<Cell> emptyCellsNearGroup(ArrayList<Pawn> group)
-    {
-        ArrayList<Cell> res = new ArrayList<>();
+        for(Pawn p : group)
+        {
+            for(Cell c : nearlyCells(p.getCell()))
+            {
+                if(c.getPawn() == null && !res.contains(c))
+                {
+                    res.add(c);
+                }
+            }
+        }
         
         return res;
     }
     
+    private ArrayList<Pawn> friendlyGroup(Pawn p)
+    {
+        ArrayList<Pawn> res = new ArrayList<>();
+        ArrayList<Pawn> next = new ArrayList<>();
+        ArrayList<Pawn> tempNext;
+        ArrayList<Pawn> near;
+        next.add(p);
+        boolean stop = false;
+        
+        while(!stop)
+        {
+            tempNext = new ArrayList<>();
+            for(Pawn p1 : next)
+            {
+                near = nearlyFriends(p1);
+                for(Pawn p2 : near)
+                {
+                    if(!res.contains(p2) && !next.contains(p2) && !tempNext.contains(p2))
+                    {
+                        tempNext.add(p2);
+                    }
+                }
+                res.add(p1);
+            }
+            if(tempNext.isEmpty())
+            {
+                stop = true;
+            }
+            else
+            {
+                next = tempNext;
+            }
+        }
+        
+        return res;
+    }
     
     private ArrayList<Pawn> nearlyFriends(Pawn p)
     {
@@ -188,9 +231,34 @@ public class Game
         for(Cell c : cells)
         {
             tPawn = c.getPawn();
-            if(tPawn.getLegion() == p.getLegion())
+            if(tPawn != null && tPawn.getLegion() == p.getLegion())
             {
-                res.add(p);
+                res.add(tPawn);
+            }
+        }
+        
+        return res;
+    }
+    
+    private ArrayList<Cell> nearlyCells(Cell c)
+    {
+        ArrayList<Cell> res = new ArrayList<>();
+        int x = c.getP().x;
+        int y = c.getP().y;
+        List<Point> pArray =
+                Arrays.asList(
+                        new Point(x,y-1),
+                        new Point(x,y+1),
+                        new Point(x-1,y),
+                        new Point(x+1,y),
+                        new Point(x-1,(x>0?x+1:x-1)),
+                        new Point(x+1,(x<0?x+1:x-1)));
+        
+        for(Point p : pArray)
+        {
+            if(board.getCell(p) != null)
+            {
+                res.add(board.getCell(p));
             }
         }
         
@@ -223,8 +291,14 @@ public class Game
         {
             switch(board.getSize())
             {
-                case 3:
+                case 3:                                                       // Test Board
                     initCell(-2,-2,new Soldier(l),l.getPosition(),true);
+                    break;
+                case 5:                                                       // Test Board
+                    initCell(-4,-4,new Soldier(l),l.getPosition(),true);
+                    initCell(-4,-3,new Soldier(l),l.getPosition(),true);
+                    initCell(-3,-3,new Soldier(l),l.getPosition());
+                    initCell(-3,-4,new Soldier(l),l.getPosition(),true);
                     break;
                 case 7:
                     initCell(-6,-6,new Soldier(l),l.getPosition(),true);
