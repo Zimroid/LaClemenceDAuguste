@@ -24,6 +24,7 @@ import org.json.JSONException;
 /**
  * Commande de création d'une partie. Instancie la salon, ajoute l'utilisateur
  * et le définie comme propriétaire, puis confirme la salon à l'utilisateur.
+ * 
  * @author Lzard
  */
 public class GameCreate extends ClientCommand

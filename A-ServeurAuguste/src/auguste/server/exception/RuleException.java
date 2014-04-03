@@ -18,6 +18,7 @@ package auguste.server.exception;
 
 /**
  * Exception lancée lorsqu'une commande enfreint les règles du jeu.
+ * 
  * @author Lzard
  */
 public class RuleException extends Exception

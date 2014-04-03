@@ -21,6 +21,7 @@ import org.json.JSONException;
 
 /**
  * Commande de signalisation qu'une erreur est survenue.
+ * 
  * @author Lzard
  */
 public class MessageError extends ServerCommand

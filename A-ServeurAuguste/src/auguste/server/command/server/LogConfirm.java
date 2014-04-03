@@ -23,6 +23,7 @@ import org.json.JSONException;
 /**
  * Commande de confirmation d'authentification. Envoi les données et paramètres
  * de l'utilisateur.
+ * 
  * @author Lzard
  */
 public class LogConfirm extends ServerCommand

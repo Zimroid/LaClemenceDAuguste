@@ -21,6 +21,7 @@ import org.json.JSONException;
 
 /**
  * Commande de transfert des données d'un tour.
+ * 
  * @author Lzard
  */
 public class GameTurn extends ServerCommand

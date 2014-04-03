@@ -21,6 +21,7 @@ import java.util.Date;
 
 /**
  * Classe utilitaire pour enregistrer les messages du serveur.
+ * 
  * @author Lzard
  */
 public class Log
@@ -55,7 +56,7 @@ public class Log
      */
     public static void debug(String message)
     {
-        if (Configuration.getBoolean("debug")) Log.DEBUG.println("DEBuG " + (new Date()).toString() + " -- " + message);
+        if (Configuration.getBoolean("debug")) Log.DEBUG.println("DEBUG " + (new Date()).toString() + " -- " + message);
     }
     
     /**

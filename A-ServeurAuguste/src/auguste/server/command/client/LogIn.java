@@ -29,6 +29,7 @@ import org.json.JSONException;
  * Commande d'authentification d'un joueur. Si l'utilisateur n'est pas
  * identifié, ouvre une connexion à la base de données et vérifie qu'un
  * utilisateur enregistré correspond au login donné.
+ * 
  * @author Lzard
  */
 public class LogIn extends ClientCommand

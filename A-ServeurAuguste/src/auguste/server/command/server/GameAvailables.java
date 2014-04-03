@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 /**
  * Commande d'envoi de la liste des salons crées disponibles.
+ * 
  * @author Lzard
  */
 public class GameAvailables extends ServerCommand

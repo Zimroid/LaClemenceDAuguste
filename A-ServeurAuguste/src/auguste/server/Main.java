@@ -24,6 +24,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * Classe statique de lancement du serveur.
+ * 
  * @author Lzard
  */
 public class Main

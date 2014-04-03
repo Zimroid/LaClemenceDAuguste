@@ -21,6 +21,7 @@ import auguste.server.Room;
 /**
  * Commande de confirmation de création/modification d'une partie. Envoi la
  * configuration de la partie.
+ * 
  * @author Lzard
  */
 public class GameConfirm extends ServerCommand

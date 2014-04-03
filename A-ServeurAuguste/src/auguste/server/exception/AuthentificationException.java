@@ -19,6 +19,7 @@ package auguste.server.exception;
 /**
  * Exception lancée lorsqu'un client non-authentifié tente d'effectuer une
  * action qu'il ne peut effectuer sans être authentifié.
+ * 
  * @author Lzard
  */
 public class AuthentificationException extends Exception

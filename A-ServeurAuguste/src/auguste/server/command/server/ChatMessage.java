@@ -24,6 +24,7 @@ import org.json.JSONException;
 
 /**
  * Commande d'envoi d'un message de chat.
+ * 
  * @author Lzard
  */
 public class ChatMessage extends ServerCommand

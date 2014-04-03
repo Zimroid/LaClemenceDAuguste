@@ -22,6 +22,7 @@ import org.json.JSONException;
 
 /**
  * Commande de désauthentification d'un client.
+ * 
  * @author Lzard
  */
 public class LogOut extends ClientCommand

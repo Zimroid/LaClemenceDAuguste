@@ -27,6 +27,7 @@ import java.sql.SQLException;
  * de la base de données. Permet également l'identification d'un utilisaeur via
  * son nom et son mot de passe hashé. Vérifie la disponibilité d'un nom
  * d'utilisateur.
+ * 
  * @author Lzard
  */
 public class UserManager extends Manager
@@ -84,7 +85,7 @@ public class UserManager extends Manager
     /**
      * Indique si un nom d'utilisateur est disponible.
      * @param name Nom à vérifier
-     * @return Booléen indiquant la disponibilité du nom
+     * @return Disponibilité du nom
      * @throws SQLException Erreur SQL
      */
     public boolean getNameAvailability(String name) throws SQLException
@@ -120,7 +121,7 @@ public class UserManager extends Manager
             // Sauvegarde de l'identifiant du nouvel utilisateur
             ResultSet generatedKeys = statement.getGeneratedKeys();
             generatedKeys.first();
-            user.setId(generatedKeys.getInt("id"));
+            user.setId(generatedKeys.getInt(1));
         }
         else
         {

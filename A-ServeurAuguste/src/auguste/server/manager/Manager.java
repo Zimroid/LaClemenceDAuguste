@@ -25,6 +25,7 @@ import java.sql.Statement;
  * Classe abstraite des gestionnaires de données à faire persister. Utilise une
  * connexion à la base de données pour effectuer des requêtes dans le but de
  * faire persister un type d'objet précis.
+ * 
  * @author Lzard
  */
 public abstract class Manager

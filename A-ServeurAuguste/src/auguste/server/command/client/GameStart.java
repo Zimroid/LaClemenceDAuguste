@@ -22,6 +22,7 @@ import org.json.JSONException;
 
 /**
  * Commande pour commencer une partie.
+ * 
  * @author Lzard
  */
 public class GameStart extends ClientCommand

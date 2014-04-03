@@ -22,3 +22,7 @@ B-ClientWeb/Client-Web/model/config.php
 *.properties
 *.properties
 *.class
+*.TXT
+*.jar
+*.class
+*.properties

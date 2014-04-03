@@ -22,6 +22,7 @@ import org.json.JSONException;
 
 /**
  * Commande indiquant la fermeture d'une salon.
+ * 
  * @author Lzard
  */
 public class GameClose extends ServerCommand

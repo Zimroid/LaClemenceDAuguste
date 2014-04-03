@@ -25,6 +25,7 @@ import java.util.Properties;
  * Classe utilitaire permettant de charger et de lire la configuration du
  * serveur. La configuration est d'abord chargée via la méthode statique load,
  * puis lue avec les méthodes get, getBoolean, getInt et getLong.
+ * 
  * @author Lzard
  */
 public class Configuration

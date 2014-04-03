@@ -271,6 +271,7 @@ public class Server extends WebSocketServer
      */
     public void logIn(WebSocket socket, User user)
     {
+        user.setSocket(socket);
         this.clients.put(socket, user);
         this.users.put(user.getId(), user);
     }

@@ -24,6 +24,7 @@ import org.json.JSONException;
 /**
  * Commande pour rejoindre une partie. Identifie la salon et, si elle existe et
  * que l'utilisateur ne l'a pas déjà rejoint, y ajoute l'utilisateur.
+ * 
  * @author Lzard
  */
 public class GameJoin extends ClientCommand

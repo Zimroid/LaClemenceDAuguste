@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 /**
  * Classe abstraite des commandes serveurs à envoyer.
+ * 
  * @author Lzard
  */
 public abstract class ServerCommand

@@ -27,6 +27,7 @@ import org.json.JSONException;
  * Commande de création d'un compte. Instancie un objet User avec les paramètres
  * donnés, ouvre une connexion à la base de données, vérifie la disponibilité
  * du nom puis ajoute l'utilisateur.
+ * 
  * @author Lzard
  */
 public class AccountCreate extends ClientCommand

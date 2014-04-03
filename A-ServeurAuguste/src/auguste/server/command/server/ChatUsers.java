@@ -27,6 +27,7 @@ import org.json.JSONObject;
 /**
  * Commande de transfert de la liste des utilisateurs authentifiés actuellement
  * connectés au serveur ou à une salon.
+ * 
  * @author Lzard
  */
 public class ChatUsers extends ServerCommand

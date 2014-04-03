@@ -22,6 +22,7 @@ import org.json.JSONException;
  * Commande de configuration d'une partie. Vérifie si l'utilisateur est le
  * propriétaire de la salon, puis modifie la configuration et envoi une
  * confirmation à tous les utilisateurs.
+ * 
  * @author Lzard
  */
 public class GameConfig extends ClientCommand

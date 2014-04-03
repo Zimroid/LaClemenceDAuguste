@@ -23,6 +23,7 @@ import org.json.JSONException;
  * Commande pour quitter une partie. Retire l'utilisateur de la salon puis
  * envoi une confirmation aux utilisateurs de la salon et à l'utilisateur
  * ayant envoyé la commande.
+ * 
  * @author Lzard
  */
 public class GameLeave extends ClientCommand

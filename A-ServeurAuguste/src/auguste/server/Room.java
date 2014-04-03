@@ -18,7 +18,6 @@ package auguste.server;
 
 import auguste.engine.GameListener;
 import auguste.engine.entity.Game;
-import auguste.server.command.server.GameClose;
 import auguste.server.command.server.GameConfirm;
 import auguste.server.exception.RoomException;
 import auguste.server.exception.RoomException.Type;
@@ -63,6 +62,15 @@ public class Room implements GameListener
     {
         this.id   = id;
         this.name = name;
+        try
+        {
+            this.configuration.put("game_name", name);
+            this.configuration.put("board_size", 5);
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
     }
     
     /**

@@ -33,6 +33,7 @@ import org.json.JSONObject;
 
 /**
  * Classe abstraite des commandes user à exécuter.
+ * 
  * @author Lzard
  */
 public abstract class ClientCommand

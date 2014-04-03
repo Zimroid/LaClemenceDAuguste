@@ -23,6 +23,7 @@ import org.json.JSONException;
 
 /**
  * Commande pour récupérer la liste des parties disponibles.
+ * 
  * @author Lzard
  */
 public class GameList extends ClientCommand

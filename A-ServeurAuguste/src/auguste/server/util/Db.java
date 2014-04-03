@@ -23,6 +23,7 @@ import java.sql.SQLException;
 /**
  * Classe utilitaire de connexion à la base de données. Ouvre les connexions et
  * désactive le commit automatique des requêtes afin d'éviter les erreurs.
+ * 
  * @author Lzard
  */
 public class Db

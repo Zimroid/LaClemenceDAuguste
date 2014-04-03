@@ -21,6 +21,7 @@ import org.json.JSONException;
 
 /**
  * Commande de confirmation d'une action quelconque.
+ * 
  * @author Lzard
  */
 public class MessageConfirm extends ServerCommand

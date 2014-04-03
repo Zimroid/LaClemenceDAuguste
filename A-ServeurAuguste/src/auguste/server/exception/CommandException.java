@@ -18,6 +18,7 @@ package auguste.server.exception;
 
 /**
  * Exception lancée lorsqu'une commande émise par un client n'est pas reconnue.
+ * 
  * @author Lzard
  */
 public class CommandException extends Exception

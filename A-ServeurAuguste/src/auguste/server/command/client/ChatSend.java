@@ -23,6 +23,7 @@ import org.json.JSONException;
 /**
  * Commande d'envoi d'un message. Envoi du message à la salon précisée ou au
  * canal général sinon.
+ * 
  * @author Lzard
  */
 public class ChatSend extends ClientCommand
