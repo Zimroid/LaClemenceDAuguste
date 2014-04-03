@@ -90,7 +90,7 @@ public class Hexagon {
 		float rac = (float) (Math.sqrt(3)/2);
 		
 		// Positions points hexagone
-		ArrayList<Position> points = new ArrayList<>();
+		ArrayList<Position> points = new ArrayList<Position>();
 		points.add(new Position(centre.getX(), centre.getY() - rayon));
 		points.add(new Position(centre.getX() + rac * rayon, centre.getY() - 0.5f * rayon));
 		points.add(new Position(centre.getX() + rac * rayon, centre.getY() + 0.5f * rayon));

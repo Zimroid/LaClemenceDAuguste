@@ -78,13 +78,16 @@ public class MenuScreen implements Screen {
         textButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 textButton.setText("Game");
-                //g.setScreen( new GameScreen());
+                g.setScreen(new GameScreen(g));
             }
         });
     }
  
     public void render (float delta) {
-        Gdx.gl.glClearColor(0.7f, 0.7f, 0.7f, 1);
+    	//if(Gdx.input.justTouched())
+            //g.setScreen(new GameScreen(g));
+            
+    	Gdx.gl.glClearColor(0.7f, 0.7f, 0.7f, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
