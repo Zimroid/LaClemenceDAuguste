@@ -7,9 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class Hexagon {
-	// Position case
-	private int u;
-	private int w;
+	private Cell cell;
 
 	private Position centre;	// Position centre
 	private float rayon;		// Taille rayon
@@ -19,11 +17,10 @@ public class Hexagon {
 	/*
 	 * Constructor
 	 */
-	public Hexagon(int u, int w, float x, float y, float r, Color color, float border)
+	public Hexagon(Cell ce, float x, float y, float r, Color color, float border)
 	{
-		// Position logique
-		this.u = u;
-		this.w = w;
+		// Données
+		this.cell = ce;		
 		
 		// Infos graphiques
 		this.centre = new Position(x, y);
