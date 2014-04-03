@@ -22,7 +22,7 @@ import auguste.server.exception.RoomException;
 import org.json.JSONException;
 
 /**
- * Commande pour rejoindre une partie. Identifie la salle et, si elle existe et
+ * Commande pour rejoindre une partie. Identifie la salon et, si elle existe et
  * que l'utilisateur ne l'a pas déjà rejoint, y ajoute l'utilisateur.
  * @author Lzard
  */
@@ -37,14 +37,14 @@ public class GameJoin extends ClientCommand
     @Override
     public void execute() throws RoomException, JSONException
     {
-        // Récupération de la salle
+        // Récupération de la salon
         Room room = Server.getInstance().getRoom(this.getJSON().getInt("room_id"));
 
         // Vérification de la non-présence de l'utilisateur
         if (!room.isInRoom(this.getUser()))
         {
-            // Ajout du client à la salle
-            room.addUser(this.getSocket(), this.getUser());
+            // Ajout du client à la salon
+            Server.getInstance().joinRoom(this.getUser(), room);
             room.confirm();
         }
         else this.error("already_in_this_room");

@@ -17,7 +17,6 @@
 package auguste.server.command.server;
 
 import auguste.server.Room;
-import org.json.JSONException;
 
 /**
  * Commande de confirmation de création/modification d'une partie. Envoi la
@@ -28,10 +27,9 @@ public class GameConfirm extends ServerCommand
 {
     /**
      * Remplit le JSON avec la configuration de la partie.
-     * @param room Salle de la partie
-     * @throws JSONException Erreur JSON
+     * @param room salon de la partie
      */
-    public GameConfirm(Room room) throws JSONException
+    public GameConfirm(Room room)
     {
         // Constructeur de la classe mère
         super("game_confirm", room);

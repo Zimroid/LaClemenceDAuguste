@@ -17,6 +17,7 @@
 package auguste.server.command.client;
 
 import auguste.server.Room;
+import auguste.server.Server;
 import auguste.server.User;
 import auguste.server.command.server.MessageConfirm;
 import auguste.server.command.server.MessageError;
@@ -25,7 +26,6 @@ import auguste.server.exception.CommandException;
 import auguste.server.exception.RoomException;
 import auguste.server.exception.RoomException.Type;
 import auguste.server.exception.RuleException;
-import auguste.server.util.Log;
 import java.sql.SQLException;
 import org.java_websocket.WebSocket;
 import org.json.JSONException;
@@ -79,8 +79,7 @@ public abstract class ClientCommand
      */
     public static void send(WebSocket socket, String message)
     {
-        Log.out(socket.getRemoteSocketAddress() + ": Send " + message);
-        socket.send(message);
+        Server.getInstance().send(socket, message);
     }
     
     /**
@@ -115,12 +114,12 @@ public abstract class ClientCommand
     
     // Données de la commande
     private User user = null; // Utilisateur qui a émit la commande
-    private Room room = null; // Salle concernée par la commande
+    private Room room = null; // salon concernée par la commande
     
     /**
      * Exécution de la commande.
      * @throws auguste.server.exception.AuthentificationException Utilisateur non-authentifié
-     * @throws auguste.server.exception.RoomException             Erreur de salle
+     * @throws auguste.server.exception.RoomException             Erreur de salon
      * @throws auguste.server.exception.RuleException             Règles enfreintes
      * @throws org.json.JSONException                             Erreur JSON
      * @throws java.sql.SQLException                              Erreur SQL
@@ -167,8 +166,8 @@ public abstract class ClientCommand
     
     /**
      * Indique s'il faut vérifier la présence d'un room_id et si l'utilisateur
-     * doit être présent dans cette salle.
-     * @return Booléen indiquant si l'utilisateur doit être dans la salle
+     * doit être présent dans cette salon.
+     * @return Booléen indiquant si l'utilisateur doit être dans la salon
      */
     public boolean checkRoom()
     {
@@ -203,8 +202,8 @@ public abstract class ClientCommand
     }
     
     /**
-     * Retourne la salle concernée par la commande.
-     * @return Salle de la commande
+     * Retourne la salon concernée par la commande.
+     * @return salon de la commande
      */
     public Room getRoom()
     {
@@ -242,9 +241,9 @@ public abstract class ClientCommand
     }
     
     /**
-     * Modifie la salle concernée par la commande.
-     * @param room Salle à utiliser
-     * @throws auguste.server.exception.RoomException Utilisateur absent de la salle
+     * Modifie la salon concernée par la commande.
+     * @param room salon à utiliser
+     * @throws auguste.server.exception.RoomException Utilisateur absent de la salon
      */
     public void setRoom(Room room) throws RoomException
     {

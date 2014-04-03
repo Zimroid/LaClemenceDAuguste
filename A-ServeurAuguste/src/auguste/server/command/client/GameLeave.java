@@ -16,11 +16,12 @@
 
 package auguste.server.command.client;
 
+import auguste.server.Server;
 import org.json.JSONException;
 
 /**
- * Commande pour quitter une partie. Retire l'utilisateur de la salle puis
- * envoi une confirmation aux utilisateurs de la salle et à l'utilisateur
+ * Commande pour quitter une partie. Retire l'utilisateur de la salon puis
+ * envoi une confirmation aux utilisateurs de la salon et à l'utilisateur
  * ayant envoyé la commande.
  * @author Lzard
  */
@@ -29,8 +30,8 @@ public class GameLeave extends ClientCommand
     @Override
     public void execute() throws JSONException
     {
-        // Retrait de l'utilisateur de la salle
-        this.getRoom().removeUser(this.getUser());
+        // Retrait de l'utilisateur de la salon
+        Server.getInstance().leaveRoom(this.getUser(), this.getRoom());
         this.getRoom().confirm();
         this.confirm("room_left");
     }

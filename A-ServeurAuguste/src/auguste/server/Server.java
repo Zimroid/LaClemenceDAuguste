@@ -17,6 +17,7 @@
 package auguste.server;
 
 import auguste.server.command.client.ClientCommand;
+import auguste.server.command.server.GameClose;
 import auguste.server.exception.AuthentificationException;
 import auguste.server.exception.CommandException;
 import auguste.server.exception.RoomException;
@@ -28,7 +29,6 @@ import java.net.InetSocketAddress;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map.Entry;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -38,8 +38,11 @@ import org.json.JSONObject;
 /**
  * Classe du serveur. Hérite de la classe WebSocketServer, permettant de lancer
  * le serveur de WebSocket, et d'effectuer une action lors d'un évènement lié
- * à une WebSocket. Gère également l'authentification des utilisateurs et les
- * salles de jeu.
+ * à une WebSocket.
+ * 
+ * L'instance du serveur gère également les connexions des clients, les
+ * utilisateurs authentifiés et les salles crées.
+ * 
  * @author Lzard / Zim
  */
 public class Server extends WebSocketServer 
@@ -61,10 +64,13 @@ public class Server extends WebSocketServer
         return Server.INSTANCE;
     }
     
-    // Liste des utilisateurs authentifiés
-    private final HashMap<WebSocket, User> users = new HashMap<>();
+    // Liste des clients connectés
+    private final HashMap<WebSocket, User> clients = new HashMap<>();
     
-    // Liste des salles existantes
+    // Liste des utilisateurs authentifiés
+    private final HashMap<Integer, User> users = new HashMap<>();
+    
+    // Liste des salons existantes
     private final HashMap<Integer, Room> rooms = new HashMap<>();
     
     /**
@@ -79,11 +85,12 @@ public class Server extends WebSocketServer
         super(address);
         
         // Confirmation de la connexion
-        Log.out("Server available at " + address);
+        Log.out("Server started on " + address);
     }
     
     /**
-     * Méthode appelée lors de la connexion d'un client.
+     * Méthode appelée lors de la connexion d'un client. Ajoute le client à la
+     * liste des clients connectés.
      * @param socket    WebSocket créée
      * @param handshake Données handshake générées
      */
@@ -91,11 +98,16 @@ public class Server extends WebSocketServer
     public void onOpen(WebSocket socket, ClientHandshake handshake)
     {
         // Signalisation
-        Log.out(socket.getRemoteSocketAddress() + ": Opened");
+        Log.out(socket.getRemoteSocketAddress() + ": Open ");
+        
+        // Ajout du client à la liste
+        this.clients.put(socket, null);
     }
 
     /**
-     * Méthode appelée lors de la déconnexion d'un client.
+     * Méthode appelée lors de la déconnexion d'un client. Désauthentifie
+     * l'utilisateur si nécessaire, et supprime le client de la liste des
+     * clients connectés.
      * @param socket    WebSocket fermée
      * @param code      Code décrivant la raison de la fermeture
      * @param reason    Raison de la fermeture
@@ -105,13 +117,14 @@ public class Server extends WebSocketServer
     public void onClose(WebSocket socket, int code, String reason, boolean byRequest)
     {
         // Signalisation
-        Log.out(socket.getRemoteSocketAddress() + ": Closed" +
+        Log.out(socket.getRemoteSocketAddress() + ": Close " +
                 (byRequest ? " by client" : "") +
                 (reason.length() > 0 ? ": \"" + reason + "\"" : "") +
                 " (" + code + ")");
         
-        // Désauthentification de l'utilisateur si nécessaire
-        if (this.users.containsKey(socket)) this.logOut(this.users.get(socket));
+        // Désauthentification de l'utilisateur si nécessaire et suppression du client
+        if (this.clients.get(socket) != null) this.logOut(this.clients.get(socket));
+        this.clients.remove(socket);
     }
 
     /**
@@ -138,8 +151,8 @@ public class Server extends WebSocketServer
             command.setSocket(socket);
             command.setJSON(json);
 
-            // Vérification de l'authentification et de la salle
-            if (command.checkAuth()) command.setUser(this.users.get(socket));
+            // Vérification de l'authentification et de la salon
+            if (command.checkAuth()) command.setUser(this.clients.get(socket));
             if (command.checkRoom()) command.setRoom(this.rooms.get(json.getInt("room_id")));
 
             // Exécution
@@ -161,7 +174,7 @@ public class Server extends WebSocketServer
         }
         catch (RoomException e)
         {
-            // Erreur de salle
+            // Erreur de salon
             switch (e.getType())
             {
                 case INEXISTANT_ROOM:
@@ -221,63 +234,24 @@ public class Server extends WebSocketServer
     }
     
     /**
+     * Envoi d'un message à un utilisateur.
+     * @param socket  Socket destinataire
+     * @param message Message à envoyer
+     */
+    public void send(WebSocket socket, String message)
+    {
+        // Envoi du message
+        Log.out(socket.getRemoteSocketAddress() + ": Send " + message);
+        socket.send(message);
+    }
+    
+    /**
      * Envoi d'un message à tous les utilisateurs authentifiés.
      * @param message Message à envoyer
      */
     public void broadcast(String message)
     {
-        Log.debug("Broadcast to all users " + message);
-        for (WebSocket socket : this.users.keySet()) socket.send(message);
-    }
-    
-    /**
-     * Ajoute un utilisateur à la liste des utilisateurs authentifiés.
-     * @param socket Socket de l'utilisateur
-     * @param user   Utilisateur à authentifier
-     */
-    public void logIn(WebSocket socket, User user)
-    {
-        synchronized (this.users)
-        {
-            this.users.put(socket, user);
-        }
-    }
-    
-    /**
-     * Supprime un utilisateur de la liste des utilisateurs authentifiés et des
-     * listes des utilisateurs de chaque salle.
-     * @param user Utilisateur à supprimer
-     */
-    public void logOut(User user)
-    {
-        // Vérification de l'existence de l'utilisateur
-        if (this.users.containsValue(user))
-        {
-            // Retrait de l'utilisateur des salles dont il fait partie
-            for (Room room : user.getRooms()) room.removeUser(user);
-
-            // Retrait de l'utilisateur de la liste des utilisateurs authentifiés
-            for (Entry<WebSocket, User> set : this.users.entrySet())
-            {
-                if (set.getValue().equals(user))
-                {
-                    synchronized (this.users)
-                    {
-                        this.users.remove(set.getKey());
-                    }
-                }
-            }
-        }
-    }
-    
-    /**
-     * Supprime un utilisateur de la liste des utilisateurs authentifiés et des
-     * listes des utilisateurs de chaque salle via sa socket.
-     * @param socket Socket de l'utilisateur à supprimer
-     */
-    public void logOut(WebSocket socket)
-    {
-        if (this.users.containsKey(socket)) this.logOut(this.users.get(socket));
+        for (User user : this.users.values()) this.send(user.getSocket(), message);
     }
     
     /**
@@ -290,43 +264,49 @@ public class Server extends WebSocketServer
     }
     
     /**
-     * Créée une nouvelle salle. Recherche un identifiant disponible et
-     * l'attribue à cette nouvelle salle.
-     * @param name Nom de la nouvelle salle
-     * @return Salle instanciée
+     * Ajoute un utilisateur à la liste des utilisateurs authentifiés et
+     * l'attribue à la socket correspondante.
+     * @param socket Socket de l'utilisateur
+     * @param user   Utilisateur à authentifier
      */
-    public Room createRoom(String name)
+    public void logIn(WebSocket socket, User user)
     {
-        int roomId; // Identifiant de la nouvelle salle
-        Room room;  // Nouvelle salle
-        
-        synchronized (this.rooms)
-        {
-            // Recherche d'un identifiant disponible
-            roomId = 1;
-            while (this.rooms.containsKey(roomId)) roomId++;
+        this.clients.put(socket, user);
+        this.users.put(user.getId(), user);
+    }
+    
+    /**
+     * Supprime un utilisateur de la liste des utilisateurs authentifiés et des
+     * listes des utilisateurs de chaque salon. La socket n'est plus liée à cet
+     * utilisateur.
+     * @param user Utilisateur à supprimer
+     */
+    public void logOut(User user)
+    {
+        // Retrait de l'utilisateur des salons dont il fait partie
+        for (Room room : user.getRooms().values()) room.getUsers().remove(user.getId());
+        user.getRooms().clear();
 
-            // Création de la salle
-            room = new Room(roomId, name);
-            this.rooms.put(roomId, room);
-        }
+        // Retrait de l'utilisateur de la liste des utilisateurs authentifiés
+        if (this.users.remove(user.getId()) != null) ClientCommand.sendError(user.getSocket(), "logged_out");
         
-        return room;
+        // Désattribution de l'utilisateur à la socket
+        this.clients.put(user.getSocket(), null);
     }
     
     /**
-     * Supprime une salle.
-     * @param room Salle à supprimer
+     * Retourne la liste des salons crées.
+     * @return Collection des salons
      */
-    public void removeRoom(Room room)
+    public Collection<Room> getRooms()
     {
-        this.rooms.remove(room.getId());
+        return this.rooms.values();
     }
     
     /**
-     * Retourne une salle via son identifiant.
-     * @param id Identifiant de la salle
-     * @return Salle correspondant à l'identifiant
+     * Retourne un salon via son identifiant.
+     * @param id Identifiant du salon
+     * @return Salon correspondant à l'identifiant
      * @throws auguste.server.exception.RoomException Identifiant inexistant
      */
     public Room getRoom(int id) throws RoomException
@@ -336,12 +316,67 @@ public class Server extends WebSocketServer
     }
     
     /**
-     * Retourne la liste des salles crées.
-     * @return Collection des salles
+     * Instancie un nouveau salon. Recherche un identifiant disponible et
+     * l'attribue à ce nouveau salon.
+     * @param name Nom du salon
+     * @return Salon instancié
      */
-    public Collection<Room> getRooms()
+    public Room createRoom(String name)
     {
-        return this.rooms.values();
+        int roomId; // Identifiant du salon
+        Room room;  // Nouveau salon
+        
+        synchronized (this.rooms)
+        {
+            // Recherche d'un identifiant disponible
+            roomId = 1;
+            while (this.rooms.containsKey(roomId)) roomId++;
+
+            // Instanciation du salon
+            room = new Room(roomId, name);
+            this.rooms.put(roomId, room);
+        }
+        
+        return room;
+    }
+    
+    /**
+     * Joint un utilisateur à un salon.
+     * @param user Utilisateur à joindre
+     * @param room Salon cible
+     */
+    public void joinRoom(User user, Room room)
+    {
+        user.getRooms().put(room.getId(), room);
+        room.getUsers().put(user.getId(), user);
+    }
+    
+    /**
+     * Retire un utilisateur d'un salon.
+     * @param user Utilisateur à retirer
+     * @param room Salon cible
+     */
+    public void leaveRoom(User user, Room room)
+    {
+        user.getRooms().remove(room.getId());
+        room.getUsers().remove(user.getId());
+    }
+    
+    /**
+     * Ferme un salon. Le supprime de la liste des salons du serveur, règle son
+     * état à Closing, indique que le salon est fermé aux utilisateurs et
+     * supprime le salon des listes des salons des utilisateurs.
+     * @param room Salon à fermer
+     */
+    public void closeRoom(Room room)
+    {
+        // Fermeture et suppression du salon
+        this.rooms.remove(room.getId());
+        room.setState(Room.State.CLOSING);
+        
+        // Signalisation et suppression du salon
+        room.broadcast((new GameClose(room)).toString());
+        for (User user : room.getUsers().values()) user.getRooms().remove(room.getId());
     }
     
 }

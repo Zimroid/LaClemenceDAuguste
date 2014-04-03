@@ -27,7 +27,7 @@ public class GameTurn extends ServerCommand
 {
     /**
      * Remplit le JSON avec les paramètres du tour.
-     * @param room Salle de la partie
+     * @param room salon de la partie
      * @throws JSONException Erreur de JSON
      */
     public GameTurn(Room room) throws JSONException

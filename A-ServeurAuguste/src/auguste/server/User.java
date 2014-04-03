@@ -22,13 +22,20 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import org.apache.commons.codec.binary.Hex;
+import org.java_websocket.WebSocket;
 
 /**
  * Classe représentant un utilisateur connecté au serveur et authentifié. Gère
- * les données relatives à cet utilisateur. Contient la liste des salles
- * auxquelles l'utilisateur appartient.
+ * les données relatives à cet utilisateur, ainsi que la socket avec laquelle il
+ * est actuellement connecté. Contient la liste des salons auxquelles
+ * l'utilisateur appartient.
+ * 
+ * Le mot de passe de l'utilisateur est toujours stocké hashé dans une instance
+ * de User. Le hashage de mot de passe se fait via la méthode statique
+ * hashPassword.
+ * 
  * @author Lzard
  */
 public class User
@@ -37,7 +44,8 @@ public class User
     private final static int UNREGISTERED_ID = 0;
     
     /**
-     * Renvoie la chaine de caractères fournie en paramètre hashée.
+     * Retourne la chaine de caractères fournie en paramètre hashée avec
+     * l'algorithme configuré.
      * @param password Mot de passe à hasher
      * @return Mot de passe hashé ou chaîne vide si algorithme indisponible
      */
@@ -57,16 +65,19 @@ public class User
         }
     }
     
+    // Socket du client de l'utilisateur
+    private WebSocket socket = null;
+    
     // Attributs
     private int    id;       // Identifiant de l'utilisateur
     private String name;     // Nom de l'utilisateur
     private String password; // Mot de passe hashé de l'utilisateur
     
-    // Salles de l'utilisateur
-    private final ArrayList<Room> rooms = new ArrayList<>();
+    // Salons de l'utilisateur
+    private final HashMap<Integer, Room> rooms = new HashMap<>();
     
     /**
-     * Création d'un nouvel utilisateur.
+     * Instanciation d'un nouvel utilisateur.
      * @param name     Nom de l'utilisateur
      * @param password Mot de passe hashé de l'utilisateur
      */
@@ -79,7 +90,7 @@ public class User
     
     /**
      * Instanciation d'un utilisateur à partir d'un résultat de requête.
-     * @param set ResultSet d'une requête
+     * @param set ResultSet d'une requête 
      * @throws java.sql.SQLException Champ(s) absent(s) du résultat
      */
     public User(ResultSet set) throws SQLException
@@ -87,6 +98,15 @@ public class User
         this.id       = set.getInt   ("id");
         this.name     = set.getString("name");
         this.password = set.getString("password");
+    }
+    
+    /**
+     * Retourne la socket du client de l'utilisateur.
+     * @return WebSocket de l'utilisateur
+     */
+    public WebSocket getSocket()
+    {
+        return this.socket;
     }
 
     /**
@@ -100,7 +120,7 @@ public class User
     
     /**
      * Indique si l'utilisateur est enregistré.
-     * @return Booléen indiquant si l'utilisateur est enregistré
+     * @return Utilisateur enregistré ou non
      */
     public boolean isSaved()
     {
@@ -124,10 +144,19 @@ public class User
     {
         return this.password;
     }
+    
+    /**
+     * Modifie la socket du client de l'utilisateur.
+     * @param socket Nouvelle socket
+     */
+    public void setSocket(WebSocket socket)
+    {
+        this.socket = socket;
+    }
 
     /**
      * Modifie l'identifiant de l'utilisateur.
-     * @param id Identifiant à utiliser
+     * @param id Nouvel identifiant
      */
     public void setId(int id)
     {
@@ -136,7 +165,7 @@ public class User
 
     /**
      * Modifie le nom de l'utilisateur.
-     * @param name Nom à utiliser
+     * @param name Nouveau nom
      */
     public void setName(String name)
     {
@@ -145,7 +174,7 @@ public class User
 
     /**
      * Modifie le mot de passe hashé de l'utilisateur.
-     * @param password Mot de passe à utiliser
+     * @param password Nouveau mot de passe
      */
     public void setPassword(String password)
     {
@@ -153,22 +182,12 @@ public class User
     }
     
     /**
-     * Liste des salles auxquelles l'utilisateur appartient.
-     * @return ArrayList des salles 
+     * Liste des salons auxquels l'utilisateur appartient.
+     * @return ArrayList des salons 
      */
-    public synchronized ArrayList<Room> getRooms()
+    public synchronized HashMap<Integer, Room> getRooms()
     {
         return this.rooms;
-    }
-    
-    /**
-     * Compare deux utilisateurs.
-     * @param user Utilisateur à comparé
-     * @return Booléen indiquant s'il s'agit du même utilisateur
-     */
-    public boolean equals(User user)
-    {
-        return user.getId() != User.UNREGISTERED_ID && user.getId() == this.getId();
     }
     
 }

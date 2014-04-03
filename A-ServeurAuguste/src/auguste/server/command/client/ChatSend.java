@@ -21,7 +21,7 @@ import auguste.server.command.server.ChatMessage;
 import org.json.JSONException;
 
 /**
- * Commande d'envoi d'un message. Envoi du message à la salle précisée ou au
+ * Commande d'envoi d'un message. Envoi du message à la salon précisée ou au
  * canal général sinon.
  * @author Lzard
  */
@@ -30,17 +30,17 @@ public class ChatSend extends ClientCommand
     @Override
     public boolean checkRoom()
     {
-        // Vérification de la salle si elle est précisée
+        // Vérification de la salon si elle est précisée
         return this.getJSON().has("room_id");
     }
     
     @Override
     public void execute() throws JSONException
     {
-        // Choix de la salle
+        // Choix de la salon
         if (this.getRoom() != null)
         {
-            // Envoi du message à la salle
+            // Envoi du message à la salon
             this.getRoom().broadcast(
                     (new ChatMessage(
                             this.getUser(),

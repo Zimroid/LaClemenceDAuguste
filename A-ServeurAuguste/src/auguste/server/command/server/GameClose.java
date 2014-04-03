@@ -21,14 +21,14 @@ import auguste.server.util.Log;
 import org.json.JSONException;
 
 /**
- * Commande indiquant la fermeture d'une salle.
+ * Commande indiquant la fermeture d'une salon.
  * @author Lzard
  */
 public class GameClose extends ServerCommand
 {
     /**
-     * Remplit le JSON avec l'identifiant de la salle.
-     * @param room Salle fermée
+     * Remplit le JSON avec l'identifiant de la salon.
+     * @param room salon fermée
      */
     public GameClose(Room room)
     {

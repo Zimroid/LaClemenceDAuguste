@@ -26,7 +26,7 @@ import org.json.JSONObject;
 
 /**
  * Commande de transfert de la liste des utilisateurs authentifiés actuellement
- * connectés au serveur ou à une salle.
+ * connectés au serveur ou à une salon.
  * @author Lzard
  */
 public class ChatUsers extends ServerCommand
@@ -62,8 +62,8 @@ public class ChatUsers extends ServerCommand
     }
     
     /**
-     * Remplit le JSON avec les utilisateurs de la salle demandée.
-     * @param room Salle demandée
+     * Remplit le JSON avec les utilisateurs de la salon demandée.
+     * @param room salon demandée
      */
     public ChatUsers(Room room)
     {
@@ -73,9 +73,9 @@ public class ChatUsers extends ServerCommand
         // Remplissage du JSON
         try
         {
-            // Création du JSONArray décrivant la liste des utilisateurs de la salle
+            // Création du JSONArray décrivant la liste des utilisateurs de la salon
             JSONArray userList = new JSONArray();
-            for (User user : room.getUsers())
+            for (User user : room.getUsers().values())
             {
                 JSONObject userEntry = new JSONObject();
                 userEntry.put("id", user.getId());

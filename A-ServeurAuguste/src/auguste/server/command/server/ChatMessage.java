@@ -54,7 +54,7 @@ public class ChatMessage extends ServerCommand
     /**
      * Remplit le JSON avec les paramètres du message.
      * @param author  Auteur du message
-     * @param room    Salle à destination du message
+     * @param room    salon à destination du message
      * @param message Contenu du message
      */
     public ChatMessage(User author, Room room, String message)

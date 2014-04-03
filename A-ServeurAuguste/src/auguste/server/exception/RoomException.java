@@ -17,7 +17,7 @@
 package auguste.server.exception;
 
 /**
- * Exception lancée lorsqu'une commande a provoqué une erreur liée à une salle.
+ * Exception lancée lorsqu'une commande a provoqué une erreur liée à une salon.
  * @author Lzard
  */
 public class RoomException extends Exception

@@ -20,8 +20,8 @@ import auguste.server.command.server.ChatUsers;
 import org.json.JSONException;
 
 /**
- * Commande de demande des utilisateurs d'une salle ou de tous les utilisateurs
- * authentifiés. Envoi la liste des utilisateurs d'une salle si précisée ou de
+ * Commande de demande des utilisateurs d'une salon ou de tous les utilisateurs
+ * authentifiés. Envoi la liste des utilisateurs d'une salon si précisée ou de
  * tous les utilisateurs authentifiés.
  * @author Lzard
  */
@@ -30,7 +30,7 @@ public class ChatUserList extends ClientCommand
     @Override
     public boolean checkRoom()
     {
-        // Vérification de la salle si elle est précisée
+        // Vérification de la salon si elle est précisée
         return this.getJSON().has("room_id");
     }
     
