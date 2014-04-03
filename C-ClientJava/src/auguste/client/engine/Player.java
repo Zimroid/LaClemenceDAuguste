@@ -17,7 +17,6 @@
 package auguste.client.engine;
 
 import auguste.client.entity.Game;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

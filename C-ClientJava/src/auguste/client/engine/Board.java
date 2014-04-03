@@ -85,12 +85,12 @@ public class Board
             List<Cell> preLine = line.subList(0, (size)+i);
             
             //Ajout de case vide, pour plus de facilité à gérer les coordonnées
-            List<Cell> nullList = new ArrayList<>();
-            for(int j = size+i; j<line.size(); j++)
-            {
-                nullList.add(null);
-            }
-            preLine.addAll(nullList);
+//            List<Cell> nullList = new ArrayList<>();
+//            for(int j = size+i; j<line.size(); j++)
+//            {
+//                nullList.add(null);
+//            }
+//            preLine.addAll(nullList);
             res.add(preLine);
         }
         
@@ -102,13 +102,13 @@ public class Board
             List<Cell> preLine = line.subList(i+1, line.size());
             
             //Ajout de case vide, pour plus de facilité à gérer les coordonnées
-            List<Cell> nullList = new ArrayList<>();
-            for(int j = 0; j<i+1; j++)
-            {
-                nullList.add(null);
-            }
-            nullList.addAll(preLine);
-            res.add(nullList);
+//            List<Cell> nullList = new ArrayList<>();
+//            for(int j = 0; j<i+1; j++)
+//            {
+//                nullList.add(null);
+//            }
+//            nullList.addAll(preLine);
+            res.add(preLine);
         }
         
         return res;
@@ -211,7 +211,7 @@ public class Board
         {
             for(Cell c : line)
             {
-                if(c != null && c.getUW().equals(uw))
+                if(c.getUW().equals(uw))
                 {
                     res = c;
                 }
@@ -221,23 +221,23 @@ public class Board
         return res;
     }
     
-    public static List<Cell> convertForServer(List<Cell> cells)
+    public static List<Cell> convertTo(List<Cell> cells)
     {
         List<Cell> res = new ArrayList<>();
         for(Cell c : cells)
         {
-            res.add(Cell.convertToServer(c));
+            res.add(Cell.convertTo(c));
         }
         return res;
     }
     
-    public static List<Cell> convertFromServer(List<Cell> cells)
+    public static List<Cell> convertFrom(List<Cell> cells)
     {
         List<Cell> res = new ArrayList<>();
         
         for(Cell c : cells)
         {
-            res.add(Cell.convertFromServer(c));
+            res.add(Cell.convertFrom(c));
         }
         
         return res;

@@ -28,11 +28,13 @@ public class Pawn
     private int id;
     private UW uw;
     private final Player player;
+    private boolean armored;
     
     public Pawn(UW uw, Player player)
     {
         this.uw = uw;
         this.player = player;
+        this.armored = false;
     }
     
     public int getId()
@@ -80,5 +82,15 @@ public class Pawn
         json.put("pawn_w", this.getUW().getW());
         
         return json;
+    }
+    
+    public boolean isArmored()
+    {
+        return this.armored;
+    }
+    
+    public void takeArmor()
+    {
+        this.armored = true;
     }
 }

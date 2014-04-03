@@ -104,7 +104,7 @@ public class Cell
         }
     }
     
-    public static Cell convertToServer(Cell cell)
+    public static Cell convertTo(Cell cell)
     {
         Cell res;
         
@@ -123,7 +123,7 @@ public class Cell
         return res;
     }
     
-    public static Cell convertFromServer(Cell cell)
+    public static Cell convertFrom(Cell cell)
     {
         Cell res;
         
@@ -140,5 +140,15 @@ public class Cell
         }
         
         return res;
+    }
+    
+    public int getU()
+    {
+        return this.uw.getU();
+    }
+    
+    public int getW()
+    {
+        return this.uw.getW();
     }
 }
