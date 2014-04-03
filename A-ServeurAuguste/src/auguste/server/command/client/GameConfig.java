@@ -34,8 +34,8 @@ public class GameConfig extends ClientCommand
         if (this.getRoom().isOwner(this.getUser()))
         {
             // Modification de la configuration et confirmation
-            this.getRoom().readConfiguration(this.getJSON());
-            this.getRoom().confirm();
+            this.getRoom().setConfiguration(this.getJSON());
+            this.getRoom().updateConfiguration();
         }
         else this.error("not_owner_of_this_room");
     }

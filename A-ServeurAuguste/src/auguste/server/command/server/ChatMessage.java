@@ -39,12 +39,14 @@ public class ChatMessage extends ServerCommand
         // Constructeur de la classe mère
         super("chat_message");
         
+        // Ajout des informations de l'auteur
+        author.addUserInformations(this.getJSON());
+        
         // Remplissage du JSON
         try
         {
-            this.getJSON().put("author", author.getName());
-            this.getJSON().put("date",   (new Date()).getTime());
-            this.getJSON().put("text",   message);
+            this.getJSON().put("date", (new Date()).getTime());
+            this.getJSON().put("text", message);
         }
         catch (JSONException e)
         {
@@ -55,7 +57,7 @@ public class ChatMessage extends ServerCommand
     /**
      * Remplit le JSON avec les paramètres du message.
      * @param author  Auteur du message
-     * @param room    salon à destination du message
+     * @param room    Salon à destination du message
      * @param message Contenu du message
      */
     public ChatMessage(User author, Room room, String message)
@@ -63,12 +65,14 @@ public class ChatMessage extends ServerCommand
         // Constructeur de la classe mère
         super("chat_message", room);
         
+        // Ajout des informations de l'auteur
+        author.addUserInformations(this.getJSON());
+        
         // Remplissage du JSON
         try
         {
-            this.getJSON().put("author", author.getName());
-            this.getJSON().put("date",   (new Date()).getTime());
-            this.getJSON().put("text",   message);
+            this.getJSON().put("date", (new Date()).getTime());
+            this.getJSON().put("text", message);
         }
         catch (JSONException e)
         {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Conseil7.
+ * Copyright 2014 Lzard.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,28 @@
  * limitations under the License.
  */
 
-package auguste.server.command.client;
+package auguste.server.command.server;
 
-import auguste.server.Server;
-import org.json.JSONException;
+import auguste.server.Room;
 
 /**
- * Commande pour quitter une partie. Retire l'utilisateur de la salon puis
- * envoi une confirmation aux utilisateurs de la salon et à l'utilisateur
- * ayant envoyé la commande.
+ * Commande de signalisation de la liste des utilisateurs d'un salon.
  * 
  * @author Lzard
  */
-public class GameLeave extends ClientCommand
+public class GameUsers extends ServerCommand
 {
-    @Override
-    public void execute() throws JSONException
+    /**
+     * Remplit le JSON avec les utilisateurs de la partie.
+     * @param room Salon de la partie
+     */
+    public GameUsers(Room room)
     {
-        // Retrait de l'utilisateur de la salon
-        Server.getInstance().leaveRoom(this.getUser(), this.getRoom());
-        this.confirm("room_left");
+        // Constructeur de la classe mère
+        super("game_users", room);
+        
+        // Remplissage du JSON
+        room.addUserList(this.getJSON());
     }
     
 }

@@ -28,7 +28,7 @@ public class GameConfirm extends ServerCommand
 {
     /**
      * Remplit le JSON avec la configuration de la partie.
-     * @param room salon de la partie
+     * @param room Salon de la partie
      */
     public GameConfirm(Room room)
     {
@@ -36,7 +36,7 @@ public class GameConfirm extends ServerCommand
         super("game_confirm", room);
         
         // Remplissage du JSON
-        room.fillConfiguration(this.getJSON());
+        room.addFullConfiguration(this.getJSON());
     }
     
 }

@@ -38,9 +38,6 @@ public class LogOut extends ClientCommand
     {
         // Désauthentification de l'utilisateur
         Server.getInstance().logOut(this.getUser());
-
-        // Confirmation
-        this.confirm("log_out");
     }
     
 }

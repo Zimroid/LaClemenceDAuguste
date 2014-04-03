@@ -19,22 +19,30 @@ package auguste.server;
 import auguste.engine.GameListener;
 import auguste.engine.entity.Game;
 import auguste.server.command.server.GameConfirm;
-import auguste.server.exception.RoomException;
-import auguste.server.exception.RoomException.Type;
+import auguste.server.command.server.GameUsers;
+import auguste.server.exception.NotInThisRoomException;
+import auguste.server.util.Configuration;
 import auguste.server.util.Log;
 import java.util.HashMap;
 import java.util.Random;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Classe représentant une instance de salon de jeu. Gère la configuration de la
- * future partie, les modifications du propriétaire de la salon, le lancement de
- * la partie et les utilisateurs entrant et sortant.
+ * future partie, les modifications du propriétaire du salon et le lancement de
+ * la partie.
  * 
- * Une fois la partie lancée, les actions de chaque joueurs sont transmises au
- * jeu, et lorsque le tour est terminée, le nouvel état du plateau est
- * broadcasté à tous les utilisateurs du salon.
+ * La configuration de la partie est stockée dans un objet JSON qui est lu et
+ * retransmis aux différents utilisateurs. Lors de la réception d'une commande
+ * game_start, la partie est crée et configurée en fonction de cet objet JSON.
+ * 
+ * L'évolution de la partie et la communication de son avancement est gérée par
+ * le salon. Les informations sont transmises à tous les utilisateurs.
+ * 
+ * Les utilisateurs présents dans la salle ou non sont gérés par l'instance
+ * courante de Server.
  * 
  * @author Lzard
  */
@@ -43,12 +51,12 @@ public class Room implements GameListener
     // Identifiant du salon
     private final int id;
     
-    private User   owner;                 // Propriétaire du salon
-    private String name;                  // Nom de la partie
-    private State  state = State.WAITING; // Etat de la partie
+    private User   owner; // Propriétaire du salon
+    private State  state; // Etat de la partie
+    private Game   game;  // Partie du salon
     
-    private final Game       game          = new Game(this, 300000); // Partie du salon
-    private final JSONObject configuration = new JSONObject();       // Configuration de la partie
+    // Configuration de la partie
+    private final JSONObject configuration = new JSONObject(); 
     
     // Liste des clients affectés au salon
     private final HashMap<Integer, User> users = new HashMap<>();
@@ -60,12 +68,15 @@ public class Room implements GameListener
      */
     public Room(int id, String name)
     {
+        // Initialisation des attributs
         this.id   = id;
-        this.name = name;
+        
+        // Paramètrage de la configuration par défaut
         try
         {
-            this.configuration.put("game_name", name);
-            this.configuration.put("board_size", 5);
+            this.configuration.put("game_name",          name                                               );
+            this.configuration.put("game_board_size",    Configuration.getInt ("game_default_board_size"   ));
+            this.configuration.put("game_turn_duration", Configuration.getLong("game_default_turn_duration"));
         }
         catch (JSONException e)
         {
@@ -74,7 +85,7 @@ public class Room implements GameListener
     }
     
     /**
-     * Envoi d'un message à tous les utilisateurs du salon.
+     * Envoi d'un message à tous les utilisateurs présents dans le salon.
      * @param message Message à envoyer
      */
     public void broadcast(String message)
@@ -83,49 +94,7 @@ public class Room implements GameListener
     }
     
     /**
-     * Configure le salon et sa partie avec les paramètres du JSON fourni.
-     * @param json JSONObject à lire
-     */
-    public void readConfiguration(JSONObject json)
-    {
-        try
-        {
-            if (json.has("game_name"))  this.configuration.put("game_name",  json.getString("game_name" ));
-            if (json.has("board_size")) this.configuration.put("board_size", json.getInt   ("board_size"));
-        }
-        catch (JSONException e)
-        {
-            Log.debug(e);
-        }
-    }
-    
-    /**
-     * Remplit le JSON fourni avec la configuration de la partie du salon.
-     * @param json JSONObject à remplir
-     */
-    public void fillConfiguration(JSONObject json)
-    {
-        try
-        {
-            json.put("game_name",  this.configuration.getString("game_name" ));
-            json.put("board_size", this.configuration.getInt   ("board_size"));
-        }
-        catch (JSONException e)
-        {
-            Log.debug(e);
-        }
-    }
-    
-    /**
-     * Envoi d'une commande game_confirm à tous les utilisateurs du salon.
-     */
-    public void confirm()
-    {
-        this.broadcast((new GameConfirm(this)).toString());
-    }
-    
-    /**
-     * Gère le lancement de la partie.
+     * Effectue le lancement de la partie.
      */
     public void start()
     {
@@ -149,43 +118,15 @@ public class Room implements GameListener
     }
     
     /**
-     * Indique si l'utilisateur donné est le propriétaire du salon.
-     * @param user Utilisateur à vérifier
-     * @return Utilisateur propriétaire ou non
-     */
-    public boolean isOwner(User user)
-    {
-        return user == this.owner;
-    }
-    
-    /**
-     * Retourne l'état de la partie.
-     * @return Etat de la partie
-     */
-    public State getState()
-    {
-        return this.state;
-    }
-    
-    /**
-     * Retourne le nom de la partie.
-     * @return Nom de la partie
-     */
-    public String getName()
-    {
-        return this.name;
-    }
-    
-    /**
      * Modifie le propriétaire du salon.
      * @param user Nouveau propriétaire
-     * @throws auguste.server.exception.RoomException Utilisateur absent du salon
+     * @throws auguste.server.exception.NotInThisRoomException Utilisateur absent du salon
      */
-    public void setOwner(User user) throws RoomException
+    public void setOwner(User user) throws NotInThisRoomException
     {
         synchronized (this.users)
         {
-            if (!this.users.containsValue(user)) throw new RoomException(Type.ABSENT_USER);
+            if (!this.users.containsValue(user)) throw new NotInThisRoomException(this, user);
             this.owner = user;
         }
     }
@@ -207,11 +148,30 @@ public class Room implements GameListener
                         )
                 );
             }
-            catch (RoomException e)
+            catch (NotInThisRoomException e)
             {
                 Log.debug(e);
             }
         }
+    }
+    
+    /**
+     * Indique si l'utilisateur donné est le propriétaire du salon.
+     * @param user Utilisateur à vérifier
+     * @return Utilisateur propriétaire
+     */
+    public boolean isOwner(User user)
+    {
+        return user == this.owner;
+    }
+    
+    /**
+     * Retourne l'état de la partie.
+     * @return Etat de la partie
+     */
+    public State getState()
+    {
+        return this.state;
     }
     
     /**
@@ -224,12 +184,69 @@ public class Room implements GameListener
     }
     
     /**
-     * Modifie le nom de la partie.
-     * @param name Nouveau nom
+     * Configure la partie avec les paramètres du JSON fourni.
+     * @param json JSONObject à lire
      */
-    public void setName(String name)
+    public void setConfiguration(JSONObject json)
     {
-        this.name = name;
+        try
+        {
+            if (json.has("game_name"))          this.configuration.put("game_name",          json.getString("game_name"         ));
+            if (json.has("game_board_size"))    this.configuration.put("game_board_size",    json.getInt   ("game_board_size"   ));
+            if (json.has("game_turn_duration")) this.configuration.put("game_turn_duration", json.getLong  ("game_turn_duration"));
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
+    }
+    
+    /**
+     * Ajoute au JSON fourni la configuration partielle de la partie du salon.
+     * @param json JSONObject à remplir
+     */
+    public void addLightConfiguration(JSONObject json)
+    {
+        try
+        {
+            json.put("game_name",          this.configuration.getString("game_name"         ));
+            json.put("game_board_size",    this.configuration.getInt   ("game_board_size"   ));
+            json.put("game_turn_duration", this.configuration.getLong  ("game_turn_duration"));
+            json.put("players_number",     this.getUsers().size()                            );
+            json.put("game_state",         this.getState()                                   );
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
+    }
+    
+    /**
+     * Ajoute au JSON fourni la configuration complète de la partie du salon.
+     * @param json JSONObject à remplir
+     */
+    public void addFullConfiguration(JSONObject json)
+    {
+        try
+        {
+            json.put("room_id",            this.id                                           );
+            json.put("game_name",          this.configuration.getString("game_name"         ));
+            json.put("game_board_size",    this.configuration.getInt   ("game_board_size"   ));
+            json.put("game_turn_duration", this.configuration.getLong  ("game_turn_duration"));
+            json.put("game_state",         this.getState()                                   );
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
+    }
+    
+    /**
+     * Broadcast la configuration de la partie.
+     */
+    public void updateConfiguration()
+    {
+        this.broadcast((new GameConfirm(this)).toString());
     }
     
     /**
@@ -242,6 +259,36 @@ public class Room implements GameListener
     }
     
     /**
+     * Ajoute un attribut "users" contenant la liste des utilisateurs du salon
+     * au JSON fourni en paramètre.
+     * @param json
+     */
+    public void addUserList(JSONObject json)
+    {
+        try
+        {
+            // Création du JSONArray décrivant la liste des utilisateurs
+            JSONArray userList = new JSONArray();
+            for (User user : this.users.values())
+            {
+                JSONObject userEntry = new JSONObject();
+                userEntry.put("user_id", user.getId());
+                userEntry.put("user_name", user.getName());
+                userEntry.put("is_owner", this.isOwner(user));
+                userEntry.put("team", 0);
+                userList.put(userEntry);
+            }
+
+            // Ajout de la liste au JSON
+            json.put("users", userList);
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
+    }
+    
+    /**
      * Indique si un utilisateur est présent dans le salon.
      * @param user Utilisateur à vérifier
      * @return Booléen indiquant la présence de l'utilisateur
@@ -249,6 +296,14 @@ public class Room implements GameListener
     public boolean isInRoom(User user)
     {
         return this.users.containsValue(user);
+    }
+    
+    /**
+     * Broadcast la liste des utilisateurs du salon.
+     */
+    public void updateUsers()
+    {
+        this.broadcast((new GameUsers(this)).toString());
     }
     
     /**

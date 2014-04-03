@@ -31,16 +31,14 @@ public class ChatUserList extends ClientCommand
     @Override
     public boolean checkRoom()
     {
-        // Vérification de la salon si elle est précisée
-        return this.getJSON().has("room_id");
+        return false;
     }
     
     @Override
     public void execute() throws JSONException
     {
         // Envoi de la liste
-        if (this.getRoom() != null) this.send((new ChatUsers(this.getRoom())).toString());
-        else                        this.send((new ChatUsers()).toString());
+        this.send((new ChatUsers()).toString());
     }
     
 }

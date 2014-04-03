@@ -41,7 +41,7 @@ public class ChatSend extends ClientCommand
         // Choix de la salon
         if (this.getRoom() != null)
         {
-            // Envoi du message à la salon
+            // Envoi du message au salon
             this.getRoom().broadcast(
                     (new ChatMessage(
                             this.getUser(),

@@ -17,16 +17,18 @@
 package auguste.server;
 
 import auguste.server.command.client.ClientCommand;
+import auguste.server.command.server.GameAvailables;
 import auguste.server.command.server.GameClose;
 import auguste.server.exception.AuthentificationException;
 import auguste.server.exception.CommandException;
-import auguste.server.exception.RoomException;
-import auguste.server.exception.RoomException.Type;
+import auguste.server.exception.InexistantRoomException;
+import auguste.server.exception.NotInThisRoomException;
 import auguste.server.exception.RuleException;
 import auguste.server.util.Configuration;
 import auguste.server.util.Log;
 import java.net.InetSocketAddress;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import org.java_websocket.WebSocket;
@@ -72,6 +74,9 @@ public class Server extends WebSocketServer
     
     // Liste des salons existantes
     private final HashMap<Integer, Room> rooms = new HashMap<>();
+    
+    // Liste des utilisateurs regardant la liste des salles disponibles
+    private final ArrayList<User> watchers = new ArrayList<>();
     
     /**
      * Instanciation du serveur. Effectue un simple appel au constructeur de la
@@ -172,29 +177,19 @@ public class Server extends WebSocketServer
             Log.debug(e);
             ClientCommand.sendError(socket, "must_be_logged");
         }
-        catch (RoomException e)
+        catch (InexistantRoomException e)
         {
-            // Erreur de salon
-            switch (e.getType())
-            {
-                case INEXISTANT_ROOM:
-                    Log.out("Inexistant room");
-                    ClientCommand.sendError(socket, "inexistant_room"); 
-                    break;
-                case NOT_IN_THIS_ROOM:
-                    Log.out("Not in this room");
-                    ClientCommand.sendError(socket, "not_in_this_room");
-                    break;
-                case UNAVAILABLE_ROOM:
-                    Log.out("Room unavailable");
-                    ClientCommand.sendError(socket, "unavailable_room");
-                    break;
-                case ABSENT_USER:
-                    Log.out("Absent user");
-                    ClientCommand.sendError(socket, "absent_user");
-                    break;
-            }
+            // Salon inexistant
+            Log.out("Inexistant room");
             Log.debug(e);
+            ClientCommand.sendError(socket, "inexistant_room");
+        }
+        catch (NotInThisRoomException e)
+        {
+            // Utilisateur absent du salon
+            Log.out("Not in this room");
+            Log.debug(e);
+            ClientCommand.sendError(socket, "not_in_this_room");
         }
         catch (RuleException e)
         {
@@ -221,7 +216,7 @@ public class Server extends WebSocketServer
 
     /**
      * Méthode appelée lorsqu'une erreur est survenue.
-     * @param socket WebSocket concernée, null en cas d'erreur serveur
+     * @param socket WebSocket concernée, null en cas d'erreur interne au serveur
      * @param e      Exception émise
      */
     @Override
@@ -271,8 +266,11 @@ public class Server extends WebSocketServer
      */
     public void logIn(WebSocket socket, User user)
     {
+        // Liaison de l'utilisateur et de la socket
         user.setSocket(socket);
         this.clients.put(socket, user);
+        
+        // Authentificaction
         this.users.put(user.getId(), user);
     }
     
@@ -285,8 +283,7 @@ public class Server extends WebSocketServer
     public void logOut(User user)
     {
         // Retrait de l'utilisateur des salons dont il fait partie
-        for (Room room : user.getRooms().values()) room.getUsers().remove(user.getId());
-        user.getRooms().clear();
+        for (Room room : ((HashMap<Integer, Room>)user.getRooms().clone()).values()) this.leaveRoom(user, room);
 
         // Retrait de l'utilisateur de la liste des utilisateurs authentifiés
         if (this.users.remove(user.getId()) != null) ClientCommand.sendError(user.getSocket(), "logged_out");
@@ -308,12 +305,12 @@ public class Server extends WebSocketServer
      * Retourne un salon via son identifiant.
      * @param id Identifiant du salon
      * @return Salon correspondant à l'identifiant
-     * @throws auguste.server.exception.RoomException Identifiant inexistant
+     * @throws auguste.server.exception.InexistantRoomException Identifiant inexistant
      */
-    public Room getRoom(int id) throws RoomException
+    public Room getRoom(int id) throws InexistantRoomException
     {
         if (this.rooms.containsKey(id)) return this.rooms.get(id);
-        else throw new RoomException(Type.INEXISTANT_ROOM);
+        else throw new InexistantRoomException(id);
     }
     
     /**
@@ -338,29 +335,52 @@ public class Server extends WebSocketServer
             this.rooms.put(roomId, room);
         }
         
+        // Notification
+        this.updateWatchers();
+        
         return room;
     }
     
     /**
-     * Joint un utilisateur à un salon.
+     * Joint un utilisateur à un salon. Notifie les utilisateurs du salon et
+     * les utilisateurs regardant la liste des salons.
      * @param user Utilisateur à joindre
      * @param room Salon cible
      */
     public void joinRoom(User user, Room room)
     {
+        // Laison de l'utilisateur et du salon
         user.getRooms().put(room.getId(), room);
         room.getUsers().put(user.getId(), user);
+        room.updateUsers();
+        
+        // Notification
+        this.updateWatchers();
     }
     
     /**
-     * Retire un utilisateur d'un salon.
+     * Retire un utilisateur d'un salon. Si cet utilisateur était le dernier
+     * utilisateur du salon, ce dernier est supprimé. Sinon, les utilisateurs
+     * regardant la liste des salons sont notifiés, et si cet utilisateur
+     * était le propriétaire du salon, un nouveau propriétaire est élu.
      * @param user Utilisateur à retirer
      * @param room Salon cible
      */
     public void leaveRoom(User user, Room room)
     {
+        // Suppression des liens entre l'utilisateur et le salon
         user.getRooms().remove(room.getId());
         room.getUsers().remove(user.getId());
+        room.updateUsers();
+        
+        // Suppression du salon si nécessaire
+        if (room.getUsers().isEmpty()) this.closeRoom(room);
+        else
+        {
+            // Changement de propriétaire et notification
+            if (room.isOwner(user)) room.setRandomOwner();
+            this.updateWatchers();
+        }
     }
     
     /**
@@ -374,10 +394,28 @@ public class Server extends WebSocketServer
         // Fermeture et suppression du salon
         this.rooms.remove(room.getId());
         room.setState(Room.State.CLOSING);
+        this.updateWatchers();
         
-        // Signalisation et suppression du salon
+        // Signalisation et retrait des utilisateurs du salon
         room.broadcast((new GameClose(room)).toString());
-        for (User user : room.getUsers().values()) user.getRooms().remove(room.getId());
+        for (User user : ((HashMap<Integer, User>)room.getUsers().clone()).values()) this.leaveRoom(user, room);
+    }
+    
+    /**
+     * Retourne la liste des utilisateurs regardant la liste des parties.
+     * @return Liste des utilisateurs regardant les parties
+     */
+    public ArrayList<User> getWatchers()
+    {
+        return this.watchers;
+    }
+    
+    /**
+     * Met à jour les utilisateurs regardant la liste des parties.
+     */
+    public void updateWatchers()
+    {
+        for (User user : this.getWatchers()) this.send(user.getSocket(), (new GameAvailables()).toString());
     }
     
 }

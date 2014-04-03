@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package auguste.server.command.client;
+package auguste.server.exception;
 
-import auguste.server.Server;
-import org.json.JSONException;
+import auguste.server.Room;
+import auguste.server.User;
 
 /**
- * Commande pour quitter une partie. Retire l'utilisateur de la salon puis
- * envoi une confirmation aux utilisateurs de la salon et à l'utilisateur
- * ayant envoyé la commande.
+ * Exception lancée lorsqu'une commande concerne un salon dans lequel
+ * l'utilisateur n'est pas présent.
  * 
  * @author Lzard
  */
-public class GameLeave extends ClientCommand
+public class NotInThisRoomException extends Exception
 {
-    @Override
-    public void execute() throws JSONException
+    /**
+     * Enregistre le salon et l'utilisateur concernés.
+     * @param room Salon concerné
+     * @param user Utilisateur concerné
+     */
+    public NotInThisRoomException(Room room, User user)
     {
-        // Retrait de l'utilisateur de la salon
-        Server.getInstance().leaveRoom(this.getUser(), this.getRoom());
-        this.confirm("room_left");
+        super("Not in this room: " + user.getName() + " not in room " + room.getId());
     }
-    
 }

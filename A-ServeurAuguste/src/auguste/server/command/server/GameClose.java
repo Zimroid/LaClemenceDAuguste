@@ -17,8 +17,6 @@
 package auguste.server.command.server;
 
 import auguste.server.Room;
-import auguste.server.util.Log;
-import org.json.JSONException;
 
 /**
  * Commande indiquant la fermeture d'une salon.
@@ -34,17 +32,7 @@ public class GameClose extends ServerCommand
     public GameClose(Room room)
     {
         // Constructeur de la classe mère
-        super("game_close");
-        
-        // Remplissage du JSON
-        try
-        {
-            this.getJSON().put("room_id", room.getId());
-        }
-        catch (JSONException e)
-        {
-            Log.debug(e);
-        }
+        super("game_close", room);
     }
     
 }

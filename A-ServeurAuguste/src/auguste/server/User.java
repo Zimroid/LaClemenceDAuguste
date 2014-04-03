@@ -25,6 +25,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import org.apache.commons.codec.binary.Hex;
 import org.java_websocket.WebSocket;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Classe représentant un utilisateur connecté au serveur et authentifié. Gère
@@ -65,19 +67,19 @@ public class User
         }
     }
     
-    // Socket du client de l'utilisateur
-    private WebSocket socket = null;
-    
     // Attributs
     private int    id;       // Identifiant de l'utilisateur
     private String name;     // Nom de l'utilisateur
     private String password; // Mot de passe hashé de l'utilisateur
     
-    // Salons de l'utilisateur
+    // Socket du client de l'utilisateur
+    private WebSocket socket = null;
+    
+    // Salons auxquels l'utilisateur appartient
     private final HashMap<Integer, Room> rooms = new HashMap<>();
     
     /**
-     * Instanciation d'un nouvel utilisateur.
+     * Instanciation d'un nouvel utilisateur non-enregistré.
      * @param name     Nom de l'utilisateur
      * @param password Mot de passe hashé de l'utilisateur
      */
@@ -101,12 +103,37 @@ public class User
     }
     
     /**
-     * Retourne la socket du client de l'utilisateur.
-     * @return WebSocket de l'utilisateur
+     * Ajoute au JSON fourni les informations de l'utilisateur.
+     * @param json JSON à compléter
      */
-    public WebSocket getSocket()
+    public void addUserInformations(JSONObject json)
     {
-        return this.socket;
+        try
+        {
+            json.put("user_id",   this.id);
+            json.put("user_name", this.name);
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
+    }
+    
+    /**
+     * Ajoute au JSON fourni les paramètres de l'utilisateur.
+     * @param json JSON à compléter
+     */
+    public void addUserParameters(JSONObject json)
+    {
+        try
+        {
+            json.put("user_favourite_pawns", "circle");
+            json.put("user_favourite_color", "green");
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
     }
 
     /**
@@ -117,10 +144,19 @@ public class User
     {
         return this.id;
     }
+
+    /**
+     * Modifie l'identifiant de l'utilisateur.
+     * @param id Nouvel identifiant
+     */
+    public void setId(int id)
+    {
+        this.id = id;
+    }
     
     /**
      * Indique si l'utilisateur est enregistré.
-     * @return Utilisateur enregistré ou non
+     * @return Utilisateur enregistré
      */
     public boolean isSaved()
     {
@@ -137,33 +173,6 @@ public class User
     }
 
     /**
-     * Retourne le mot de passe hashé de l'utilisateur.
-     * @return Mot de passe de l'utilisateur
-     */
-    public String getPassword()
-    {
-        return this.password;
-    }
-    
-    /**
-     * Modifie la socket du client de l'utilisateur.
-     * @param socket Nouvelle socket
-     */
-    public void setSocket(WebSocket socket)
-    {
-        this.socket = socket;
-    }
-
-    /**
-     * Modifie l'identifiant de l'utilisateur.
-     * @param id Nouvel identifiant
-     */
-    public void setId(int id)
-    {
-        this.id = id;
-    }
-
-    /**
      * Modifie le nom de l'utilisateur.
      * @param name Nouveau nom
      */
@@ -173,12 +182,39 @@ public class User
     }
 
     /**
+     * Retourne le mot de passe hashé de l'utilisateur.
+     * @return Mot de passe hashé de l'utilisateur
+     */
+    public String getPassword()
+    {
+        return this.password;
+    }
+
+    /**
      * Modifie le mot de passe hashé de l'utilisateur.
      * @param password Nouveau mot de passe
      */
     public void setPassword(String password)
     {
         this.password = password;
+    }
+    
+    /**
+     * Retourne la socket du client de l'utilisateur.
+     * @return WebSocket de l'utilisateur
+     */
+    public WebSocket getSocket()
+    {
+        return this.socket;
+    }
+    
+    /**
+     * Modifie la socket du client de l'utilisateur.
+     * @param socket Nouvelle socket
+     */
+    public void setSocket(WebSocket socket)
+    {
+        this.socket = socket;
     }
     
     /**

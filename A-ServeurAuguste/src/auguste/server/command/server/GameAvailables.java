@@ -25,7 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Commande d'envoi de la liste des salons crées disponibles.
+ * Commande d'envoi de la liste des salons créés.
  * 
  * @author Lzard
  */
@@ -42,22 +42,17 @@ public class GameAvailables extends ServerCommand
         // Remplissage du JSON
         try
         {
-            // Création du JSONObject contenant la liste des salons
+            // Création du JSONArray décrivant la liste des salons
             JSONArray roomList = new JSONArray();
             for (Room room : Server.getInstance().getRooms())
             {
-                // salon ignorée si en cours de fermeture
-                if (room.getState() != State.CLOSING)
-                {
-                    JSONObject roomEntry = new JSONObject();
-                    roomEntry.put("room_id", room.getId());
-                    roomEntry.put("game_name", room.getName());
-                    roomList.put(roomEntry);
-                }
+                JSONObject roomEntry = new JSONObject();
+                room.addLightConfiguration(roomEntry);
+                roomList.put(roomEntry);
             }
 
             // Création du JSON
-            this.getJSON().put("list", roomList);
+            this.getJSON().put("games", roomList);
         }
         catch (JSONException e)
         {

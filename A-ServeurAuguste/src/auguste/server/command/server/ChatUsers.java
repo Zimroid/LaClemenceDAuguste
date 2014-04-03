@@ -26,7 +26,7 @@ import org.json.JSONObject;
 
 /**
  * Commande de transfert de la liste des utilisateurs authentifiés actuellement
- * connectés au serveur ou à une salon.
+ * connectés au serveur.
  * 
  * @author Lzard
  */
@@ -48,44 +48,12 @@ public class ChatUsers extends ServerCommand
             for (User user : Server.getInstance().getUsers())
             {
                 JSONObject userEntry = new JSONObject();
-                userEntry.put("id", user.getId());
-                userEntry.put("name", user.getName());
+                user.addUserInformations(userEntry);
                 userList.put(userEntry);
             }
 
             // Ajout de la liste au JSON
-            this.getJSON().put("list", userList);
-        }
-        catch (JSONException e)
-        {
-            Log.debug(e);
-        }
-    }
-    
-    /**
-     * Remplit le JSON avec les utilisateurs de la salon demandée.
-     * @param room salon demandée
-     */
-    public ChatUsers(Room room)
-    {
-        // Constructeur de la classe mère
-        super("chat_users");
-        
-        // Remplissage du JSON
-        try
-        {
-            // Création du JSONArray décrivant la liste des utilisateurs de la salon
-            JSONArray userList = new JSONArray();
-            for (User user : room.getUsers().values())
-            {
-                JSONObject userEntry = new JSONObject();
-                userEntry.put("id", user.getId());
-                userEntry.put("name", user.getName());
-                userList.put(userEntry);
-            }
-
-            // Ajout de la liste au JSON
-            this.getJSON().put("list", userList);
+            this.getJSON().put("users", userList);
         }
         catch (JSONException e)
         {

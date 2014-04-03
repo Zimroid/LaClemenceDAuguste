@@ -17,8 +17,6 @@
 package auguste.server.command.server;
 
 import auguste.server.User;
-import auguste.server.util.Log;
-import org.json.JSONException;
 
 /**
  * Commande de confirmation d'authentification. Envoi les données et paramètres
@@ -38,14 +36,8 @@ public class LogConfirm extends ServerCommand
         super("log_confirm");
         
         // Remplissage du JSON
-        try
-        {
-            this.getJSON().put("name", user.getName());
-        }
-        catch (JSONException e)
-        {
-            Log.debug(e);
-        }
+        user.addUserInformations(this.getJSON());
+        user.addUserParameters(this.getJSON());
     }
     
 }

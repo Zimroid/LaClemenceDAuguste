@@ -16,6 +16,7 @@
 
 package auguste.server.command.client;
 
+import auguste.server.Server;
 import auguste.server.command.server.GameAvailables;
 import auguste.server.exception.RuleException;
 import java.sql.SQLException;
@@ -38,6 +39,7 @@ public class GameList extends ClientCommand
     public void execute() throws SQLException, JSONException, RuleException
     {
         this.send((new GameAvailables()).toString());
+        Server.getInstance().getWatchers().add(this.getUser());
     }
     
 }

@@ -18,7 +18,7 @@ package auguste.server.command.client;
 
 import auguste.server.Room;
 import auguste.server.Server;
-import auguste.server.exception.RoomException;
+import auguste.server.exception.InexistantRoomException;
 import org.json.JSONException;
 
 /**
@@ -36,7 +36,7 @@ public class GameJoin extends ClientCommand
     }
     
     @Override
-    public void execute() throws RoomException, JSONException
+    public void execute() throws InexistantRoomException, JSONException
     {
         // Récupération de la salon
         Room room = Server.getInstance().getRoom(this.getJSON().getInt("room_id"));
@@ -46,7 +46,6 @@ public class GameJoin extends ClientCommand
         {
             // Ajout du client à la salon
             Server.getInstance().joinRoom(this.getUser(), room);
-            room.confirm();
         }
         else this.error("already_in_this_room");
     }

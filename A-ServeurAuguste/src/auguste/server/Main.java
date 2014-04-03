@@ -35,7 +35,7 @@ public class Main
     /**
      * Point d'entrée de l'application. Charge la configuration, vérifie
      * la présence du driver JDBC et la disponibilité de l'algorithme de
-     * hashage si besoin, puis lance le serveur.
+     * hashage s'il s'agit d'un serveur en ligne, puis lance le serveur.
      * @param args Arguments de la commande
      */
     public static void main(String[] args)
@@ -46,7 +46,7 @@ public class Main
             Configuration.load(Main.CONFIGURATION_FILE);
             
             // Vérification du mode hors-ligne
-            if (!Configuration.getBoolean("offline"))
+            if (Configuration.getBoolean("online"))
             {
                 // Vérification de la présence du driver JDBC
                 Class.forName(Configuration.get("db_driver"));

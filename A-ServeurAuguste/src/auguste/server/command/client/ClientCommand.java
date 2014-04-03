@@ -23,8 +23,8 @@ import auguste.server.command.server.MessageConfirm;
 import auguste.server.command.server.MessageError;
 import auguste.server.exception.AuthentificationException;
 import auguste.server.exception.CommandException;
-import auguste.server.exception.RoomException;
-import auguste.server.exception.RoomException.Type;
+import auguste.server.exception.InexistantRoomException;
+import auguste.server.exception.NotInThisRoomException;
 import auguste.server.exception.RuleException;
 import java.sql.SQLException;
 import org.java_websocket.WebSocket;
@@ -120,12 +120,13 @@ public abstract class ClientCommand
     /**
      * Exécution de la commande.
      * @throws auguste.server.exception.AuthentificationException Utilisateur non-authentifié
-     * @throws auguste.server.exception.RoomException             Erreur de salon
-     * @throws auguste.server.exception.RuleException             Règles enfreintes
-     * @throws org.json.JSONException                             Erreur JSON
-     * @throws java.sql.SQLException                              Erreur SQL
+     * @throws auguste.server.exception.InexistantRoomException Salon inexistant
+     * @throws auguste.server.exception.NotInThisRoomException  Utilisateur absent du salon
+     * @throws auguste.server.exception.RuleException           Règles enfreintes
+     * @throws org.json.JSONException                           Erreur JSON
+     * @throws java.sql.SQLException                            Erreur SQL
      */
-    public abstract void execute() throws AuthentificationException, RoomException, RuleException, JSONException, SQLException;
+    public abstract void execute() throws AuthentificationException, InexistantRoomException, NotInThisRoomException, RuleException, JSONException, SQLException;
     
     /**
      * Envoi d'un message à l'utilisateur ayant émit la commande.
@@ -244,12 +245,13 @@ public abstract class ClientCommand
     /**
      * Modifie la salon concernée par la commande.
      * @param room salon à utiliser
-     * @throws auguste.server.exception.RoomException Utilisateur absent de la salon
+     * @throws auguste.server.exception.InexistantRoomException Salon inexistant
+     * @throws auguste.server.exception.NotInThisRoomException  Utilisateur absent du salon
      */
-    public void setRoom(Room room) throws RoomException
+    public void setRoom(Room room) throws InexistantRoomException, NotInThisRoomException
     {
-        if (room == null) throw new RoomException(Type.INEXISTANT_ROOM);
-        else if (!room.isInRoom(user)) throw new RoomException(Type.NOT_IN_THIS_ROOM);
+        if (room == null) throw new InexistantRoomException(0);
+        else if (!room.isInRoom(this.getUser())) throw new NotInThisRoomException(room, this.getUser());
         else this.room = room;
     }
     
