@@ -10,8 +10,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 public class Hexagon {
 	private Cell cell;
 
-	private Position centre;	// Position centre
-	private float rayon;		// Taille rayon
+	private Position center;	// Position centre
+	private float radius;		// Taille rayon
 	private Color color;		// Couleur de la case
 	private float sizeBorder;	// Taille de la bordure noire (chevauchement)
 		
@@ -24,8 +24,8 @@ public class Hexagon {
 		this.cell = ce;		
 		
 		// Infos graphiques
-		this.centre = new Position(x, y);
-		this.rayon = r;
+		this.center = new Position(x, y);
+		this.radius = r;
 		this.color = color;
 		this.sizeBorder = border;
 	}
@@ -35,11 +35,44 @@ public class Hexagon {
 	 */
 	public void drawCase(ShapeRenderer shrd)
 	{
-		drawHex(shrd, this.centre, this.rayon, this.color, this.sizeBorder);
+		drawHex(shrd, this.center, this.radius, this.color, this.sizeBorder);
 	}
 	
 	/*
-	 * Dessine un hexagone
+	 * Vérifie si clic dans l'hexagone
+	 */
+	public boolean checkClic(Position clic)
+	{
+		boolean isInHex = inCircle(this.center, this.radius, clic);
+		
+		if(isInHex)
+		{
+			ArrayList<Position> vertices = calcPoints(center, radius);
+			
+			// Dessin des triangles
+			for(int i = 0; i < vertices.size() && isInHex; i++)
+			{
+				Position a = vertices.get(i);
+				Position b;
+				
+				if(i+1 < vertices.size())
+				{
+					b = vertices.get(i+1);
+				}
+				else
+				{
+					b = vertices.get(0);
+				}
+
+				isInHex = sameSide(a, b, this.center, clic);
+			}
+		}
+		
+		return isInHex;
+	}
+	
+	/*
+	 * Dessine un hexagone avec sa bordure
 	 */
 	public static void drawHex(ShapeRenderer shrd, Position c, float r, Color color, float border)
 	{
@@ -82,20 +115,37 @@ public class Hexagon {
 	/*
 	 * Calcul les points de l'hexagone
 	 */
-	public static ArrayList<Position> calcPoints(Position centre, float rayon)
+	public static ArrayList<Position> calcPoints(Position center, float radius)
 	{
 		// (Racine de 3) / 2
 		float rac = (float) (Math.sqrt(3)/2);
 		
 		// Positions points hexagone
 		ArrayList<Position> points = new ArrayList<Position>();
-		points.add(new Position(centre.getX(), centre.getY() - rayon));
-		points.add(new Position(centre.getX() + rac * rayon, centre.getY() - 0.5f * rayon));
-		points.add(new Position(centre.getX() + rac * rayon, centre.getY() + 0.5f * rayon));
-		points.add(new Position(centre.getX(), centre.getY() + rayon));
-		points.add(new Position(centre.getX() - rac * rayon, centre.getY() + 0.5f * rayon));
-		points.add(new Position(centre.getX() - rac * rayon, centre.getY() - 0.5f * rayon));
+		points.add(new Position(center.getX(), center.getY() - radius));
+		points.add(new Position(center.getX() + rac * radius, center.getY() - 0.5f * radius));
+		points.add(new Position(center.getX() + rac * radius, center.getY() + 0.5f * radius));
+		points.add(new Position(center.getX(), center.getY() + radius));
+		points.add(new Position(center.getX() - rac * radius, center.getY() + 0.5f * radius));
+		points.add(new Position(center.getX() - rac * radius, center.getY() - 0.5f * radius));
 		
 		return points;
+	}
+	
+	/*
+	 * Vérfie si le clic se trouve dans le cercle circonscrit de l'hexagone
+	 */
+	public static boolean inCircle(Position o, float radius, Position clic)
+	{
+		return Math.sqrt((o.getX() - clic.getX()) * (o.getX() - clic.getX()) + (o.getY() - clic.getY()) * (o.getY() - clic.getY())) < radius; 
+	}
+	
+	/*
+	 * Vérifie si le centre O et le point cliqué sont du même côté de la droite AB
+	 */
+	public static boolean sameSide(Position a, Position b, Position o, Position clic)
+	{
+		return (  (o.getX() - a.getX()) * (b.getY() - a.getY()) - (b.getX() - a.getX()) * (o.getY() - a.getY()) )
+			*( (clic.getX() - a.getX()) * (b.getY() - a.getY()) - (b.getX() - a.getX()) * (clic.getY() - a.getY()) ) > 0;
 	}
 }

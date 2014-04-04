@@ -21,8 +21,8 @@ import auguste.server.Server;
 import org.json.JSONException;
 
 /**
- * Commande pour quitter une partie. Retire l'utilisateur de la salon puis
- * envoi une confirmation aux utilisateurs de la salon et à l'utilisateur
+ * Commande pour quitter une partie. Retire l'utilisateur du salon puis
+ * envoi une confirmation aux utilisateurs du salon et à l'utilisateur
  * ayant envoyé la commande.
  * 
  * @author Lzard

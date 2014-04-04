@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import auguste.client.entity.Client;
 
 import java.net.URISyntaxException;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONException;
@@ -24,7 +24,8 @@ import org.json.JSONException;
 public abstract class CommandClient
 {
     private final JSONObject json;
-    private Map<String,String> args;
+    private Map<String,Object> args;
+    private List<Object> tab;
     Client client;    
     
     // Noms de commandes possibles
@@ -81,7 +82,7 @@ public abstract class CommandClient
      *
      * @param s Le premier argument est le nom de la commande, le reste change en fonction de la commande concernée.
      */
-    public void setArguments(Map<String,String> s)
+    public void setArguments(Map<String,Object> s)
     {
         this.args = s;
     }
@@ -99,9 +100,19 @@ public abstract class CommandClient
      *
      * @return Les arguments de la commande.
      */
-    public Map<String,String> getArguments()
+    public Map<String,Object> getArguments()
     {
         return this.args;
+    }
+    
+    public List<Object> getTab()
+    {
+    	return this.tab;
+    }
+    
+    public void setTab(List<Object> l)
+    {
+    	this.tab = l;
     }
     
     /**

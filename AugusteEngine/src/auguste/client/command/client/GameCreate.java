@@ -28,7 +28,7 @@ public class GameCreate extends CommandClient
     @Override
     public void buildJSON() throws JSONException 
     {
-        String game_name = this.getArguments().get(GAME_NAME);
+        String game_name = (String) this.getArguments().get(GAME_NAME);
         
 //        if(this.getArguments().containsKey(TURN_TIMER))
 //        {

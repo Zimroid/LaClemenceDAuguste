@@ -50,7 +50,7 @@ public abstract class ServerCommand
     /**
      * Insère dans le JSON le nom de la commande et l'identifiant de la salon.
      * @param name Nom de la commande
-     * @param room salon à destination
+     * @param room Salon à destination
      */
     public ServerCommand(String name, Room room)
     {

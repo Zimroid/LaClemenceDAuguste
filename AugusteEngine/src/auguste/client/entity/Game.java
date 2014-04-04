@@ -8,15 +8,16 @@ package auguste.client.entity;
 
 import auguste.client.engine.Board;
 import auguste.client.engine.Legion;
-import auguste.client.engine.Pawn;
-import auguste.client.engine.Player;
+import auguste.client.engine.Move;
 import auguste.client.engine.Team;
+import auguste.client.engine.Tenaille;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 /**
  * Classe qui représente une partie
@@ -31,6 +32,8 @@ public class Game
     private List<Team> teams;
     private Board board;
     private Client client;
+    private Queue<Tenaille> tenailles;
+    private Queue<Move> moves;
     private Map<Integer, Legion> legions;
     
     /**
@@ -42,6 +45,8 @@ public class Game
         this.id = id;
         this.teams = new ArrayList<>();
         this.legions = new HashMap<>();
+        this.tenailles = new LinkedList<>();
+        this.moves = new LinkedList<>();
     }
     
     /**
@@ -136,5 +141,15 @@ public class Game
 	public Map<Integer,Legion> getLegions()
 	{
 		return this.legions;
+	}
+	
+	public Queue<Tenaille> getTenailles()
+	{
+		return this.tenailles;
+	}
+	
+	public Queue<Move> getMoves()
+	{
+		return this.moves;
 	}
 }

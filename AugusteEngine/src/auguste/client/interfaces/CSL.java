@@ -55,7 +55,7 @@ public class CSL implements UpdateListener
 			Scanner sc = new Scanner(System.in);
             String line = sc.nextLine();
             String[] words = line.split(" ");
-            Map<String,String> command;
+            Map<String,Object> command;
             switch(words[0])
             {
                 case CommandClient.LOG_IN:
@@ -93,9 +93,9 @@ public class CSL implements UpdateListener
         }
     }
     
-    private Map<String,String> gameCreate(String[] args)
+    private Map<String,Object> gameCreate(String[] args)
     {
-        Map<String,String> res = new HashMap<>();
+        Map<String,Object> res = new HashMap<>();
         
         res.put(CommandClient.COMMAND, args[0]);
         res.put(CommandClient.GAME_NAME, args[1]);
@@ -103,9 +103,9 @@ public class CSL implements UpdateListener
         return res;
     }
     
-    private Map<String,String> login(String[] args)
+    private Map<String,Object> login(String[] args)
     {
-        Map<String,String> res = new HashMap<>();
+        Map<String,Object> res = new HashMap<>();
         
         res.put(CommandClient.COMMAND, args[0]);
         res.put(CommandClient.NAME, args[1]);
@@ -114,9 +114,9 @@ public class CSL implements UpdateListener
         return res;
     }
     
-    private Map<String,String> accountCreate(String[] args)
+    private Map<String,Object> accountCreate(String[] args)
     {
-        Map<String,String> res = new HashMap<>();
+        Map<String,Object> res = new HashMap<>();
         
         res.put(CommandClient.COMMAND, args[0]);
         res.put(CommandClient.NAME, args[1]);
@@ -125,9 +125,9 @@ public class CSL implements UpdateListener
         return res;
     }
     
-    private Map<String,String> gameJoin(String[] args)
+    private Map<String,Object> gameJoin(String[] args)
     {
-        Map<String,String> res = new HashMap<>();
+        Map<String,Object> res = new HashMap<>();
         
         res.put(CommandClient.COMMAND, args[0]);
         res.put(CommandClient.ROOM_ID, args[1]);
@@ -135,17 +135,17 @@ public class CSL implements UpdateListener
         return res;
     }
     
-    private Map<String,String> exit()
+    private Map<String,Object> exit()
     {
-        Map<String,String> res = new HashMap<>();
+        Map<String,Object> res = new HashMap<>();
         
         res.put(CommandClient.COMMAND, "exit");
         return res;
     }
     
-    private Map<String,String> msg(String[] args)
+    private Map<String,Object> msg(String[] args)
     {
-        Map<String,String> res = new HashMap<>();
+        Map<String,Object> res = new HashMap<>();
         
         String message = "";
         
@@ -161,9 +161,9 @@ public class CSL implements UpdateListener
         return res;
     }
     
-    private Map<String,String> gameLeave(String[] args)
+    private Map<String,Object> gameLeave(String[] args)
     {
-        Map<String,String> res = new HashMap<>();
+        Map<String,Object> res = new HashMap<>();
         
         res.put(CommandClient.COMMAND, "game_leave");
         res.put(CommandClient.ROOM_ID, args[1]);
@@ -171,9 +171,9 @@ public class CSL implements UpdateListener
         return res;
     }
     
-    private Map<String,String> listGame()
+    private Map<String,Object> listGame()
     {
-        Map<String,String> res = new HashMap<>();
+        Map<String,Object> res = new HashMap<>();
         
         res.put(CommandClient.COMMAND, "game_list");
         
@@ -272,9 +272,9 @@ public class CSL implements UpdateListener
         this.confirmCommand();
     }
 
-    private Map<String, String> gameConfig(String[] words) 
+    private Map<String, Object> gameConfig(String[] words) 
     {
-        Map<String,String> params = new HashMap<>();
+        Map<String,Object> params = new HashMap<>();
         
         for(int i = 1; i<words.length; i++)
         {
@@ -282,7 +282,7 @@ public class CSL implements UpdateListener
             params.put(param[0], param[1]);
         }
         
-        Map<String,String> res = new HashMap<>();
+        Map<String,Object> res = new HashMap<>();
         
         res.put(CommandClient.COMMAND, CommandClient.GAME_CONFIG);
         res.put(CommandClient.ROOM_ID, params.get(CommandClient.ROOM_ID));

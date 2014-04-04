@@ -22,9 +22,7 @@ import auguste.server.command.server.ListUsers;
 import org.json.JSONException;
 
 /**
- * Commande de demande des utilisateurs d'une salon ou de tous les utilisateurs
- * authentifiés. Envoi la liste des utilisateurs d'une salon si précisée ou de
- * tous les utilisateurs authentifiés.
+ * Commande de demande des utilisateurs de tous les utilisateurs authentifiés.
  * 
  * @author Lzard
  */

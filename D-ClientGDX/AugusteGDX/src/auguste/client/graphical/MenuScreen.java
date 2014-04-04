@@ -29,14 +29,14 @@ public class MenuScreen implements Screen {
     Stage stage;
     SpriteBatch batch;
      
-    Game g;
+    MainGr g;
     
     /*
      * Constructeurs
      */
-    public MenuScreen(Game g){
+    public MenuScreen(MainGr g){
         create();
-        this.g=g;
+        this.g = g;
     }
     public MenuScreen(){
         create();
@@ -118,7 +118,7 @@ public class MenuScreen implements Screen {
             	cmd.put(CommandClient.COMMAND, CommandClient.LOG_IN);
             	cmd.put(CommandClient.NAME, username.getText());
             	cmd.put(CommandClient.PASSWORD, password.getText());
-            	
+            	//g.getCli().sendCommand(cmd);
             }
         });
         
