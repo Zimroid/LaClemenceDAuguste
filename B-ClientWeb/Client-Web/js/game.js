@@ -6,7 +6,7 @@ function gameCreate()
     {
         var json = JSON.stringify(
 		{
-            "command": "GAME_CREATE",
+            "command": "ROOM_CREATE",
             "game_name": gameName
         });
 
@@ -30,10 +30,10 @@ function gameConfig()
     //nombre de joueurs dont il faut envoyer la configuration
     var playNbr = $("[name='player']");
 
-    var test ='{"command": "GAME_CONFIG","room_id": "1"}';
+    var test ='{"command": "GAME_CONFIGURATION","room_id": "1"}';
 
     var json = JSON.stringify({
-        "command": "GAME_CONFIG",
+        "command": "GAME_CONFIGURATION",
         "room_id": "1"
     });
     
@@ -46,8 +46,8 @@ function gameList(argument)
     {
         var json = JSON.stringify(
         {
-            "command": "GAME_LIST",
-            "on_update": true
+            "command": "QUERY_ROOMS",
+            "on_update": "true"
         });
     }
     else
@@ -55,8 +55,7 @@ function gameList(argument)
         $(".game").remove();
         var json = JSON.stringify(
         {
-            "command": "GAME_LIST",
-            "on_update": false
+            "command": "QUERY_ROOMS"
         });
     }
     sendText(json);
@@ -66,7 +65,7 @@ function gameJoin(game)
 {
 	var json = JSON.stringify(
     {
-        "command": "GAME_JOIN",
+        "command": "ROOM_JOIN",
         "room_id": game
     });
     
@@ -115,8 +114,6 @@ function newPlayer(team, player)
     var optForm2 = $("<option>Carré</option>");
     var optForm3 = $("<option>Cercle</option>");
     var optForm4 = $("<option>Triangle</option>");
-    //label pour la color
-    var lblColor = $("<label for='color'>Couleur du pion</label>");
     //select pour la color
     var selColor = $("<select name='color' class='" + team + "'></select>");
     //options pour la color

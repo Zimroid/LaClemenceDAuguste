@@ -28,7 +28,7 @@
 			<a id='newGameScript' onclick="sitePage = 'newGame';" href="<?php echo $sitePath; ?>/index.php?page=newGame">Créer une partie</a>
 		</li>
 		<li class="liJoin">
-			<a id='joinGameScript' onclick="sitePage = 'joinGame';" href="<?php echo $sitePath; ?>/index.php?page=joinGame">Rejoindre une partie</a>
+			<a id='joinGameScript' onclick="sitePage = 'joinGame'; gameList('');" href="<?php echo $sitePath; ?>/index.php?page=joinGame">Rejoindre une partie</a>
 		</li>
 	</ul>
 </nav>

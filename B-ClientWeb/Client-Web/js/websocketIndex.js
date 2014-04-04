@@ -72,8 +72,9 @@ function process(evt)
 	
 	
 	// Si on demande la liste des parties
-	else if(command == "game_availables")
+	else if(command == "list_games")
 	{
+		$(".game").remove();
 		for (var i = 0 ; i < data.games.length ; i++)
 		{
 			$("#joinGameView").append("<li class='game' onclick='gameJoin(" + data.games[i].room_id + ")'>" + data.games[i].game_name + "</li>");

@@ -29,8 +29,8 @@ function connexion(bool,us,pa)
         var json = JSON.stringify(
 		{
 			"command": "LOG_IN",
-			"name": user,
-			"password": pass
+			"user_name": user,
+			"user_password": pass
         });
 
         sendText(json);
@@ -58,8 +58,8 @@ function inscription()
         var json = JSON.stringify(
 		{
 			"command": "ACCOUNT_CREATE",
-			"name": user,
-			"password": pass
+			"user_name": user,
+			"user_password": pass
         });
 
         sendText(json);
