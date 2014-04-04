@@ -3,6 +3,7 @@ package auguste.client.graphical;
 import java.net.URISyntaxException;
 
 import auguste.client.entity.Client;
+import auguste.client.graphical.*;
 
 import com.badlogic.gdx.Game;
 
