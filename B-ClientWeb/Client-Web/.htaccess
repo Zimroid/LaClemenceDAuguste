@@ -49,5 +49,5 @@ Options -Indexes
 	Header append Vary User-Agent env=!dont-vary
 </IfModule>
 
-Header unset ETag
-FileETag none
+#Header unset ETag
+#FileETag none
