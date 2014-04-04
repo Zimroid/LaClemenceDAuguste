@@ -40,7 +40,7 @@ public class RoomCreate extends ClientCommand
     @Override
     public void execute() throws InexistantRoomException, JSONException, NotInThisRoomException
     {
-        // Création de la salon
+        // Création du salon
         Room newRoom = Server.getInstance().createRoom(
                 this.getJSON().getString("game_name")
         );

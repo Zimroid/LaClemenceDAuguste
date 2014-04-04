@@ -33,14 +33,14 @@ public class ChatSend extends ClientCommand
     @Override
     public boolean checkRoom()
     {
-        // Vérification de la salon si elle est précisée
+        // Vérification du salon si il est précisé
         return this.getJSON().has("room_id");
     }
     
     @Override
     public void execute() throws JSONException
     {
-        // Choix de la salon
+        // Choix du salon
         if (this.getRoom() != null)
         {
             // Envoi du message au salon

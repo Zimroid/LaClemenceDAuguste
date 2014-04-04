@@ -27,8 +27,8 @@ import auguste.server.Room;
 public class RoomClose extends ServerCommand
 {
     /**
-     * Remplit le JSON avec l'identifiant de la salon.
-     * @param room salon fermée
+     * Remplit le JSON avec l'identifiant du salon.
+     * @param room Salon fermée
      */
     public RoomClose(Room room)
     {
