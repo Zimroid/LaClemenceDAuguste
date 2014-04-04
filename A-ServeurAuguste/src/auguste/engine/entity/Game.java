@@ -107,22 +107,27 @@ public class Game
     
     /**
     * Applique les actions.
+    * @return Legion gagnane (null si partie non terminée)
     */
-    public void applyActions()
+    public Legion applyActions()
     {
         calculateMoves();
-        applyMoves();
-        calculateTenailles();
-        applyTenailles();
-        calculateBattles();
-        applyBattles();
-        for(Action a : this.actions)
+        Legion res = applyMoves();
+        if(res == null)
         {
-            a.getLegion().setAction(null);
+            calculateTenailles();
+            applyTenailles();
+            calculateBattles();
+            applyBattles();
+            for(Action a : this.actions)
+            {
+                a.getLegion().setAction(null);
+            }
+            this.actions.clear();
+            this.timer = new GameTimer(this,turnDuration);
+            this.timer.start();
         }
-        this.actions.clear();
-        this.timer = new GameTimer(this,turnDuration);
-        this.timer.start();
+        return res;
     }
     
     /**
@@ -199,12 +204,13 @@ public class Game
         }
     }
     
-    private void applyMoves()
+    private Legion applyMoves()
     {
         Cell c1;
         Cell c2;
         Pawn p1;
         Pawn p2;
+        Legion res = null;
         for(Move m : moves)
         {
             c1 = board.getCell(m.getP1());
@@ -218,9 +224,14 @@ public class Game
                 p2.setCell(null);
                 ((Soldier)p1).setArmored(true);
             }
+            else if(p1 instanceof Laurel && c2.getTent() != null)
+            {
+                res = c2.getTent();
+            }
             c2.setPawn(p1);
             c1.setPawn(null);
         }
+        return res;
     }
     
     /**
