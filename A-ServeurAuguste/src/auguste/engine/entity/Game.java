@@ -129,7 +129,7 @@ public class Game
         Pawn p;
         Cell c;
         Move move;
-        boolean moveOk;
+        boolean dies;
         Movement m;
         Pawn tp;
         
@@ -145,32 +145,53 @@ public class Game
                 if(p != null && p.getLegion() == a.getLegion() && (tp == null || (p instanceof Soldier && ((Soldier)p).isArmored() == false && tp instanceof Armor)) && correctMove(m))
                 {
                     move = new Move(p.getCell().getP(),c.getP(),false);
-                    p.getCell().setPawn(null);
-                    moveOk = true;
+                    dies = false;
                     for(Movement m2 : moveActions)
                     {
-                        if(m2 != m && m2.getCell() == c)
+                        if(m2 != m)
                         {
-                            p.setCell(null);
-                            move.setDies(true);
-                            moveOk = false;
-                            break;
+                            if(m2.getPawn().getCell() == c)
+                            {
+                                move = null;
+                                break;
+                            }
+                            else if(m2.getCell() == c)
+                            {
+                                dies = true;
+                            }
                         }
                     }
-                    if(moveOk)
+                    
+                    if(dies && move != null)
                     {
-                        p.setCell(c);
-                        if(tp != null && tp instanceof Armor)
-                        {
-                            tp.setCell(null);
-                            ((Soldier)p).setArmored(true);
-                        }
-                        c.setPawn(p);
+                        p.setCell(null);
+                        move.setDies(true);
                     }
                 }
 
                 if(move != null) moves.add(move);
             }
+        }
+        
+        Cell c1;
+        Cell c2;
+        Pawn p1;
+        Pawn p2;
+        for(Move mv : moves)
+        {
+            c1 = board.getCell(mv.getP1());
+            c2 = board.getCell(mv.getP2());
+            p1 = c1.getPawn();
+            p2 = c2.getPawn();
+            
+            p1.setCell(c2);
+            if(p2 != null && p2 instanceof Armor)
+            {
+                p2.setCell(null);
+                ((Soldier)p1).setArmored(true);
+            }
+            c2.setPawn(p1);
+            c1.setPawn(null);
         }
     }
     

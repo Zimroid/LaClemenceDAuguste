@@ -45,17 +45,33 @@ public class Board
         this.cells = new ArrayList<>();
         this.fillCells();
     }
-    
+        
+    /**
+    * Transforme un point utilisant la nouvelle méthode (-2,-2 en haut à gauche, -2,0 en haut à droite)
+    * @param p Le point à transformer
+    * @return Le point transformé
+    */
     public Point oldFromNew(Point p)
     {
         return new Point(p.y + (size -1),p.x + (size -1));
     }
-    
+        
+    /**
+    * Transforme un point utilisant l'ancienne méthode (0,0 en haut à gauche, 2,0 en haut à droite)
+    * @param p Le point à transformer
+    * @return Le point transformé
+    */
     public Point newFromOld(Point p)
     {
         return new Point(p.y - (size -1),p.x - (size -1));
     }
     
+    /**
+    * Renvoie une position avec X rotations horaires
+    * @param pos Le point à transformer
+    * @param nbRotations Le nombre de rotations
+    * @return Le point transformé
+    */
     public Point getRotatedPosition(Point pos, int nbRotations)
     {
         Point res = getRotatedPositionOld(oldFromNew(pos), nbRotations);
@@ -63,6 +79,12 @@ public class Board
         return newFromOld(res);
     }
     
+    /**
+    * Renvoie une position avec X rotations horaires de coins (Point utilisant ancienne méthode)
+    * @param pos Le point à transformer
+    * @param nbRotations Le nombre de rotations
+    * @return Le point transformé
+    */
     public Point getRotatedPositionOld(Point pos, int nbRotations)
     {
         Point res;
