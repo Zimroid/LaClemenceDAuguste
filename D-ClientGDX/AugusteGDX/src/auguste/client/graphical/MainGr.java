@@ -1,5 +1,9 @@
 package auguste.client.graphical;
 
+import java.net.URISyntaxException;
+
+import auguste.client.entity.Client;
+
 import com.badlogic.gdx.Game;
 
 /*
@@ -10,7 +14,19 @@ public class MainGr extends Game implements UpdateListener {
 
     @Override
     public void create() {
-    	setScreen(new MenuScreen(this));
+    	Client cl = null;
+		try
+		{
+			cl = Client.getInstance();
+		}
+		catch (URISyntaxException e)
+		{
+			e.printStackTrace();
+		}
+		
+    	cl.getInterfaces().add(this);
+    	
+		setScreen(new MenuScreen(this));
     	//setScreen(new GameScreen(this));
     }
 

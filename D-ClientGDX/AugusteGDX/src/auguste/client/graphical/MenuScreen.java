@@ -80,7 +80,7 @@ public class MenuScreen implements Screen {
                 textButton.setText("Game");
                 
                 GameScreen alpha = new GameScreen(g);
-                g.setScreen(alpha);                
+                g.setScreen(alpha);               
             }
         });
     }
@@ -100,7 +100,7 @@ public class MenuScreen implements Screen {
  
     @Override
     public void resize (int width, int height) {
-        stage.setViewport(width, height, false);
+        //stage.setViewport(width, height, false);
     }
  
     @Override

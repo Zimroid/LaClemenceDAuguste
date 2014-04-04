@@ -1,5 +1,6 @@
 package auguste.client.graphical;
 
+import auguste.client.engine.Cell;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
