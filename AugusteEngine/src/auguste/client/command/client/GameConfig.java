@@ -17,6 +17,8 @@
 package auguste.client.command.client;
 
 import java.net.URISyntaxException;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 
 /**

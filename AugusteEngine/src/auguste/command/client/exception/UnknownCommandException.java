@@ -12,7 +12,12 @@ package auguste.command.client.exception;
  */
 public class UnknownCommandException extends Exception 
 {
-    public UnknownCommandException(String not_supported_yet) 
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public UnknownCommandException(String not_supported_yet) 
     {
         super(not_supported_yet);
     }

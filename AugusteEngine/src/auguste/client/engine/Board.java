@@ -253,8 +253,8 @@ public class Board
             List<Legionnary> victimes = tenaille.applyTenaille();
             for(Legionnary pawn : victimes)
             {
-                Player player = pawn.getLegion().getPlayer();
-                
+                Legion legion = pawn.getLegion();
+                legion.removePawn(pawn);
             }
         }
     }

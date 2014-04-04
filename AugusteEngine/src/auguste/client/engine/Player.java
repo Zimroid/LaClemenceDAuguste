@@ -19,7 +19,6 @@ package auguste.client.engine;
 import auguste.client.entity.Game;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Un joueur dans une partie
