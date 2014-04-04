@@ -16,9 +16,10 @@
 
 package auguste.server;
 
-import auguste.server.command.client.ClientCommand;
-import auguste.server.command.server.GameAvailables;
-import auguste.server.command.server.GameClose;
+import auguste.server.command.client.QueryUsers;
+import auguste.server.command.ClientCommand;
+import auguste.server.command.server.ListGames;
+import auguste.server.command.server.RoomClose;
 import auguste.server.exception.AuthentificationException;
 import auguste.server.exception.CommandException;
 import auguste.server.exception.InexistantRoomException;
@@ -42,8 +43,12 @@ import org.json.JSONObject;
  * le serveur de WebSocket, et d'effectuer une action lors d'un évènement lié
  * à une WebSocket.
  * 
- * L'instance du serveur gère également les connexions des clients, les
- * utilisateurs authentifiés et les salles crées.
+ * L'instance du serveur gère également l'authentification des utilisateurs et
+ * leur appartenance aux salles. Lorsqu'une modification concernant la liste des
+ * utilisateurs authentifiés ou la liste des salons créés, les utilisateurs
+ * regardant ces listes sont notifiés.
+ * 
+ * Tout message envoyé par le serveur doit être envoyé via cette instance.
  * 
  * @author Lzard / Zim
  */
@@ -75,8 +80,9 @@ public class Server extends WebSocketServer
     // Liste des salons existantes
     private final HashMap<Integer, Room> rooms = new HashMap<>();
     
-    // Liste des utilisateurs regardant la liste des salles disponibles
-    private final ArrayList<User> watchers = new ArrayList<>();
+    // Listes des utilisateurs regardant la liste utilisateurs ou des salles disponibles
+    private final ArrayList<User> usersWatchers = new ArrayList<>();
+    private final ArrayList<User> roomsWatchers = new ArrayList<>();
     
     /**
      * Instanciation du serveur. Effectue un simple appel au constructeur de la
@@ -272,6 +278,9 @@ public class Server extends WebSocketServer
         
         // Authentificaction
         this.users.put(user.getId(), user);
+        
+        // Notification
+        this.updateUsersWatchers();
     }
     
     /**
@@ -288,8 +297,13 @@ public class Server extends WebSocketServer
         // Retrait de l'utilisateur de la liste des utilisateurs authentifiés
         if (this.users.remove(user.getId()) != null) ClientCommand.sendError(user.getSocket(), "logged_out");
         
-        // Désattribution de l'utilisateur à la socket
+        // Désattribution de l'utilisateur à la socket et suppression des listes
         this.clients.put(user.getSocket(), null);
+        this.getUsersWatchers().remove(user);
+        this.getRoomsWatchers().remove(user);
+        
+        // Notification
+        this.updateUsersWatchers();
     }
     
     /**
@@ -305,7 +319,7 @@ public class Server extends WebSocketServer
      * Retourne un salon via son identifiant.
      * @param id Identifiant du salon
      * @return Salon correspondant à l'identifiant
-     * @throws auguste.server.exception.InexistantRoomException Identifiant inexistant
+     * @throws InexistantRoomException Identifiant inexistant
      */
     public Room getRoom(int id) throws InexistantRoomException
     {
@@ -336,7 +350,7 @@ public class Server extends WebSocketServer
         }
         
         // Notification
-        this.updateWatchers();
+        this.updateRoomsWatchers();
         
         return room;
     }
@@ -352,10 +366,10 @@ public class Server extends WebSocketServer
         // Laison de l'utilisateur et du salon
         user.getRooms().put(room.getId(), room);
         room.getUsers().put(user.getId(), user);
-        room.updateUsers();
         
         // Notification
-        this.updateWatchers();
+        room.updateUsers();
+        this.updateRoomsWatchers();
     }
     
     /**
@@ -379,7 +393,7 @@ public class Server extends WebSocketServer
         {
             // Changement de propriétaire et notification
             if (room.isOwner(user)) room.setRandomOwner();
-            this.updateWatchers();
+            this.updateRoomsWatchers();
         }
     }
     
@@ -394,28 +408,49 @@ public class Server extends WebSocketServer
         // Fermeture et suppression du salon
         this.rooms.remove(room.getId());
         room.setState(Room.State.CLOSING);
-        this.updateWatchers();
+        this.updateRoomsWatchers();
         
         // Signalisation et retrait des utilisateurs du salon
-        room.broadcast((new GameClose(room)).toString());
+        room.broadcast((new RoomClose(room)).toString());
         for (User user : ((HashMap<Integer, User>)room.getUsers().clone()).values()) this.leaveRoom(user, room);
+    }
+    
+    /**
+     * Retourne la liste des utilisateurs regardant la liste des utilisateurs
+     * authentifiés.
+     * @return Liste des utilisateurs regardant la liste des utilisateurs
+     */
+    public ArrayList<User> getUsersWatchers()
+    {
+        return this.usersWatchers;
+    }
+    
+    /**
+     * Met à jour les utilisateurs regardant la liste des utilisateurs
+     * authentifiés.
+     */
+    public void updateUsersWatchers()
+    {
+        for (User user : this.getUsersWatchers()) this.send(user.getSocket(), (new QueryUsers()).toString());
+        this.getUsersWatchers().clear();
     }
     
     /**
      * Retourne la liste des utilisateurs regardant la liste des parties.
      * @return Liste des utilisateurs regardant les parties
      */
-    public ArrayList<User> getWatchers()
+    public ArrayList<User> getRoomsWatchers()
     {
-        return this.watchers;
+        return this.roomsWatchers;
     }
     
     /**
      * Met à jour les utilisateurs regardant la liste des parties.
      */
-    public void updateWatchers()
+    public void updateRoomsWatchers()
     {
-        for (User user : this.getWatchers()) this.send(user.getSocket(), (new GameAvailables()).toString());
+        for (User user : this.getRoomsWatchers()) this.send(user.getSocket(), (new ListGames()).toString());
+        this.getRoomsWatchers().clear();
     }
     
 }

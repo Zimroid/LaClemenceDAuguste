@@ -16,6 +16,7 @@
 
 package auguste.server.command.server;
 
+import auguste.server.command.ServerCommand;
 import auguste.server.util.Log;
 import org.json.JSONException;
 

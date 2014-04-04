@@ -16,6 +16,7 @@
 
 package auguste.server.command.server;
 
+import auguste.server.command.ServerCommand;
 import auguste.server.Room;
 import auguste.server.User;
 import auguste.server.util.Log;
@@ -23,18 +24,19 @@ import java.util.Date;
 import org.json.JSONException;
 
 /**
- * Commande d'envoi d'un message de chat.
+ * Commande de transfert d'un message de chat.
  * 
  * @author Lzard
  */
 public class ChatMessage extends ServerCommand
 {
     /**
-     * Remplit le JSON avec les paramètres du message.
-     * @param author  Auteur du message
+     * Remplit le JSON avec les données du message.
+     * @param author  Utilisateur auteur du message
+     * @param date    Date de réception du message
      * @param message Contenu du message
      */
-    public ChatMessage(User author, String message)
+    public ChatMessage(User author, Date date, String message)
     {
         // Constructeur de la classe mère
         super("chat_message");
@@ -45,7 +47,7 @@ public class ChatMessage extends ServerCommand
         // Remplissage du JSON
         try
         {
-            this.getJSON().put("date", (new Date()).getTime());
+            this.getJSON().put("date", date.getTime());
             this.getJSON().put("text", message);
         }
         catch (JSONException e)
@@ -55,12 +57,13 @@ public class ChatMessage extends ServerCommand
     }
 
     /**
-     * Remplit le JSON avec les paramètres du message.
-     * @param author  Auteur du message
+     * Remplit le JSON avec les données du message.
+     * @param author  Utilisateur auteur du message
      * @param room    Salon à destination du message
+     * @param date    Date de réception du message
      * @param message Contenu du message
      */
-    public ChatMessage(User author, Room room, String message)
+    public ChatMessage(User author, Room room, Date date, String message)
     {
         // Constructeur de la classe mère
         super("chat_message", room);
@@ -71,7 +74,7 @@ public class ChatMessage extends ServerCommand
         // Remplissage du JSON
         try
         {
-            this.getJSON().put("date", (new Date()).getTime());
+            this.getJSON().put("date", date.getTime());
             this.getJSON().put("text", message);
         }
         catch (JSONException e)

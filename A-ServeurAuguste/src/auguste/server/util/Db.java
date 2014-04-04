@@ -32,7 +32,7 @@ public class Db
      * Ouvre et retourne une connexion à la base de données. La fonctionnalité
      * de commit automatique de la connexion ouverte est désactivée.
      * @return Une instance de Connection
-     * @throws java.sql.SQLException Erreur SQL
+     * @throws SQLException Erreur SQL
      */
     public static Connection open() throws SQLException
     {

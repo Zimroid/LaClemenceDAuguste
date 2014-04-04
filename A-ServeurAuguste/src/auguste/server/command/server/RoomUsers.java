@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Conseil7.
+ * Copyright 2014 Lzard.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,27 @@
 
 package auguste.server.command.server;
 
+import auguste.server.command.ServerCommand;
 import auguste.server.Room;
 
 /**
- * Commande indiquant la fermeture d'une salon.
+ * Commande de signalisation de la liste des utilisateurs d'un salon.
  * 
  * @author Lzard
  */
-public class GameClose extends ServerCommand
+public class RoomUsers extends ServerCommand
 {
     /**
-     * Remplit le JSON avec l'identifiant de la salon.
-     * @param room salon fermée
+     * Remplit le JSON avec les utilisateurs du salon.
+     * @param room Salon de la partie
      */
-    public GameClose(Room room)
+    public RoomUsers(Room room)
     {
         // Constructeur de la classe mère
-        super("game_close", room);
+        super("game_users", room);
+        
+        // Remplissage du JSON
+        room.addUserList(this.getJSON());
     }
     
 }

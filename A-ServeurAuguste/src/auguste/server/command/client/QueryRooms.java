@@ -16,17 +16,19 @@
 
 package auguste.server.command.client;
 
-import auguste.server.command.server.ChatUsers;
+import auguste.server.command.ClientCommand;
+import auguste.server.Server;
+import auguste.server.command.server.ListGames;
+import auguste.server.exception.RuleException;
+import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
- * Commande de demande des utilisateurs d'une salon ou de tous les utilisateurs
- * authentifiés. Envoi la liste des utilisateurs d'une salon si précisée ou de
- * tous les utilisateurs authentifiés.
+ * Commande pour récupérer la liste des parties disponibles.
  * 
  * @author Lzard
  */
-public class ChatUserList extends ClientCommand
+public class QueryRooms extends ClientCommand
 {
     @Override
     public boolean checkRoom()
@@ -35,10 +37,10 @@ public class ChatUserList extends ClientCommand
     }
     
     @Override
-    public void execute() throws JSONException
+    public void execute() throws SQLException, JSONException, RuleException
     {
-        // Envoi de la liste
-        this.send((new ChatUsers()).toString());
+        if (this.getJSON().has("on_update") && this.getJSON().getString("on_update").equals("true")) Server.getInstance().getRoomsWatchers().add(this.getUser());
+        else this.send((new ListGames()).toString());
     }
     
 }

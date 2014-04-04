@@ -72,6 +72,9 @@ public class User
     private String name;     // Nom de l'utilisateur
     private String password; // Mot de passe hashé de l'utilisateur
     
+    // JSON des paramètres de l'utilisateur
+    private final JSONObject parameters = new JSONObject();
+    
     // Socket du client de l'utilisateur
     private WebSocket socket = null;
     
@@ -79,27 +82,52 @@ public class User
     private final HashMap<Integer, Room> rooms = new HashMap<>();
     
     /**
-     * Instanciation d'un nouvel utilisateur non-enregistré.
+     * Instanciation d'un nouvel utilisateur non-enregistré. Utilise les
+     * paramètres par défaut.
      * @param name     Nom de l'utilisateur
      * @param password Mot de passe hashé de l'utilisateur
      */
     public User(String name, String password)
     {
+        // Attributs
         this.id       = User.UNREGISTERED_ID;
         this.name     = name;
         this.password = password;
+        
+        // Paramètres
+        try
+        {
+            this.parameters.put("user_favourite_pawns", Configuration.get("user_default_favourite_pawns"));
+            this.parameters.put("user_favourite_color", Configuration.get("user_default_favourite_color"));
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
     }
     
     /**
      * Instanciation d'un utilisateur à partir d'un résultat de requête.
      * @param set ResultSet d'une requête 
-     * @throws java.sql.SQLException Champ(s) absent(s) du résultat
+     * @throws SQLException Champ(s) absent(s) du résultat
      */
     public User(ResultSet set) throws SQLException
     {
+        // Attributs
         this.id       = set.getInt   ("id");
         this.name     = set.getString("name");
         this.password = set.getString("password");
+        
+        // Paramètres
+        try
+        {
+            this.parameters.put("user_favourite_pawns", Configuration.get("user_default_favourite_pawns"));
+            this.parameters.put("user_favourite_color", Configuration.get("user_default_favourite_color"));
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
     }
     
     /**
@@ -127,8 +155,7 @@ public class User
     {
         try
         {
-            json.put("user_favourite_pawns", "circle");
-            json.put("user_favourite_color", "green");
+            json.put("parameters", this.parameters);
         }
         catch (JSONException e)
         {

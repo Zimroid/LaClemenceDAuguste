@@ -14,11 +14,22 @@
  * limitations under the License.
  */
 
-package auguste.server.command.client;
+package auguste.server.command;
 
 import auguste.server.Room;
 import auguste.server.Server;
 import auguste.server.User;
+import auguste.server.command.client.AccountCreate;
+import auguste.server.command.client.ChatSend;
+import auguste.server.command.client.GameConfiguration;
+import auguste.server.command.client.GameStart;
+import auguste.server.command.client.LogIn;
+import auguste.server.command.client.LogOut;
+import auguste.server.command.client.QueryRooms;
+import auguste.server.command.client.QueryUsers;
+import auguste.server.command.client.RoomCreate;
+import auguste.server.command.client.RoomJoin;
+import auguste.server.command.client.RoomLeave;
 import auguste.server.command.server.MessageConfirm;
 import auguste.server.command.server.MessageError;
 import auguste.server.exception.AuthentificationException;
@@ -39,7 +50,7 @@ import org.json.JSONObject;
 public abstract class ClientCommand
 {
     /**
-     * Retourne l'objet commande correspondant au nom donné.
+     * Retourne l'objet commande correspondant au nom de commande donné.
      * @param name Nom de la commande
      * @return Objet commande correspondant
      * @throws CommandException Nom de commande inconnu
@@ -52,17 +63,17 @@ public abstract class ClientCommand
             ClientCommand command = null;
             switch (CommandName.valueOf(name.toUpperCase()))
             {
-                case ACCOUNT_CREATE: command = new AccountCreate(); break;
-                case CHAT_SEND:      command = new ChatSend();      break;
-                case CHAT_USERLIST:  command = new ChatUserList();  break;
-                case GAME_CONFIG:    command = new GameConfig();    break;
-                case GAME_CREATE:    command = new GameCreate();    break;
-                case GAME_JOIN:      command = new GameJoin();      break;
-                case GAME_LEAVE:     command = new GameLeave();     break;
-                case GAME_LIST:      command = new GameList();      break;
-                case GAME_START:     command = new GameStart();     break;
-                case LOG_IN:         command = new LogIn();         break;
-                case LOG_OUT:        command = new LogOut();        break;
+                case ACCOUNT_CREATE:     command = new AccountCreate();     break;
+                case CHAT_SEND:          command = new ChatSend();          break;
+                case GAME_CONFIGURATION: command = new GameConfiguration(); break;
+                case GAME_START:         command = new GameStart();         break;
+                case LOG_IN:             command = new LogIn();             break;
+                case LOG_OUT:            command = new LogOut();            break;
+                case QUERY_ROOMS:        command = new QueryRooms();        break;
+                case QUERY_USER8:        command = new QueryUsers();        break;
+                case ROOM_CREATE:        command = new RoomCreate();        break;
+                case ROOM_JOIN:          command = new RoomJoin();          break;
+                case ROOM_LEAVE:         command = new RoomLeave();         break;
             }
             return command;
         }
@@ -115,16 +126,16 @@ public abstract class ClientCommand
     
     // Données de la commande
     private User user = null; // Utilisateur qui a émit la commande
-    private Room room = null; // salon concernée par la commande
+    private Room room = null; // Salon concerné par la commande
     
     /**
      * Exécution de la commande.
-     * @throws auguste.server.exception.AuthentificationException Utilisateur non-authentifié
-     * @throws auguste.server.exception.InexistantRoomException Salon inexistant
-     * @throws auguste.server.exception.NotInThisRoomException  Utilisateur absent du salon
-     * @throws auguste.server.exception.RuleException           Règles enfreintes
-     * @throws org.json.JSONException                           Erreur JSON
-     * @throws java.sql.SQLException                            Erreur SQL
+     * @throws AuthentificationException Utilisateur non-authentifié
+     * @throws InexistantRoomException   Salon inexistant
+     * @throws NotInThisRoomException    Utilisateur absent du salon
+     * @throws RuleException             Règles enfreintes
+     * @throws JSONException             Erreur JSON
+     * @throws SQLException              Erreur SQL
      */
     public abstract void execute() throws AuthentificationException, InexistantRoomException, NotInThisRoomException, RuleException, JSONException, SQLException;
     
@@ -184,10 +195,19 @@ public abstract class ClientCommand
     {
         return this.socket;
     }
+
+    /**
+     * Modifie la WebSocket ayant reçu la commande.
+     * @param socket Nouvelle socket
+     */
+    public void setSocket(WebSocket socket)
+    {
+        this.socket = socket;
+    }
     
     /**
      * Retourne le JSONObject de la commande.
-     * @return JSONObject de la json
+     * @return JSON de la commande
      */
     public JSONObject getJSON()
     {
@@ -195,35 +215,8 @@ public abstract class ClientCommand
     }
 
     /**
-     * Retourne le user ayant émit la commande.
-     * @return User ayant émit la commande
-     */
-    public User getUser()
-    {
-        return this.user;
-    }
-    
-    /**
-     * Retourne la salon concernée par la commande.
-     * @return salon de la commande
-     */
-    public Room getRoom()
-    {
-        return this.room;
-    }
-
-    /**
-     * Modifie la WebSocket ayant reçu la commande.
-     * @param socket WebSocket à utiliser
-     */
-    public void setSocket(WebSocket socket)
-    {
-        this.socket = socket;
-    }
-
-    /**
      * Modifie le JSONObject de la commande.
-     * @param command JSONObject à utiliser
+     * @param command Nouveau JSON
      */
     public void setJSON(JSONObject command)
     {
@@ -231,10 +224,19 @@ public abstract class ClientCommand
     }
 
     /**
-     * Modifie le user ayant émit la commande.
-     * @param user Utilisateur à utiliser
-     * @throws auguste.server.exception.AuthentificationException Non-authentifié
-     * @throws org.json.JSONException                             Champ "command" absent du JSON
+     * Retourne l'utilisateur ayant émit la commande.
+     * @return Utilisateur ayant émit la commande
+     */
+    public User getUser()
+    {
+        return this.user;
+    }
+
+    /**
+     * Modifie l'utilisateur ayant émit la commande.
+     * @param user Nouvel utilisateur
+     * @throws AuthentificationException Non-authentifié
+     * @throws JSONException             Champ "command" absent du JSON
      */
     public void setUser(User user) throws AuthentificationException, JSONException
     {
@@ -243,10 +245,19 @@ public abstract class ClientCommand
     }
     
     /**
+     * Retourne la salon concerné par la commande.
+     * @return Salon de la commande
+     */
+    public Room getRoom()
+    {
+        return this.room;
+    }
+    
+    /**
      * Modifie la salon concernée par la commande.
-     * @param room salon à utiliser
-     * @throws auguste.server.exception.InexistantRoomException Salon inexistant
-     * @throws auguste.server.exception.NotInThisRoomException  Utilisateur absent du salon
+     * @param room Nouveau salon
+     * @throws InexistantRoomException Salon inexistant
+     * @throws NotInThisRoomException  Utilisateur absent du salon
      */
     public void setRoom(Room room) throws InexistantRoomException, NotInThisRoomException
     {
@@ -262,15 +273,15 @@ public abstract class ClientCommand
     {
         ACCOUNT_CREATE,
         CHAT_SEND,
-        CHAT_USERLIST,
-        GAME_CONFIG,
-        GAME_CREATE,
-        GAME_JOIN,
-        GAME_LEAVE,
-        GAME_LIST,
+        GAME_CONFIGURATION,
         GAME_START,
         LOG_IN,
-        LOG_OUT
+        LOG_OUT,
+        QUERY_ROOMS,
+        QUERY_USER8,
+        ROOM_CREATE,
+        ROOM_JOIN,
+        ROOM_LEAVE,
     }
 
 }

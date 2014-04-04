@@ -16,6 +16,7 @@
 
 package auguste.server.command.client;
 
+import auguste.server.command.ClientCommand;
 import auguste.server.Server;
 import auguste.server.User;
 import auguste.server.command.server.LogConfirm;
@@ -58,8 +59,8 @@ public class LogIn extends ClientCommand
             {
                 UserManager manager = new UserManager(connection);
                 userToLog = manager.getUser(
-                        this.getJSON().getString("name"),
-                        User.hashPassword(this.getJSON().getString("password"))
+                        this.getJSON().getString("user_name"),
+                        User.hashPassword(this.getJSON().getString("user_password"))
                 );
             }
 

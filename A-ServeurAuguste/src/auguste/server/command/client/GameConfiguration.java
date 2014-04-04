@@ -16,30 +16,29 @@
 
 package auguste.server.command.client;
 
-import auguste.server.Server;
-import auguste.server.command.server.GameAvailables;
-import auguste.server.exception.RuleException;
-import java.sql.SQLException;
+import auguste.server.command.ClientCommand;
 import org.json.JSONException;
 
 /**
- * Commande pour récupérer la liste des parties disponibles.
+ * Commande de configuration d'une partie. Vérifie si l'utilisateur est le
+ * propriétaire du salon, puis modifie la configuration et envoi une
+ * confirmation à tous les utilisateurs.
  * 
  * @author Lzard
  */
-public class GameList extends ClientCommand
+public class GameConfiguration extends ClientCommand
 {
     @Override
-    public boolean checkRoom()
+    public void execute() throws JSONException
     {
-        return false;
-    }
-    
-    @Override
-    public void execute() throws SQLException, JSONException, RuleException
-    {
-        this.send((new GameAvailables()).toString());
-        Server.getInstance().getWatchers().add(this.getUser());
+        // Vérification du propriétaire
+        if (this.getRoom().isOwner(this.getUser()))
+        {
+            // Modification de la configuration et confirmation
+            this.getRoom().setConfiguration(this.getJSON());
+            this.getRoom().updateConfiguration();
+        }
+        else this.error("not_owner_of_this_room");
     }
     
 }

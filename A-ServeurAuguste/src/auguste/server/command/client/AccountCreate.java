@@ -16,6 +16,7 @@
 
 package auguste.server.command.client;
 
+import auguste.server.command.ClientCommand;
 import auguste.server.User;
 import auguste.server.manager.UserManager;
 import auguste.server.util.Db;
@@ -52,8 +53,8 @@ public class AccountCreate extends ClientCommand
         {
             // Création du joueur
             User newUser = new User(
-                    this.getJSON().getString("name"),
-                    User.hashPassword(this.getJSON().getString("password"))
+                    this.getJSON().getString("user_name"),
+                    User.hashPassword(this.getJSON().getString("user_password"))
             );
 
             // Sauvegarde du joueur

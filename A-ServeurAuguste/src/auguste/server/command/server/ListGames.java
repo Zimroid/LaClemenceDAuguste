@@ -16,49 +16,47 @@
 
 package auguste.server.command.server;
 
+import auguste.server.command.ServerCommand;
 import auguste.server.Room;
 import auguste.server.Server;
-import auguste.server.User;
 import auguste.server.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Commande de transfert de la liste des utilisateurs authentifiés actuellement
- * connectés au serveur.
+ * Commande d'envoi de la liste des salons créés.
  * 
  * @author Lzard
  */
-public class ChatUsers extends ServerCommand
+public class ListGames extends ServerCommand
 {
     /**
-     * Remplit le JSON avec les utilisateurs authentifiés.
+     * Remplit le JSON avec les salles créés.
      */
-    public ChatUsers()
+    public ListGames()
     {
         // Constructeur de la classe mère
-        super("chat_users");
+        super("list_games");
         
         // Remplissage du JSON
         try
         {
-            // Création du JSONArray décrivant la liste des utilisateurs
-            JSONArray userList = new JSONArray();
-            for (User user : Server.getInstance().getUsers())
+            // Création du JSONArray décrivant la liste des salons
+            JSONArray roomList = new JSONArray();
+            for (Room room : Server.getInstance().getRooms())
             {
-                JSONObject userEntry = new JSONObject();
-                user.addUserInformations(userEntry);
-                userList.put(userEntry);
+                JSONObject roomEntry = new JSONObject();
+                room.addLightConfiguration(roomEntry);
+                roomList.put(roomEntry);
             }
 
-            // Ajout de la liste au JSON
-            this.getJSON().put("users", userList);
+            // Création du JSON
+            this.getJSON().put("games", roomList);
         }
         catch (JSONException e)
         {
             Log.debug(e);
         }
     }
-
 }

@@ -16,28 +16,31 @@
 
 package auguste.server.command.client;
 
+import auguste.server.command.ClientCommand;
+import auguste.server.Server;
+import auguste.server.command.server.ListUsers;
 import org.json.JSONException;
 
 /**
- * Commande de configuration d'une partie. Vérifie si l'utilisateur est le
- * propriétaire de la salon, puis modifie la configuration et envoi une
- * confirmation à tous les utilisateurs.
+ * Commande de demande des utilisateurs d'une salon ou de tous les utilisateurs
+ * authentifiés. Envoi la liste des utilisateurs d'une salon si précisée ou de
+ * tous les utilisateurs authentifiés.
  * 
  * @author Lzard
  */
-public class GameConfig extends ClientCommand
+public class QueryUsers extends ClientCommand
 {
+    @Override
+    public boolean checkRoom()
+    {
+        return false;
+    }
+    
     @Override
     public void execute() throws JSONException
     {
-        // Vérification du propriétaire
-        if (this.getRoom().isOwner(this.getUser()))
-        {
-            // Modification de la configuration et confirmation
-            this.getRoom().setConfiguration(this.getJSON());
-            this.getRoom().updateConfiguration();
-        }
-        else this.error("not_owner_of_this_room");
+        if (this.getJSON().has("on_update") && this.getJSON().getString("on_update").equals("true")) Server.getInstance().getRoomsWatchers().add(this.getUser());
+        else this.send((new ListUsers()).toString());
     }
     
 }

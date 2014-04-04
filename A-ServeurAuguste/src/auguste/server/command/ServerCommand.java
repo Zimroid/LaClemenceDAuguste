@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package auguste.server.command.server;
+package auguste.server.command;
 
 import auguste.server.Room;
 import auguste.server.util.Log;
@@ -74,6 +74,10 @@ public abstract class ServerCommand
         return this.json;
     }
     
+    /**
+     * Retourne le JSON en format texte.
+     * @return JSON texte
+     */
     @Override
     public String toString()
     {

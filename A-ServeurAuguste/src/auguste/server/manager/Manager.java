@@ -47,7 +47,7 @@ public abstract class Manager
      * Prépare une requête à la base de donnée connectée.
      * @param query Requête à préparer
      * @return PreparedStatement de la requête
-     * @throws java.sql.SQLException Erreur dans la requête SQL
+     * @throws SQLException Erreur dans la requête SQL
      */
     protected PreparedStatement query(String query) throws SQLException
     {

@@ -37,8 +37,8 @@ public class Configuration
      * Charge la configuration de base du serveur depuis le fichier de
      * configuration spécifié.
      * @param file Chemin du fichier de configuration
-     * @throws java.io.FileNotFoundException Fichier non trouvé
-     * @throws java.io.IOException           Fichier illisible
+     * @throws FileNotFoundException Fichier non trouvé
+     * @throws IOException           Fichier illisible
      */
     public static void load(String file) throws FileNotFoundException, IOException
     {

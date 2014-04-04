@@ -16,12 +16,14 @@
 
 package auguste.server.command.client;
 
+import auguste.server.command.ClientCommand;
 import auguste.server.Server;
 import auguste.server.command.server.ChatMessage;
+import java.util.Date;
 import org.json.JSONException;
 
 /**
- * Commande d'envoi d'un message. Envoi du message à la salon précisée ou au
+ * Commande d'envoi d'un message. Envoi du message au salon si précisé ou au
  * canal général sinon.
  * 
  * @author Lzard
@@ -46,6 +48,7 @@ public class ChatSend extends ClientCommand
                     (new ChatMessage(
                             this.getUser(),
                             this.getRoom(),
+                            new Date(),
                             this.getJSON().getString("message")
                     )).toString()
             );
@@ -56,6 +59,7 @@ public class ChatSend extends ClientCommand
             Server.getInstance().broadcast(
                     (new ChatMessage(
                             this.getUser(),
+                            new Date(),
                             this.getJSON().getString("message")
                     )).toString()
             );

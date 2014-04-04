@@ -19,7 +19,7 @@ package auguste.server;
 import auguste.engine.GameListener;
 import auguste.engine.entity.Game;
 import auguste.server.command.server.GameConfirm;
-import auguste.server.command.server.GameUsers;
+import auguste.server.command.server.RoomUsers;
 import auguste.server.exception.NotInThisRoomException;
 import auguste.server.util.Configuration;
 import auguste.server.util.Log;
@@ -120,7 +120,7 @@ public class Room implements GameListener
     /**
      * Modifie le propriétaire du salon.
      * @param user Nouveau propriétaire
-     * @throws auguste.server.exception.NotInThisRoomException Utilisateur absent du salon
+     * @throws NotInThisRoomException Utilisateur absent du salon
      */
     public void setOwner(User user) throws NotInThisRoomException
     {
@@ -209,6 +209,7 @@ public class Room implements GameListener
     {
         try
         {
+            json.put("room_id",            this.id                                           );
             json.put("game_name",          this.configuration.getString("game_name"         ));
             json.put("game_board_size",    this.configuration.getInt   ("game_board_size"   ));
             json.put("game_turn_duration", this.configuration.getLong  ("game_turn_duration"));
@@ -229,11 +230,8 @@ public class Room implements GameListener
     {
         try
         {
-            json.put("room_id",            this.id                                           );
-            json.put("game_name",          this.configuration.getString("game_name"         ));
-            json.put("game_board_size",    this.configuration.getInt   ("game_board_size"   ));
-            json.put("game_turn_duration", this.configuration.getLong  ("game_turn_duration"));
-            json.put("game_state",         this.getState()                                   );
+            json.put("game_state",    this.getState()   );
+            json.put("configuration", this.configuration);
         }
         catch (JSONException e)
         {
@@ -303,7 +301,7 @@ public class Room implements GameListener
      */
     public void updateUsers()
     {
-        this.broadcast((new GameUsers(this)).toString());
+        this.broadcast((new RoomUsers(this)).toString());
     }
     
     /**

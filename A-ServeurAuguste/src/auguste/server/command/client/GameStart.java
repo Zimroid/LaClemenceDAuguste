@@ -16,6 +16,7 @@
 
 package auguste.server.command.client;
 
+import auguste.server.command.ClientCommand;
 import auguste.server.exception.RuleException;
 import java.sql.SQLException;
 import org.json.JSONException;

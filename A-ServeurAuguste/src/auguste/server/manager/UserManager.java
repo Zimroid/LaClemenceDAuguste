@@ -67,7 +67,7 @@ public class UserManager extends Manager
      * @param name     Nom de l'utilisateur
      * @param password Mot de passe hashé de l'utilisateur
      * @return Instance d'User correspondant à l'utilisateur trouvé ou null
-     * @throws java.sql.SQLException Erreur SQL
+     * @throws SQLException Erreur SQL
      */
     public User getUser(String name, String password) throws SQLException
     {
@@ -105,7 +105,7 @@ public class UserManager extends Manager
      * table et un nouvel identifiant lui est attribué. Sinon, la ligne de
      * l'utilisateur est mise à jour.
      * @param user Utilisateur à sauvegarder
-     * @throws java.sql.SQLException Erreur SQL
+     * @throws SQLException Erreur SQL
      */
     public void saveUser(User user) throws SQLException
     {

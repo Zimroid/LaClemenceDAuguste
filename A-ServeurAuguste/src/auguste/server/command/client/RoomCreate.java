@@ -16,18 +16,20 @@
 
 package auguste.server.command.client;
 
+import auguste.server.command.ClientCommand;
 import auguste.server.Room;
 import auguste.server.Server;
 import auguste.server.exception.InexistantRoomException;
+import auguste.server.exception.NotInThisRoomException;
 import org.json.JSONException;
 
 /**
- * Commande pour rejoindre une partie. Identifie la salon et, si elle existe et
- * que l'utilisateur ne l'a pas déjà rejoint, y ajoute l'utilisateur.
+ * Commande de création d'une partie. Instancie le salon, ajoute l'utilisateur
+ * et le définie comme propriétaire, puis confirme le salon à l'utilisateur.
  * 
  * @author Lzard
  */
-public class GameJoin extends ClientCommand
+public class RoomCreate extends ClientCommand
 {
     @Override
     public boolean checkRoom()
@@ -36,18 +38,15 @@ public class GameJoin extends ClientCommand
     }
     
     @Override
-    public void execute() throws InexistantRoomException, JSONException
+    public void execute() throws InexistantRoomException, JSONException, NotInThisRoomException
     {
-        // Récupération de la salon
-        Room room = Server.getInstance().getRoom(this.getJSON().getInt("room_id"));
-
-        // Vérification de la non-présence de l'utilisateur
-        if (!room.isInRoom(this.getUser()))
-        {
-            // Ajout du client à la salon
-            Server.getInstance().joinRoom(this.getUser(), room);
-        }
-        else this.error("already_in_this_room");
+        // Création de la salon
+        Room newRoom = Server.getInstance().createRoom(
+                this.getJSON().getString("game_name")
+        );
+        Server.getInstance().joinRoom(this.getUser(), newRoom);
+        newRoom.setOwner(this.getUser());
+        newRoom.updateConfiguration();
     }
     
 }

@@ -16,6 +16,7 @@
 
 package auguste.server.command.client;
 
+import auguste.server.command.ClientCommand;
 import auguste.server.Server;
 import org.json.JSONException;
 
@@ -26,12 +27,12 @@ import org.json.JSONException;
  * 
  * @author Lzard
  */
-public class GameLeave extends ClientCommand
+public class RoomLeave extends ClientCommand
 {
     @Override
     public void execute() throws JSONException
     {
-        // Retrait de l'utilisateur de la salon
+        // Retrait de l'utilisateur du salon
         Server.getInstance().leaveRoom(this.getUser(), this.getRoom());
         this.confirm("room_left");
     }

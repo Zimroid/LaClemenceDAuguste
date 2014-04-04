@@ -16,6 +16,7 @@
 
 package auguste.server.command.client;
 
+import auguste.server.command.ClientCommand;
 import auguste.server.Server;
 import auguste.server.exception.AuthentificationException;
 import org.json.JSONException;
