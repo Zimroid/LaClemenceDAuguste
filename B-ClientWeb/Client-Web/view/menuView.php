@@ -7,28 +7,28 @@
 	<div class="navDivider"></div>
 	<ul class="navNav">
 		<li class="liHome">
-			<a id='homeScript' href='<?php echo $sitePath; ?>'>Accueil</a>
+			<a id='homeScript' onclick="sitePage = 'home';" href='<?php echo $sitePath; ?>'>Accueil</a>
 		</li>
 		<li class="liRules">
-			<a id='rulesScript' href="<?php echo $sitePath; ?>/index.php?page=rules">Règles</a>
+			<a id='rulesScript' onclick="sitePage = 'rules';" href="<?php echo $sitePath; ?>/index.php?page=rules">Règles</a>
 		</li>
 		<li class="liFAQ">
-			<a id='faqScript' href="<?php echo $sitePath; ?>/index.php?page=faq">FAQ</a>
+			<a id='faqScript' onclick="sitePage = 'faq';" href="<?php echo $sitePath; ?>/index.php?page=faq">FAQ</a>
 		</li>
 		<li class="liContact">
-			<a id='contactScript' href="<?php echo $sitePath; ?>/index.php?page=contact">Contact</a>
+			<a id='contactScript' onclick="sitePage = 'contact';" href="<?php echo $sitePath; ?>/index.php?page=contact">Contact</a>
 		</li>
 		<li class="liDownload">
-			<a id='downloadScript' href='<?php echo $sitePath; ?>/index.php?page=download'>Téléchargements</a>
+			<a id='downloadScript' onclick="sitePage = 'download';" href='<?php echo $sitePath; ?>/index.php?page=download'>Téléchargements</a>
 		</li>
 	</ul>
 	<div class="navDivider"></div>
 	<ul class="navGame">
 		<li class="liCreate">
-			<a id='newGameScript' href="<?php echo $sitePath; ?>/index.php?page=newGame">Créer une partie</a>
+			<a id='newGameScript' onclick="sitePage = 'newGame';" href="<?php echo $sitePath; ?>/index.php?page=newGame">Créer une partie</a>
 		</li>
 		<li class="liJoin">
-			<a id='joinGameScript' href="<?php echo $sitePath; ?>/index.php?page=joinGame">Rejoindre une partie</a>
+			<a id='joinGameScript' onclick="sitePage = 'joinGame';" href="<?php echo $sitePath; ?>/index.php?page=joinGame">Rejoindre une partie</a>
 		</li>
 	</ul>
 </nav>

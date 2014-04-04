@@ -29,16 +29,8 @@ function gameConfig()
 {
     //nombre de joueurs dont il faut envoyer la configuration
     var playNbr = $("[name='player']");
-    //
-    for(int i = 1; i <= playNbr; i++)
-    {
 
-    }
-
-    var test ='{
-        "command": "GAME_CONFIG",
-        "room_id": "1"
-    }';
+    var test ='{"command": "GAME_CONFIG","room_id": "1"}';
 
     var json = JSON.stringify({
         "command": "GAME_CONFIG",
