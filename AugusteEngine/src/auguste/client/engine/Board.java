@@ -154,7 +154,10 @@ public class Board
             }
             else
             {
-                if(neighbor.getPawn().getPlayer().getId() == origin.getPawn().getPlayer().getId())
+            	//Vérifier que le pion est un legionnaire
+            	Legionnary legionnaryNei = (Legionnary) neighbor.getPawn();
+            	Legionnary legionnaryOri = (Legionnary) origin.getPawn();
+                if(legionnaryNei.getLegion().getPlayer().getId() == legionnaryOri.getLegion().getPlayer().getId())
                 {
                     res.addAll(this.getDeplacableCells(neighbor));
                 }
@@ -247,11 +250,11 @@ public class Board
     {
         for(Tenaille tenaille : tenailles)
         {
-            List<Pawn> victimes = tenaille.applyTenaille();
-            for(Pawn pawn : victimes)
+            List<Legionnary> victimes = tenaille.applyTenaille();
+            for(Legionnary pawn : victimes)
             {
-                Player player = pawn.getPlayer();
-                player.getPawns().remove(pawn);
+                Player player = pawn.getLegion().getPlayer();
+                
             }
         }
     }

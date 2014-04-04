@@ -7,12 +7,16 @@
 package auguste.client.entity;
 
 import auguste.client.engine.Board;
+import auguste.client.engine.Legion;
 import auguste.client.engine.Pawn;
 import auguste.client.engine.Player;
 import auguste.client.engine.Team;
+
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Classe qui représente une partie
@@ -27,6 +31,7 @@ public class Game
     private List<Team> teams;
     private Board board;
     private Client client;
+    private Map<Integer, Legion> legions;
     
     /**
      * Crée une partie en spécifiant son id.
@@ -36,6 +41,7 @@ public class Game
     {
         this.id = id;
         this.teams = new ArrayList<>();
+        this.legions = new HashMap<>();
     }
     
     /**
@@ -125,5 +131,10 @@ public class Game
 
 	public void setBoard(Board board) {
 		this.board = board;
+	}
+	
+	public Map<Integer,Legion> getLegions()
+	{
+		return this.legions;
 	}
 }

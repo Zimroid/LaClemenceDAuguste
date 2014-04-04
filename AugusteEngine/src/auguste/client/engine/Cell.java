@@ -25,13 +25,13 @@ public class Cell
     private final UW uw;
     private boolean armored;
     private Pawn pawn;
-    private boolean edge;
+    private boolean tent;
     
     public Cell(UW uw)
     {
         this.uw = uw;
         this.armored = false;
-        this.edge = false;
+        this.tent = false;
     }
     
     public void setPawn(Pawn pawn)
@@ -54,11 +54,6 @@ public class Cell
         return res;
     }
     
-    public void setArmor(boolean b)
-    {
-        this.armored = b;
-    }
-    
     public boolean isArmored()
     {
         return this.armored;
@@ -69,6 +64,11 @@ public class Cell
         this.armored = false;
     }
     
+    public void putArmor()
+    {
+    	this.armored = true;
+    }
+    
     public UW getUW()
     {
         return this.uw;
@@ -77,15 +77,15 @@ public class Cell
     /**
      * @return the edge
      */
-    public boolean isEdge() {
-        return edge;
+    public boolean isTent() {
+        return tent;
     }
 
     /**
      * @param edge the edge to set
      */
-    public void setEdge(boolean edge) {
-        this.edge = edge;
+    public void putTent() {
+        this.tent = true;
     }
     
     public String getStringRepresentation()

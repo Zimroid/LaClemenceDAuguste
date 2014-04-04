@@ -51,6 +51,7 @@ public abstract class CommandServer
         GAME_AVAILABLES,
         LOG_CONFIRM,
         GAME_TURN,
-        GAME_CONFIRM
+        GAME_CONFIRM,
+        MESSAGE_ERROR
     }
 }

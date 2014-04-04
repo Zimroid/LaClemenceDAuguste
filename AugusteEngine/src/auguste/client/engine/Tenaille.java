@@ -40,9 +40,9 @@ public class Tenaille
      * Cherche et renvoie la liste des pions détruits par la tenaille
      * @return Liste des pions détruits par la tenaille
      */
-    public List<Pawn> applyTenaille()
+    public List<Legionnary> applyTenaille()
     {
-        List<Pawn> res = new ArrayList<>();
+        List<Legionnary> res = new ArrayList<>();
         
         int uBeg = this.beginning.getUW().getU();
         int wBeg = this.beginning.getUW().getW();
@@ -71,7 +71,7 @@ public class Tenaille
                    c.getUW()!=this.end.getUW() &&
                    c.isOccuped())
                 {
-                    res.add(c.getPawn());
+                    res.add((Legionnary) c.getPawn());
                 }
             }
         }
@@ -94,7 +94,7 @@ public class Tenaille
                    c.getUW()!=this.end.getUW() &&
                    c.isOccuped())
                 {
-                    res.add(c.getPawn());
+                    res.add((Legionnary) c.getPawn());
                 }
             }
         }
@@ -119,7 +119,7 @@ public class Tenaille
                        c.getUW()!=this.end.getUW() &&
                        c.isOccuped())
                     {
-                        res.add(c.getPawn());
+                        res.add((Legionnary) c.getPawn());
                     }
                 }
             }

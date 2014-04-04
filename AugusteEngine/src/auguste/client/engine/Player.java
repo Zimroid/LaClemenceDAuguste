@@ -32,8 +32,7 @@ public class Player
     private Game game;
     private int pawnShape;
     private int color;
-    private final List<Pawn> pawns;
-    private Map<Integer,Pawn> tabPawn;
+    private final List<Legion> legions;
     
     public static final int CIRCLE      = 1;
     public static final int TRIANGLE    = 2;
@@ -44,7 +43,7 @@ public class Player
     public Player(String name)
     {
         this.name = name;
-        this.pawns = new ArrayList<>();
+        this.legions = new ArrayList<>();
     }
 
     /**
@@ -117,19 +116,29 @@ public class Player
         this.color = color;
     }
     
-    public List<Pawn> getPawns()
+    public void addLegion(Legion l)
     {
-        return this.pawns;
+    	this.legions.add(l);
+    	this.getGame().getLegions().put(l.getId(), l);
     }
     
-    public void addPawn(Pawn pawn)
+    public List<Legion> getLegions()
     {
-        this.pawns.add(pawn);
-        this.tabPawn.put(pawn.getId(), pawn);
+        return this.legions;
     }
-    
-    public void generatePawns()
+
+    public Legion getLegion(int id)
     {
-        
+    	Legion res = null;
+    	
+    	for(Legion l : this.legions)
+    	{
+    		if(l.getId() == id)
+    		{
+    			res = l;
+    		}
+    	}
+    	
+    	return res;
     }
 }
