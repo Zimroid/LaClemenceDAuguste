@@ -27,19 +27,19 @@ import java.util.ArrayList;
 public class Player
 {        
     // Variables métier
-    private User user;
+    private int num;
     private final ArrayList<Legion> legions;
     private Team team;
     private Game game = null;
     
     /**
      * Instanciation d'un utilisateur avec les valeurs données.
-     * @param user L'utilisateur relatif au joueur
+     * @param num Numéro du joueur
      */
-    public Player(User user)
+    public Player(int num)
     {
         this();
-        this.user = user;
+        this.num = num;
     }
     
     public Player()
@@ -105,22 +105,22 @@ public class Player
     }
 
     /**
-     * @return the user
+     * @return the num
      */
-    public User getUser() {
-        return user;
+    public int getNum() {
+        return num;
     }
 
     /**
-     * @param user the user to set
+     * @param num the num to set
      */
-    public void setUser(User user) {
-        this.user = user;
+    public void setNum(int num) {
+        this.num = num;
     }
     
     @Override
     public String toString()
     {
-        return "Joueur (" + this.user.getName() + ") - " + this.getTeam();
+        return "Joueur (" + num + ") - " + this.getTeam();
     }
 }

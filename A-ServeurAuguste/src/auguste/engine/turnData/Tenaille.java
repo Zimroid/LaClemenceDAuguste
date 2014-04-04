@@ -25,13 +25,11 @@ import java.awt.Point;
 public class Tenaille {
     private Point p1;
     private Point p2;
-    private Point dies;
     
-    public Tenaille(Point p1, Point p2, Point dies)
+    public Tenaille(Point p1, Point p2)
     {
         this.p1 = p1;
         this.p2 = p2;
-        this.dies = dies;
     }
 
     /**
@@ -61,19 +59,4 @@ public class Tenaille {
     public void setP2(Point p2) {
         this.p2 = p2;
     }
-
-    /**
-     * @return the dies
-     */
-    public Point getDies() {
-        return dies;
-    }
-
-    /**
-     * @param dies the dies to set
-     */
-    public void setDies(Point dies) {
-        this.dies = dies;
-    }
-
 }

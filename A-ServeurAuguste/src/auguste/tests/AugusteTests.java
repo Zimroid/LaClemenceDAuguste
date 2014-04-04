@@ -27,8 +27,8 @@ public class AugusteTests {
         tOne.setNum(1);
         Team tTwo = new Team();
         tTwo.setNum(2);
-        Player pOne = new Player();
-        Player pTwo = new Player();
+        Player pOne = new Player(1);
+        Player pTwo = new Player(2);
         pOne.setTeam(tOne);
         pTwo.setTeam(tTwo);
         Legion lOne = new Legion(pOne);
@@ -58,25 +58,33 @@ public class AugusteTests {
         
         g.initBoard();
         showBoard(b);
-        System.out.println();
         
         g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-4,-4)).getPawn(),b.getCell(new Point(-2,-2))),null));
+        g.addAction(new Action(lFour,new Movement(b.getCell(new Point(-4,0)).getPawn(),b.getCell(new Point(-2,0))),null));
         g.applyActions();
-        g.getMoves().clear();
+        g.nextTurn();
         showBoard(b);
-        System.out.println();
-        
-        g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-4,-3)).getPawn(),b.getCell(new Point(-1,-1))),null));
+        g.addAction(new Action(lFour,new Movement(b.getCell(new Point(-2,0)).getPawn(),b.getCell(new Point(-1,0))),null));
         g.applyActions();
-        g.getMoves().clear();
+        g.nextTurn();
         showBoard(b);
-        System.out.println();
+        g.addAction(new Action(lFour,new Movement(b.getCell(new Point(-1,0)).getPawn(),b.getCell(new Point(-2,0))),null));
+        g.applyActions();
+        g.nextTurn();
+        showBoard(b);
         
+        
+        g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-4,-3)).getPawn(),b.getCell(new Point(-2,-1))),null));
+        g.applyActions();
+        g.nextTurn();
+        showBoard(b);
+        
+        /*
         g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-1,-1)).getPawn(),b.getCell(new Point(-4,-4))),null));
         g.applyActions();
-        g.getMoves().clear();
+        g.nextTurn();
         showBoard(b);
-        System.out.println();
+        */
     }
     
     private static void showBoard(Board b){
@@ -93,5 +101,6 @@ public class AugusteTests {
                 System.out.print(" ");
             }
         }
+        System.out.println();
     }
 }

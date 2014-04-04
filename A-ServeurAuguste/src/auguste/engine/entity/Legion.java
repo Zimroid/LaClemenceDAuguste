@@ -31,6 +31,7 @@ public class Legion
     
     // Variables de classe
     private Color color;
+    private String shape;
     private int position;
     
     // Variables métier
@@ -43,11 +44,13 @@ public class Legion
     * Instanciation d'une légion avec le joueur la gérant.
     * @param player Joueur gérant la légion
     * @param color Couleur de la légion
+    * @param shape Forme de la légion
     */
-    public Legion(Player player, Color color)
+    public Legion(Player player, Color color, String shape)
     {
         this.player = player;
         this.color = color;
+        this.shape = shape;
         this.pawns = new ArrayList<>();
     }
     
@@ -57,7 +60,7 @@ public class Legion
     */
     public Legion(Player player)
     {
-        this(player,null);
+        this(player,null,null);
     }
 
     /**
@@ -166,5 +169,19 @@ public class Legion
     public String toString()
     {
         return "Légion (" + this.getPosition() + ") - " + this.getPlayer();
+    }
+
+    /**
+     * @return the shape
+     */
+    public String getShape() {
+        return shape;
+    }
+
+    /**
+     * @param shape the shape to set
+     */
+    public void setShape(String shape) {
+        this.shape = shape;
     }
 }

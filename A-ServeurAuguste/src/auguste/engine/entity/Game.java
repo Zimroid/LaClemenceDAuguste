@@ -39,12 +39,13 @@ import java.util.List;
 public class Game
 {
     // Variables de classe
-    private int turnDuration;
+    private long turnDuration;
     private final ArrayList<Team> teams;
     private final ArrayList<Legion> legions;
     
     private final ArrayList<Action> actions;
     private GameTimer timer;
+    private int turn = 1;
     
     // Variables pour l'affichage client
     private final GameListener listener;
@@ -95,13 +96,24 @@ public class Game
         this.actions.add(a);
     }
     
+    public void nextTurn()
+    {
+        turn++;
+        moves.clear();
+        tenailles.clear();
+        battles.clear();
+    }
+    
     /**
     * Applique les actions.
     */
     public void applyActions()
     {
+        calculateMoves();
         applyMoves();
+        calculateTenailles();
         applyTenailles();
+        calculateBattles();
         applyBattles();
         for(Action a : this.actions)
         {
@@ -113,9 +125,9 @@ public class Game
     }
     
     /**
-    * Applique les mouvements.
+    * Calcule les mouvements et leurs effets (collisions, correct ou non..)
     */
-    public void applyMoves()
+    public void calculateMoves()
     {
         ArrayList<Movement> moveActions = new ArrayList<>();
         for(Action a : actions)
@@ -172,15 +184,18 @@ public class Game
                 if(move != null) moves.add(move);
             }
         }
-        
+    }
+    
+    private void applyMoves()
+    {
         Cell c1;
         Cell c2;
         Pawn p1;
         Pawn p2;
-        for(Move mv : moves)
+        for(Move m : moves)
         {
-            c1 = board.getCell(mv.getP1());
-            c2 = board.getCell(mv.getP2());
+            c1 = board.getCell(m.getP1());
+            c2 = board.getCell(m.getP2());
             p1 = c1.getPawn();
             p2 = c2.getPawn();
             
@@ -196,125 +211,114 @@ public class Game
     }
     
     /**
-     * Calcule si le mouvement est correct ou non
-     * @param m Mouvement
-     * @return Mouvement correct ou non
-     */
-    private boolean correctMove(Movement m)
-    {
-        return nearlyEmptyCells(friendlyGroup(m.getPawn()),true).contains(m.getCell());
-    }
-    
-    private ArrayList<Cell> nearlyEmptyCells(ArrayList<Pawn> group, boolean armorIsOk)
-    {
-        ArrayList<Cell> res = new ArrayList<>();
-        
-        for(Pawn p : group)
-        {
-            for(Cell c : nearlyCells(p.getCell()))
-            {
-                if((c.getPawn() == null || (armorIsOk && c.getPawn() instanceof Armor)) && !res.contains(c))
-                {
-                    res.add(c);
-                }
-            }
-        }
-        return res;
-    }
-    
-    private ArrayList<Pawn> friendlyGroup(Pawn p)
-    {
-        ArrayList<Pawn> res = new ArrayList<>();
-        ArrayList<Pawn> next = new ArrayList<>();
-        ArrayList<Pawn> tempNext;
-        ArrayList<Pawn> near;
-        next.add(p);
-        boolean stop = false;
-        
-        while(!stop)
-        {
-            tempNext = new ArrayList<>();
-            for(Pawn p1 : next)
-            {
-                near = nearlyFriends(p1);
-                for(Pawn p2 : near)
-                {
-                    if(!res.contains(p2) && !next.contains(p2) && !tempNext.contains(p2))
-                    {
-                        tempNext.add(p2);
-                    }
-                }
-                res.add(p1);
-            }
-            if(tempNext.isEmpty())
-            {
-                stop = true;
-            }
-            else
-            {
-                next = tempNext;
-            }
-        }
-        
-        return res;
-    }
-    
-    private ArrayList<Pawn> nearlyFriends(Pawn p)
-    {
-        ArrayList<Pawn> res = new ArrayList<>();
-        ArrayList<Cell> cells = nearlyCells(p.getCell());
-        Pawn tPawn;
-        for(Cell c : cells)
-        {
-            tPawn = c.getPawn();
-            if(tPawn != null && tPawn.getLegion() == p.getLegion())
-            {
-                res.add(tPawn);
-            }
-        }
-        
-        return res;
-    }
-    
-    private ArrayList<Cell> nearlyCells(Cell c)
-    {
-        ArrayList<Cell> res = new ArrayList<>();
-        int x = c.getP().x;
-        int y = c.getP().y;
-        List<Point> pArray =
-                Arrays.asList(
-                        new Point(x,y-1),
-                        new Point(x,y+1),
-                        new Point(x-1,y),
-                        new Point(x+1,y),
-                        new Point(x-1,(x>0?x+1:x-1)),
-                        new Point(x+1,(x<0?x+1:x-1)));
-        
-        for(Point p : pArray)
-        {
-            if(board.getCell(p) != null)
-            {
-                res.add(board.getCell(p));
-            }
-        }
-        
-        return res;
-    }
-    
-    /**
-    * Applique les tenailles.
+    * Calcule les tenailles.
     */
+    public void calculateTenailles()
+    {
+        //TODO
+    }
+    
     public void applyTenailles()
     {
+        Pawn p1;
+        Pawn p2;
+        int orientation;
         
+        for(Tenaille t : tenailles)
+        {
+            p1 = board.getCell(t.getP1()).getPawn();
+            p2 = board.getCell(t.getP2()).getPawn();
+            
+            if(p1 != null && p2 != null)
+            {
+                orientation = getOrientation(p1.getCell(),p2.getCell());
+                for(Cell c = p1.getCell(); c != p2.getCell(); c = getCell(c,orientation))
+                {
+                    if(c != p1.getCell())
+                    {
+                        c.getPawn().setCell(null);
+                        c.setPawn(null);
+                    }
+                }
+            }
+        }
     }
     
     /**
-    * Applique les batailles.
+    * Calcule les batailles.
     */
+    public void calculateBattles()
+    {
+        Soldier p1;
+        Soldier p2;
+        int orientation;
+        int battleRes;
+        boolean exists;
+        
+        for(Cell c : board.getCells())
+        {
+            if(c.getPawn() != null && c.getPawn() instanceof Soldier)
+            {
+                p1 = (Soldier) c.getPawn();
+                for(Soldier p : nearlyEnnemies(p1))
+                {
+                    exists = false;
+                    for(Battle b : battles)
+                    {
+                        if((b.getP1().x == p.getCell().getP().x && b.getP1().y == p.getCell().getP().y && b.getP2().x == p1.getCell().getP().x && b.getP2().y == p1.getCell().getP().y)
+                            ||(b.getP1().x == p1.getCell().getP().x && b.getP1().y == p1.getCell().getP().y && b.getP2().x == p.getCell().getP().x && b.getP2().y == p.getCell().getP().y))
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+                    if(!exists)
+                    {
+                        orientation = getOrientation(p1.getCell(),p.getCell());
+                        battleRes = lineForce(p1,(orientation+3)%6) - lineForce(p,(orientation+3)%6);
+                        battles.add(new Battle(p1.getCell().getP(),p.getCell().getP(),battleRes==0?null:battleRes<0?p1.getCell().getP():p.getCell().getP()));
+                    }
+                }
+            }
+        }
+    }
+    
+    private int lineForce(Soldier p1, int orientation)
+    {
+        int res = p1.isArmored()?2:1;
+        
+        Pawn p = getCell(p1.getCell(),orientation).getPawn();
+        while(p != null && p instanceof Soldier && p.getLegion().getPlayer().getTeam() == p1.getLegion().getPlayer().getTeam())
+        {
+            res += 1;
+            p = getCell(p.getCell(),orientation).getPawn();
+        }
+        
+        return res;
+    }
+    
     public void applyBattles()
     {
+        Pawn p1;
+        Pawn p2;
+        Pawn dies;
         
+        for(Battle b : battles)
+        {
+            p1 = board.getCell(b.getP1()).getPawn();
+            p2 = board.getCell(b.getP2()).getPawn();
+            dies = b.getDies()!=null?board.getCell(b.getP2()).getPawn():null;
+            if(dies == p1)
+            {
+                p1.getCell().setPawn(null);
+                p1.setCell(null);
+            }
+            else if(dies == p2)
+            {
+                p2.getCell().setPawn(null);
+                p2.setCell(null);
+            }
+        }
     }
     
     /**
@@ -421,6 +425,230 @@ public class Game
         this.timer.start();
     }
     
+    /**
+     * Calcule si le mouvement est correct ou non
+     * @param m Mouvement
+     * @return Mouvement correct ou non
+     */
+    private boolean correctMove(Movement m)
+    {
+        return nearlyEmptyCells(friendlyGroup(m.getPawn()),true).contains(m.getCell());
+    }
+    
+    private ArrayList<Cell> nearlyEmptyCells(ArrayList<Pawn> group, boolean armorIsOk)
+    {
+        ArrayList<Cell> res = new ArrayList<>();
+        
+        for(Pawn p : group)
+        {
+            for(Cell c : nearlyCells(p.getCell()))
+            {
+                if((c.getPawn() == null || (armorIsOk && c.getPawn() instanceof Armor)) && !res.contains(c))
+                {
+                    res.add(c);
+                }
+            }
+        }
+        return res;
+    }
+    
+    private ArrayList<Pawn> friendlyGroup(Pawn p)
+    {
+        ArrayList<Pawn> res = new ArrayList<>();
+        ArrayList<Pawn> next = new ArrayList<>();
+        ArrayList<Pawn> tempNext;
+        ArrayList<Pawn> near;
+        next.add(p);
+        boolean stop = false;
+        
+        while(!stop)
+        {
+            tempNext = new ArrayList<>();
+            for(Pawn p1 : next)
+            {
+                near = nearlyFriends(p1);
+                for(Pawn p2 : near)
+                {
+                    if(!res.contains(p2) && !next.contains(p2) && !tempNext.contains(p2))
+                    {
+                        tempNext.add(p2);
+                    }
+                }
+                res.add(p1);
+            }
+            if(tempNext.isEmpty())
+            {
+                stop = true;
+            }
+            else
+            {
+                next = tempNext;
+            }
+        }
+        
+        return res;
+    }
+    
+    private ArrayList<Pawn> nearlyFriends(Pawn p)
+    {
+        ArrayList<Pawn> res = new ArrayList<>();
+        ArrayList<Cell> cells = nearlyCells(p.getCell());
+        Pawn tPawn;
+        for(Cell c : cells)
+        {
+            tPawn = c.getPawn();
+            if(tPawn != null && tPawn.getLegion() == p.getLegion())
+            {
+                res.add(tPawn);
+            }
+        }
+        
+        return res;
+    }
+    
+    private ArrayList<Soldier> nearlyEnnemies(Pawn p)
+    {
+        ArrayList<Soldier> res = new ArrayList<>();
+        ArrayList<Cell> cells = nearlyCells(p.getCell());
+        Pawn tPawn;
+        for(Cell c : cells)
+        {
+            tPawn = c.getPawn();
+            if(tPawn != null && tPawn instanceof Soldier && tPawn.getLegion().getPlayer().getTeam() != p.getLegion().getPlayer().getTeam())
+            {
+                res.add((Soldier)tPawn);
+            }
+        }
+        
+        return res;
+    }
+    
+    private ArrayList<Cell> nearlyCells(Cell c)
+    {
+        ArrayList<Cell> res = new ArrayList<>();
+        int x = c.getP().x;
+        int y = c.getP().y;
+        List<Point> pArray =
+                Arrays.asList(
+                        new Point(x,y-1),
+                        new Point(x,y+1),
+                        new Point(x-1,y),
+                        new Point(x+1,y),
+                        new Point(x-1,(x>0?y+1:y-1)),
+                        new Point(x+1,(x<0?y+1:y-1)));
+        
+        for(Point p : pArray)
+        {
+            if(board.getCell(p) != null)
+            {
+                res.add(board.getCell(p));
+            }
+        }
+        
+        return res;
+    }
+    
+    // NB : Orientation c2 par rapport à c1 de 0 à 5 dans le sens horaires avec 0 = haut droite
+    public int getOrientation(Cell c1, Cell c2)
+    {
+        int res = -1;
+        Point p1 = c1.getP();
+        Point p2 = c2.getP();
+        
+        if(p1.x == p2.x)
+        {
+            if(p1.y == p2.y-1)
+            {
+                res = 1;
+            }
+            else if(p1.y == p2.y+1)
+            {
+                res = 4;
+            }
+        }
+        else if(p1.x == p2.x+1)
+        {
+            if(p1.x > 0)
+            {
+                if(p1.y == p2.y)
+                {
+                    res = 5;
+                }
+                else if(p1.y == p2.y-1)
+                {
+                    res = 0;
+                }
+            }
+            else
+            {
+                if(p1.y == p2.y+1)
+                {
+                    res = 5;
+                }
+                else if(p1.y == p2.y)
+                {
+                    res = 0;
+                }
+            }
+        }
+        else if(p1.x == p2.x-1)
+        {
+            if(p1.x < 0)
+            {
+                if(p1.y == p2.y)
+                {
+                    res = 3;
+                }
+                else if(p1.y == p2.y-1)
+                {
+                    res = 2;
+                }
+            }
+            else
+            {
+                if(p1.y == p2.y+1)
+                {
+                    res = 3;
+                }
+                else if(p1.y == p2.y)
+                {
+                    res = 2;
+                }
+            }
+        }
+        
+        return res;
+    }
+    
+    public Cell getCell(Cell c, int orientation)
+    {
+        Cell res = null;
+        Point p = c.getP();
+        
+        switch(orientation)
+        {
+            case 0:
+                res = board.getCell(new Point(p.x-1,p.x>0?p.y+1:p.y));
+                break;
+            case 1:
+                res = board.getCell(new Point(p.x,p.y+1));
+                break;
+            case 2:
+                res = board.getCell(new Point(p.x+1,p.x<0?p.y+1:p.y));
+                break;
+            case 3:
+                res = board.getCell(new Point(p.x+1,p.x<0?p.y:p.y-1));
+                break;
+            case 4:
+                res = board.getCell(new Point(p.x,p.y-1));
+                break;
+            case 5:
+                res = board.getCell(new Point(p.x-1,p.x>0?p.y:p.y-1));
+                break;
+        }
+        
+        return res;
+    }
     
     /**
     * Initialise une case.
@@ -564,14 +792,21 @@ public class Game
     /**
      * @return the turnDuration
      */
-    public int getTurnDuration() {
+    public long getTurnDuration() {
         return turnDuration;
     }
 
     /**
      * @param turnDuration the turnDuration to set
      */
-    public void setTurnDuration(int turnDuration) {
+    public void setTurnDuration(long turnDuration) {
         this.turnDuration = turnDuration;
+    }
+
+    /**
+     * @return the turn
+     */
+    public int getTurn() {
+        return turn;
     }
 }
