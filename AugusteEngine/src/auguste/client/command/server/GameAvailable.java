@@ -7,9 +7,11 @@
 package auguste.client.command.server;
 
 import auguste.client.entity.Game;
-import auguste.client.graphical.UpdateListener;
+import auguste.client.interfaces.UpdateListener;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

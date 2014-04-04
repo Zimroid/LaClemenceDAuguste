@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package auguste.client.graphical;
+package auguste.client.interfaces;
 
 /**
  *

@@ -7,9 +7,13 @@
 package auguste.client.command.client;
 
 import org.json.JSONObject;
+
 import auguste.client.entity.Client;
+
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Map;
+
 import org.json.JSONException;
 
 /**
@@ -21,7 +25,7 @@ public abstract class CommandClient
 {
     private final JSONObject json;
     private Map<String,String> args;
-    Client client;
+    Client client;    
     
     // Noms de commandes possibles
     public static final String GAME_CREATE      = "game_create";
@@ -61,6 +65,7 @@ public abstract class CommandClient
     {
         this.json = new JSONObject();
         this.client = Client.getInstance();
+        
     }
     
     /**

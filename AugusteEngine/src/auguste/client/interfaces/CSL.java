@@ -4,12 +4,13 @@
  * and open the template in the editor.
  */
 
-package auguste.client.graphical;
+package auguste.client.interfaces;
 
 import auguste.client.command.client.CommandClient;
 import auguste.client.entity.ChatMessageReceived;
 import auguste.client.entity.Client;
 import auguste.client.entity.Game;
+
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
+
 import org.json.JSONException;
 
 /**
@@ -49,7 +51,8 @@ public class CSL implements UpdateListener
 
         while(!stop)
         {
-            Scanner sc = new Scanner(System.in);
+            @SuppressWarnings("resource")
+			Scanner sc = new Scanner(System.in);
             String line = sc.nextLine();
             String[] words = line.split(" ");
             Map<String,String> command;

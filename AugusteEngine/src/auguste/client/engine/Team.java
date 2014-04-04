@@ -16,7 +16,6 @@
 
 package auguste.client.engine;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +43,7 @@ public class Team
     {
         this.id = id;
         this.players = new ArrayList<>();
-        this.tabPlayers = new HashMap();
+        this.tabPlayers = new HashMap<>();
     }
 
     /**

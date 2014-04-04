@@ -6,7 +6,8 @@
 
 package auguste.client.command.server;
 
-import auguste.client.graphical.UpdateListener;
+import auguste.client.interfaces.UpdateListener;
+
 import org.json.JSONException;
 
 /**

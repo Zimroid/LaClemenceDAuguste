@@ -2,14 +2,16 @@ package auguste.client.entity;
 
 import auguste.client.command.manager.CommandClientManager;
 import auguste.client.command.manager.CommandServerManager;
-import auguste.client.graphical.UpdateListener;
+import auguste.client.interfaces.UpdateListener;
 import auguste.client.reseau.ClientSocket;
+
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+
 import org.json.JSONException;
 
 /**

@@ -96,26 +96,6 @@ public class Game
     public void setTeams(List<Team> teams) {
         this.teams = teams;
     }
-    
-    private void setPawns()
-    {
-        List<Pawn> pawns = new ArrayList<>();
-        for(Team team : this.teams)
-        {
-            int teamColor = team.getColor();
-            int teamShape = team.getTeamShape();
-            
-            for(Player player : team.getPlayers())
-            {                
-                player.generatePawns();
-            }
-        }
-    }
-    
-    public void start()
-    {
-        
-    }
 
     /**
      * @return the legion_number
@@ -130,4 +110,20 @@ public class Game
     public void setLegion_number(int legion_number) {
         this.legion_number = legion_number;
     }
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
+	public Board getBoard() {
+		return board;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
 }

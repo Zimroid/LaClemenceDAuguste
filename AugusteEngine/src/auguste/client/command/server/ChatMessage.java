@@ -7,8 +7,10 @@
 package auguste.client.command.server;
 
 import auguste.client.entity.ChatMessageReceived;
-import auguste.client.graphical.UpdateListener;
+import auguste.client.interfaces.UpdateListener;
+
 import java.util.Date;
+
 import org.json.JSONException;
 
 /**

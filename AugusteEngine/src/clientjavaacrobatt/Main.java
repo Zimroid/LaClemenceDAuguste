@@ -3,11 +3,13 @@ import auguste.client.engine.Board;
 import auguste.client.engine.Cell;
 import auguste.client.engine.UW;
 import auguste.client.entity.Client;
-import auguste.client.graphical.CSL;
-import auguste.client.graphical.UpdateListener;
+import auguste.client.interfaces.CSL;
+import auguste.client.interfaces.UpdateListener;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+
 import org.json.JSONException;
 
 public class Main

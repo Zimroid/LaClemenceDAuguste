@@ -6,8 +6,10 @@
 
 package auguste.client.command.client;
 
-import auguste.client.graphical.UpdateListener;
+import auguste.client.interfaces.UpdateListener;
+
 import java.net.URISyntaxException;
+
 import org.json.JSONException;
 
 /**
