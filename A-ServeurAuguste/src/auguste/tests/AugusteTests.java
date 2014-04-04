@@ -61,9 +61,12 @@ public class AugusteTests {
         
         g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-4,-4)).getPawn(),b.getCell(new Point(-2,-2))),null));
         g.addAction(new Action(lFour,new Movement(b.getCell(new Point(-4,0)).getPawn(),b.getCell(new Point(-2,0))),null));
+        g.addAction(new Action(lSix,new Movement(b.getCell(new Point(0,-3)).getPawn(),b.getCell(new Point(0,-2))),null));
         g.applyActions();
         g.nextTurn();
         showBoard(b);
+        
+        /*
         g.addAction(new Action(lFour,new Movement(b.getCell(new Point(-2,0)).getPawn(),b.getCell(new Point(-1,0))),null));
         g.applyActions();
         g.nextTurn();
@@ -72,9 +75,27 @@ public class AugusteTests {
         g.applyActions();
         g.nextTurn();
         showBoard(b);
-        
+        */
         
         g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-4,-3)).getPawn(),b.getCell(new Point(-2,-1))),null));
+        g.addAction(new Action(lSix,new Movement(b.getCell(new Point(0,-2)).getPawn(),b.getCell(new Point(0,-1))),null));
+        g.applyActions();
+        g.nextTurn();
+        showBoard(b);
+        
+        g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-2,-2)).getPawn(),b.getCell(new Point(-1,-1))),null));
+        g.applyActions();
+        g.nextTurn();
+        showBoard(b);
+        
+        g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-1,-1)).getPawn(),b.getCell(new Point(-2,-2))),null));
+        g.addAction(new Action(lFour,new Movement(b.getCell(new Point(-2,0)).getPawn(),b.getCell(new Point(-1,0))),null));
+        g.applyActions();
+        g.nextTurn();
+        showBoard(b);
+        
+        g.addAction(new Action(lSix,new Movement(b.getCell(new Point(0,0)).getPawn(),b.getCell(new Point(-1,-1))),null));
+        g.addAction(new Action(lFour,new Movement(b.getCell(new Point(0,0)).getPawn(),b.getCell(new Point(-1,-1))),null));
         g.applyActions();
         g.nextTurn();
         showBoard(b);

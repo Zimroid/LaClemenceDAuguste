@@ -24,6 +24,7 @@ import auguste.engine.entity.pawn.Armor;
 import auguste.engine.entity.pawn.Laurel;
 import auguste.engine.entity.pawn.Pawn;
 import auguste.engine.entity.pawn.Soldier;
+import auguste.engine.entity.pawn.Wall;
 import auguste.engine.turnData.Battle;
 import auguste.engine.turnData.Move;
 import auguste.engine.turnData.Tenaille;
@@ -180,6 +181,18 @@ public class Game
                         move.setDies(true);
                     }
                 }
+                else if(p != null && p instanceof Laurel && canMoveLaurel(a.getLegion(),p) && correctMove(m,true))
+                {
+                    move = new Move(p.getCell().getP(),c.getP(),false);
+                    for(Movement m2 : moveActions)
+                    {
+                        if(m2 != m && m2.getPawn() == p)
+                        {
+                            move = null;
+                            break;
+                        }
+                    }
+                }
 
                 if(move != null) moves.add(move);
             }
@@ -215,7 +228,85 @@ public class Game
     */
     public void calculateTenailles()
     {
-        //TODO
+        Pawn p;
+        int orientation;
+        Cell tc;
+        boolean wall;
+        boolean exists;
+        
+        for(Cell c : board.getCells())
+        {
+            if(c.getPawn() instanceof Soldier)
+            {
+                p = c.getPawn();
+                for(Soldier s : nearbyTenailleEnnemies(p))
+                {
+                    orientation = getOrientation(p.getCell(),s.getCell());
+                    tc = s.getCell();
+                    wall = false;
+                    while(!wall && tc != null && tc.getPawn() != null && tc.getPawn() instanceof Soldier && tc.getPawn().getLegion().getPlayer().getTeam() != p.getLegion().getPlayer().getTeam())
+                    {
+                        tc = getCell(tc,orientation);
+                        if(tc != null && tc.getPawn() != null && tc.getPawn() instanceof Wall)
+                        {
+                            wall = true;
+                        }
+                    }
+                    if(!wall)
+                    {
+                        if(tc != null && (tc.getPawn() == null || !(tc.getPawn() instanceof Soldier)))
+                        {
+                            tc = getCell(tc,orientation);
+                        }
+                        if(tc != null && tc.getPawn() != null && tc.getPawn() instanceof Soldier && tc.getPawn().getLegion().getPlayer().getTeam() == p.getLegion().getPlayer().getTeam())
+                        {
+                            exists = false;
+                            for(Tenaille t : tenailles)
+                            {
+                                if(t.getP1().x == p.getCell().getP().x && t.getP1().y == p.getCell().getP().y && t.getP2().x == tc.getP().x && t.getP2().y == tc.getP().y
+                                        || t.getP2().x == p.getCell().getP().x && t.getP2().y == p.getCell().getP().y && t.getP1().x == tc.getP().x && t.getP1().y == tc.getP().y)
+                                {
+                                    exists = true;
+                                }
+                            }
+                            if(!exists)
+                            {
+                                tenailles.add(new Tenaille(p.getCell().getP(),tc.getP()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    public ArrayList<Soldier> nearbyTenailleEnnemies(Pawn p)
+    {
+        ArrayList<Soldier> res = new ArrayList<>();
+        Cell c1;
+        Cell c2;
+        
+        for(int orientation = 0; orientation < 6; orientation++)
+        {
+            c1 = getCell(p.getCell(),orientation);
+            if(c1 != null)
+            {
+                if(c1.getPawn() != null && c1.getPawn() instanceof Soldier && c1.getPawn().getLegion().getPlayer().getTeam() != p.getLegion().getPlayer().getTeam())
+                {
+                    res.add((Soldier)c1.getPawn());
+                }
+                if(!(c1.getPawn() != null && c1.getPawn() instanceof Wall))
+                {
+                    c2 = getCell(c1,orientation);
+                    if(c2 != null && c2.getPawn() != null && c2.getPawn() instanceof Soldier && c2.getPawn().getLegion().getPlayer().getTeam() != p.getLegion().getPlayer().getTeam())
+                    {
+                        res.add((Soldier)c2.getPawn());
+                    }
+                }
+            }
+        }
+        
+        return res;
     }
     
     public void applyTenailles()
@@ -223,7 +314,6 @@ public class Game
         Pawn p1;
         Pawn p2;
         int orientation;
-        
         for(Tenaille t : tenailles)
         {
             p1 = board.getCell(t.getP1()).getPawn();
@@ -234,7 +324,7 @@ public class Game
                 orientation = getOrientation(p1.getCell(),p2.getCell());
                 for(Cell c = p1.getCell(); c != p2.getCell(); c = getCell(c,orientation))
                 {
-                    if(c != p1.getCell())
+                    if(c != p1.getCell() && c.getPawn() != null && c.getPawn() instanceof Soldier)
                     {
                         c.getPawn().setCell(null);
                         c.setPawn(null);
@@ -260,7 +350,7 @@ public class Game
             if(c.getPawn() != null && c.getPawn() instanceof Soldier)
             {
                 p1 = (Soldier) c.getPawn();
-                for(Soldier p : nearlyEnnemies(p1))
+                for(Soldier p : nearbyEnnemies(p1))
                 {
                     exists = false;
                     for(Battle b : battles)
@@ -421,8 +511,23 @@ public class Game
                     break;
             }
         }
-        board.getCell(new Point(0,0)).setPawn(new Laurel());        // Laurel
+        initCell(0,0,new Laurel(),0);        // Laurel
         this.timer.start();
+    }
+    
+    private boolean canMoveLaurel(Legion l, Pawn laurel)
+    {
+        boolean res = false;
+        for(Cell c : nearbyCells(laurel.getCell()))
+        {
+            if(c.getPawn() != null && c.getPawn() instanceof Soldier && c.getPawn().getLegion() == l)
+            {
+                res = true;
+                break;
+            }
+        }
+        
+        return res;
     }
     
     /**
@@ -432,16 +537,35 @@ public class Game
      */
     private boolean correctMove(Movement m)
     {
-        return nearlyEmptyCells(friendlyGroup(m.getPawn()),true).contains(m.getCell());
+        return correctMove(m,false);
     }
     
-    private ArrayList<Cell> nearlyEmptyCells(ArrayList<Pawn> group, boolean armorIsOk)
+    private boolean correctMove(Movement m, boolean isLaurel)
+    {
+        if(isLaurel)
+        {
+            return nearbyEmptyCells(m.getPawn(),false).contains(m.getCell());
+        }
+        else
+        {
+            return nearbyEmptyCells(friendlyGroup(m.getPawn()),true).contains(m.getCell());
+        }
+    }
+    
+    private ArrayList<Cell> nearbyEmptyCells(Pawn pawn, boolean armorIsOk)
+    {
+        ArrayList<Pawn> l = new ArrayList<>();
+        l.add(pawn);
+        return nearbyEmptyCells(l,armorIsOk);
+    }
+    
+    private ArrayList<Cell> nearbyEmptyCells(ArrayList<Pawn> group, boolean armorIsOk)
     {
         ArrayList<Cell> res = new ArrayList<>();
         
         for(Pawn p : group)
         {
-            for(Cell c : nearlyCells(p.getCell()))
+            for(Cell c : nearbyCells(p.getCell()))
             {
                 if((c.getPawn() == null || (armorIsOk && c.getPawn() instanceof Armor)) && !res.contains(c))
                 {
@@ -466,7 +590,7 @@ public class Game
             tempNext = new ArrayList<>();
             for(Pawn p1 : next)
             {
-                near = nearlyFriends(p1);
+                near = nearbyFriends(p1);
                 for(Pawn p2 : near)
                 {
                     if(!res.contains(p2) && !next.contains(p2) && !tempNext.contains(p2))
@@ -489,10 +613,10 @@ public class Game
         return res;
     }
     
-    private ArrayList<Pawn> nearlyFriends(Pawn p)
+    private ArrayList<Pawn> nearbyFriends(Pawn p)
     {
         ArrayList<Pawn> res = new ArrayList<>();
-        ArrayList<Cell> cells = nearlyCells(p.getCell());
+        ArrayList<Cell> cells = nearbyCells(p.getCell());
         Pawn tPawn;
         for(Cell c : cells)
         {
@@ -506,10 +630,10 @@ public class Game
         return res;
     }
     
-    private ArrayList<Soldier> nearlyEnnemies(Pawn p)
+    private ArrayList<Soldier> nearbyEnnemies(Pawn p)
     {
         ArrayList<Soldier> res = new ArrayList<>();
-        ArrayList<Cell> cells = nearlyCells(p.getCell());
+        ArrayList<Cell> cells = nearbyCells(p.getCell());
         Pawn tPawn;
         for(Cell c : cells)
         {
@@ -523,7 +647,7 @@ public class Game
         return res;
     }
     
-    private ArrayList<Cell> nearlyCells(Cell c)
+    private ArrayList<Cell> nearbyCells(Cell c)
     {
         ArrayList<Cell> res = new ArrayList<>();
         int x = c.getP().x;
@@ -557,16 +681,16 @@ public class Game
         
         if(p1.x == p2.x)
         {
-            if(p1.y == p2.y-1)
+            if(p1.y < p2.y)
             {
                 res = 1;
             }
-            else if(p1.y == p2.y+1)
+            else if(p1.y > p2.y)
             {
                 res = 4;
             }
         }
-        else if(p1.x == p2.x+1)
+        else if(p1.x > p2.x)
         {
             if(p1.x > 0)
             {
@@ -574,14 +698,14 @@ public class Game
                 {
                     res = 5;
                 }
-                else if(p1.y == p2.y-1)
+                else if(p1.y < p2.y)
                 {
                     res = 0;
                 }
             }
             else
             {
-                if(p1.y == p2.y+1)
+                if(p1.y > p2.y)
                 {
                     res = 5;
                 }
@@ -591,7 +715,7 @@ public class Game
                 }
             }
         }
-        else if(p1.x == p2.x-1)
+        else if(p1.x < p2.x)
         {
             if(p1.x < 0)
             {
@@ -599,14 +723,14 @@ public class Game
                 {
                     res = 3;
                 }
-                else if(p1.y == p2.y-1)
+                else if(p1.y < p2.y)
                 {
                     res = 2;
                 }
             }
             else
             {
-                if(p1.y == p2.y+1)
+                if(p1.y > p2.y)
                 {
                     res = 3;
                 }
