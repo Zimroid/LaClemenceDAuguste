@@ -27,22 +27,38 @@ function gameStart()
 
 function gameConfig()
 {
-    var json = JSON.stringify(
-    {
-        "command": "GAME_CONFIG"
+    //nombre de joueurs dont il faut envoyer la configuration
+    var playNbr = $("[name='player']");
+
+    var test ='{"command": "GAME_CONFIG","room_id": "1"}';
+
+    var json = JSON.stringify({
+        "command": "GAME_CONFIG",
+        "room_id": "1"
     });
     
     sendText(json);
 }
 
-function gameList()
+function gameList(argument)
 {
-	$(".game").remove();
-	var json = JSON.stringify(
+    if (argument == 'on_update')
     {
-        "command": "GAME_LIST"
-    });
-    
+        var json = JSON.stringify(
+        {
+            "command": "GAME_LIST",
+            "on_update": true
+        });
+    }
+    else
+    {
+        $(".game").remove();
+        var json = JSON.stringify(
+        {
+            "command": "GAME_LIST",
+            "on_update": false
+        });
+    }
     sendText(json);
 }
 
@@ -77,9 +93,9 @@ function newTeam()
 
 function newPlayer(team, player)
 {
-	//button de création du nouveau joueur
-	var NPButton = $("#button" + team).attr("onclick","newPlayer(" + team + "," + (player + 1) + ")");
-	//div de la team du nouveau joueur
+    //button de création du nouveau joueur
+    var NPButton = $("#button" + team).attr("onclick","newPlayer(" + team + "," + (player + 1) + ")");
+    //div de la team du nouveau joueur
     var divTeam = $("#team" + team);
     //div de config pour le nouveau player
     var divPlay = $("<div name='player' id='player" + team + "_" + player + "'></div>");
@@ -101,8 +117,13 @@ function newPlayer(team, player)
     var optForm4 = $("<option>Triangle</option>");
     //label pour la color
     var lblColor = $("<label for='color'>Couleur du pion</label>");
-    //input pour la color
-    var inpColor = $("<input name='color' class='color " + team + "' />");
+    //select pour la color
+    var selColor = $("<select name='color' class='" + team + "'></select>");
+    //options pour la color
+    var optColor = $("<option selected='selected'>Couleur du pion</option>");
+    var optColor2 = $("<option name='1'>Rouge</option>");
+    var optColor3 = $("<option name='2'>Vert</option>");
+    var optColor4 = $("<option name='3'>Bleu</option>");
     //select pour la position sur le plateau
     var selPosit = $("<select name='position' class='" + team + "'></select>");
     //options pour le selPosit
@@ -114,9 +135,8 @@ function newPlayer(team, player)
 
     selPlay.append(optPlay, optPlay2);
     selForm.append(optForm, optForm2, optForm3, optForm4);
+    selColor.append(optColor, optColor2, optColor3, optColor4);
     selPosit.append(optPosit, optPosit2, optPosit3, optPosit4, optPosit5);
-    divPlay.append(selPlay, lblLegion, inpLegion, selForm, lblColor, inpColor, selPosit);
+    divPlay.append(selPlay, lblLegion, inpLegion, selForm, lblColor, selColor, selPosit);
     divTeam.append(divPlay);
-    
-    jscolor.init();
 }

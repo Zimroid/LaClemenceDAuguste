@@ -15,7 +15,7 @@ function process(evt)
 	// Reussite connexion utilisateur
 	else if(command == "log_confirm")
 	{
-		reloadChat(sitePath + "/index.php?script=1&page=connect&user=" + data.name);
+		reloadChat(sitePath + "/index.php?script=1&page=connect&user=" + data.user_name);
 	}
 	
 	// Réception message
@@ -31,7 +31,7 @@ function process(evt)
 		if (m < 10) { m = "0" + m; }
 
 		message = data.text.replace("\n","<br>");
-		messagesList.innerHTML += "<br />" + data.author +  " [" + h + ":" + m + "] : " + message;
+		messagesList.innerHTML += "<br />" + data.user_name +  " [" + h + ":" + m + "] : " + message;
 		messagesList.scrollTop = messagesList.scrollHeight;
 	}
 	
@@ -74,8 +74,13 @@ function process(evt)
 	// Si on demande la liste des parties
 	else if(command == "game_availables")
 	{
-		for (var i = 0 ; i < data.list.length ; i++) {
-			$("#joinGameView").append("<li class='game' onclick='gameJoin(" + data.list[i].room_id + ")'>" + data.list[i].game_name + "</li>");
+		for (var i = 0 ; i < data.games.length ; i++)
+		{
+			$("#joinGameView").append("<li class='game' onclick='gameJoin(" + data.games[i].room_id + ")'>" + data.games[i].game_name + "</li>");
+		}
+		if (sitePage == 'joinGame')
+		{
+			gameList("on_update");
 		}
 	}
 	

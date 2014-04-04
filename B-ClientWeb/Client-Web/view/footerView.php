@@ -1,6 +1,7 @@
 		<script>
 			var sitePath = "<?php echo $sitePath; ?>";
 			var siteName = "<?php echo $siteName; ?>";
+			var sitePage = '';
 			var game_id = 0;
 		</script>
 		
@@ -18,7 +19,6 @@
 		?>	
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/websocket.js"></script>
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/websocketIndex.js"></script>
-		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/jscolor/jscolor.js"></script>
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/sha1.js"></script>
 		
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/chat.js"></script>

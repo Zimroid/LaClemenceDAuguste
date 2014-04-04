@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class MenuScreen implements Screen {
@@ -51,7 +53,7 @@ public class MenuScreen implements Screen {
         
         // Génération texture pixmap
         Pixmap pixmap = new Pixmap(100, 100, Format.RGBA8888);
-        pixmap.setColor(Color.BLUE);
+        pixmap.setColor(Color.LIGHT_GRAY);
         pixmap.fill();
         skin.add("btn", new Texture(pixmap));
  
@@ -60,36 +62,68 @@ public class MenuScreen implements Screen {
         bfont.scale(1);
         skin.add("default", bfont);
  
-        // Configuration d'un design de textButton
+        // Configuration options textButton
         TextButtonStyle textButtonStyle = new TextButtonStyle();
-        textButtonStyle.up 		= skin.newDrawable("btn", Color.DARK_GRAY);
+        textButtonStyle.up 		= skin.newDrawable("btn", Color.LIGHT_GRAY);
         textButtonStyle.down 	= skin.newDrawable("btn", Color.DARK_GRAY);
-        textButtonStyle.checked = skin.newDrawable("btn", Color.BLUE);
-        textButtonStyle.over 	= skin.newDrawable("btn", Color.LIGHT_GRAY);
         textButtonStyle.font 	= skin.getFont("default");
-        skin.add("Basic", textButtonStyle);
- 
-        // Création du bouton
-        final TextButton textButton = new TextButton("Create Game", skin, "Basic");
-        textButton.setPosition(200, 200);
-        stage.addActor(textButton);
+        skin.add("btn", textButtonStyle);
+        
+        // Configuration options textButton
+        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+        textFieldStyle.background	= skin.newDrawable("btn", Color.LIGHT_GRAY);
+        textFieldStyle.fontColor 	= Color.WHITE;
+        textFieldStyle.font 		= skin.getFont("default");
+        skin.add("txt", textFieldStyle);
+
+        // Nom d'utilisateur
+        final TextField username = new TextField("Username ...", skin, "txt");
+        username.setSize(400, 50);
+        username.setPosition(200, 400);
+        
+        // Mot de passe
+        final TextField password = new TextField("Password ...", skin, "txt");
+        password.setSize(400, 50);
+        password.setPosition(200, 300);
+        
+        // Création du bouton        
+        final TextButton btnConnect = new TextButton("Connexion", skin, "btn");
+        btnConnect.setSize(250, 50);
+        btnConnect.setPosition(200, 200);
+        
+        
+        // ----------------- FOR TEST !!!
+        final TextButton goGame = new TextButton("Page plateau", skin, "btn");
+        goGame.setSize(250, 50);
+        goGame.setPosition(500, 200);
+        // ----------------------------------------------------------
+        
+        // Ajout sur la page
+        stage.addActor(username);
+        stage.addActor(password);
+        stage.addActor(btnConnect);
+        stage.addActor(goGame);
+        
+        // Connexion
+        btnConnect.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+            	System.out.println(username.getText());
+            	System.out.println(password.getText());          
+            }
+        });
         
         // Clic sur le bouton
-        textButton.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-                textButton.setText("Game");
-                
-                GameScreen alpha = new GameScreen(g);
+        goGame.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {            	
+            	GameScreen alpha = new GameScreen(g);
                 g.setScreen(alpha);               
             }
         });
     }
  
-    public void render (float delta) {
-    	//if(Gdx.input.justTouched())
-            //g.setScreen(new GameScreen(g));
-            
-    	Gdx.gl.glClearColor(0.7f, 0.7f, 0.7f, 1);
+    public void render (float delta)
+    {
+    	Gdx.gl.glClearColor(0.9f, 0.9f, 0.9f, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
