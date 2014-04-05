@@ -28,20 +28,10 @@ import java.util.Map;
 public class Team 
 {
     private List<Player> players;
-    private int color;
-    private int teamShape;
-    private final int id;
     private Map<Integer,Player> tabPlayers;
     
-    public static final int CIRCLE      = 1;
-    public static final int TRIANGLE    = 2;
-    public static final int SQUARE      = 3;
-    public static final int PENTAGONE   = 4;
-    public static final int HEXAGONE    = 5;
-    
-    public Team(int id)
+    public Team()
     {
-        this.id = id;
         this.players = new ArrayList<>();
         this.tabPlayers = new HashMap<>();
     }
@@ -49,7 +39,8 @@ public class Team
     /**
      * @return the players
      */
-    public List<Player> getPlayers() {
+    public List<Player> getPlayers() 
+    {
         return players;
     }
 
@@ -60,45 +51,10 @@ public class Team
     {
         this.players = players;
     }
-
-    /**
-     * @return the color
-     */
-    public int getColor() {
-        return color;
-    }
-
-    /**
-     * @param color the color to set
-     */
-    public void setColor(int color) {
-        this.color = color;
-    }
-
-    /**
-     * @return the teamShape
-     */
-    public int getTeamShape() {
-        return teamShape;
-    }
-
-    /**
-     * @param teamShape the teamShape to set
-     */
-    public void setTeamShape(int teamShape) {
-        this.teamShape = teamShape;
-    }
     
     public Player getPlayer(int id)
     {
         return this.tabPlayers.get(id);
-    }
-
-    /**
-     * @return the id
-     */
-    public int getId() {
-        return id;
     }
     
     public void addPlayer(Player player)

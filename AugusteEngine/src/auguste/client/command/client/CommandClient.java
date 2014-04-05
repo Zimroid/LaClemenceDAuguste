@@ -24,17 +24,17 @@ import org.json.JSONException;
 public abstract class CommandClient
 {
     private final JSONObject json;
-    private Map<String,Object> args;
+    private Map<String,?> args;
     private List<Object> tab;
     Client client;    
     
     // Noms de commandes possibles
-    public static final String GAME_CREATE      = "game_create";
-    public static final String GAME_LIST        = "game_list";
-    public static final String GAME_JOIN        = "game_join";
+    public static final String GAME_CREATE      = "room_create";
+    public static final String GAME_LIST        = "query_rooms";
+    public static final String GAME_JOIN        = "room_join";
     public static final String GAME_START       = "game_start";
-    public static final String GAME_LEAVE       = "game_leave";
-    public static final String GAME_CONFIG      = "game_config";
+    public static final String GAME_LEAVE       = "room_leave";
+    public static final String GAME_CONFIG      = "game_configuration";
     public static final String COMMAND          = "command";
     public static final String EXIT             = "exit";
     public static final String CHAT_SEND        = "chat_send";
@@ -50,14 +50,15 @@ public abstract class CommandClient
     public static final String NAME                 = "name";
     public static final String PASSWORD             = "password";
     public static final String GAME_NAME            = "game_name";
-    public static final String TURN_TIMER           = "turn_timer";
-    public static final String BOARD_SIZE           = "board_size";
+    public static final String GAME_TURN_DURATION   = "game_turn_duration";
+    public static final String BOARD_SIZE           = "game_board_size";
     public static final String CARDS                = "cards";
     public static final String NUMBER_OF_TEAM       = "number_of_team";
     public static final String LEGION_PER_PLAYER    = "legion_per_player";
     public static final String PAWN_ID              = "pawn_id";
     public static final String POS_BEG              = "pos_beg";
     public static final String POS_END              = "pos_end";
+    public static final String TEAMS				= "teams";
     
     
     public abstract void buildJSON() throws JSONException;
@@ -82,7 +83,7 @@ public abstract class CommandClient
      *
      * @param s Le premier argument est le nom de la commande, le reste change en fonction de la commande concernée.
      */
-    public void setArguments(Map<String,Object> s)
+    public void setArguments(Map<String,?> s)
     {
         this.args = s;
     }
@@ -100,7 +101,7 @@ public abstract class CommandClient
      *
      * @return Les arguments de la commande.
      */
-    public Map<String,Object> getArguments()
+    public Map<String,?> getArguments()
     {
         return this.args;
     }

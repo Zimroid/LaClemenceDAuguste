@@ -11,6 +11,12 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Joel/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/server/command/client/GameConfiguration.java</file>
+            <file>file:/C:/Users/Joel/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/server/command/server/GameConfirm.java</file>
+            <file>file:/C:/Users/Joel/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/server/Room.java</file>
+            <file>file:/C:/Users/Joel/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/server/command/ClientCommand.java</file>
+            <file>file:/C:/Users/Joel/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/server/command/client/GameStart.java</file>
+        </group>
     </open-files>
 </project-private>

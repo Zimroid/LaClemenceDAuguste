@@ -29,15 +29,7 @@ public class Player
     private int id;
     private String name;
     private Game game;
-    private int pawnShape;
-    private int color;
-    private final List<Legion> legions;
-    
-    public static final int CIRCLE      = 1;
-    public static final int TRIANGLE    = 2;
-    public static final int SQUARE      = 3;
-    public static final int PENTAGONE   = 4;
-    public static final int HEXAGONE    = 5;
+    private List<Legion> legions;
     
     public Player(String name)
     {
@@ -48,96 +40,63 @@ public class Player
     /**
      * @return the id
      */
-    public int getId() {
+    public int getId() 
+    {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(int id) 
+    {
         this.id = id;
     }
 
     /**
      * @return the name
      */
-    public String getName() {
+    public String getName() 
+    {
         return name;
     }
 
     /**
      * @param name the name to set
      */
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
     /**
      * @return the game
      */
-    public Game getGame() {
+    public Game getGame()
+    {
         return game;
     }
 
     /**
      * @param game the game to set
      */
-    public void setGame(Game game) {
+    public void setGame(Game game) 
+    {
         this.game = game;
-    }
-
-    /**
-     * @return the pawnShape
-     */
-    public int getPawnShape() {
-        return pawnShape;
-    }
-
-    /**
-     * @param pawnShape the pawnShape to set
-     */
-    public void setPawnShape(int pawnShape) {
-        this.pawnShape = pawnShape;
-    }
-
-    /**
-     * @return the color
-     */
-    public int getColor() {
-        return color;
-    }
-
-    /**
-     * @param color the color to set
-     */
-    public void setColor(int color) {
-        this.color = color;
     }
     
     public void addLegion(Legion l)
     {
     	this.legions.add(l);
-    	this.getGame().getLegions().put(l.getId(), l);
     }
     
     public List<Legion> getLegions()
     {
         return this.legions;
     }
-
-    public Legion getLegion(int id)
+    
+    public void setLegions(List<Legion> legions)
     {
-    	Legion res = null;
-    	
-    	for(Legion l : this.legions)
-    	{
-    		if(l.getId() == id)
-    		{
-    			res = l;
-    		}
-    	}
-    	
-    	return res;
+    	this.legions = legions;
     }
 }

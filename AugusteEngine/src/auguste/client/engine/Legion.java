@@ -10,14 +10,14 @@ public class Legion
 	private List<Pawn> pawns;
 	private Player player;
     private Map<Integer,Pawn> tabPawn;
-    private int legion_id;
+    private String color;
+    private String shape;
 	
-	public Legion(int id, Player player) 
+	public Legion(Player player) 
 	{
 		this.player = player;
 		this.pawns = new ArrayList<>();
 		this.tabPawn = new HashMap<>();
-		this.legion_id = id;
 	}
 	
 	public List<Pawn> getPawns()
@@ -56,9 +56,24 @@ public class Legion
 	{
 		return this.tabPawn.get(id);
 	}
-	
-	public int getId()
+
+	public String getColor()
 	{
-		return this.legion_id;
+		return color;
+	}
+
+	public void setColor(String color)
+	{
+		this.color = color;
+	}
+
+	public String getShape()
+	{
+		return shape;
+	}
+
+	public void setShape(String shape)
+	{
+		this.shape = shape;
 	}
 }
