@@ -36,4 +36,14 @@ public class NotInThisRoomException extends Exception
     {
         super("Not in this room: " + user.getName() + " not in room " + room.getId());
     }
+    
+    /**
+     * Enregistre le salon et l'identifiant de l'utilisateur concernés.
+     * @param room   Salon concerné
+     * @param userId Identifiant de l'utilisateur concerné
+     */
+    public NotInThisRoomException(Room room, int userId)
+    {
+        super("Not in this room: user " + userId + " not in room " + room.getId());
+    }
 }
