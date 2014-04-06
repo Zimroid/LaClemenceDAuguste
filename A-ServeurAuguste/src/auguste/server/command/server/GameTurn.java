@@ -16,8 +16,9 @@
 
 package auguste.server.command.server;
 
-import auguste.server.command.ServerCommand;
 import auguste.server.Room;
+import auguste.server.command.ServerCommand;
+import auguste.server.util.Log;
 import org.json.JSONException;
 
 /**
@@ -30,12 +31,20 @@ public class GameTurn extends ServerCommand
     /**
      * Remplit le JSON avec les données du tour.
      * @param room Salon de la partie
-     * @throws JSONException Erreur de JSON
      */
-    public GameTurn(Room room) throws JSONException
+    public GameTurn(Room room)
     {
         // Constructeur de la classe mère
         super("game_turn", room);
+        
+        try
+        {
+            room.addTurnData(this.getJSON());
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
     }
     
 }

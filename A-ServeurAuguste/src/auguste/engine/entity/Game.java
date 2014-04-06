@@ -95,6 +95,7 @@ public class Game
         }
         a.getLegion().setAction(a);
         this.actions.add(a);
+        if (this.actions.size() == this.legions.size()) timer.notify();
     }
     
     public void nextTurn()

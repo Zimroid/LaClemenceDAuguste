@@ -17,17 +17,28 @@
 package auguste.server;
 
 import auguste.engine.GameListener;
+import auguste.engine.entity.Board;
+import auguste.engine.entity.Cell;
 import auguste.engine.entity.Game;
 import auguste.engine.entity.Legion;
 import auguste.engine.entity.Player;
 import auguste.engine.entity.Team;
+import auguste.engine.entity.action.Action;
+import auguste.engine.entity.action.Movement;
+import auguste.engine.entity.pawn.Soldier;
+import auguste.engine.turnData.Battle;
+import auguste.engine.turnData.Move;
+import auguste.engine.turnData.Tenaille;
 import auguste.server.command.server.GameConfirm;
+import auguste.server.command.server.GameTurn;
 import auguste.server.command.server.RoomUsers;
 import auguste.server.exception.NotInThisRoomException;
 import auguste.server.util.Configuration;
 import auguste.server.util.Log;
 import java.awt.Color;
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -105,9 +116,50 @@ public class Room implements GameListener
     
     /**
      * Effectue le lancement de la partie.
+     * @throws org.json.JSONException
      */
-    public void start()
+    public void start() throws JSONException
     {
+        this.game.setTurnDuration(this.configuration.getLong("game_turn_duration"));
+        this.game.setBoard(new Board(this.configuration.getInt("game_board_size"), this.game));
+        for (Player player : this.playing.keySet()) this.game.addPlayer(player);
+        this.game.initBoard();
+        this.broadcast((new GameTurn(this)).toString());
+    }
+    
+    /**
+     *
+     * @param user
+     * @param json
+     * @throws org.json.JSONException
+     */
+    public void addAction(User user, JSONObject json) throws JSONException
+    {
+        Legion legion = null;
+        for (Entry<Player, Integer> entry : this.playing.entrySet())
+        {
+            if (entry.getValue() == user.getId())
+            {
+                legion = entry.getKey().getLegions().get(json.getInt("legion_id"));
+            }
+        }
+        
+        Cell cell = this.game.getBoard().getCell(new Point(json.getInt("start_u"), json.getInt("start_w")));
+        Action action = null;
+        if (cell != null)
+        {
+            if (cell.getPawn() != null && cell.getPawn().getLegion() == legion)
+            {
+                Cell newCell = this.game.getBoard().getCell(new Point(json.getInt("end_u"), json.getInt("end_w")));
+                if (newCell != null)
+                {
+                    Movement movement = new Movement(cell.getPawn(), newCell);
+                    action = new Action(legion, movement, null);
+                }
+            }
+        }
+        
+        if (action != null) this.game.addAction(action);
     }
     
     /**
@@ -116,6 +168,108 @@ public class Room implements GameListener
     @Override
     public void onTurnEnd()
     {
+        this.broadcast((new GameTurn(this)).toString());
+    }
+    
+    /**
+     *
+     * @param json
+     * @throws org.json.JSONException
+     */
+    public void addTurnData(JSONObject json) throws JSONException
+    {
+        // Ajout du plateau
+        JSONArray boardData = new JSONArray();
+        JSONObject cellData;
+        for (Cell cell : this.game.getBoard().getCells())
+        {
+            if (cell.getPawn() != null)
+            {
+                cellData = new JSONObject();
+                cellData.put("u", cell.getP().getX());
+                cellData.put("w", cell.getP().getY());
+                cellData.put("type", cell.getPawn().getClass().getName().toLowerCase());
+                
+                if (cell.getTent() != null)
+                {
+                    cellData.put("tent_color", cell.getTent().getColor().toString());
+                    cellData.put("tent_shape", cell.getTent().getShape());
+                }
+
+                if (cell.getPawn() instanceof Soldier)
+                {
+                    cellData.put("legion_armor", ((Soldier)cell.getPawn()).isArmored());
+                    cellData.put("legion_color", cell.getPawn().getLegion().getColor().toString());
+                    cellData.put("legion_shape", cell.getPawn().getLegion().getShape());
+                }
+                boardData.put(cellData);
+            }
+            else if (cell.getTent() != null)
+            {
+                cellData = new JSONObject();
+                cellData.put("u", cell.getP().getX());
+                cellData.put("w", cell.getP().getY());
+                cellData.put("tent_color", cell.getTent().getColor().toString());
+                cellData.put("tent_shape", cell.getTent().getShape());
+                boardData.put(cellData);
+            }
+        }
+        json.put("board", boardData);
+        
+        // Application des actions et ajout du prochain timeout
+        json.put("turn_timeout", (new Date((new Date()).getTime() + this.configuration.getLong("game_turn_duration"))).getTime());
+        this.game.applyActions();
+        
+        // Ajout des déplacements
+        JSONArray movesData = new JSONArray();
+        JSONObject moveData;
+        for (Move move : this.game.getMoves())
+        {
+            moveData = new JSONObject();
+            moveData.put("start_u", move.getP1().getX());
+            moveData.put("start_w", move.getP1().getY());
+            moveData.put("end_u", move.getP2().getX());
+            moveData.put("end_w", move.getP2().getY());
+            moveData.put("destroyed", move.isDies());
+            movesData.put(moveData);
+        }
+        json.put("moves", movesData);
+        
+        // Ajout des tenailles
+        JSONArray tenaillesData = new JSONArray();
+        JSONObject tenailleData;
+        for (Tenaille tenaille : this.game.getTenailles())
+        {
+            tenailleData = new JSONObject();
+            tenailleData.put("front1_u", tenaille.getP1().getX());
+            tenailleData.put("front1_w", tenaille.getP1().getY());
+            tenailleData.put("front2_u", tenaille.getP2().getX());
+            tenailleData.put("front2_w", tenaille.getP2().getY());
+            tenaillesData.put(tenailleData);
+        }
+        json.put("tenailles", tenaillesData);
+        
+        // Ajout des combats
+        JSONArray battlesData = new JSONArray();
+        JSONObject battleData;
+        for (Battle battle : this.game.getBattles())
+        {
+            battleData = new JSONObject();
+            battleData.put("pawn1_u", battle.getP1().getX());
+            battleData.put("pawn1_w", battle.getP1().getY());
+            battleData.put("pawn2_u", battle.getP2().getX());
+            battleData.put("pawn2_w", battle.getP2().getY());
+            if (battle.getDies() != null)
+            {
+                battleData.put("loser_u", battle.getDies().getX());
+                battleData.put("loser_w", battle.getDies().getY());
+            }
+            battlesData.put(battleData);
+        }
+        json.put("battles", battlesData);
+        
+        // Début du prochain tour
+        this.game.nextTurn();
     }
     
     /**
@@ -249,6 +403,7 @@ public class Room implements GameListener
                         Legion newLegion = new Legion(newPlayer);
                         newLegion.setColor(Color.green);
                         newLegion.setShape(legionData.getString("legion_shape"));
+                        newLegion.setPosition(legionData.getInt("legion_position"));
                         newPlayer.addLegion(newLegion);
                     }
                 }
