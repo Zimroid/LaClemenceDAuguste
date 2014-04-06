@@ -8,15 +8,15 @@ package auguste.client.entity;
 
 import auguste.client.engine.Board;
 import auguste.client.engine.Legion;
-import auguste.client.engine.Pawn;
+import auguste.client.engine.Move;
 import auguste.client.engine.Player;
 import auguste.client.engine.Team;
+import auguste.client.engine.Tenaille;
 
-import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.Queue;
 
 /**
  * Classe qui représente une partie
@@ -25,13 +25,19 @@ import java.util.Map;
 public class Game
 {
     private int id;
+    
     private String name;
     private int board_size;
     private int legion_number;
+    private long turn_duration;
+    
     private List<Team> teams;
     private Board board;
     private Client client;
-    private Map<Integer, Legion> legions;
+    
+    private Queue<Tenaille> tenailles;
+    private Queue<Move> moves;
+    private List<Legion> legions;
     
     /**
      * Crée une partie en spécifiant son id.
@@ -41,7 +47,9 @@ public class Game
     {
         this.id = id;
         this.teams = new ArrayList<>();
-        this.legions = new HashMap<>();
+        this.legions = new ArrayList<>();
+        this.tenailles = new LinkedList<>();
+        this.moves = new LinkedList<>();
     }
     
     /**
@@ -92,49 +100,92 @@ public class Game
     /**
      * @return the teams
      */
-    public List<Team> getTeams() {
+    public List<Team> getTeams() 
+    {
         return teams;
     }
 
     /**
      * @param teams the teams to set
      */
-    public void setTeams(List<Team> teams) {
+    public void setTeams(List<Team> teams) 
+    {
         this.teams = teams;
     }
 
     /**
      * @return the legion_number
      */
-    public int getLegion_number() {
+    public int getLegion_number() 
+    {
         return legion_number;
     }
 
     /**
      * @param legion_number the legion_number to set
      */
-    public void setLegion_number(int legion_number) {
+    public void setLegion_number(int legion_number) 
+    {
         this.legion_number = legion_number;
     }
 
-	public Client getClient() {
+	public Client getClient() 
+	{
 		return client;
 	}
 
-	public void setClient(Client client) {
+	public void setClient(Client client)
+	{
 		this.client = client;
 	}
 
-	public Board getBoard() {
+	public Board getBoard() 
+	{
 		return board;
 	}
 
-	public void setBoard(Board board) {
+	public void setBoard(Board board) 
+	{
 		this.board = board;
 	}
 	
-	public Map<Integer,Legion> getLegions()
+	public List<Legion> getLegions()
 	{
 		return this.legions;
+	}
+	
+	public Queue<Tenaille> getTenailles()
+	{
+		return this.tenailles;
+	}
+	
+	public Queue<Move> getMoves()
+	{
+		return this.moves;
+	}
+
+	public long getTurn_duration() 
+	{
+		return turn_duration;
+	}
+
+	public void setTurn_duration(long turn_duration) 
+	{
+		this.turn_duration = turn_duration;
+	}
+	
+	public Player getPlayer(int id)
+	{
+		Player res = null;
+		
+		for(Team team : this.teams)
+		{
+			if(team.getPlayer(id) != null)
+			{
+				res = team.getPlayer(id);
+			}
+		}
+		
+		return res;
 	}
 }

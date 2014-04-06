@@ -75,7 +75,7 @@ public class Client
          * @throws JSONException
          * @throws java.net.URISyntaxException
          */
-        public void sendCommand(Map<String,String> command) throws JSONException, URISyntaxException
+        public void sendCommand(Map<String,?> command) throws JSONException, URISyntaxException
         {
             CommandClientManager.executeCommand(INSTANCE, command);
         }

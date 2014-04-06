@@ -25,11 +25,9 @@ public class Move
     private UW uwBeg;
     private UW uwEnd;
     private Pawn pawn;
-    private int id;
     
-    public Move(int id, Pawn pawn, UW beg, UW end)
+    public Move(Pawn pawn, UW beg, UW end)
     {
-        this.id = id;
         this.pawn = pawn;
         this.uwBeg = beg;
         this.uwEnd = end;
@@ -75,19 +73,5 @@ public class Move
      */
     public void setPawn(Pawn pawn) {
         this.pawn = pawn;
-    }
-
-    /**
-     * @return the id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 }

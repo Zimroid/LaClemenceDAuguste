@@ -19,8 +19,10 @@ import auguste.client.command.client.LogIn;
 import auguste.client.command.client.LogOut;
 import auguste.client.command.client.QuitGame;
 import auguste.client.entity.Client;
+
 import java.net.URISyntaxException;
 import java.util.Map;
+
 import org.json.JSONException;
 
 /**
@@ -29,9 +31,9 @@ import org.json.JSONException;
  */
 public class CommandClientManager 
 {
-    public static void executeCommand(Client client, Map<String,String> params) throws JSONException, URISyntaxException
+	public static void executeCommand(Client client, Map<String,?> params) throws JSONException, URISyntaxException
     {
-        String command_name = params.get("command");
+        String command_name = (String) params.get("command");
                     
         CommandClient command;
         try

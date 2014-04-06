@@ -30,12 +30,12 @@ public class ChatSend extends CommandClient
     @Override
     public void buildJSON() throws JSONException
     {
-        String msg = this.getArguments().get(MESSAGE);
+        String msg = (String) this.getArguments().get(MESSAGE);
         int gameId = 0;
         
         if(this.getArguments().containsKey(ROOM_ID))
         {
-            gameId = Integer.parseInt(this.getArguments().get(ROOM_ID));
+            gameId = Integer.parseInt((String)this.getArguments().get(ROOM_ID));
         }
         
         this.getJSON().put(COMMAND, CHAT_SEND);
