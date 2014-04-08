@@ -78,6 +78,12 @@ public class MainGr extends Game implements UpdateListener
 		
 	}
 
+	@Override
+	public void error(String errorType) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	public Client getCli() {
 		return cli;
 	}

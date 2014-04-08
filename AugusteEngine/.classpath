@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="lib/commons-codec-1.9.jar"/>
-	<classpathentry kind="lib" path="lib/java_websocket.jar"/>
-	<classpathentry kind="lib" path="lib/java-json.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Vincent/Documents/GitHub/LaClemenceDAuguste/D-ClientGDX/lib/commons-codec-1.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Vincent/Documents/GitHub/LaClemenceDAuguste/D-ClientGDX/lib/java_websocket.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Vincent/Documents/GitHub/LaClemenceDAuguste/D-ClientGDX/lib/java-json.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

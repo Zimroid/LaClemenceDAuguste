@@ -1,23 +1,31 @@
-package auguste.client.graphical;
+package auguste.client.graphical.entity;
 
 import java.util.ArrayList;
 
 import auguste.client.engine.Cell;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class Hexagon {
-	private Cell cell;
-
+	private final Color BASIC_COLOR = Color.WHITE;
+	
+	private Cell cell;			// Contient l'hexagone virtuel
 	private Position center;	// Position centre
 	private float radius;		// Taille rayon
 	private Color color;		// Couleur de la case
 	private float sizeBorder;	// Taille de la bordure noire (chevauchement)
+	
+	public boolean colored;		// Param de test
 		
 	/*
-	 * Constructor
+	 * Constructeurs
 	 */
+	public Hexagon(Cell ce)
+	{
+		this.cell = ce;
+	}
 	public Hexagon(Cell ce, float x, float y, float r, Color color, float border)
 	{
 		// Données
@@ -28,6 +36,12 @@ public class Hexagon {
 		this.radius = r;
 		this.color = color;
 		this.sizeBorder = border;
+		this.colored = false;
+		
+		if(this.getColor() == null)
+		{
+			this.color = BASIC_COLOR;
+		}
 	}
 	
 	/*
@@ -35,7 +49,7 @@ public class Hexagon {
 	 */
 	public void drawCase(ShapeRenderer shrd)
 	{
-		drawHex(shrd, this.center, this.radius, this.color, this.sizeBorder);
+		drawHex(shrd, this.center, this.radius, this.getColor(), this.sizeBorder);
 	}
 	
 	/*
@@ -147,5 +161,32 @@ public class Hexagon {
 	{
 		return (  (o.getX() - a.getX()) * (b.getY() - a.getY()) - (b.getX() - a.getX()) * (o.getY() - a.getY()) )
 			*( (clic.getX() - a.getX()) * (b.getY() - a.getY()) - (b.getX() - a.getX()) * (clic.getY() - a.getY()) ) > 0;
+	}
+	
+	/*
+	 * Changement de couleur
+	 */
+	public void changeColor(Color color) {
+		if(color != null && color != Color.WHITE)
+		{
+			this.color = color;
+			this.colored = true;
+		}
+	}
+
+	/*
+	 * Restauration couleur
+	 */
+	public void resetColor()
+	{
+		this.color = BASIC_COLOR;
+		this.colored = false;
+	}
+	
+	/*
+	 * Détecte la couleur
+	 */
+	public Color getColor() {
+		return color;
 	}
 }

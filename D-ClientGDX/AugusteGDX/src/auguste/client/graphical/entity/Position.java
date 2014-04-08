@@ -1,4 +1,4 @@
-package auguste.client.graphical;
+package auguste.client.graphical.entity;
 
 /*
  * Classe identifiant une position via ses coordonnées X et Y

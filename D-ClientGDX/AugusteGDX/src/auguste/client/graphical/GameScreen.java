@@ -1,41 +1,40 @@
 package auguste.client.graphical;
 
-import auguste.client.engine.Cell;
-import com.badlogic.gdx.Game;
+import auguste.client.graphical.entity.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
-
-import java.util.List;
 
 public class GameScreen implements Screen {
 	private Stage stage;
     private SpriteBatch batch;
-    private Game g;
+    private MainGr g;
     
     private ShapeRenderer shrd;
     private HexaBoard board;
-    private int boardRadius;
-    private List<List<Cell>> cells;
     
     /*
      * Constructeurs
      */
-    public GameScreen(Game g)
+    public GameScreen(MainGr g)
     {
-        create();
         this.g = g;
-        this.boardRadius = 5; // RECUPERER DANS LE MOTEUR
-        cells = null;
+
+        // Création des objets de la page
+        create();
+	
+ 	    // ------------------------------------------------------------ TEST
+		this.getBoard().testBoard(shrd);
     }
+    
+    // ------ CONFIG TAILLE DU CANEVAS !!!!
     
     /*
      *  Création de la page
@@ -52,6 +51,9 @@ public class GameScreen implements Screen {
         
         // Instanciation
         this.setShrd(new ShapeRenderer());
+        
+		// Création du plateau
+		this.setBoard(new HexaBoard(g, 800f));
     }
 	
     /*
@@ -62,26 +64,48 @@ public class GameScreen implements Screen {
 	public void render(float delta)
 	{
 		// Fond
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+ 		Gdx.gl.glClearColor(1, 1, 1, 1);
+ 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-	    batch.begin();
+ 	    batch.begin();
 		    stage.draw();
 		    
 			Gdx.gl10.glLineWidth(2);
 			getShrd().begin(ShapeType.Line);
+				// Positionnement chat
 				float positionChat = Gdx.graphics.getWidth()*4/5;
 				getShrd().setColor(0, 0, 0, 1);
 				getShrd().line(positionChat, 0, positionChat, Gdx.graphics.getHeight());
 			getShrd().end();
 		batch.end();
 		
-		this.setBoard(new HexaBoard(this.boardRadius, this.cells));
+		// Dessin du plateau de jeu
 		this.getBoard().DrawBoard(getShrd());
 		
 		// Clic sur le bouton
-		if (Gdx.input.justTouched()){          
+		if (Gdx.input.justTouched()) {          
 	        System.out.println(Gdx.input.getX() +"-"+ Gdx.input.getY());
+	        	        
+	        // Si clic dans le grand hexagone
+	        if(true)
+	        {
+	        	Hexagon current = this.board.findClickedHex(new Position(Gdx.input.getX(), Gdx.input.getY()));
+	        	if(current != null)
+	        	{
+	        		// Mise à jour de l'hexagone
+		        	if(current.colored == false)
+	        		{ 
+		        		current.changeColor(Color.BLUE);
+	        		}
+		        	else
+		        	{
+		        		current.resetColor();
+		        	}
+		        	
+		        	// Redessine la case
+		        	current.drawCase(shrd);
+	        	}
+	        }
 	    }
 	}
 
