@@ -17,16 +17,28 @@
 package auguste.server;
 
 import auguste.engine.GameListener;
+import auguste.engine.entity.Board;
+import auguste.engine.entity.Cell;
 import auguste.engine.entity.Game;
 import auguste.engine.entity.Legion;
 import auguste.engine.entity.Player;
 import auguste.engine.entity.Team;
+import auguste.engine.entity.action.Action;
+import auguste.engine.entity.action.Movement;
+import auguste.engine.entity.pawn.Soldier;
+import auguste.engine.turnData.Battle;
+import auguste.engine.turnData.Move;
+import auguste.engine.turnData.Tenaille;
 import auguste.server.command.server.GameConfirm;
+import auguste.server.command.server.GameTurn;
 import auguste.server.command.server.RoomUsers;
 import auguste.server.exception.NotInThisRoomException;
 import auguste.server.util.Configuration;
 import auguste.server.util.Log;
 import java.awt.Color;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -63,10 +75,9 @@ public class Room implements GameListener
     // Configuration de la partie
     private final JSONObject configuration = new JSONObject(); 
     
-    // Listes des équipes, joueurs et légions
-    private final HashMap<Integer, Team>   teams   = new HashMap<>();
-    private final HashMap<Integer, Player> players = new HashMap<>();
-    private final HashMap<Player, Legion>  legions = new HashMap<>();
+    // Listes des joueurs et des équipes
+    private final HashMap<Player, Integer> playing = new HashMap<>();
+    private final ArrayList<Team>          teams   = new ArrayList<>();
     
     // Liste des clients affectés au salon
     private final HashMap<Integer, User> users = new HashMap<>();
@@ -105,9 +116,50 @@ public class Room implements GameListener
     
     /**
      * Effectue le lancement de la partie.
+     * @throws org.json.JSONException
      */
-    public void start()
+    public void start() throws JSONException
     {
+        this.game.setTurnDuration(this.configuration.getLong("game_turn_duration"));
+        this.game.setBoard(new Board(this.configuration.getInt("game_board_size"), this.game));
+        for (Player player : this.playing.keySet()) this.game.addPlayer(player);
+        this.game.initBoard();
+        this.broadcast((new GameTurn(this)).toString());
+    }
+    
+    /**
+     *
+     * @param user
+     * @param json
+     * @throws org.json.JSONException
+     */
+    public void addAction(User user, JSONObject json) throws JSONException
+    {
+        Legion legion = null;
+        for (Entry<Player, Integer> entry : this.playing.entrySet())
+        {
+            if (entry.getValue() == user.getId())
+            {
+                legion = entry.getKey().getLegions().get(json.getInt("legion_id"));
+            }
+        }
+        
+        Cell cell = this.game.getBoard().getCell(new Point(json.getInt("start_u"), json.getInt("start_w")));
+        Action action = null;
+        if (cell != null)
+        {
+            if (cell.getPawn() != null && cell.getPawn().getLegion() == legion)
+            {
+                Cell newCell = this.game.getBoard().getCell(new Point(json.getInt("end_u"), json.getInt("end_w")));
+                if (newCell != null)
+                {
+                    Movement movement = new Movement(cell.getPawn(), newCell);
+                    action = new Action(legion, movement, null);
+                }
+            }
+        }
+        
+        if (action != null) this.game.addAction(action);
     }
     
     /**
@@ -116,6 +168,108 @@ public class Room implements GameListener
     @Override
     public void onTurnEnd()
     {
+        this.broadcast((new GameTurn(this)).toString());
+    }
+    
+    /**
+     *
+     * @param json
+     * @throws org.json.JSONException
+     */
+    public void addTurnData(JSONObject json) throws JSONException
+    {
+        // Ajout du plateau
+        JSONArray boardData = new JSONArray();
+        JSONObject cellData;
+        for (Cell cell : this.game.getBoard().getCells())
+        {
+            if (cell.getPawn() != null)
+            {
+                cellData = new JSONObject();
+                cellData.put("u", cell.getP().getX());
+                cellData.put("w", cell.getP().getY());
+                cellData.put("type", cell.getPawn().getClass().getName().toLowerCase());
+                
+                if (cell.getTent() != null)
+                {
+                    cellData.put("tent_color", cell.getTent().getColor().toString());
+                    cellData.put("tent_shape", cell.getTent().getShape());
+                }
+
+                if (cell.getPawn() instanceof Soldier)
+                {
+                    cellData.put("legion_armor", ((Soldier)cell.getPawn()).isArmored());
+                    cellData.put("legion_color", cell.getPawn().getLegion().getColor().toString());
+                    cellData.put("legion_shape", cell.getPawn().getLegion().getShape());
+                }
+                boardData.put(cellData);
+            }
+            else if (cell.getTent() != null)
+            {
+                cellData = new JSONObject();
+                cellData.put("u", cell.getP().getX());
+                cellData.put("w", cell.getP().getY());
+                cellData.put("tent_color", cell.getTent().getColor().toString());
+                cellData.put("tent_shape", cell.getTent().getShape());
+                boardData.put(cellData);
+            }
+        }
+        json.put("board", boardData);
+        
+        // Application des actions et ajout du prochain timeout
+        json.put("turn_timeout", (new Date((new Date()).getTime() + this.configuration.getLong("game_turn_duration"))).getTime());
+        this.game.applyActions();
+        
+        // Ajout des déplacements
+        JSONArray movesData = new JSONArray();
+        JSONObject moveData;
+        for (Move move : this.game.getMoves())
+        {
+            moveData = new JSONObject();
+            moveData.put("start_u", move.getP1().getX());
+            moveData.put("start_w", move.getP1().getY());
+            moveData.put("end_u", move.getP2().getX());
+            moveData.put("end_w", move.getP2().getY());
+            moveData.put("destroyed", move.isDies());
+            movesData.put(moveData);
+        }
+        json.put("moves", movesData);
+        
+        // Ajout des tenailles
+        JSONArray tenaillesData = new JSONArray();
+        JSONObject tenailleData;
+        for (Tenaille tenaille : this.game.getTenailles())
+        {
+            tenailleData = new JSONObject();
+            tenailleData.put("front1_u", tenaille.getP1().getX());
+            tenailleData.put("front1_w", tenaille.getP1().getY());
+            tenailleData.put("front2_u", tenaille.getP2().getX());
+            tenailleData.put("front2_w", tenaille.getP2().getY());
+            tenaillesData.put(tenailleData);
+        }
+        json.put("tenailles", tenaillesData);
+        
+        // Ajout des combats
+        JSONArray battlesData = new JSONArray();
+        JSONObject battleData;
+        for (Battle battle : this.game.getBattles())
+        {
+            battleData = new JSONObject();
+            battleData.put("pawn1_u", battle.getP1().getX());
+            battleData.put("pawn1_w", battle.getP1().getY());
+            battleData.put("pawn2_u", battle.getP2().getX());
+            battleData.put("pawn2_w", battle.getP2().getY());
+            if (battle.getDies() != null)
+            {
+                battleData.put("loser_u", battle.getDies().getX());
+                battleData.put("loser_w", battle.getDies().getY());
+            }
+            battlesData.put(battleData);
+        }
+        json.put("battles", battlesData);
+        
+        // Début du prochain tour
+        this.game.nextTurn();
     }
     
     /**
@@ -198,49 +352,61 @@ public class Room implements GameListener
      * @param json JSON à lire
      * @throws JSONException JSON éronné
      */
-    public void setConfiguration(JSONObject json) throws JSONException
+    public void setConfiguration(JSONObject json) throws JSONException, NotInThisRoomException
     {
         // Configuration de la partie
-        if (json.has("game_name"))          this.configuration.put("game_name",          json.getString("game_name"         ));
-        if (json.has("game_board_size"))    this.configuration.put("game_board_size",    json.getInt   ("game_board_size"   ));
-        if (json.has("game_turn_duration")) this.configuration.put("game_turn_duration", json.getLong  ("game_turn_duration"));
+        this.configuration.put("game_name",          json.getString("game_name"         ));
+        this.configuration.put("game_board_size",    json.getInt   ("game_board_size"   ));
+        this.configuration.put("game_turn_duration", json.getLong  ("game_turn_duration"));
 
         // Attribution des utilisateurs
-        if (json.has("teams") && json.has("players") && json.has("legions"))
+        if (json.has("teams"))
         {
             // Vidage des listes
+            this.playing.clear();
             this.teams.clear();
-            this.players.clear();
-            this.legions.clear();
             
-            // Equipes
-            for (int i = 0; i < json.getJSONArray("teams").length(); i++)
+            // Ajout des équipes
+            for (int iTeam = 0; iTeam < json.getJSONArray("teams").length(); iTeam++)
             {
-                JSONObject teamData = json.getJSONArray("teams").getJSONObject(i);
+                // Récupération du JSON
+                JSONObject teamData = json.getJSONArray("teams").getJSONObject(iTeam);
+                
+                // Instanciation de l'équipe
                 Team newTeam = new Team();
-                newTeam.setNum(teamData.getInt("team_number"));
-                this.teams.put(newTeam.getNum(), newTeam);
-            }
+                this.teams.add(newTeam);
             
-            // Joueurs
-            for (int i = 0; i < json.getJSONArray("players").length(); i++)
-            {
-                JSONObject playerData = json.getJSONArray("players").getJSONObject(i);
-                Player newPlayer = new Player();
-                newPlayer.setGame(this.game);
-                newPlayer.setNum(playerData.getInt("user_id"));
-                newPlayer.setTeam(this.teams.get(playerData.getInt("player_team")));
-                this.players.put(playerData.getInt("user_id"), newPlayer);
-            }
-            
-            // Légions
-            for (int i = 0; i < json.getJSONArray("legions").length(); i++)
-            {
-                JSONObject legionData = json.getJSONArray("legions").getJSONObject(i);
-                Legion newLegion = new Legion(this.players.get(legionData.getInt("user_id")));
-                newLegion.setColor(Color.green);
-                newLegion.setShape("lol");
-                this.legions.put(newLegion.getPlayer(), newLegion);
+                // Ajout des joueurs
+                for (int iPlayer = 0; iPlayer < json.getJSONArray("players").length(); iPlayer++)
+                {
+                    // Récupération du JSON
+                    JSONObject playerData = json.getJSONArray("players").getJSONObject(iPlayer);
+                    
+                    // Instanciation du joueur
+                    Player newPlayer = new Player();
+                    newPlayer.setGame(this.game);
+                    newPlayer.setTeam(newTeam);
+                    newTeam.addPlayer(newPlayer);
+                    
+                    // Attribution du joueur à l'utilisateur
+                    int userId = playerData.getInt("player_user_id");
+                    if (!this.getUsers().containsKey(userId)) throw new NotInThisRoomException(this, userId);
+                    this.playing.put(newPlayer, userId);
+
+                    // Ajout des légions
+                    for (int iLegion = 0; iLegion < json.getJSONArray("legions").length(); iLegion++)
+                    {
+                        // Récupération du JSON
+                        JSONObject legionData = json.getJSONArray("legions").getJSONObject(iLegion);
+                        
+                        // Instanciation de la légion
+                        Legion newLegion = new Legion(newPlayer);
+                        newLegion.setColor(Color.green);
+                        newLegion.setShape(legionData.getString("legion_shape"));
+                        newLegion.setPosition(legionData.getInt("legion_position"));
+                        newPlayer.addLegion(newLegion);
+                    }
+                }
             }
         }
     }
@@ -276,46 +442,45 @@ public class Room implements GameListener
         try
         {
             // Etat de la partie
-            json.put("game_state",    this.getState()   );
+            json.put("game_state", this.getState());
             
             // Configuration de la partie
             json.put("configuration", this.configuration);
             
-            // Equipes
+            // Ajout des équipes
             JSONArray teamsToAdd = new JSONArray();
             JSONObject teamData;
-            for (Entry<Integer, Team> entry : this.teams.entrySet())
+            for (Team team : this.teams)
             {
+                // Instanciation du JSON
                 teamData = new JSONObject();
-                teamData.put("team_number", entry.getKey());
                 teamsToAdd.put(teamData);
+            
+                // Ajout des joueurs
+                JSONArray playersToAdd = new JSONArray();
+                JSONObject playerData;
+                for (Player player : team.getPlayers())
+                {
+                    // Instanciation du JSON
+                    playerData = new JSONObject();
+                    playerData.put("player_user_id", this.playing.get(player));
+                    playersToAdd.put(playerData);
+            
+                    // Légions
+                    JSONArray legionsToAdd = new JSONArray();
+                    JSONObject legionData;
+                    for (Legion legion : player.getLegions())
+                    {
+                        legionData = new JSONObject();
+                        legionData.put("legion_color", legion.getColor().toString());
+                        legionData.put("legion_shape", legion.getShape());
+                        legionsToAdd.put(legionData);
+                    }
+                    json.put("legions", legionsToAdd);
+                }
+                json.put("players", playersToAdd);
             }
             json.put("teams", teamsToAdd);
-            
-            // Joueurs
-            JSONArray playersToAdd = new JSONArray();
-            JSONObject playerData;
-            for (Entry<Integer, Player> entry : this.players.entrySet())
-            {
-                playerData = new JSONObject();
-                playerData.put("user_id", entry.getKey());
-                playerData.put("player_team", entry.getValue().getTeam().getNum());
-                playersToAdd.put(playerData);
-            }
-            json.put("players", playersToAdd);
-            
-            // Légions
-            JSONArray legionsToAdd = new JSONArray();
-            JSONObject legionData;
-            for (Entry<Player, Legion> entry : this.legions.entrySet())
-            {
-                legionData = new JSONObject();
-                legionData.put("player", entry.getKey());
-                legionData.put("legion_color", entry.getValue().getColor().toString());
-                legionData.put("legion_shape", entry.getValue().getShape());
-                legionsToAdd.put(legionData);
-            }
-            json.put("legions", legionsToAdd);
         }
         catch (JSONException e)
         {
@@ -357,7 +522,6 @@ public class Room implements GameListener
                 userEntry.put("user_id", user.getId());
                 userEntry.put("user_name", user.getName());
                 userEntry.put("is_owner", this.isOwner(user));
-                userEntry.put("is_playing", this.players.keySet().contains(user));
                 userList.put(userEntry);
             }
 

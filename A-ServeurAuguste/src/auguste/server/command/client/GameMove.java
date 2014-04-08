@@ -17,29 +17,23 @@
 package auguste.server.command.client;
 
 import auguste.server.command.ClientCommand;
-import auguste.server.exception.NotInThisRoomException;
+import auguste.server.exception.RuleException;
+import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
- * Commande de configuration d'une partie. Vérifie si l'utilisateur est le
- * propriétaire du salon, puis modifie la configuration et envoi une
- * confirmation à tous les utilisateurs.
+ * Commande pour effectuer une action.
  * 
  * @author Lzard
  */
-public class GameConfiguration extends ClientCommand
+public class GameMove extends ClientCommand
 {
     @Override
-    public void execute() throws JSONException, NotInThisRoomException
+    public void execute() throws SQLException, JSONException, RuleException
     {
-        // Vérification du propriétaire
-        if (this.getRoom().isOwner(this.getUser()))
-        {
-            // Modification de la configuration et confirmation
-            this.getRoom().setConfiguration(this.getJSON());
-            this.getRoom().updateConfiguration();
-        }
-        else this.error("not_owner_of_this_room");
+        this.getRoom().addAction(this.getUser(), this.getJSON());
+        this.confirm("action_received");
     }
     
 }
+

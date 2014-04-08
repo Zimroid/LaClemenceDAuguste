@@ -57,7 +57,7 @@ function process(evt)
 	// ATTENTION NOM DE COMMANDE NON DEFINITIVE !!!
 	else if(command == "game_confirm")
 	{
-		reloadContent(sitePath + "/index.php?script=1&page=gameConfig");
+		reloadContent(sitePath + "/index.php?script=1&page=gameConfig&name=" + data.configuration.game_name + "&id=" + data.room_id);
 	}
 
 	// Si on nous envoie un plateau de jeu
@@ -67,9 +67,6 @@ function process(evt)
 		// Qu'on soit n'importe où, ou qu'on recharge la page principale pour arriver en jeu (cas pour un nouveau tour, un début de partie voir une reconnexion)
 		reloadContent(sitePath + "/index.php?script=1&page=game");
 	}
-
-	// Liste des parties créées
-	
 	
 	// Si on demande la liste des parties
 	else if(command == "list_games")
@@ -82,6 +79,19 @@ function process(evt)
 		if (sitePage == 'joinGame')
 		{
 			gameList("on_update");
+		}
+	}
+	
+	// Réception liste des joueurs d'une partie
+	else if(command == "game_users")
+	{
+		$("#noTeam").html('');
+		var pViewers = $("<p>Spectateurs</p>");
+		$("#noTeam").append(pViewers);
+		for (var i = 0 ; i < data.users.length ; i++)
+		{
+			$("#noTeam").append("<span class='viewers'>" + data.users[i].user_name + "</span><br>");
+			$("[name='playerName']").append("<option value='" + data.users[i].user_id + "'>" + data.users[i].user_name + "</option>");
 		}
 	}
 	

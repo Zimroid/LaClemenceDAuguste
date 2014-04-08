@@ -1,41 +1,44 @@
-<h2>Panneau de configuration de la partie</h2>
+<h2>Panneau de configuration de la partie <span id="game_name"><?php if (isset($_GET['name'])) echo $_GET['name']; ?></span></h2>
 <form autocomplete="off" onsubmit="return false;" >
-	<input type="hidden" id="game_id" />
+	<input type="hidden" id="room_id" value="<?php if (isset($_GET['id'])) echo $_GET['id']; ?>">
 	<label for="player_number">Nombre de joueurs :</label>
 	<input type="number" id="player_number" name="player_number" onfocusout="gameConfig();" />
 	<label for="board_size">Taille du plateau :</label>
-	<input type="number" id="board_size" name="board_size" onfocusout="gameConfig();" />
+	<input type="number" id="board_size" name="board_size" onfocusout="gameConfig();" value="5" />
+	<label for="turn_duration">Durée d'un tour (en secondes) :</label>
+	<input type="number" id="turn_duration" name="turn_duration" onfocusout="gameConfig();" value="30" />
 
 	<fieldset>
 		<legend>Nom de la partie</legend>
-		<button onClick="newTeam()">Nouvelle team</button>
+		<button onclick="newTeam()">Nouvelle team</button>
 		<div id="allTeams" name="allTeams">
 			<div id="team1" name="team">
 				<p id="title1" name="title1">Team 1</p>
 				<button id="button1" name="button1" onClick="newPlayer(1,2)">Nouveau joueur</button>
 				<div name="player" id="player1_1">
+					<label>Joueur</label>
 					<select name="playerName" class="1" onselectionchange="gameConfig();">
-						<option selected="selected">Joueur</option>
-						<option>Admin</option>
 					</select>
-					<label for="legion_number">Nombre de légions</label>
+					<label>Nombre de légions</label>
 					<input type="number" min="1" step="1" value="1" name="legion_number" class="1" onfocusout="gameConfig();" />
+					<label>Forme du pion</label>
 					<select name="pawn" class="1" onselectionchange="gameConfig();">
-						<option selected="selected">Forme du pion</option>
 						<option>Carré</option>
 						<option>Cercle</option>
 						<option>Triangle</option>
 					</select>
-					<select name="color" class="1">
-						<option selected="selected">Couleur du pion</option>
+					<label>Couleur du pion</label>
+					<select name="color" class="1" onselectionchange="gameConfig();">
 						<option name="1">Rouge</option>
 						<option name="2">Vert</option>
 						<option name="3">Bleu</option>
 					</select>
+					<label>Position sur le plateau</label>
 					<select name="position" class="1" onselectionchange="gameConfig();">
-						<option selected="selected">Position sur le plateau</option>
-						<option name="3">Bas droit</option>
+						<option name="5">Gauche</option>
 						<option name="4">Bas gauche</option>
+						<option name="3">Bas droit</option>
+						<option name="2">Droit</option>
 						<option name="1">Haut droit</option>
 						<option name="0">Haut gauche</option>
 					</select>
@@ -50,5 +53,5 @@
 			<p>Spectateurs</p>
 		</div>
 	</fieldset>
-	<input type="submit" id="valid" value="GO !" />
+	<input type="button" id="valid" value="GO !" onclick="gameConfig()"/>
 </form>

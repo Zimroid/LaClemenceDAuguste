@@ -31,7 +31,7 @@ public class GameStart extends ClientCommand
     @Override
     public void execute() throws SQLException, JSONException, RuleException
     {
-        this.confirm("=)");
+        this.getRoom().start();
     }
     
 }

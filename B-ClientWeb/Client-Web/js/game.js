@@ -1,6 +1,6 @@
 function gameCreate()
 {
-	var gameName = $("#gameName").val();
+	var gameName = htmlspecialchars($("#gameName").val());
 
 	if(gameName != "")
     {
@@ -27,15 +27,104 @@ function gameStart()
 
 function gameConfig()
 {
-    //nombre de joueurs dont il faut envoyer la configuration
-    var playNbr = $("[name='player']");
-
-    var test ='{"command": "GAME_CONFIGURATION","room_id": "1"}';
-
-    var json = JSON.stringify({
-        "command": "GAME_CONFIGURATION",
-        "room_id": "1"
-    });
+	// String à changer en JSON
+	var stringJSON = '';
+    // paramètres globaux de la partie
+    var roomId = '';
+    var gameName = '';
+    var boardSize = 5;
+    var turnDuration = 30;
+    if ((typeof htmlspecialchars($("#room_id").val()) != 'undefined') && (htmlspecialchars($("#room_id").val()) != ''))
+    {
+    	var roomId = htmlspecialchars($("#room_id").val());
+    }
+    if ((typeof htmlspecialchars($("#game_name").html()) != 'undefined') && (htmlspecialchars($("#game_name").html()) != ''))
+    {
+    	var gameName = htmlspecialchars($("#game_name").html());
+    }
+    if ((typeof htmlspecialchars($("#board_size").val()) != 'undefined') && (htmlspecialchars($("#board_size").val()) != ''))
+    {
+    	var boardSize = htmlspecialchars($("#board_size").val());
+    }
+	if ((typeof htmlspecialchars($("#turn_duration").val()) != 'undefined') && (htmlspecialchars($("#turn_duration").val()) != ''))
+    {
+    	var turnDuration = htmlspecialchars($("#turn_duration").val());
+    }
+    turnDuration = turnDuration * 1000;
+    
+    stringJSON = '{"command": "GAME_CONFIGURATION","room_id": ' + roomId + ',"game_name": "' + gameName + '","game_board_size": ' + boardSize + ',"game_turn_duration": ' + turnDuration + ',"teams":[';
+    
+	// numéro de la team courante
+	var nbrTeam = 0;
+	// numéro du joueur courant
+	var nbrPlayer = 0;
+	// nombre de légions contrôlées par un joueur
+	var nbrLegion = 0;
+	// parcours des teams
+	for (nbrTeam = 1 ; nbrTeam <= $('[name="team"]').length ; nbrTeam++)
+	{
+		stringJSON += '{"players":[';
+		// parcours des joueurs
+		for (nbrPlayer = 1 ; nbrPlayer <= $('[name="player"]').length ; nbrPlayer++)
+		{
+			// si le joueur existe
+			if ($('#player' + nbrTeam + '_' + nbrPlayer).length == 1)
+			{
+				// si un nom de joueur est détecté
+				if ($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val() != null)
+				{
+					// id du joueur
+					stringJSON += '{"player_user_id":' + $('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val() + ',"legions":[';
+					// nombre de légions du joueur
+					nbrLegion += $('#player' + nbrTeam + '_' + nbrPlayer).children("[name='legion_number']").val();
+					alert(nbrLegion);
+					for (var i = 0 ; i < nbrLegion ; i++)
+					{
+						// forme des pions du joueur
+						stringJSON += '{"legion_shape": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children("[name='pawn']").val() + '",';
+						// couleur des pions du joueur
+						stringJSON += '"legion_color": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children("[name='color']").val() + '",';
+						// position sur le plateau du joueur
+						stringJSON += '"legion_position": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children("[name='position']").val() + '"}';
+						if ((i + 1) < nbrLegion)
+						{
+							stringJSON += ',';
+						}
+					}
+					stringJSON += ']}';
+				}
+				else
+				{
+					// supprimer la virgule de l'élément suivant pouvant provoquer une erreur (vu que l'élément suivant n'existe pas)
+					if (stringJSON.charAt(stringJSON.length-1) == ',')
+					{
+						stringJSON = stringJSON.substring(0,stringJSON.length-1);
+					}
+				}
+			}
+			// il n'y a plus de joueurs dans cette team
+			else
+			{
+				break;
+			}
+			if ((nbrPlayer + 1) <= $('[name="player"]').length)
+			{
+				stringJSON += ',';
+			}
+		}
+		stringJSON += ']}';
+		if ((nbrTeam + 1) <= $('[name="team"]').length)
+		{
+			stringJSON += ',';
+		}
+		// on remet le compte de joueurs à 0 pour la prochaine team
+		nbrPlayer = 0;
+	}
+	stringJSON += ']}';
+    
+    // envoi de la config
+    alert(stringJSON);
+	var json = JSON.stringify(JSON.parse(stringJSON));
     
     sendText(json);
 }
@@ -88,6 +177,7 @@ function newTeam()
     var NPButton = $("<button id='button" + numberTeam + "' name='button" + numberTeam + "' onclick='newPlayer(" + numberTeam + ",1)'>Nouveau joueur</button>");
 
     divTeams.append(ptitle, NPButton, divTeam);
+    gameConfig();
 }
 
 function newPlayer(team, player)
@@ -98,42 +188,46 @@ function newPlayer(team, player)
     var divTeam = $("#team" + team);
     //div de config pour le nouveau player
     var divPlay = $("<div name='player' id='player" + team + "_" + player + "'></div>");
+    //label du joueur dont on fait la config
+    var lblPlay = $("<label>Joueur</label>");
     //select du joueur dont on fait la config
-    var selPlay = $("<select name='player' class='" + team + "'></select>");
-    //options pour selPl
-    var optPlay = $("<option selected='selected'>Joueur</option>");
-    var optPlay2 = $("<option>Admin</option>");
+    var selPlay = $("<select name='playerName' class='" + team + "'></select>");
     //label pour le legion_number
-    var lblLegion = $("<label for='legion_number'>Nombre de légions</label>");
+    var lblLegion = $("<label>Nombre de légions</label>");
     //input pour le legion_number
     var inpLegion = $("<input type='number' min='1' step='1' value='1' name='legion_number' class='" + team + "' />");
+    //label pour la forme du pion
+    var lblForm = $("<label>Forme du pion</label>");
     //select pour la forme du pion
     var selForm = $("<select name='pawn' class='" + team + "'></select>");
     //options pour le selForm
-    var optForm = $("<option selected='selected'>Forme du pion</option>");
-    var optForm2 = $("<option>Carré</option>");
-    var optForm3 = $("<option>Cercle</option>");
-    var optForm4 = $("<option>Triangle</option>");
+    var optForm = $("<option>Carré</option>");
+    var optForm2 = $("<option>Cercle</option>");
+    var optForm3 = $("<option>Triangle</option>");
+    //label pour la color
+    var lblColor = $("<label>Couleur du pion</label>");
     //select pour la color
     var selColor = $("<select name='color' class='" + team + "'></select>");
     //options pour la color
-    var optColor = $("<option selected='selected'>Couleur du pion</option>");
-    var optColor2 = $("<option name='1'>Rouge</option>");
-    var optColor3 = $("<option name='2'>Vert</option>");
-    var optColor4 = $("<option name='3'>Bleu</option>");
+    var optColor = $("<option name='1'>Rouge</option>");
+    var optColor2 = $("<option name='2'>Vert</option>");
+    var optColor3 = $("<option name='3'>Bleu</option>");
+    //label pour la position sur le plateau
+    var lblPosit = $("<label>Position sur le plateau</label>");
     //select pour la position sur le plateau
     var selPosit = $("<select name='position' class='" + team + "'></select>");
     //options pour le selPosit
-    var optPosit = $("<option selected='selected'>Position sur le plateau</option>");
-    var optPosit2 = $("<option name='0'>Bas droit</option>");
-    var optPosit3 = $("<option name='1'>Bas gauche</option>");
-    var optPosit4 = $("<option name='2'>Haut droit</option>");
-    var optPosit5 = $("<option name='3'>Haut gauche</option>");
+    var optPosit = $("<option name='5'>Gauche</option>");
+	var optPosit2 = $("<option name='4'>Bas gauche</option>");
+	var optPosit3 = $("<option name='3'>Bas droit</option>");
+	var optPosit4 = $("<option name='2'>Droit</option>");
+	var optPosit5 = $("<option name='1'>Haut droit</option>");
+	var optPosit6 = $("<option name='0'>Haut gauche</option>");
 
-    selPlay.append(optPlay, optPlay2);
-    selForm.append(optForm, optForm2, optForm3, optForm4);
-    selColor.append(optColor, optColor2, optColor3, optColor4);
-    selPosit.append(optPosit, optPosit2, optPosit3, optPosit4, optPosit5);
-    divPlay.append(selPlay, lblLegion, inpLegion, selForm, lblColor, selColor, selPosit);
+    selForm.append(optForm, optForm2, optForm3);
+    selColor.append(optColor, optColor2, optColor3);
+    selPosit.append(optPosit, optPosit2, optPosit3, optPosit4, optPosit5, optPosit6);
+    divPlay.append(lblPlay, selPlay, lblLegion, inpLegion, lblForm, selForm, lblColor, selColor, lblPosit, selPosit);
     divTeam.append(divPlay);
+    gameConfig();
 }
