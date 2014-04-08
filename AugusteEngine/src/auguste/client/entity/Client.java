@@ -21,84 +21,84 @@ import org.json.JSONException;
  */
 public class Client
 {
-        private final ClientSocket socket;
-        private final List<UpdateListener> interfaces;
-        private static Client INSTANCE;
-        
-        private List<Game> gameAvailable;
-        private User currentUser;
-        private Queue<ChatMessageReceived> chatMessageReceived;
-        private String confirmMessage;
-        private List<Game> games;
-        
-        private Client() throws URISyntaxException
+    private final ClientSocket socket;
+    private final List<UpdateListener> interfaces;
+    private static Client INSTANCE;
+    
+    private List<Game> gameAvailable;
+    private User currentUser;
+    private Queue<ChatMessageReceived> chatMessageReceived;
+    private String confirmMessage;
+    private List<Game> games;
+    
+    private Client() throws URISyntaxException
+    {
+        this.socket = ClientSocket.getInstance();
+        this.interfaces = new ArrayList<>();
+        this.chatMessageReceived = new LinkedList<>();
+        this.games = new ArrayList<>();
+    }
+    
+    public static Client getInstance() throws URISyntaxException
+    {
+        if(INSTANCE == null)
         {
-            this.socket = ClientSocket.getInstance();
-            this.interfaces = new ArrayList<>();
-            this.chatMessageReceived = new LinkedList<>();
-            this.games = new ArrayList<>();
+            INSTANCE = new Client();
         }
-        
-        public static Client getInstance() throws URISyntaxException
-        {
-            if(INSTANCE == null)
-            {
-                INSTANCE = new Client();
-            }
-            return INSTANCE;
-        }
-        
-        public List<UpdateListener> getInterfaces()
-        {
-            return this.interfaces;
-        }
-        
-        public ClientSocket getClientSocket()
-        {
-            return this.socket;
-        }
+        return INSTANCE;
+    }
+    
+    public List<UpdateListener> getInterfaces()
+    {
+        return this.interfaces;
+    }
+    
+    public ClientSocket getClientSocket()
+    {
+        return this.socket;
+    }
 
-        /**
-         * Cette méthode lit un message du serveur et l'interprète.
-         * @param param
-         *      Chaine contenant le nom de la commande ainsi que les paramètres l'accompagant
-         */
-        public void messageServerReceive(String param)
-        {
-            CommandServerManager.executeCommand(INSTANCE, param);
-        }
+    /**
+     * Cette méthode lit un message du serveur et l'interprète.
+     * @param param
+     *      Chaine contenant le nom de la commande ainsi que les paramètres l'accompagant
+     */
+    public void messageServerReceive(String param)
+    {
+        CommandServerManager.executeCommand(INSTANCE, param);
+    }
 
-        /**
-         * Cette méthode contruit un message à envoyer à un serveur et l'envoie.
-         * @param command
-         *      Map qui contient au moins le nom de la commande et les paramètres associés
-         * @throws JSONException
-         * @throws java.net.URISyntaxException
-         */
-        public void sendCommand(Map<String,?> command) throws JSONException, URISyntaxException
-        {
-            CommandClientManager.executeCommand(INSTANCE, command);
-        }
-        
-        public List<Game> getGameAvailable()
-        {
-            return this.gameAvailable;
-        }
-        
-        public void setGameAvailable(List<Game> games)
-        {
-            this.gameAvailable = games;
-        }
-        
-        public User getUser()
-        {
-            return this.currentUser;
-        }
-        
-        public void setUser(User user)
-        {
-            this.currentUser = user;
-        }
+    /**
+     * Cette méthode contruit un message à envoyer à un serveur et l'envoie.
+     * @param command
+     *      Map qui contient au moins le nom de la commande et les paramètres associés
+     * @throws JSONException
+     * @throws java.net.URISyntaxException
+     */
+    public void sendCommand(Map<String,?> command) throws JSONException, URISyntaxException
+    {
+        CommandClientManager.executeCommand(INSTANCE, command);
+    }
+    
+    public List<Game> getGameAvailable()
+    {
+        return this.gameAvailable;
+    }
+    
+    public void setGameAvailable(List<Game> games)
+    {
+        this.gameAvailable = games;
+    }
+    
+    public User getUser()
+    {
+        return this.currentUser;
+    }
+    
+    public void setUser(User user)
+    {
+        this.currentUser = user;
+    }
 
     /**
      * @return the chatMessageReceived

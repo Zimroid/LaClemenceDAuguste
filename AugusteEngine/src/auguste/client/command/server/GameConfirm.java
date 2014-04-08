@@ -112,7 +112,7 @@ public class GameConfirm extends CommandServer
     	
     	for(int i = 0; i < jsonLegions.length(); i++)
     	{
-    		Legion legion = new Legion(player);
+    		Legion legion = new Legion(i+1, player);
     		
     		String color = jsonLegions.getJSONObject(i).getString("legion_color");
     		String shape = jsonLegions.getJSONObject(i).getString("legion_shape");

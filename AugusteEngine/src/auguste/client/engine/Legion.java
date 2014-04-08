@@ -12,8 +12,9 @@ public class Legion
     private Map<Integer,Pawn> tabPawn;
     private String color;
     private String shape;
+    private int id;
 	
-	public Legion(Player player) 
+	public Legion(int id, Player player) 
 	{
 		this.player = player;
 		this.pawns = new ArrayList<>();
@@ -75,5 +76,36 @@ public class Legion
 	public void setShape(String shape)
 	{
 		this.shape = shape;
+	}
+
+	public int getId()
+	{
+		return id;
+	}
+
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o instanceof Legion)
+		{
+			Legion l = (Legion) o;
+			if(l.getColor().equals(this.getColor()) && l.getShape().equals(this.getShape()))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

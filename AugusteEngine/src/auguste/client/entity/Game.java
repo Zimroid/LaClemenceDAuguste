@@ -6,6 +6,7 @@
 
 package auguste.client.entity;
 
+import auguste.client.engine.Battle;
 import auguste.client.engine.Board;
 import auguste.client.engine.Legion;
 import auguste.client.engine.Move;
@@ -37,7 +38,7 @@ public class Game
     
     private Queue<Tenaille> tenailles;
     private Queue<Move> moves;
-    private List<Legion> legions;
+    private Queue<Battle> battles;
     
     /**
      * Crée une partie en spécifiant son id.
@@ -47,9 +48,9 @@ public class Game
     {
         this.id = id;
         this.teams = new ArrayList<>();
-        this.legions = new ArrayList<>();
         this.tenailles = new LinkedList<>();
         this.moves = new LinkedList<>();
+        this.battles = new LinkedList<>();
     }
     
     /**
@@ -151,7 +152,32 @@ public class Game
 	
 	public List<Legion> getLegions()
 	{
-		return this.legions;
+		List<Legion> legions = new ArrayList<>();
+		
+		for(Team team : this.teams)
+		{
+			for(Player player : team.getPlayers())
+			{
+				legions.addAll(player.getLegions());
+			}
+		}
+		
+		return legions;
+	}
+	
+	public Legion getLegion(String color, String shape)
+	{
+		Legion res = null;
+		
+		for(Legion legion : this.getLegions())
+		{
+			if(legion.getColor().equals(color) && legion.getShape().equals(shape))
+			{
+				res = legion;
+			}
+		}
+		
+		return res;
 	}
 	
 	public Queue<Tenaille> getTenailles()
@@ -162,6 +188,11 @@ public class Game
 	public Queue<Move> getMoves()
 	{
 		return this.moves;
+	}
+	
+	public Queue<Battle> getBattles()
+	{
+		return this.battles;
 	}
 
 	public long getTurn_duration() 
@@ -187,5 +218,11 @@ public class Game
 		}
 		
 		return res;
+	}
+	
+	public void sendTurn()
+	{
+		//Envoyer les Files aux UI et les appliquer pour dégager les morts
+		System.out.println("Game.sendTurn non défini");
 	}
 }

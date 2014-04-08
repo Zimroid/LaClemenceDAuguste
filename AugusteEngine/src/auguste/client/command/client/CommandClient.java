@@ -41,7 +41,7 @@ public abstract class CommandClient
     public static final String ACCOUNT_CREATE   = "account_create";
     public static final String LOG_IN           = "log_in";
     public static final String LOG_OUT          = "log_out";
-    public static final String GAME_TURN        = "game_turn";
+    public static final String GAME_MOVE        = "game_move";
     
     // Noms de paramètres possibles
     public static final String ROOM_ID              = "room_id";
@@ -56,7 +56,10 @@ public abstract class CommandClient
     public static final String NUMBER_OF_TEAM       = "number_of_team";
     public static final String LEGION_PER_PLAYER    = "legion_per_player";
     public static final String PAWN_ID              = "pawn_id";
-    public static final String POS_BEG              = "pos_beg";
+    public static final String START_U              = "start_u";
+    public static final String START_W              = "start_w";
+    public static final String END_U             	= "end_u";
+    public static final String END_W              	= "end_w";
     public static final String POS_END              = "pos_end";
     public static final String TEAMS				= "teams";
     

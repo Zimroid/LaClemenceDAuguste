@@ -25,32 +25,38 @@ public class Move
     private UW uwBeg;
     private UW uwEnd;
     private Pawn pawn;
+    private boolean destroyed;
+    private Board board;
     
-    public Move(Pawn pawn, UW beg, UW end)
+    public Move(Pawn pawn, UW beg, UW end, Board board)
     {
         this.pawn = pawn;
         this.uwBeg = beg;
         this.uwEnd = end;
+        this.board = board;
     }
 
     /**
      * @return the uwBeg
      */
-    public UW getUwBeg() {
+    public UW getUwBeg() 
+    {
         return uwBeg;
     }
 
     /**
      * @param uwBeg the uwBeg to set
      */
-    public void setUwBeg(UW uwBeg) {
+    public void setUwBeg(UW uwBeg) 
+    {
         this.uwBeg = uwBeg;
     }
 
     /**
      * @return the uwEnd
      */
-    public UW getUwEnd() {
+    public UW getUwEnd() 
+    {
         return uwEnd;
     }
 
@@ -64,14 +70,31 @@ public class Move
     /**
      * @return the pawn
      */
-    public Pawn getPawn() {
+    public Pawn getPawn() 
+    {
         return pawn;
     }
 
     /**
      * @param pawn the pawn to set
      */
-    public void setPawn(Pawn pawn) {
+    public void setPawn(Pawn pawn) 
+    {
         this.pawn = pawn;
+    }
+    
+    public void setDestroyed(boolean b)
+    {
+    	this.destroyed = b;
+    }
+    
+    public boolean isDestroyed()
+    {
+    	return this.destroyed;
+    }
+    
+    public Legionnary applyMove()
+    {
+		return (Legionnary) this.board.getCell(this.uwBeg).getPawn();
     }
 }

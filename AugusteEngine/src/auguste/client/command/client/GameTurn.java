@@ -33,10 +33,11 @@ public class GameTurn extends CommandClient
     @Override
     public void buildJSON() throws JSONException 
     {
-        this.getJSON().put(CommandClient.COMMAND, CommandClient.GAME_TURN);
+        this.getJSON().put(CommandClient.COMMAND, CommandClient.GAME_MOVE);
         this.getJSON().put(CommandClient.ROOM_ID, this.getArguments().get(CommandClient.ROOM_ID));
-        this.getJSON().put(CommandClient.PAWN_ID, this.getArguments().get(CommandClient.PAWN_ID));
-        this.getJSON().put(CommandClient.POS_BEG, this.getArguments().get(CommandClient.POS_BEG));
-        this.getJSON().put(CommandClient.POS_END, this.getArguments().get(CommandClient.POS_END));
+        this.getJSON().put(CommandClient.START_U, this.getArguments().get(CommandClient.START_U));
+        this.getJSON().put(CommandClient.START_W, this.getArguments().get(CommandClient.START_W));
+        this.getJSON().put(CommandClient.END_U, this.getArguments().get(CommandClient.END_U));
+        this.getJSON().put(CommandClient.END_W, this.getArguments().get(CommandClient.END_W));
     }
 }

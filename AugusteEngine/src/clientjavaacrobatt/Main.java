@@ -11,7 +11,7 @@ import org.json.JSONException;
 public class Main
 {        
 	public static void main(String[] args) throws URISyntaxException, IOException, JSONException
-	{
+	{		
         Client c = Client.getInstance();
         c.getInterfaces().add(new CSL());
         c.getClientSocket().connect();
