@@ -23,7 +23,7 @@ public class MainGr extends Game implements UpdateListener
     		this.cli = Client.getInstance();
 	    	this.cli.getInterfaces().add(this);
 	    	
-			setScreen(new MenuScreen(this));
+			setScreen(new LogScreen(this));
 		}
 		catch (URISyntaxException e)
 		{
@@ -33,55 +33,58 @@ public class MainGr extends Game implements UpdateListener
 
 	private void setCli(Client instance) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Accès engine 1");
 	}
 
 	@Override
 	public void chatUpdate() {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Accès engine 2");
 	}
 
 	@Override
 	public void userUpdate() {
-		// TODO Auto-generated method stub
+		System.out.println("Accès engine 3");
 		
+    	GameScreen alpha = new GameScreen(this);
+        this.setScreen(alpha);   
 	}
 
 	@Override
 	public void createGameUpdate(int id) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Accès engine 4");
 	}
 
 	@Override
 	public void listGameUpdate() {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Accès engine 5");
 	}
 
 	@Override
 	public void confirmMessageUpdate() {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Accès engine 6");
 	}
 
 	@Override
 	public void gameTurnUpdate(int id) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Accès engine 7");
 	}
 
 	@Override
 	public void stop() {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Accès engine 8");
 	}
 
 	@Override
-	public void error(String errorType) {
-		// TODO Auto-generated method stub
-		
+	public void error(String errorType)
+	{
+		System.out.println("Accès engine 9");
+		System.out.println("Erreur engine detectée : " + errorType);
 	}
 
 	public Client getCli() {

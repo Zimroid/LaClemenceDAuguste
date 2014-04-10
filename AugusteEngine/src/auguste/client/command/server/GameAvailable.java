@@ -22,7 +22,7 @@ import org.json.JSONObject;
  */
 public class GameAvailable extends CommandServer
 {    
-    public static final String LIST =       "list";
+    public static final String LIST =       "list_games";
     public static final String ROOM_ID =    "room_id";
     public static final String GAME_NAME =  "game_name";
     

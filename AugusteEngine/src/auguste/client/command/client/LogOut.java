@@ -7,7 +7,10 @@
 package auguste.client.command.client;
 
 import java.net.URISyntaxException;
+
 import org.json.JSONException;
+
+import auguste.client.interfaces.UpdateListener;
 
 /**
  *
@@ -24,6 +27,10 @@ public class LogOut extends CommandClient
     public void buildJSON() throws JSONException 
     {
         this.getClient().setUser(null);
-        this.getJSON().put(COMMAND, LOG_OUT);        
+        this.getJSON().put(COMMAND, LOG_OUT);
+        for(UpdateListener ul : this.getClient().getInterfaces())
+        {
+        	ul.logOut();
+        }
     }
 }
