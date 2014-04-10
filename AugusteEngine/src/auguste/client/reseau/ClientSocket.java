@@ -38,14 +38,14 @@ public class ClientSocket extends WebSocketClient
 		System.out.println("Client created");
 	}
         
-        public static ClientSocket getInstance() throws URISyntaxException
+    public static ClientSocket getInstance() throws URISyntaxException
+    {
+        if(INSTANCE == null)
         {
-            if(INSTANCE == null)
-            {
-                INSTANCE = new ClientSocket();
-            }
-            return INSTANCE;
+            INSTANCE = new ClientSocket();
         }
+        return INSTANCE;
+    }
 
 	@Override
 	public void onClose(int arg0, String arg1, boolean arg2)
@@ -62,7 +62,6 @@ public class ClientSocket extends WebSocketClient
 	@Override
 	public void onMessage(String arg0)
 	{
-		System.out.println("onMessage");
 		try
 		{
 			Client.getInstance().messageServerReceive(arg0);

@@ -12,6 +12,7 @@ import auguste.client.command.server.ConfirmCommand;
 import auguste.client.command.server.GameAvailable;
 import auguste.client.command.server.GameConfirm;
 import auguste.client.command.server.GameTurn;
+import auguste.client.command.server.GameUsers;
 import auguste.client.command.server.LogClient;
 import auguste.client.command.server.MessageError;
 import auguste.client.entity.Client;
@@ -50,6 +51,7 @@ public class CommandServerManager
                 case GAME_CONFIRM:      command = new GameConfirm();    break;
                 case MESSAGE_ERROR:		command = new MessageError();	break;
                 case GAME_TURN:			command = new GameTurn();		break;
+                case GAME_USERS:		command = new GameUsers();		break;
                 default:                command = null;                 break;
             }
             command.setClient(client);

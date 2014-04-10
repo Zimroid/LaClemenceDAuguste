@@ -47,7 +47,7 @@ public class CommandClientManager
                 case LOG_OUT:       		command = new LogOut();         break;
                 case ROOM_CREATE:   		command = new GameCreate();     break;
                 case GAME_LIST:     		command = new GameList();       break;
-                case GAME_JOIN:     		command = new GameJoin();       break;
+                case ROOM_JOIN:     		command = new GameJoin();       break;
                 case GAME_START:    		command = new GameStart();      break;
                 case GAME_LEAVE:    		command = new GameLeave();      break;
                 case GAME_CONFIGURATION:	command = new GameConfig();     break;

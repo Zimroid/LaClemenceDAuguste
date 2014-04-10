@@ -26,6 +26,7 @@ import java.util.Queue;
 public class Game
 {
     private int id;
+    private List<User> users;
     
     private String name;
     private int board_size;
@@ -51,6 +52,7 @@ public class Game
         this.tenailles = new LinkedList<>();
         this.moves = new LinkedList<>();
         this.battles = new LinkedList<>();
+        this.users = new ArrayList<>();
     }
     
     /**
@@ -224,5 +226,15 @@ public class Game
 	{
 		//Envoyer les Files aux UI et les appliquer pour dégager les morts
 		System.out.println("Game.sendTurn non défini");
+	}
+
+	public List<User> getUsers()
+	{
+		return users;
+	}
+
+	public void setUsers(List<User> users)
+	{
+		this.users = users;
 	}
 }

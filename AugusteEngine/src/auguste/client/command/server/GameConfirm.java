@@ -89,7 +89,9 @@ public class GameConfirm extends CommandServer
     		Team team = new Team();
     		JSONObject arrayPlayers = teams.getJSONObject(i);
     		this.setPlayers(arrayPlayers.getJSONArray("players"), team);
+    		res.add(team);
     	}
+    	
     	this.game.setTeams(res);
     }
     
@@ -129,7 +131,7 @@ public class GameConfirm extends CommandServer
     		
     		legion.setColor(color);
     		legion.setShape(shape);
-	    		
+    		
     		legions.add(legion);
     	}
     	

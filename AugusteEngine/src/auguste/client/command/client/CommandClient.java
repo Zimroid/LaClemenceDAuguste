@@ -140,7 +140,7 @@ public abstract class CommandClient
         CHAT_SEND,
         ROOM_CREATE,
         GAME_CONFIGURATION,
-        GAME_JOIN,
+        ROOM_JOIN,
         GAME_LIST,
         GAME_START,
         GAME_LEAVE,
