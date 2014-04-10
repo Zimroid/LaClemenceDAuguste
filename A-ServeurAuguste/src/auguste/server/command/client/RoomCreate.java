@@ -16,12 +16,19 @@
 
 package auguste.server.command.client;
 
-import auguste.server.command.ClientCommand;
 import auguste.server.Room;
 import auguste.server.Server;
+import auguste.server.command.ClientCommand;
 import auguste.server.exception.InexistantRoomException;
 import auguste.server.exception.NotInThisRoomException;
+import auguste.server.util.Log;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 /**
  * Commande de création d'une partie. Instancie le salon, ajoute l'utilisateur
@@ -44,6 +51,13 @@ public class RoomCreate extends ClientCommand
         Room newRoom = Server.getInstance().createRoom(
                 this.getJSON().getString("game_name")
         );
+        if (this.getJSON().getString("game_type").equals("fast")) try {
+            newRoom.setConfiguration(new JSONObject(new JSONTokener(new FileInputStream("modes/fast.json"))));
+        }
+        catch (FileNotFoundException e)
+        {
+            Log.debug(e);
+        }
         Server.getInstance().joinRoom(this.getUser(), newRoom);
         newRoom.setOwner(this.getUser());
         newRoom.updateConfiguration();

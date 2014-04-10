@@ -63,7 +63,7 @@ public class Game
     * @param listener Game listener
     * @param turnDuration durée d'un tour
     */
-    public Game(GameListener listener, int turnDuration)
+    public Game(GameListener listener, long turnDuration)
     {
         this.listener = listener;
         this.turnDuration = turnDuration;
