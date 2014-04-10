@@ -10,9 +10,11 @@ import org.json.JSONException;
 
 public class Main
 {        
+	public static Client c;
+	
 	public static void main(String[] args) throws URISyntaxException, IOException, JSONException
 	{		
-        Client c = Client.getInstance();
+        c = Client.getInstance();
         c.getInterfaces().add(new CSL());
         for(UpdateListener ul : c.getInterfaces())
         {
