@@ -17,7 +17,7 @@ import org.json.JSONException;
  */
 public class LogClient extends CommandServer
 {    
-    public static final String NAME =   "name";
+    public static final String NAME =   "user_name";
     public LogClient()
     {
         super();

@@ -35,20 +35,23 @@ public abstract class CommandClient
     public static final String GAME_START       = "game_start";
     public static final String GAME_LEAVE       = "room_leave";
     public static final String GAME_CONFIG      = "game_configuration";
+    public static final String GAME_MOVE        = "game_move";
     public static final String COMMAND          = "command";
     public static final String EXIT             = "exit";
     public static final String CHAT_SEND        = "chat_send";
     public static final String ACCOUNT_CREATE   = "account_create";
     public static final String LOG_IN           = "log_in";
     public static final String LOG_OUT          = "log_out";
-    public static final String GAME_MOVE        = "game_move";
+    
+    // COMMANDE A AJOUTER
+    public static final String QUERY_USER		= "query_users";
     
     // Noms de paramètres possibles
     public static final String ROOM_ID              = "room_id";
     public static final String PLAYER_NUMBER        = "player_number";
     public static final String MESSAGE              = "message";
-    public static final String NAME                 = "name";
-    public static final String PASSWORD             = "password";
+    public static final String NAME                 = "user_name";
+    public static final String PASSWORD             = "user_password";
     public static final String GAME_NAME            = "game_name";
     public static final String GAME_TURN_DURATION   = "game_turn_duration";
     public static final String BOARD_SIZE           = "game_board_size";
@@ -62,6 +65,7 @@ public abstract class CommandClient
     public static final String END_W              	= "end_w";
     public static final String POS_END              = "pos_end";
     public static final String TEAMS				= "teams";
+    public static final String GAME_TYPE			= "game_type";
     
     
     public abstract void buildJSON() throws JSONException;
@@ -134,7 +138,7 @@ public abstract class CommandClient
     {
         ACCOUNT_CREATE,
         CHAT_SEND,
-        GAME_CREATE,
+        ROOM_CREATE,
         GAME_CONFIG,
         GAME_JOIN,
         GAME_LIST,

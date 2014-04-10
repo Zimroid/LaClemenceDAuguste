@@ -30,5 +30,5 @@ public interface UpdateListener
     public void gameTurnUpdate(int id);
     public void stop();
     public void error(String errorType);
-    
+    public void logOut();
 }

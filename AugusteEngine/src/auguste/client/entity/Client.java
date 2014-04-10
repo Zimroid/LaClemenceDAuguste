@@ -25,11 +25,11 @@ public class Client
     private final List<UpdateListener> interfaces;
     private static Client INSTANCE;
     
-    private List<Game> gameAvailable;
-    private User currentUser;
-    private Queue<ChatMessageReceived> chatMessageReceived;
-    private String confirmMessage;
-    private List<Game> games;
+    private volatile List<Game> gameAvailable;
+    private volatile User currentUser;
+    private volatile Queue<ChatMessageReceived> chatMessageReceived;
+    private volatile String confirmMessage;
+    private volatile List<Game> games;
     
     private Client() throws URISyntaxException
     {

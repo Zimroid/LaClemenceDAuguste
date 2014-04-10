@@ -85,20 +85,38 @@ public class CSL implements UpdateListener
                 case CommandClient.GAME_CONFIG:
                     command = gameConfig(words);
                     break;
+                case CommandClient.GAME_START:
+                	command = gameStart(words);
+                	break;
                 default:
                     command = null;
                     break;
             }
-            this.client.sendCommand(command);
+
+        	if(command != null)
+        	{
+                this.client.sendCommand(command);
+        	}
         }
     }
     
-    private Map<String,Object> gameCreate(String[] args)
+    private Map<String, Object> gameStart(String[] words)
+	{
+    	Map<String,Object> res = new HashMap<>();
+    	
+    	res.put(CommandClient.COMMAND, CommandClient.GAME_START);
+    	res.put(CommandClient.ROOM_ID, words[1]);
+    	
+		return res;
+	}
+
+	private Map<String,Object> gameCreate(String[] args)
     {
         Map<String,Object> res = new HashMap<>();
         
         res.put(CommandClient.COMMAND, args[0]);
         res.put(CommandClient.GAME_NAME, args[1]);
+        res.put(CommandClient.GAME_TYPE, "fast");
         
         return res;
     }
@@ -121,7 +139,7 @@ public class CSL implements UpdateListener
         res.put(CommandClient.COMMAND, args[0]);
         res.put(CommandClient.NAME, args[1]);
         res.put(CommandClient.PASSWORD, args[2]);
-        
+                
         return res;
     }
     
@@ -303,4 +321,10 @@ public class CSL implements UpdateListener
     {
     	System.out.println(errorType);
     }
+
+	@Override
+	public void logOut()
+	{
+		System.out.println("log_out");
+	}
 }
