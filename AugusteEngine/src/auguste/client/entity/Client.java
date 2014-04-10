@@ -84,6 +84,7 @@ public class Client
     public void sendCommand(Map<String,?> command) throws JSONException, URISyntaxException
     {
         CommandClientManager.executeCommand(INSTANCE, command);
+        System.out.println(command.get("command"));
     }
     
     public List<Game> getGameAvailable()

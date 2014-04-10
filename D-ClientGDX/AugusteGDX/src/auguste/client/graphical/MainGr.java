@@ -14,6 +14,8 @@ public class MainGr extends Game implements UpdateListener
 {
 	private Client cli;
 	public static String APP_NAME = "Auguste";
+	
+	public boolean userConnect = false;
 
     @Override
     public void create() {
@@ -44,10 +46,8 @@ public class MainGr extends Game implements UpdateListener
 
 	@Override
 	public void userUpdate() {
-		System.out.println("Accès engine 3");
-		
-		setScreen(new GameScreen(this));
-		//setScreen(new MenuScreen(this)); 
+		System.out.println("Accès engine 3 : log_in");
+		userConnect = true; 
 	}
 
 	@Override
@@ -83,18 +83,17 @@ public class MainGr extends Game implements UpdateListener
 	@Override
 	public void error(String errorType)
 	{
-		System.out.println("Accès engine 9");
+		System.out.println("Accès engine 9 : error");
 		System.out.println("Erreur engine detectée : " + errorType);
+	}
+
+	@Override
+	public void logOut() {
+		System.out.println("Accès engine 10 : log_out");
+		this.userConnect = false;
 	}
 
 	public Client getCli() {
 		return cli;
-	}
-
-
-	@Override
-	public void logOut() {
-		// TODO Auto-generated method stub
-		
 	}
 }

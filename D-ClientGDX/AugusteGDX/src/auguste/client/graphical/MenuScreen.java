@@ -1,5 +1,10 @@
 package auguste.client.graphical;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import auguste.client.command.client.CommandClient;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -68,10 +73,14 @@ public class MenuScreen implements Screen {
         textButtonStyle.font 	= skin.getFont("default");
         skin.add("btn", textButtonStyle);
         
-        // Création du bouton        
+        // Création des boutons        
+        final TextButton btnLogout = new TextButton("Déconnexion", skin, "btn");
+        btnLogout.setSize(200, 80);
+        btnLogout.setPosition(1270, 690);
+        
         final TextButton btnCreate = new TextButton("Créer une partie", skin, "btn");
         btnCreate.setSize(400, 100);
-        btnCreate.setPosition(550, 150);
+        btnCreate.setPosition(550, 550);
         
         final TextButton btnJoin = new TextButton("Rejoindre une partie", skin, "btn");
         btnJoin.setSize(400, 100);
@@ -79,18 +88,46 @@ public class MenuScreen implements Screen {
         
         final TextButton btnFastStart = new TextButton("Partie rapide", skin, "btn");
         btnFastStart.setSize(400, 100);
-        btnFastStart.setPosition(550, 550);
+        btnFastStart.setPosition(550, 150);
+        
         
         // Ajout sur la page
+        stage.addActor(btnLogout);
         stage.addActor(btnFastStart);
         stage.addActor(btnCreate);
         stage.addActor(btnJoin);
         
-        // Connexion
-        btnJoin.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor)
+        // Déconnexion
+        btnLogout.addListener(new ChangeListener() {
+        	public void changed (ChangeEvent event, Actor actor)
             {
-            	System.out.print("Clic sur bouton ");
+            	Map<String, String> cmd = new HashMap<>();
+	        	cmd.put(CommandClient.COMMAND, CommandClient.LOG_OUT);
+	        	try
+	        	{
+					g.getCli().sendCommand(cmd);
+				}
+	        	catch (Exception e)
+	        	{
+					e.printStackTrace();
+					System.out.println("Exception lors de la connexion ...");
+				}
+	        }
+        });
+        
+        // Créer une partie
+        btnCreate.addListener(new ChangeListener() {
+        	public void changed (ChangeEvent event, Actor actor)
+            {
+            	CreateGameScreen temp = new CreateGameScreen(g);
+                g.setScreen(temp);
+            }
+        });
+        
+        // Rejoindre une partie
+        btnJoin.addListener(new ChangeListener() {
+        	public void changed (ChangeEvent event, Actor actor)
+            {
             	GameScreen temp = new GameScreen(g);
                 g.setScreen(temp);
             }
@@ -104,6 +141,11 @@ public class MenuScreen implements Screen {
         
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+        
+        if(!g.userConnect)
+        {
+        	g.setScreen(new LogScreen(g));
+        }
         
         Table.drawDebug(stage);
     }

@@ -70,6 +70,7 @@ public class ClientSocket extends WebSocketClient
 	@Override
 	public void onMessage(String arg0)
 	{
+		System.out.println("onMessage");
 		try
 		{
 			Client.getInstance().messageServerReceive(arg0);
