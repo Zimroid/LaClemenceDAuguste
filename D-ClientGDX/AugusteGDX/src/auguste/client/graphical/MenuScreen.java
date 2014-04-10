@@ -128,6 +128,15 @@ public class MenuScreen implements Screen {
         btnJoin.addListener(new ChangeListener() {
         	public void changed (ChangeEvent event, Actor actor)
             {
+            	ListGamesScreen temp = new ListGamesScreen(g);
+                g.setScreen(temp);
+            }
+        });
+        
+        // Partie rapide
+        btnFastStart.addListener(new ChangeListener() {
+        	public void changed (ChangeEvent event, Actor actor)
+            {
             	GameScreen temp = new GameScreen(g);
                 g.setScreen(temp);
             }

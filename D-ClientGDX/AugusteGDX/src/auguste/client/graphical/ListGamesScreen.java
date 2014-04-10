@@ -1,10 +1,5 @@
 package auguste.client.graphical;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import auguste.client.command.client.CommandClient;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -23,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-public class CreateGameScreen implements Screen {
+public class ListGamesScreen implements Screen {
 	Skin skin;
     Stage stage;
     SpriteBatch batch;
@@ -33,11 +28,11 @@ public class CreateGameScreen implements Screen {
     /*
      * Constructeurs
      */
-    public CreateGameScreen(MainGr g){
+    public ListGamesScreen(MainGr g){
     	this.g = g;
     	create();
     }
-    public CreateGameScreen(){
+    public ListGamesScreen(){
         create();
     }
     
@@ -81,46 +76,13 @@ public class CreateGameScreen implements Screen {
         textFieldStyle.font 		= skin.getFont("default");
         skin.add("txt", textFieldStyle);
         
-        
-        // Nom de la partie
-        final TextField gameName = new TextField("", skin, "txt");
-        gameName.setSize(400, 50);
-        gameName.setPosition(300, 600);
-        
-    	// Nombre de joueurs
-        final TextField players = new TextField("", skin, "txt");
-        players.setSize(400, 50);
-        players.setPosition(300, 500);
-        
-        // Nombre d'équipes
-        final TextField teams = new TextField("", skin, "txt");
-        teams.setSize(400, 50);
-        teams.setPosition(300, 400);
-        
-        // Taille d plateau
-        final TextField sizeBoard = new TextField("", skin, "txt");
-        sizeBoard.setSize(400, 50);
-        sizeBoard.setPosition(300, 300);
-        
-        // Bouton création de partie
-        final TextButton btnCreate = new TextButton("Créer la partie", skin, "btn");
-        btnCreate.setSize(250, 50);
-        btnCreate.setPosition(300, 200);
-        
         // Bouton de retour ...
         final TextButton btnMenu = new TextButton("Menu", skin, "btn");
         btnMenu.setSize(200, 80);
         btnMenu.setPosition(30, 690);
         
-        
         // Ajout sur la page
-        stage.addActor(gameName);
-        stage.addActor(players);
-        stage.addActor(teams);
-        stage.addActor(sizeBoard);
-        stage.addActor(btnCreate);
-
-    	stage.addActor(btnMenu);
+        stage.addActor(btnMenu);
         
         // Retour au menu
         btnMenu.addListener(new ChangeListener() {
@@ -130,27 +92,8 @@ public class CreateGameScreen implements Screen {
                 g.setScreen(temp);
             }
         });
-        
-        btnCreate.addListener(new ChangeListener() {
-        	public void changed (ChangeEvent event, Actor actor)
-            {
-        		Map<String, String> cmd = new HashMap<>();
-            	cmd.put(CommandClient.COMMAND, CommandClient.GAME_CREATE);
-            	cmd.put(CommandClient.GAME_NAME, gameName.getText());
-            	cmd.put(CommandClient.GAME_TYPE, "fast");
-            	try
-            	{
-					g.getCli().sendCommand(cmd);
-				}
-            	catch (Exception e)
-            	{
-					e.printStackTrace();
-					System.out.println("Exception lors de la connexion ...");
-				}
-            }
-        });
     }
- 
+    
     public void render (float delta)
     {
     	Gdx.gl.glClearColor(0.9f, 0.9f, 0.9f, 1);
@@ -159,24 +102,10 @@ public class CreateGameScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
         
-        /*
         if(!g.userConnect)
         {
         	g.setScreen(new LogScreen(g));
         }
-        */
-        
-        // Affichages texts
-        batch.begin();
-        skin.getFont("default").setColor(0.0f, 0.0f, 0.0f, 1.0f); // Couleur noire
-        skin.getFont("default").draw(batch, "Nom de partie  :", 50, 640);
-        skin.getFont("default").draw(batch, "Nombre joueurs :", 50, 540);
-        skin.getFont("default").draw(batch, "Nombre équipes :", 50, 440);
-        skin.getFont("default").draw(batch, "Taille plateau :", 50, 340);
-        
-        skin.getFont("default").setColor(1.0f, 0.0f, 0.0f, 1.0f); // Couleur rouge
-        //skin.getFont("default").draw(batch, error_message, 50, 520);
-        batch.end();
         
         Table.drawDebug(stage);
     }

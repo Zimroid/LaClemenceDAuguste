@@ -20,6 +20,9 @@ public class GameScreen implements Screen {
     private ShapeRenderer shrd;
     private HexaBoard board;
     
+    private Hexagon firstHexa;
+    private Hexagon secHexa;
+    
     /*
      * Constructeurs
      */
@@ -92,15 +95,33 @@ public class GameScreen implements Screen {
 	        	Hexagon current = this.board.findClickedHex(new Position(Gdx.input.getX(), Gdx.input.getY()));
 	        	if(current != null)
 	        	{
-	        		// Mise à jour de l'hexagone
-		        	if(current.colored == false)
-	        		{ 
-		        		current.changeColor(Color.BLUE);
+	        		if(firstHexa == null)
+	        		{
+	        			firstHexa = current;
+	        			current.changeColor(Color.BLUE);
 	        		}
-		        	else
-		        	{
-		        		current.resetColor();
-		        	}
+	        		else if (firstHexa == current)
+	        		{
+	        			firstHexa = null;
+	        			current.resetColor();
+	        			if (secHexa != null)
+	        			{
+	        				secHexa.resetColor();
+	        				secHexa.drawCase(shrd);
+	        				secHexa = null;
+	        			}
+	        		}
+	        		else if (secHexa != current)
+	        		{
+	        			if (secHexa != null)
+	        			{
+	        				secHexa.resetColor();
+	        				secHexa.drawCase(shrd);
+	        			}
+	        			
+        				current.changeColor(Color.BLUE);
+	        			secHexa = current;
+	        		}
 		        	
 		        	// Redessine la case
 		        	current.drawCase(shrd);
