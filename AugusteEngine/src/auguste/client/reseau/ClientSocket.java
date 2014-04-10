@@ -70,8 +70,15 @@ public class ClientSocket extends WebSocketClient
 	@Override
 	public void onMessage(String arg0)
 	{
-		//this.commandTransfer.setJSON(arg0);
-		Main.c.messageServerReceive(arg0);
+		try
+		{
+			Client.getInstance().messageServerReceive(arg0);
+		}
+		catch (URISyntaxException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
