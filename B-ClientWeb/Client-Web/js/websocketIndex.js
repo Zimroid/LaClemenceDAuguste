@@ -8,13 +8,22 @@ function process(evt)
 	// Erreur connexion utilisateur
 	if(command == "message_error")
 	{
-		console.log("Erreur connexion utilisateur ...");
-		alert(data.type);
+		// Déconnexion
+		if(data.type == "logged_out")
+		{
+			myName = '';
+			reloadChat(sitePath + "/index.php?script=1&page=deconnect");
+		}
+		else
+		{
+			alert(data.type);
+		}
 	}
 	
 	// Reussite connexion utilisateur
 	else if(command == "log_confirm")
 	{
+		myName = data.user_name;
 		reloadChat(sitePath + "/index.php?script=1&page=connect&user=" + data.user_name);
 	}
 	
@@ -40,13 +49,8 @@ function process(evt)
 	{
 		var type = data.type;
 		
-		// Déconnexion
-		if(type == "log_out")
-		{
-			reloadChat(sitePath + "/index.php?script=1&page=deconnect");
-		}
 		// Connexion auto à la création de compte
-		else if(type == "account_create")
+		if(type == "account_create")
 		{
 			connexion(true,'','');
 			reloadContent(sitePath + "/index.php?script=1&page=news");
@@ -56,8 +60,10 @@ function process(evt)
 	// Si on nous confirme la création d'une partie
 	// ATTENTION NOM DE COMMANDE NON DEFINITIVE !!!
 	else if(command == "game_confirm")
-	{
-		reloadContent(sitePath + "/index.php?script=1&page=gameConfig&name=" + data.configuration.game_name + "&id=" + data.room_id);
+	{	
+		save_game_config = data;
+		// si une partie normale est lancée
+		reloadContent(sitePath + "/index.php?script=1&page=gameConfig&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
 	}
 
 	// Si on nous envoie un plateau de jeu
@@ -85,13 +91,29 @@ function process(evt)
 	// Réception liste des joueurs d'une partie
 	else if(command == "game_users")
 	{
-		$("#noTeam").html('');
-		var pViewers = $("<p>Spectateurs</p>");
-		$("#noTeam").append(pViewers);
-		for (var i = 0 ; i < data.users.length ; i++)
+		var mode = $("#type_game").val();
+		if (mode == 'normal')
 		{
-			$("#noTeam").append("<span class='viewers'>" + data.users[i].user_name + "</span><br>");
-			$("[name='playerName']").append("<option value='" + data.users[i].user_id + "'>" + data.users[i].user_name + "</option>");
+			$("#noTeam").html('');
+			var pViewers = $("<p>Spectateurs</p>");
+			$("#noTeam").append(pViewers);
+			for (var i = 0 ; i < data.users.length ; i++)
+			{
+				$("#noTeam").append("<span class='viewers'>" + data.users[i].user_name + "</span><br>");
+				$("[name='playerName']").append("<option value='" + data.users[i].user_id + "'>" + data.users[i].user_name + "</option>");
+			}
+		}
+		else if (mode == 'fast' && data.users[1] && myName == data.users[0].user_name)
+		{
+			save_game_config.command = "GAME_CONFIGURATION";
+			save_game_config.teams[0].players[0].player_user_id = data.users[0].user_id;
+			save_game_config.teams[1].players[0].player_user_id = data.users[1].user_id;
+			save_game_config.game_turn_duration = save_game_config.configuration.game_turn_duration;
+			save_game_config.game_mode = save_game_config.configuration.game_mode;
+			save_game_config.game_board_size = save_game_config.configuration.game_board_size;
+			save_game_config.game_name = save_game_config.configuration.game_name;
+			var json = JSON.stringify(save_game_config);
+			sendText(json);
 		}
 	}
 	

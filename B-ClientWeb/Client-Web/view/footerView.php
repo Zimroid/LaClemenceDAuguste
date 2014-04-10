@@ -3,6 +3,8 @@
 			var siteName = "<?php echo $siteName; ?>";
 			var sitePage = '';
 			var game_id = 0;
+			var save_game_config = '';
+			var myName = '';
 		</script>
 		
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/jquery/js/jquery-1.11.0.min.js"></script>
