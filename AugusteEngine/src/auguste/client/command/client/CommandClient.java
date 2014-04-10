@@ -139,7 +139,7 @@ public abstract class CommandClient
         ACCOUNT_CREATE,
         CHAT_SEND,
         ROOM_CREATE,
-        GAME_CONFIG,
+        GAME_CONFIGURATION,
         GAME_JOIN,
         GAME_LIST,
         GAME_START,

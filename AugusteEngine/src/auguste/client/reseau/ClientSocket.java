@@ -10,15 +10,9 @@ import auguste.client.entity.Client;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.StreamHandler;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-
-import clientjavaacrobatt.Main;
 
 /**
  *
@@ -32,8 +26,6 @@ public class ClientSocket extends WebSocketClient
 	private static final String CONNECTION_STRING = "ws://"+ADDRESS+":"+PORT_TEST;
 	
 	private static ClientSocket INSTANCE;
-	private CommandTransfer commandTransfer;
-	private Handler handler;
         
 	private ClientSocket(URI serverURI)
 	{
@@ -77,7 +69,6 @@ public class ClientSocket extends WebSocketClient
 		}
 		catch (URISyntaxException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -86,10 +77,5 @@ public class ClientSocket extends WebSocketClient
 	public void onOpen(ServerHandshake arg0)
 	{
 		System.out.println("Connected with " + arg0.getHttpStatusMessage());
-	}
-
-	public void setCommandTransfer(CommandTransfer commandTransfer)
-	{
-		this.commandTransfer = commandTransfer;
 	}
 }

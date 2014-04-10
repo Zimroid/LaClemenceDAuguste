@@ -22,9 +22,11 @@ import org.json.JSONObject;
  */
 public class GameAvailable extends CommandServer
 {    
-    public static final String LIST =       "list_games";
-    public static final String ROOM_ID =    "room_id";
-    public static final String GAME_NAME =  "game_name";
+    public static final String LIST =       	"games";
+    public static final String ROOM_ID =    	"room_id";
+    public static final String GAME_NAME =  	"game_name";
+    public static final String BOARD_SIZE =		"game_board_size";
+    public static final String TURN_DURATION =	"game_turn_duration";
     
     public GameAvailable()
     {
@@ -42,9 +44,13 @@ public class GameAvailable extends CommandServer
             JSONObject game = game_array.getJSONObject(i);
             int game_id = game.getInt(ROOM_ID);
             String game_name = game.getString(GAME_NAME);
+            int board_size = game.getInt(BOARD_SIZE);
+            long turn_duration = game.getLong(TURN_DURATION);
             
             g.setId(game_id);
             g.setName(game_name);
+            g.setBoardSize(board_size);
+            g.setTurn_duration(turn_duration);
             
             games.add(g);
         }

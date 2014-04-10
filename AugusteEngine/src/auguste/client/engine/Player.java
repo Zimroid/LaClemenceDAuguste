@@ -31,9 +31,9 @@ public class Player
     private Game game;
     private List<Legion> legions;
     
-    public Player(String name)
+    public Player(int id)
     {
-        this.name = name;
+        this.id = id;
         this.legions = new ArrayList<>();
     }
 

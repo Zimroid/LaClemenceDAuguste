@@ -40,18 +40,18 @@ public class CommandClientManager
         {
             switch(CommandClient.CommandName.valueOf(command_name.toUpperCase()))
             {
-                case EXIT:          command = new QuitGame();       break;
-                case CHAT_SEND:     command = new ChatSend();       break;
-                case ACCOUNT_CREATE:command = new AccountCreate();  break;
-                case LOG_IN:        command = new LogIn();          break;
-                case LOG_OUT:       command = new LogOut();         break;
-                case ROOM_CREATE:   command = new GameCreate();     break;
-                case GAME_LIST:     command = new GameList();       break;
-                case GAME_JOIN:     command = new GameJoin();       break;
-                case GAME_START:    command = new GameStart();      break;
-                case GAME_LEAVE:    command = new GameLeave();      break;
-                case GAME_CONFIG:   command = new GameConfig();     break;
-                default:            command = null;
+                case EXIT:          		command = new QuitGame();       break;
+                case CHAT_SEND:     		command = new ChatSend();       break;
+                case ACCOUNT_CREATE:		command = new AccountCreate();  break;
+                case LOG_IN:        		command = new LogIn();          break;
+                case LOG_OUT:       		command = new LogOut();         break;
+                case ROOM_CREATE:   		command = new GameCreate();     break;
+                case GAME_LIST:     		command = new GameList();       break;
+                case GAME_JOIN:     		command = new GameJoin();       break;
+                case GAME_START:    		command = new GameStart();      break;
+                case GAME_LEAVE:    		command = new GameLeave();      break;
+                case GAME_CONFIGURATION:	command = new GameConfig();     break;
+                default:            		command = null;
             }
 
             command.setArguments(params);

@@ -57,8 +57,17 @@ public class Team
         return this.tabPlayers.get(id);
     }
     
-    public void addPlayer(Player player)
+    /*
+     * Mise à jour du joueur passé en paramètre. S'il n'existe pas, un nouveau joueur est inseré.
+     */
+    public void updatePlayer(Player player)
     {
+    	if(this.getPlayer(player.getId()) != null)
+    	{
+    		Player toRemove = this.getPlayer(player.getId());
+    		this.players.remove(toRemove);
+    		this.tabPlayers.remove(toRemove.getId());
+    	}
         this.players.add(player);
         this.tabPlayers.put(player.getId(), player);
     }

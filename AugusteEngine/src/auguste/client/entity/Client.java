@@ -4,7 +4,6 @@ import auguste.client.command.manager.CommandClientManager;
 import auguste.client.command.manager.CommandServerManager;
 import auguste.client.interfaces.UpdateListener;
 import auguste.client.reseau.ClientSocket;
-import auguste.client.reseau.CommandTransfer;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -32,13 +31,9 @@ public class Client
     private volatile String confirmMessage;
     private volatile List<Game> games;
     
-    private CommandTransfer commandTransfer;
-    
     private Client() throws URISyntaxException
     {
-    	this.commandTransfer = new CommandTransfer(this);
         this.socket = ClientSocket.getInstance();
-        this.socket.setCommandTransfer(this.commandTransfer);
         this.interfaces = new ArrayList<>();
         this.chatMessageReceived = new LinkedList<>();
         this.games = new ArrayList<>();
@@ -140,7 +135,7 @@ public class Client
     
     public void addGame(Game game)
     {
-        this.gameAvailable.add(game);
+        this.games.add(game);
     }
     
     public void removeGame(int id)
@@ -167,6 +162,7 @@ public class Client
     {
         if(this.getGame(game.getId()) != null)
         {
+        	System.out.println("test");
             this.removeGame(game.getId());
         }
         this.addGame(game);

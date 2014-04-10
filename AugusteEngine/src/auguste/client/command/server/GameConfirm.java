@@ -55,7 +55,7 @@ public class GameConfirm extends CommandServer
     {
         this.setConfiguration(this.getJSON());
         this.setTeams(this.getJSON());
-        
+
         this.getClient().updateGame(game);
         
         for(UpdateListener ul : this.getClient().getInterfaces())
@@ -68,10 +68,12 @@ public class GameConfirm extends CommandServer
     {
     	JSONObject configuration = json.getJSONObject(CONFIGURATION);
     	
+    	int roomId 				= json.getInt(ROOM_ID);
     	String game_name 		= configuration.getString(GAME_NAME);
     	int board_size			= configuration.getInt(BOARD_SIZE);
     	long game_turn_duration	= configuration.getLong(GAME_TURN_DURATION);
     	
+    	this.game.setId(roomId);
     	this.game.setName(game_name);
     	this.game.setBoardSize(board_size);
     	this.game.setTurn_duration(game_turn_duration);
@@ -80,14 +82,14 @@ public class GameConfirm extends CommandServer
     private void setTeams(JSONObject json) throws JSONException
     {
     	List<Team> res = new ArrayList<>();
-    	JSONArray teams = json.getJSONArray(TEAMS);
+		JSONArray teams = json.getJSONArray(TEAMS);
     	
     	for(int i = 0; i < teams.length(); i++)
     	{
     		Team team = new Team();
-    		this.setPlayers(teams.getJSONArray(i), team);
+    		JSONObject arrayPlayers = teams.getJSONObject(i);
+    		this.setPlayers(arrayPlayers.getJSONArray("players"), team);
     	}
-    	
     	this.game.setTeams(res);
     }
     
@@ -95,15 +97,23 @@ public class GameConfirm extends CommandServer
     {
     	for(int i = 0; i < players.length(); i++)
     	{
-    		this.setPlayer(players.getJSONObject(i), team);
+			this.setPlayer(players.getJSONObject(i), team);
     	}
     }
     
     private void setPlayer(JSONObject player, Team team) throws JSONException
     {
-    	Player pl = game.getPlayer(player.getInt("player_user_id"));
+        Player pl;
+        if(game.getPlayer(player.getInt("player_user_id")) == null)
+		{
+    		pl = new Player(player.getInt("player_user_id"));
+		}
+        else
+        {
+        	pl = game.getPlayer(player.getInt("player_user_id"));
+        }
     	setLegions(pl, player.getJSONArray("legions"));
-    	team.addPlayer(pl);
+    	team.updatePlayer(pl);
     }
     
     private void setLegions(Player player, JSONArray jsonLegions) throws JSONException
@@ -114,12 +124,12 @@ public class GameConfirm extends CommandServer
     	{
     		Legion legion = new Legion(i+1, player);
     		
-    		String color = jsonLegions.getJSONObject(i).getString("legion_color");
+			String color = jsonLegions.getJSONObject(i).getString("legion_color");
     		String shape = jsonLegions.getJSONObject(i).getString("legion_shape");
     		
     		legion.setColor(color);
     		legion.setShape(shape);
-    		
+	    		
     		legions.add(legion);
     	}
     	
