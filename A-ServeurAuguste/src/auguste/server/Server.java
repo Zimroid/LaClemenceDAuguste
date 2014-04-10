@@ -368,6 +368,7 @@ public class Server extends WebSocketServer
         room.getUsers().put(user.getId(), user);
         
         // Notification
+        room.updateConfiguration();
         room.updateUsers();
         this.updateRoomsWatchers();
     }

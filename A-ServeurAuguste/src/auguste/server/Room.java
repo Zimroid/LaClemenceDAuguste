@@ -98,6 +98,7 @@ public class Room implements GameListener
             this.configuration.put("game_name",          name                                               );
             this.configuration.put("game_board_size",    Configuration.getInt ("game_default_board_size"   ));
             this.configuration.put("game_turn_duration", Configuration.getLong("game_default_turn_duration"));
+            this.configuration.put("game_mode", "normal");
         }
         catch (JSONException e)
         {
@@ -120,6 +121,7 @@ public class Room implements GameListener
      */
     public void start() throws JSONException
     {
+        this.game = new Game(this, this.configuration.getLong("game_turn_duration"));
         this.game.setTurnDuration(this.configuration.getLong("game_turn_duration"));
         this.game.setBoard(new Board(this.configuration.getInt("game_board_size"), this.game));
         for (Player player : this.playing.keySet()) this.game.addPlayer(player);
@@ -199,7 +201,7 @@ public class Room implements GameListener
                 if (cell.getPawn() instanceof Soldier)
                 {
                     cellData.put("legion_armor", ((Soldier)cell.getPawn()).isArmored());
-                    cellData.put("legion_color", cell.getPawn().getLegion().getColor().toString());
+                    cellData.put("legion_color", cell.getPawn().getLegion().getColor());
                     cellData.put("legion_shape", cell.getPawn().getLegion().getShape());
                 }
                 boardData.put(cellData);
@@ -209,7 +211,7 @@ public class Room implements GameListener
                 cellData = new JSONObject();
                 cellData.put("u", cell.getP().getX());
                 cellData.put("w", cell.getP().getY());
-                cellData.put("tent_color", cell.getTent().getColor().toString());
+                cellData.put("tent_color", cell.getTent().getColor());
                 cellData.put("tent_shape", cell.getTent().getShape());
                 boardData.put(cellData);
             }
@@ -292,6 +294,7 @@ public class Room implements GameListener
         {
             if (!this.users.containsValue(user)) throw new NotInThisRoomException(this, user);
             this.owner = user;
+            this.updateUsers();
         }
     }
     
@@ -355,9 +358,10 @@ public class Room implements GameListener
     public void setConfiguration(JSONObject json) throws JSONException, NotInThisRoomException
     {
         // Configuration de la partie
-        this.configuration.put("game_name",          json.getString("game_name"         ));
+        //this.configuration.put("game_name",          json.getString("game_name"         ));
         this.configuration.put("game_board_size",    json.getInt   ("game_board_size"   ));
         this.configuration.put("game_turn_duration", json.getLong  ("game_turn_duration"));
+        this.configuration.put("game_mode", json.getString  ("game_mode"));
 
         // Attribution des utilisateurs
         if (json.has("teams"))
@@ -377,31 +381,33 @@ public class Room implements GameListener
                 this.teams.add(newTeam);
             
                 // Ajout des joueurs
-                for (int iPlayer = 0; iPlayer < json.getJSONArray("players").length(); iPlayer++)
+                for (int iPlayer = 0; iPlayer < teamData.getJSONArray("players").length(); iPlayer++)
                 {
                     // Récupération du JSON
-                    JSONObject playerData = json.getJSONArray("players").getJSONObject(iPlayer);
+                    JSONObject playerData = teamData.getJSONArray("players").getJSONObject(iPlayer);
                     
                     // Instanciation du joueur
                     Player newPlayer = new Player();
                     newPlayer.setGame(this.game);
                     newPlayer.setTeam(newTeam);
-                    newTeam.addPlayer(newPlayer);
                     
                     // Attribution du joueur à l'utilisateur
                     int userId = playerData.getInt("player_user_id");
-                    if (!this.getUsers().containsKey(userId)) throw new NotInThisRoomException(this, userId);
-                    this.playing.put(newPlayer, userId);
+                    if (this.getUsers().containsKey(userId))
+                    {
+                        //throw new NotInThisRoomException(this, userId);
+                        this.playing.put(newPlayer, userId);
+                    }
 
                     // Ajout des légions
-                    for (int iLegion = 0; iLegion < json.getJSONArray("legions").length(); iLegion++)
+                    for (int iLegion = 0; iLegion < playerData.getJSONArray("legions").length(); iLegion++)
                     {
                         // Récupération du JSON
-                        JSONObject legionData = json.getJSONArray("legions").getJSONObject(iLegion);
+                        JSONObject legionData = playerData.getJSONArray("legions").getJSONObject(iLegion);
                         
                         // Instanciation de la légion
                         Legion newLegion = new Legion(newPlayer);
-                        newLegion.setColor(Color.green);
+                        newLegion.setColor(legionData.getString("legion_color"));
                         newLegion.setShape(legionData.getString("legion_shape"));
                         newLegion.setPosition(legionData.getInt("legion_position"));
                         newPlayer.addLegion(newLegion);
@@ -424,6 +430,7 @@ public class Room implements GameListener
             json.put("game_name",          this.configuration.getString("game_name"         ));
             json.put("game_board_size",    this.configuration.getInt   ("game_board_size"   ));
             json.put("game_turn_duration", this.configuration.getLong  ("game_turn_duration"));
+            json.put("game_mode", this.configuration.getString  ("game_mode"));
             json.put("game_state",         this.getState()                                   );
             json.put("players_number",     this.getUsers().size()                            );
         }
@@ -454,7 +461,6 @@ public class Room implements GameListener
             {
                 // Instanciation du JSON
                 teamData = new JSONObject();
-                teamsToAdd.put(teamData);
             
                 // Ajout des joueurs
                 JSONArray playersToAdd = new JSONArray();
@@ -463,8 +469,11 @@ public class Room implements GameListener
                 {
                     // Instanciation du JSON
                     playerData = new JSONObject();
-                    playerData.put("player_user_id", this.playing.get(player));
-                    playersToAdd.put(playerData);
+                    if (this.playing.containsKey(player))
+                    {
+                        playerData.put("player_user_id", this.playing.get(player));
+                    }
+                    else playerData.put("player_user_id", 0);
             
                     // Légions
                     JSONArray legionsToAdd = new JSONArray();
@@ -472,13 +481,15 @@ public class Room implements GameListener
                     for (Legion legion : player.getLegions())
                     {
                         legionData = new JSONObject();
-                        legionData.put("legion_color", legion.getColor().toString());
+                        legionData.put("legion_color", legion.getColor());
                         legionData.put("legion_shape", legion.getShape());
                         legionsToAdd.put(legionData);
                     }
-                    json.put("legions", legionsToAdd);
+                    playerData.put("legions", legionsToAdd);
+                    playersToAdd.put(playerData);
                 }
-                json.put("players", playersToAdd);
+                teamData.put("players", playersToAdd);
+                teamsToAdd.put(teamData);
             }
             json.put("teams", teamsToAdd);
         }

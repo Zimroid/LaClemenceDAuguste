@@ -30,7 +30,7 @@ public class Legion
 {
     
     // Variables de classe
-    private Color color;
+    private String color;
     private String shape;
     private int position;
     
@@ -46,7 +46,7 @@ public class Legion
     * @param color Couleur de la légion
     * @param shape Forme de la légion
     */
-    public Legion(Player player, Color color, String shape)
+    public Legion(Player player, String color, String shape)
     {
         this.player = player;
         this.color = color;
@@ -66,7 +66,7 @@ public class Legion
     /**
      * @return the color
      */
-    public Color getColor()
+    public String getColor()
     {
         return color;
     }
@@ -74,7 +74,7 @@ public class Legion
     /**
      * @param color the color to set
      */
-    public void setColor(Color color)
+    public void setColor(String color)
     {
         this.color = color;
     }
