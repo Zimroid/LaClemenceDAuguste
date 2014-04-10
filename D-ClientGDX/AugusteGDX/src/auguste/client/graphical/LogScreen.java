@@ -23,7 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import auguste.client.command.client.*;
 
-public class MenuScreen implements Screen {
+public class LogScreen implements Screen {
     Skin skin;
     Stage stage;
     SpriteBatch batch;
@@ -33,11 +33,11 @@ public class MenuScreen implements Screen {
     /*
      * Constructeurs
      */
-    public MenuScreen(MainGr g){
+    public LogScreen(MainGr g){
         create();
         this.g = g;
     }
-    public MenuScreen(){
+    public LogScreen(){
         create();
     }
     
@@ -80,12 +80,12 @@ public class MenuScreen implements Screen {
         skin.add("txt", textFieldStyle);
 
         // Nom d'utilisateur
-        final TextField username = new TextField("Username ...", skin, "txt");
+        final TextField username = new TextField("", skin, "txt");
         username.setSize(400, 50);
         username.setPosition(200, 400);
         
         // Mot de passe
-        final TextField password = new TextField("Password ...", skin, "txt");
+        final TextField password = new TextField("", skin, "txt");
         password.setSize(400, 50);
         password.setPosition(200, 300);
         
@@ -94,38 +94,28 @@ public class MenuScreen implements Screen {
         btnConnect.setSize(250, 50);
         btnConnect.setPosition(200, 200);
         
-        
-        // ----------------- FOR TEST !!!
-        final TextButton goGame = new TextButton("Page plateau", skin, "btn");
-        goGame.setSize(250, 50);
-        goGame.setPosition(500, 200);
-        // ----------------------------------------------------------
-        
         // Ajout sur la page
         stage.addActor(username);
         stage.addActor(password);
         stage.addActor(btnConnect);
-        stage.addActor(goGame);
         
         // Connexion
         btnConnect.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-            	System.out.println(username.getText());
-            	System.out.println(password.getText());
-            	
             	Map<String, String> cmd = new HashMap<>();
             	cmd.put(CommandClient.COMMAND, CommandClient.LOG_IN);
             	cmd.put(CommandClient.NAME, username.getText());
             	cmd.put(CommandClient.PASSWORD, password.getText());
-            	//g.getCli().sendCommand(cmd);
-            }
-        });
-        
-        // Clic sur le bouton
-        goGame.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {            	
-            	GameScreen alpha = new GameScreen(g);
-                g.setScreen(alpha);               
+            	try
+            	{
+					g.getCli().sendCommand(cmd);
+				}
+            	catch (Exception e)
+            	{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					System.out.println("Epic fail");
+				}
             }
         });
     }
