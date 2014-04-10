@@ -30,7 +30,6 @@ public class Board
     private final int size;
     
     // Variables métier
-    private final Game game;
     private final ArrayList<Cell> cells;
     
     /**
@@ -38,10 +37,9 @@ public class Board
     * @param size La taille du plateau
     * @param game La partie relative au plateau
     */
-    public Board(int size, Game game)
+    public Board(int size)
     {
         this.size = size;
-        this.game = game;
         this.cells = new ArrayList<>();
         this.fillCells();
     }
@@ -136,14 +134,6 @@ public class Board
     public int getSize()
     {
         return size;
-    }
-
-    /**
-     * @return the game
-     */
-    public Game getGame()
-    {
-        return game;
     }
 
     /**

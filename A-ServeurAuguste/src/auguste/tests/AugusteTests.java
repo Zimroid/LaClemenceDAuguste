@@ -53,7 +53,7 @@ public class AugusteTests {
         Game g = new Game(1);
         g.addPlayer(pOne);
         g.addPlayer(pTwo);
-        Board b = new Board(5,g);
+        Board b = new Board(5);
         g.setBoard(b);
         
         g.initBoard();
