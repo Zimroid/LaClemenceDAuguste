@@ -1,0 +1,172 @@
+<!doctype html>
+<html style="width:100%;height:100%;" lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>Zygarde Board</title>
+	<!--<link rel="stylesheet" href="style.css">-->
+</head>
+<body style="width:100%;height:100%;margin:0px;">
+<div style="width:90%;height:90%;margin:auto;margin-top:2%;">
+<canvas id="board" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+</div>
+<button onClick='alert($("#board").getDeplacement());'>Finir le tour</button>
+
+<!--<img id="test" src="138.jpg"/>-->
+<script type="text/javascript" src="jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="jcanvas.min.js"></script>
+<script type="text/javascript" src="board.js"></script>
+<script type="text/javascript">
+var pions = new Array();
+
+pions[0] = new Array();
+pions[0][0] = -4;
+pions[0][1] = -4;
+pions[0][2] = 0;
+
+pions[1] = new Array();
+pions[1][0] = -3;
+pions[1][1] = -2;
+pions[1][2] = 1;
+
+pions[2] = new Array();
+pions[2][0] = -1;
+pions[2][1] = 0;
+pions[2][2] = 2;
+
+pions[3] = new Array();
+pions[3][0] = 0;
+pions[3][1] = -2;
+pions[3][2] = 2;
+
+pions[4] = new Array();
+pions[4][0] = 0;
+pions[4][1] = 4;
+pions[4][2] = 2;
+
+pions[5] = new Array();
+pions[5][0] = 1;
+pions[5][1] = 0;
+pions[5][2] = 2;
+
+pions[6] = new Array();
+pions[6][0] = 2;
+pions[6][1] = 0;
+pions[6][2] = 2;
+
+pions[7] = new Array();
+pions[7][0] = 2;
+pions[7][1] = 2;
+pions[7][2] = 2;
+
+pions[8] = new Array();
+pions[8][0] = 3;
+pions[8][1] = -4;
+pions[8][2] = 2;
+
+pions[9] = new Array();
+pions[9][0] = 3;
+pions[9][1] = 0;
+pions[9][2] = 2;
+
+pions[10] = new Array();
+pions[10][0] = 3;
+pions[10][1] = 1;
+pions[10][2] = 2;
+
+pions[11] = new Array();
+pions[11][0] = 4;
+pions[11][1] = -3;
+pions[11][2] = 2;
+
+pions[12] = new Array();
+pions[12][0] = 2;
+pions[12][1] = 1;
+pions[12][2] = 2;
+
+pions[13] = new Array();
+pions[13][0] = 1;
+pions[13][1] = 1;
+pions[13][2] = 2;
+
+pions[14] = new Array();
+pions[14][0] = 1;
+pions[14][1] = 3;
+pions[14][2] = 2;
+
+pions[15] = new Array();
+pions[15][0] = 0;
+pions[15][1] = 2;
+pions[15][2] = 2;
+
+pions[16] = new Array();
+pions[16][0] = 0;
+pions[16][1] = 3;
+pions[16][2] = 2;
+
+pions[17] = new Array();
+pions[17][0] = 0;
+pions[17][1] = 1;
+pions[17][2] = 1;
+
+pions[18] = new Array();
+pions[18][0] = -1;
+pions[18][1] = 1;
+pions[18][2] = 1;
+
+//la legion -1 est le laurier
+pions[19] = new Array();
+pions[19][0] = -2;
+pions[19][1] = -3;
+pions[19][2] = -1;
+
+pions[20] = new Array();
+pions[20][0] = -3;
+pions[20][1] = -3;
+pions[20][2] = 1;
+
+pions[21] = new Array();
+pions[21][0] = -2;
+pions[21][1] = -2;
+pions[21][2] = 1;
+
+var armor = new Array();
+
+armor[0] = new Array();
+armor[0][0] = 0;
+armor[0][1] = -5;
+
+armor[1] = new Array();
+armor[1][0] = -3;
+armor[1][1] = -1;
+
+armor[2] = new Array();
+armor[2][0] = -3;
+armor[2][1] = -2;
+
+armor[3] = new Array();
+armor[3][0] = 0;
+armor[3][1] = 4;
+
+armor[4] = new Array();
+armor[4][0] = -3;
+armor[4][1] = -4;
+
+var legions = new Array();
+legions[0] = new Array();
+legions[0][0] = "#FF0000";
+legions[0][1] = "hexagon";
+
+legions[1] = new Array();
+legions[1][0] = "#00FF00";
+legions[1][1] = "hexagon";
+
+legions[2] = new Array();
+legions[2][0] = "#0000FF";
+legions[2][1] = "square";
+
+$("#board").boardCreate(6, pions, legions, 2, armor);
+</script>
+
+</body>
+</html>

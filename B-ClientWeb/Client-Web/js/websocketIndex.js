@@ -70,6 +70,7 @@ function process(evt)
 	// ATTENTION NOM DE COMMANDE NON DEFINITIVE !!!
 	else if(command == "game_turn")
 	{
+		save_game_turn = data;
 		// Qu'on soit n'importe où, ou qu'on recharge la page principale pour arriver en jeu (cas pour un nouveau tour, un début de partie voir une reconnexion)
 		reloadContent(sitePath + "/index.php?script=1&page=game");
 	}
