@@ -17,12 +17,16 @@ public class MainGr extends Game implements UpdateListener
 
     @Override
     public void create() {
+    	setScreen(new GameScreen(this));
+    	
+    	//Runnable isLogged = new Runnable();
+    	
     	setCli(null);
     	try
 		{
     		this.cli = Client.getInstance();
 	    	this.cli.getInterfaces().add(this);
-	    	
+	    	//setScreen(new GameScreen(this));
 			setScreen(new LogScreen(this));
 		}
 		catch (URISyntaxException e)
@@ -30,7 +34,8 @@ public class MainGr extends Game implements UpdateListener
 			e.printStackTrace();
 		}
     }
-
+    
+    
 	private void setCli(Client instance) {
 		// TODO Auto-generated method stub
 		System.out.println("Accès engine 1");
@@ -46,8 +51,8 @@ public class MainGr extends Game implements UpdateListener
 	public void userUpdate() {
 		System.out.println("Accès engine 3");
 		
-    	GameScreen alpha = new GameScreen(this);
-        this.setScreen(alpha);   
+		setScreen(new GameScreen(this));
+		//setScreen(new MenuScreen(this)); 
 	}
 
 	@Override
