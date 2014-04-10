@@ -17,16 +17,11 @@ public class MainGr extends Game implements UpdateListener
 
     @Override
     public void create() {
-    	setScreen(new GameScreen(this));
-    	
-    	//Runnable isLogged = new Runnable();
-    	
     	setCli(null);
     	try
 		{
     		this.cli = Client.getInstance();
 	    	this.cli.getInterfaces().add(this);
-	    	//setScreen(new GameScreen(this));
 			setScreen(new LogScreen(this));
 		}
 		catch (URISyntaxException e)
@@ -94,5 +89,12 @@ public class MainGr extends Game implements UpdateListener
 
 	public Client getCli() {
 		return cli;
+	}
+
+
+	@Override
+	public void logOut() {
+		// TODO Auto-generated method stub
+		
 	}
 }

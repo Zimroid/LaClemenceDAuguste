@@ -25,10 +25,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import auguste.client.command.client.*;
 
 public class LogScreen implements Screen {
-    Skin skin;
+	private String error_message = "";
+	
+	Skin skin;
     Stage stage;
     SpriteBatch batch;
-     
+    
     MainGr g;
     
     /*
@@ -117,6 +119,7 @@ public class LogScreen implements Screen {
             	{
 					e.printStackTrace();
 					System.out.println("Exception lors de la connexion ...");
+					error_message = "Erreur : Connexion perdue ...";
 				}
             }
         });
@@ -136,7 +139,7 @@ public class LogScreen implements Screen {
         skin.getFont("default").draw(batch, "Pass :", 100, 340);
         
         skin.getFont("default").setColor(1.0f, 0.0f, 0.0f, 1.0f); // Couleur rouge
-        skin.getFont("default").draw(batch, "Erreur :", 100, 520);
+        skin.getFont("default").draw(batch, error_message, 100, 520);
         batch.end();
         
         Table.drawDebug(stage);

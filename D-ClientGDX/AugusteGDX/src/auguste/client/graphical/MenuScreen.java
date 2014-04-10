@@ -49,7 +49,7 @@ public class MenuScreen implements Screen {
 
         // Définition du skin
         skin = new Skin();
-        /*
+        
         // Génération texture pixmap
         Pixmap pixmap = new Pixmap(100, 100, Format.RGBA8888);
         pixmap.setColor(Color.LIGHT_GRAY);
@@ -67,9 +67,9 @@ public class MenuScreen implements Screen {
         textButtonStyle.down 	= skin.newDrawable("btn", Color.DARK_GRAY);
         textButtonStyle.font 	= skin.getFont("default");
         skin.add("btn", textButtonStyle);
-        */
+        
         // Création du bouton        
-        final TextButton btnCreate = new TextButton("Créer une partie", skin);
+        final TextButton btnCreate = new TextButton("Créer une partie", skin, "btn");
         btnCreate.setSize(400, 100);
         btnCreate.setPosition(550, 150);
         
@@ -101,11 +101,11 @@ public class MenuScreen implements Screen {
     {
     	Gdx.gl.glClearColor(0.9f, 0.9f, 0.9f, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-        /*
+        
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
         
-        Table.drawDebug(stage);*/
+        Table.drawDebug(stage);
     }
  
     @Override
