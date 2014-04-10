@@ -14,7 +14,6 @@ public class Main
 	{		
         Client c = Client.getInstance();
         c.getInterfaces().add(new CSL());
-        c.getClientSocket().connect();
         for(UpdateListener ul : c.getInterfaces())
         {
             if(ul instanceof CSL)

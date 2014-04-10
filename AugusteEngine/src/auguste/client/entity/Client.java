@@ -37,6 +37,7 @@ public class Client
         this.interfaces = new ArrayList<>();
         this.chatMessageReceived = new LinkedList<>();
         this.games = new ArrayList<>();
+        this.socket.connect();
     }
     
     public static Client getInstance() throws URISyntaxException
