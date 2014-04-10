@@ -1,25 +1,35 @@
-function gameCreate()
+function gameCreate(arg)
 {
 	var gameName = htmlspecialchars($("#gameName").val());
 
 	if(gameName != "")
     {
-        var json = JSON.stringify(
+    	if (arg == 'defaut')
+    	{
+	        var type = "fast";
+        }
+        else
+    	{
+	        var type = "normal";
+        }
+		var json = JSON.stringify(
 		{
-            "command": "ROOM_CREATE",
-            "game_name": gameName
-        });
-
+	        "command": "ROOM_CREATE",
+	        "game_name": gameName,
+	        "game_type": type
+	    });
         $("#message").val("");
         sendText(json);
     }
 }
 
-function gameStart()
+function gameStart(room_id)
 {
 	var json = JSON.stringify(
 	{
-        "command": "GAME_START"
+        "command": "GAME_START",
+        "room_id": room_id
+        
     });
 
     sendText(json);
@@ -74,18 +84,18 @@ function gameConfig()
 				if ($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val() != null)
 				{
 					// id du joueur
-					stringJSON += '{"player_user_id":' + $('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val() + ',"legions":[';
+					stringJSON += '{"player_user_id":' + parseInt($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val(),10) + ',"legions":[';
 					// nombre de légions du joueur
 					nbrLegion += $('#player' + nbrTeam + '_' + nbrPlayer).children("[name='legion_number']").val();
 					alert(nbrLegion);
 					for (var i = 0 ; i < nbrLegion ; i++)
 					{
 						// forme des pions du joueur
-						stringJSON += '{"legion_shape": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children("[name='pawn']").val() + '",';
+						stringJSON += '{"legion_shape": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children("[name='pawn']").attr(name) + '",';
 						// couleur des pions du joueur
-						stringJSON += '"legion_color": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children("[name='color']").val() + '",';
+						stringJSON += '"legion_color": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children("[name='color']").attr(name) + '",';
 						// position sur le plateau du joueur
-						stringJSON += '"legion_position": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children("[name='position']").val() + '"}';
+						stringJSON += '"legion_position": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children("[name='position']").attr(name) + '"}';
 						if ((i + 1) < nbrLegion)
 						{
 							stringJSON += ',';
@@ -95,21 +105,21 @@ function gameConfig()
 				}
 				else
 				{
-					// supprimer la virgule de l'élément suivant pouvant provoquer une erreur (vu que l'élément suivant n'existe pas)
-					if (stringJSON.charAt(stringJSON.length-1) == ',')
-					{
-						stringJSON = stringJSON.substring(0,stringJSON.length-1);
-					}
+					stringJSON += '{"player_user_id": 0, "legions" : []}';
+				}
+				if ((nbrPlayer + 1) <= $('#player' + nbrTeam + '_' + nbrPlayer).children('[name="player"]').length)
+				{
+					stringJSON += ',';
 				}
 			}
 			// il n'y a plus de joueurs dans cette team
 			else
 			{
+				if ((nbrPlayer + 1) <= $('#player' + nbrTeam + '_' + nbrPlayer).children('[name="player"]').length)
+				{
+					stringJSON += ',';
+				}
 				break;
-			}
-			if ((nbrPlayer + 1) <= $('[name="player"]').length)
-			{
-				stringJSON += ',';
 			}
 		}
 		stringJSON += ']}';
@@ -121,12 +131,17 @@ function gameConfig()
 		nbrPlayer = 0;
 	}
 	stringJSON += ']}';
-    
+   
     // envoi de la config
     alert(stringJSON);
 	var json = JSON.stringify(JSON.parse(stringJSON));
     
     sendText(json);
+}
+
+function gameConfigFast()
+{
+	
 }
 
 function gameList(argument)
@@ -201,17 +216,17 @@ function newPlayer(team, player)
     //select pour la forme du pion
     var selForm = $("<select name='pawn' class='" + team + "'></select>");
     //options pour le selForm
-    var optForm = $("<option>Carré</option>");
-    var optForm2 = $("<option>Cercle</option>");
-    var optForm3 = $("<option>Triangle</option>");
+    var optForm = $("<option name='square'>Carré</option>");
+    var optForm2 = $("<option name='circle'>Cercle</option>");
+    var optForm3 = $("<option name='triangle'>Triangle</option>");
     //label pour la color
     var lblColor = $("<label>Couleur du pion</label>");
     //select pour la color
     var selColor = $("<select name='color' class='" + team + "'></select>");
     //options pour la color
-    var optColor = $("<option name='1'>Rouge</option>");
-    var optColor2 = $("<option name='2'>Vert</option>");
-    var optColor3 = $("<option name='3'>Bleu</option>");
+    var optColor = $("<option name='#FF0000'>Rouge</option>");
+    var optColor2 = $("<option name='#00FF00'>Vert</option>");
+    var optColor3 = $("<option name='#0000FF'>Bleu</option>");
     //label pour la position sur le plateau
     var lblPosit = $("<label>Position sur le plateau</label>");
     //select pour la position sur le plateau
