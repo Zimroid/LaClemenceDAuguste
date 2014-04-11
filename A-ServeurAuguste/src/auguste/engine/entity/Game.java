@@ -117,8 +117,8 @@ public class Game
     public Legion applyActions()
     {
         calculateMoves();
-        Legion res = applyMoves();
-        if(res == null)
+        winning = applyMoves();
+        if(winning == null)
         {
             calculateTenailles();
             applyTenailles();
@@ -412,10 +412,19 @@ public class Game
         int res = p1.isArmored()?2:1;
         
         Pawn p = getCell(p1.getCell(),orientation).getPawn();
+        Cell c;
         while(p != null && p instanceof Soldier && p.getLegion().getPlayer().getTeam() == p1.getLegion().getPlayer().getTeam())
         {
             res += 1;
-            p = getCell(p.getCell(),orientation).getPawn();
+            c = getCell(p.getCell(),orientation);
+            if(c != null)
+            {
+                p = c.getPawn();
+            }
+            else
+            {
+                p = null;
+            }
         }
         
         return res;

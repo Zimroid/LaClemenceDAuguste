@@ -59,7 +59,12 @@ public class AugusteTests {
         g.initBoard();
         showBoard(b);
         
-        g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-4,-4)).getPawn(),b.getCell(new Point(-2,-2))),null));
+        g.addAction(new Action(lFour,new Movement(b.getCell(new Point(-4,-1)).getPawn(),b.getCell(new Point(-4,-2))),null));
+        g.applyActions();
+        g.nextTurn();
+        showBoard(b);
+        
+        /*g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-4,-4)).getPawn(),b.getCell(new Point(-2,-2))),null));
         g.addAction(new Action(lFour,new Movement(b.getCell(new Point(-4,0)).getPawn(),b.getCell(new Point(-2,0))),null));
         g.addAction(new Action(lSix,new Movement(b.getCell(new Point(0,-3)).getPawn(),b.getCell(new Point(0,-2))),null));
         g.applyActions();
@@ -106,7 +111,7 @@ public class AugusteTests {
         g.addAction(new Action(lFour,new Movement(b.getCell(new Point(-3,0)).getPawn(),b.getCell(new Point(-4,0))),null));
         System.out.println(g.applyActions());
         g.nextTurn();
-        showBoard(b);
+        showBoard(b);*/
     }
     
     private static void showBoard(Board b){
