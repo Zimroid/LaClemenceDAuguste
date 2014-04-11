@@ -25,6 +25,7 @@ import auguste.engine.entity.pawn.Laurel;
 import auguste.engine.entity.pawn.Pawn;
 import auguste.engine.entity.pawn.Soldier;
 import auguste.engine.entity.pawn.Wall;
+import auguste.engine.ia.IA;
 import auguste.engine.turnData.Battle;
 import auguste.engine.turnData.Move;
 import auguste.engine.turnData.Tenaille;
@@ -47,6 +48,8 @@ public class Game
     private final ArrayList<Action> actions;
     private GameTimer timer;
     private int turn = 1;
+    private Legion winning = null;
+    private IA ia;
     
     // Variables pour l'affichage client
     private final GameListener listener;
@@ -75,6 +78,7 @@ public class Game
         this.tenailles = new ArrayList<>();
         this.battles = new ArrayList<>();
         //this.timer = new GameTimer(this,turnDuration);
+        this.ia = new IA(this);
     }
     
     public Game(int turnDuration)
@@ -127,8 +131,26 @@ public class Game
             this.actions.clear();
             //this.timer = new GameTimer(this,turnDuration);
             //this.timer.start();
+            (new Thread()
+            {
+                @Override
+                public void run()
+                {
+                    Game.this.applyBots();
+                }
+            }).start();
         }
-        return res;
+        return winning;
+    }
+
+    private void applyBots() {
+        for(Player p : players)
+        {
+            if(p instanceof Bot)
+            {
+                actions.addAll(ia.activateBot((Bot)p));
+            }
+        }
     }
     
     /**
