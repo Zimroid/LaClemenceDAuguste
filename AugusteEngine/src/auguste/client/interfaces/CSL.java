@@ -304,16 +304,19 @@ public class CSL implements UpdateListener
         
         res.put(CommandClient.COMMAND, CommandClient.GAME_CONFIG);
         res.put(CommandClient.ROOM_ID, params.get(CommandClient.ROOM_ID));
-        res.put(CommandClient.GAME_NAME, params.get(CommandClient.GAME_NAME));
-        res.put(CommandClient.PLAYER_NUMBER, params.get(CommandClient.PLAYER_NUMBER));
-        res.put(CommandClient.BOARD_SIZE, params.get(CommandClient.BOARD_SIZE));
+        res.put(CommandClient.GAME_NAME, "Un nom de partie");
+        res.put(CommandClient.PLAYER_NUMBER, 6);
+        res.put(CommandClient.BOARD_SIZE, 12);
+        res.put(CommandClient.GAME_TURN_DURATION, 25);
         
         return res;
     }
 
     @Override
-    public void gameTurnUpdate(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void gameTurnUpdate(int id) 
+    {
+    	System.out.println("gameTurnUpdate id : " + id);
+    	this.client.getGame(id).getBoard().boardToConsole();
     }
     
     @Override

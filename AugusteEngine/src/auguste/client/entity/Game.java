@@ -224,7 +224,7 @@ public class Game
 	
 	public void sendTurn()
 	{
-		//Envoyer les Files aux UI et les appliquer pour dégager les morts
+		System.out.println("Envoyer les Files aux UI et les appliquer pour dégager les morts");
 		System.out.println("Game.sendTurn non défini");
 	}
 

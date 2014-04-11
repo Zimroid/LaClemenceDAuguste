@@ -156,11 +156,17 @@ public class GameTurn extends CommandServer
         for(int i = 0; i < board.length(); i++)
         {
         	JSONObject json = board.getJSONObject(i);
-
-        	String legionColor = json.getString(LEGION_COLOR);
-        	String legionShape = json.getString(LEGION_SHAPE);
+        	String legionColor = null;
+        	String legionShape = null;
         	
+        	if(json.has(LEGION_COLOR) && json.has(LEGION_SHAPE))
+        	{
+            	legionColor = json.getString(LEGION_COLOR);
+            	legionShape = json.getString(LEGION_SHAPE);
+        	}
+
         	Legion legion = game.getLegion(legionColor, legionShape);
+        	
         	UW uw = new UW(json.getInt(U),json.getInt(W));
         	Pawn p = null;
         	
@@ -187,7 +193,7 @@ public class GameTurn extends CommandServer
         	
         	b.getCell(uw).setPawn(p);
         	
-        	if(json.getBoolean(TENT))
+        	if(json.has(TENT) && json.getBoolean(TENT))
         	{
         		b.getCell(uw).putTent();
         	}

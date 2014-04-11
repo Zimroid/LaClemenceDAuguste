@@ -65,6 +65,7 @@ public class CommandClientManager
         catch(NullPointerException e)
         {
             System.out.println("Lol NullPointerException : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

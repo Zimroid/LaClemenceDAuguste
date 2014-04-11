@@ -18,12 +18,14 @@ package auguste.client.command.client;
 
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import auguste.client.engine.Legion;
+import auguste.client.engine.Player;
+import auguste.client.engine.Team;
 import auguste.client.entity.Game;
 
 /**
@@ -40,7 +42,6 @@ public class GameConfig extends CommandClient
     @Override
     public void buildJSON() throws JSONException
     {
-    	System.out.println("gameconfig");
         this.getJSON().put(COMMAND, GAME_CONFIG);
         this.getJSON().put(ROOM_ID, this.getArguments().get(ROOM_ID));
         this.getJSON().put(GAME_NAME, this.getArguments().get(GAME_NAME));
@@ -54,77 +55,75 @@ public class GameConfig extends CommandClient
         // Il semblerai que les teams ne s'initialisent pas correctement à voir dans le game_confirm
     	List<?> teams = game.getTeams();
         JSONArray jsonTeams = getJSONTeams(teams);
-        this.getJSON().put("teams", jsonTeams);
+        this.getJSON().put(TEAMS, jsonTeams);
         System.out.println(this.getJSON().toString());
     }
     
     private static JSONArray getJSONTeams(List<?> teams) throws JSONException
     {
-    	System.out.println("getTeams size:" + teams.size());
     	JSONArray res = new JSONArray();
     	
     	for(int i = 0; i < teams.size(); i++)
     	{
-    		List<?> players = (List<?>) teams.get(i);
-    		JSONArray jsonPlayers = getJSONPlayers(players);
-    		res.put(jsonPlayers);
+    		Team team = (Team) teams.get(i);
+    		List<Player> players = team.getPlayers();
+    		res.put(getJSONTeam(players));
     	}
     	
     	return res;
     }
     
-    private static JSONArray getJSONPlayers(List<?> players) throws JSONException
+    private static JSONObject getJSONTeam(List<Player> players) throws JSONException
     {
-    	System.out.println("getPlayers");
-    	JSONArray res = new JSONArray();
-    	
-    	for(int i = 0; i < players.size(); i++)
-    	{
-    		Map<?,?> player = (Map<?,?>) players.get(i);
-    		JSONObject jsonPlayer = getJSONPlayer(player);
-    		res.put(jsonPlayer);
-    	}
-    	
-    	return res;
-    }
-    
-    private static JSONObject getJSONPlayer(Map<?,?> player) throws JSONException
-    {
-    	System.out.println("getPlayer");
     	JSONObject res = new JSONObject();
     	
-    	int player_user_id = (Integer) player.get("player_user_id");
-    	List<?> legions = (List<?>) player.get("legions");
-    	JSONArray jsonLegions = getJSONLegions(legions);
-    	
-    	res.put("player_user_id", player_user_id);
-    	res.put("legions", jsonLegions);
+    	JSONArray jsonPlayers = getJSONPlayers(players);
+    	res.put("players", jsonPlayers);
     	
     	return res;
     }
     
-    private static JSONArray getJSONLegions(List<?> legions) throws JSONException
+    private static JSONArray getJSONPlayers(List<Player> players) throws JSONException
     {
-    	System.out.println("getLegions");
     	JSONArray res = new JSONArray();
     	
-    	for(Object obj : legions)
+    	for(Player player : players)
     	{
-    		Map<?,?> legion = (Map<?,?>) obj;
-    		JSONObject jsonLegion = getJSONLegion(legion);
-    		res.put(jsonLegion);
+    		res.put(getJSONPlayer(player));
     	}
     	
     	return res;
     }
     
-    private static JSONObject getJSONLegion(Map<?,?> legion) throws JSONException
+    private static JSONObject getJSONPlayer(Player player) throws JSONException
     {
-    	System.out.println("getLegion");
     	JSONObject res = new JSONObject();
     	
-    	res.put("legion_color", legion.get("legion_color"));
-    	res.put("legion_shape", legion.get("legion_shape"));
+    	res.put("player_user_id", player.getId());
+    	res.put("legions", getLegions(player.getLegions()));
+    	
+    	return res;
+    }
+    
+    private static JSONArray getLegions(List<Legion> legions) throws JSONException
+    {
+    	JSONArray res = new JSONArray();
+    	
+    	for(Legion legion : legions)
+    	{
+    		res.put(getLegion(legion));
+    	}
+    	
+    	return res;
+    }
+    
+    private static JSONObject getLegion(Legion legion) throws JSONException
+    {
+    	JSONObject res = new JSONObject();
+    	
+    	res.put("legion_color", legion.getColor());
+    	res.put("legion_shape", legion.getShape());
+    	res.put("legion_position", legion.getPosition());
     	
     	return res;
     }

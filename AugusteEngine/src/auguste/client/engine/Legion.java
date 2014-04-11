@@ -13,12 +13,23 @@ public class Legion
     private String color;
     private String shape;
     private int id;
+    private int position;
 	
 	public Legion(int id, Player player) 
 	{
 		this.player = player;
 		this.pawns = new ArrayList<>();
 		this.tabPawn = new HashMap<>();
+	}
+	
+	public int getPosition()
+	{
+		return this.position;
+	}
+	
+	public void setPosition(int pos)
+	{
+		this.position = pos;
 	}
 	
 	public List<Pawn> getPawns()
