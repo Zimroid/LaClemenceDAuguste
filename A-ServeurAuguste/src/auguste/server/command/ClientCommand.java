@@ -22,6 +22,7 @@ import auguste.server.User;
 import auguste.server.command.client.AccountCreate;
 import auguste.server.command.client.ChatSend;
 import auguste.server.command.client.GameConfiguration;
+import auguste.server.command.client.GameMove;
 import auguste.server.command.client.GameStart;
 import auguste.server.command.client.LogIn;
 import auguste.server.command.client.LogOut;
@@ -66,6 +67,7 @@ public abstract class ClientCommand
                 case ACCOUNT_CREATE:     command = new AccountCreate();     break;
                 case CHAT_SEND:          command = new ChatSend();          break;
                 case GAME_CONFIGURATION: command = new GameConfiguration(); break;
+                case GAME_MOVE:          command = new GameMove();          break;
                 case GAME_START:         command = new GameStart();         break;
                 case LOG_IN:             command = new LogIn();             break;
                 case LOG_OUT:            command = new LogOut();            break;
@@ -274,6 +276,7 @@ public abstract class ClientCommand
         ACCOUNT_CREATE,
         CHAT_SEND,
         GAME_CONFIGURATION,
+        GAME_MOVE,
         GAME_START,
         LOG_IN,
         LOG_OUT,

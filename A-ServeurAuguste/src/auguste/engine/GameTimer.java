@@ -17,12 +17,16 @@
 package auguste.engine;
 
 import auguste.engine.entity.Game;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
  * @author Zwyk
  */
 public class GameTimer extends Thread {
+    
+    private static final ArrayList<GameTimer> threads = new ArrayList<>();
     
     private final Game game;
     private final long duration;
@@ -34,14 +38,22 @@ public class GameTimer extends Thread {
     }
     
     @Override
-    public synchronized void run()
+    public void run()
     {
+        for(GameTimer thread : GameTimer.threads) thread.interrupt();
+        GameTimer.threads.clear();
+        GameTimer.threads.add(this);
         try
         {
-            this.wait(duration);
+            Thread.sleep(duration);
         } catch (InterruptedException ex)
         {
         }
-        if(game.getListener() != null) game.getListener().onTurnEnd();
+        finally
+        {
+            
+            System.out.println("lol at " + (new Date()).getTime());
+            if(game.getListener() != null) game.getListener().onTurnEnd();
+        }
     }
 }

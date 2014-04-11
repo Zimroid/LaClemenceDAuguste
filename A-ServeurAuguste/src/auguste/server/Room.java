@@ -123,8 +123,8 @@ public class Room implements GameListener
     {
         this.game = new Game(this, this.configuration.getLong("game_turn_duration"));
         this.game.setTurnDuration(this.configuration.getLong("game_turn_duration"));
-        this.game.setBoard(new Board(this.configuration.getInt("game_board_size"), this.game));
         for (Player player : this.playing.keySet()) this.game.addPlayer(player);
+        this.game.setBoard(new Board(this.configuration.getInt("game_board_size")));
         this.game.initBoard();
         this.broadcast((new GameTurn(this)).toString());
     }
@@ -137,26 +137,17 @@ public class Room implements GameListener
      */
     public void addAction(User user, JSONObject json) throws JSONException
     {
-        Legion legion = null;
-        for (Entry<Player, Integer> entry : this.playing.entrySet())
-        {
-            if (entry.getValue() == user.getId())
-            {
-                legion = entry.getKey().getLegions().get(json.getInt("legion_id"));
-            }
-        }
-        
         Cell cell = this.game.getBoard().getCell(new Point(json.getInt("start_u"), json.getInt("start_w")));
         Action action = null;
         if (cell != null)
         {
-            if (cell.getPawn() != null && cell.getPawn().getLegion() == legion)
+            if (cell.getPawn() != null && cell.getPawn().getLegion() != null && this.playing.get(cell.getPawn().getLegion().getPlayer()) == user.getId())
             {
                 Cell newCell = this.game.getBoard().getCell(new Point(json.getInt("end_u"), json.getInt("end_w")));
                 if (newCell != null)
                 {
                     Movement movement = new Movement(cell.getPawn(), newCell);
-                    action = new Action(legion, movement, null);
+                    action = new Action(cell.getPawn().getLegion(), movement, null);
                 }
             }
         }
@@ -170,7 +161,8 @@ public class Room implements GameListener
     @Override
     public void onTurnEnd()
     {
-        this.broadcast((new GameTurn(this)).toString());
+        String message = (new GameTurn(this)).toString();
+        this.broadcast(message);
     }
     
     /**
@@ -180,6 +172,9 @@ public class Room implements GameListener
      */
     public void addTurnData(JSONObject json) throws JSONException
     {
+        // Ajout du numéro de tour
+        json.put("game_turn_number", this.game.getTurn());
+        
         // Ajout du plateau
         JSONArray boardData = new JSONArray();
         JSONObject cellData;
@@ -194,8 +189,11 @@ public class Room implements GameListener
                 
                 if (cell.getTent() != null)
                 {
-                    cellData.put("tent_color", cell.getTent().getColor().toString());
+                    cellData.put("tent_color", cell.getTent().getColor());
                     cellData.put("tent_shape", cell.getTent().getShape());
+                    cellData.put("tent_legion", cell.getTent().getPlayer().getLegions().indexOf(cell.getTent()));
+                    cellData.put("tent_player", cell.getTent().getPlayer().getTeam().getPlayers().indexOf(cell.getTent().getPlayer()));
+                    cellData.put("tent_team", this.teams.indexOf(cell.getTent().getPlayer().getTeam()));
                 }
 
                 if (cell.getPawn() instanceof Soldier)
@@ -203,6 +201,9 @@ public class Room implements GameListener
                     cellData.put("legion_armor", ((Soldier)cell.getPawn()).isArmored());
                     cellData.put("legion_color", cell.getPawn().getLegion().getColor());
                     cellData.put("legion_shape", cell.getPawn().getLegion().getShape());
+                    cellData.put("pawn_legion", ((Soldier)cell.getPawn()).getLegion().getPlayer().getLegions().indexOf(((Soldier)cell.getPawn()).getLegion()));
+                    cellData.put("pawn_player", ((Soldier)cell.getPawn()).getLegion().getPlayer().getTeam().getPlayers().indexOf(((Soldier)cell.getPawn()).getLegion().getPlayer()));
+                    cellData.put("pawn_team", this.teams.indexOf(((Soldier)cell.getPawn()).getLegion().getPlayer().getTeam()));
                 }
                 boardData.put(cellData);
             }
@@ -213,6 +214,9 @@ public class Room implements GameListener
                 cellData.put("w", cell.getP().getY());
                 cellData.put("tent_color", cell.getTent().getColor());
                 cellData.put("tent_shape", cell.getTent().getShape());
+                cellData.put("tent_legion", cell.getTent().getPlayer().getLegions().indexOf(cell.getTent()));
+                cellData.put("tent_player", cell.getTent().getPlayer().getTeam().getPlayers().indexOf(cell.getTent().getPlayer()));
+                cellData.put("tent_team", this.teams.indexOf(cell.getTent().getPlayer().getTeam()));
                 boardData.put(cellData);
             }
         }
@@ -483,6 +487,7 @@ public class Room implements GameListener
                         legionData = new JSONObject();
                         legionData.put("legion_color", legion.getColor());
                         legionData.put("legion_shape", legion.getShape());
+                        legionData.put("legion_position", legion.getPosition());
                         legionsToAdd.put(legionData);
                     }
                     playerData.put("legions", legionsToAdd);

@@ -5,7 +5,7 @@
             <url>src/auguste/server/Room.java</url>
             <bookmark id="1">
                 <name/>
-                <line>102</line>
+                <line>103</line>
                 <key/>
             </bookmark>
         </file>
@@ -13,10 +13,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/engine/entity/Game.java</file>
-            <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/server/command/client/AccountCreate.java</file>
             <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/server/Room.java</file>
-            <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/tests/AugusteTests.java</file>
-            <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/server/command/client/GameMove.java</file>
+            <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/engine/GameTimer.java</file>
+            <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/server/command/server/GameTurn.java</file>
         </group>
     </open-files>
 </project-private>
