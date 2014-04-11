@@ -139,15 +139,20 @@ public class Room implements GameListener
     {
         Cell cell = this.game.getBoard().getCell(new Point(json.getInt("start_u"), json.getInt("start_w")));
         Action action = null;
+        System.out.println("lol1");
         if (cell != null)
         {
+        System.out.println("lol2");
             if (cell.getPawn() != null && cell.getPawn().getLegion() != null && this.playing.get(cell.getPawn().getLegion().getPlayer()) == user.getId())
             {
+        System.out.println("lol3");
                 Cell newCell = this.game.getBoard().getCell(new Point(json.getInt("end_u"), json.getInt("end_w")));
                 if (newCell != null)
                 {
+        System.out.println("lol4");
                     Movement movement = new Movement(cell.getPawn(), newCell);
                     action = new Action(cell.getPawn().getLegion(), movement, null);
+        System.out.println("lol5");
                 }
             }
         }
@@ -392,7 +397,6 @@ public class Room implements GameListener
                     
                     // Instanciation du joueur
                     Player newPlayer = new Player();
-                    newPlayer.setGame(this.game);
                     newPlayer.setTeam(newTeam);
                     
                     // Attribution du joueur à l'utilisateur
