@@ -50,7 +50,7 @@ public class AugusteTests {
         pTwo.addLegion(lSix);
         lSix.setPosition(5);
         
-        Game g = new Game(1);
+        Game g = new Game(2000);
         g.addPlayer(pOne);
         g.addPlayer(pTwo);
         Board b = new Board(5);
