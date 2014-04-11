@@ -72,7 +72,7 @@ public class AugusteTests {
         g.nextTurn();
         showBoard(b);
         
-        g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-2,-2)).getPawn(),b.getCell(new Point(-1,-1))),null));
+        /*g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-2,-2)).getPawn(),b.getCell(new Point(-1,-1))),null));
         g.applyActions();
         g.nextTurn();
         showBoard(b);

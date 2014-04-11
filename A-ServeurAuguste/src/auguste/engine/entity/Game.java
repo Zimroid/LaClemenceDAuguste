@@ -256,7 +256,7 @@ public class Game
                     orientation = getOrientation(p.getCell(),s.getCell());
                     tc = s.getCell();
                     wall = false;
-                    while(!wall && tc != null && tc.getPawn() != null && tc.getPawn() instanceof Soldier && tc.getPawn().getLegion().getPlayer().getTeam() != p.getLegion().getPlayer().getTeam())
+                    while(!wall && tc != null && tc.getPawn() != null && tc.getPawn() instanceof Soldier && tc.getPawn().getLegion().getPlayer().getTeam() == s.getLegion().getPlayer().getTeam())
                     {
                         tc = getCell(tc,orientation);
                         if(tc != null && tc.getPawn() != null && tc.getPawn() instanceof Wall)
@@ -270,7 +270,7 @@ public class Game
                         {
                             tc = getCell(tc,orientation);
                         }
-                        if(tc != null && tc.getPawn() != null && tc.getPawn() instanceof Soldier && tc.getPawn().getLegion().getPlayer().getTeam() == p.getLegion().getPlayer().getTeam())
+                        if(tc != null && tc.getPawn() != null && tc.getPawn() instanceof Soldier && tc.getPawn().getLegion().getPlayer().getTeam() != s.getLegion().getPlayer().getTeam())
                         {
                             exists = false;
                             for(Tenaille t : tenailles)
