@@ -22,6 +22,8 @@ var keys = new Array();
 var depStart;
 //Déplacement arrivé
 var depEnd;
+//Le groupe du pions cliqué
+var actuGroup;
 
 // choppe toutes les coordonnées des cases adjacente à la case donné
 function getProx(pawnX, pawnY)
@@ -105,7 +107,7 @@ function getZoneProx(pawnX, pawnY, group)
 		comp = res[i][0] + ',' + res[i][1];
 		if(jQuery.inArray(comp, pawn) != -1) {
 			if(jQuery.inArray(comp, group) == -1) {
-				if(getPawns(getXVirtual(res[i][0], res[i][1])-size+1, getYVirtual(res[i][0], res[i][1], getXVirtual(res[i][0], res[i][1]))-size+1)[2] == playerGroup) {
+				if(getPawns(getXVirtual(res[i][0], res[i][1])-size+1, getYVirtual(res[i][0], res[i][1], getXVirtual(res[i][0], res[i][1]))-size+1)[2] == actuGroup) {
 					group.push(res[i].join());
 					var xVirtual = getXVirtual(res[i][0], res[i][1]);
 					var yVirtual = getYVirtual(res[i][0], res[i][1], xVirtual);
@@ -285,7 +287,16 @@ function harden()
 					rotate: 0,
 					click: function(layer) {
 						depEnd = [layer.pawnX-size+1, layer.pawnY-size+1];
-						alert(depStart + ' -> ' + depEnd);
+						//alert(depStart + ' -> ' + depEnd);
+						var json = JSON.stringify(
+						{
+					        "command": "GAME_MOVE",
+					        "u_start": depStart[0],
+					        "w_start": depStart[1],
+					        "u_end": depEnd[0],
+					        "w_end": depEnd[1]
+					    });
+						sendText(json);
 					}
 				});
 			}
@@ -299,6 +310,9 @@ function harden()
 				if(pawns[i][2] >= 0) {
 					if(legions[group][1] == 'square') {
 						shape = 4;
+					}
+					else if(legions[group][1] == 'triangle') {
+						shape = 3;
 					}
 					else {
 						shape = 6;
@@ -461,8 +475,18 @@ jQuery.fn.extend({
 						sides: 6,
 						rotate: 90,
 						click: function(layer) {
-							depEnd = [layer.coordX-size+1, layer.coordY-size+1];
-							alert(depStart + ' -> ' + depEnd);
+						depEnd = [layer.coordX-size+1, layer.coordY-size+1];
+						var json = JSON.stringify(
+						{
+					        "command": "GAME_MOVE",
+					        "room_id": save_game_config.room_id,
+					        "start_u": depStart[0],
+					        "start_w": depStart[1],
+					        "end_u": depEnd[0],
+					        "end_w": depEnd[1]
+					    });
+					    //alert(depStart+" -> "+depEnd);
+						sendText(json);
 						}
 					});
 				}
@@ -486,7 +510,17 @@ jQuery.fn.extend({
 						rotate: 90,
 						click: function(layer) {
 							depEnd = [layer.coordX-size+1, layer.coordY-size+1];
-							alert(depStart + ' -> ' + depEnd);
+							var json = JSON.stringify(
+						{
+					        "command": "GAME_MOVE",
+					        "room_id": save_game_config.room_id,
+					        "start_u": depStart[0],
+					        "start_w": depStart[1],
+					        "end_u": depEnd[0],
+					        "end_w": depEnd[1]
+					    });
+					    //alert(depStart+" -> "+depEnd);
+						sendText(json);
 						}
 					});
 				}
@@ -512,6 +546,9 @@ jQuery.fn.extend({
 
 			 	if(legions[pawns[i][2]][1] == 'square') {
 					shape = 4;
+				}
+				else if(legions[pawns[i][2]][1] == 'triangle') {
+					shape = 3;
 				}
 				else {
 					shape = 6;
@@ -541,6 +578,7 @@ jQuery.fn.extend({
 					t.boardCreate(size, pawns, legions);*/
 					//Rajouter cette condition pour ne controler qu'une légion
 					//if(layer.group == playerGroup) {
+						actuGroup = layer.group;
 						depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
 						depEnd = null;
 						t.restoreCanvas();
@@ -585,6 +623,7 @@ jQuery.fn.extend({
 						/*t.clearCanvas();
 						t.boardCreate(size, pawns, legions);*/
 						//if(layer.group == playerGroup) {
+							actuGroup = layer.group;
 							depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
 							depEnd = null;
 							t.restoreCanvas();

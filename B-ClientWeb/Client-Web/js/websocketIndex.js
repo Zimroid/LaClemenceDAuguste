@@ -23,6 +23,7 @@ function process(evt)
 	// Reussite connexion utilisateur
 	else if(command == "log_confirm")
 	{
+		myId = data.user_id;
 		myName = data.user_name;
 		reloadChat(sitePath + "/index.php?script=1&page=connect&user=" + data.user_name);
 	}
@@ -104,7 +105,7 @@ function process(evt)
 				$("[name='playerName']").append("<option value='" + data.users[i].user_id + "'>" + data.users[i].user_name + "</option>");
 			}
 		}
-		else if (mode == 'fast' && data.users[1] && myName == data.users[1].user_name)
+		else if (mode == 'fast' && data.users[1] && myName == data.users[0].user_name)
 		{
 			save_game_config.command = "GAME_CONFIGURATION";
 			save_game_config.teams[0].players[0].player_user_id = data.users[0].user_id;
