@@ -25,6 +25,9 @@ function reloadContent(url)
 		{
 			pageContent = document.getElementById("mainPage");
 			pageContent.innerHTML = xhr.responseText;
+			if($("#board").length != 0) {
+				$("#board").initBoard(save_game_turn);
+			}
 		}
 	}
 	

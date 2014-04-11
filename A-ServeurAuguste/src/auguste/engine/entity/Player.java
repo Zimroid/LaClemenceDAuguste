@@ -16,7 +16,6 @@
 
 package auguste.engine.entity;
 
-import auguste.server.User;
 import java.util.ArrayList;
 
 
@@ -30,7 +29,6 @@ public class Player
     private int num;
     private final ArrayList<Legion> legions;
     private Team team;
-    private Game game = null;
     
     /**
      * Instanciation d'un utilisateur avec les valeurs données.
@@ -86,22 +84,6 @@ public class Player
     {
         this.team = team;
         if(!this.team.getPlayers().contains(this)) this.team.addPlayer(this);
-    }
-
-    /**
-     * @return the game
-     */
-    public Game getGame()
-    {
-        return game;
-    }
-
-    /**
-     * @param game the game to set
-     */
-    public void setGame(Game game)
-    {
-        this.game = game;
     }
 
     /**
