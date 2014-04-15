@@ -106,7 +106,7 @@ public class AugusteTests {
         g.addAction(new Action(lFour,new Movement(b.getCell(new Point(-3,0)).getPawn(),b.getCell(new Point(-4,0))),null));
         System.out.println(g.applyActions());
         g.nextTurn();
-        showBoard(b);
+        showBoard(b);*/
     }
     
     private static void showBoard(Board b){
