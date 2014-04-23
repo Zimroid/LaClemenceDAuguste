@@ -23,6 +23,7 @@ function process(evt)
 	// Reussite connexion utilisateur
 	else if(command == "log_confirm")
 	{
+		myId = data.user_id;
 		myName = data.user_name;
 		reloadChat(sitePath + "/index.php?script=1&page=connect&user=" + data.user_name);
 	}

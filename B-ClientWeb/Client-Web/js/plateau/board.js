@@ -22,6 +22,8 @@ var keys = new Array();
 var depStart;
 //Déplacement arrivé
 var depEnd;
+//Le groupe du pions cliqué
+var actuGroup;
 
 // choppe toutes les coordonnées des cases adjacente à la case donné
 function getProx(pawnX, pawnY)
@@ -105,7 +107,7 @@ function getZoneProx(pawnX, pawnY, group)
 		comp = res[i][0] + ',' + res[i][1];
 		if(jQuery.inArray(comp, pawn) != -1) {
 			if(jQuery.inArray(comp, group) == -1) {
-				if(getPawns(getXVirtual(res[i][0], res[i][1])-size+1, getYVirtual(res[i][0], res[i][1], getXVirtual(res[i][0], res[i][1]))-size+1)[2] == playerGroup) {
+				if(getPawns(getXVirtual(res[i][0], res[i][1])-size+1, getYVirtual(res[i][0], res[i][1], getXVirtual(res[i][0], res[i][1]))-size+1)[2] == actuGroup) {
 					group.push(res[i].join());
 					var xVirtual = getXVirtual(res[i][0], res[i][1]);
 					var yVirtual = getYVirtual(res[i][0], res[i][1], xVirtual);
@@ -285,7 +287,16 @@ function harden()
 					rotate: 0,
 					click: function(layer) {
 						depEnd = [layer.pawnX-size+1, layer.pawnY-size+1];
-						alert(depStart + ' -> ' + depEnd);
+						//alert(depStart + ' -> ' + depEnd);
+						var json = JSON.stringify(
+						{
+					        "command": "GAME_MOVE",
+					        "u_start": depStart[0],
+					        "w_start": depStart[1],
+					        "u_end": depEnd[0],
+					        "w_end": depEnd[1]
+					    });
+						sendText(json);
 					}
 				});
 			}
@@ -299,6 +310,9 @@ function harden()
 				if(pawns[i][2] >= 0) {
 					if(legions[group][1] == 'square') {
 						shape = 4;
+					}
+					else if(legions[group][1] == 'triangle') {
+						shape = 3;
 					}
 					else {
 						shape = 6;
@@ -357,8 +371,9 @@ function keyPress(e)
 jQuery.fn.extend({
 	initBoard: function(data)
 	{
-		alert(JSON.stringify(data));
 		t = $(this);
+		//Ce tableau nous servira à savoir à quelle légion appartient un pions
+		var tabTypeLegion = new Array();
 		// tableau des pions
 		var pions = new Array();
 		// tableau des armures
@@ -370,188 +385,30 @@ jQuery.fn.extend({
 			// soldat
 			if (data.board[i].type == "auguste.engine.entity.pawn.soldier")
 			{
-				pions[i] = new Array();
-				pions[i][0] = data.board[i].u;
-				pions[i][1] = data.board[i].w;
-				pions[i][2] = data.board[i].pawn_legion + (data.board.pawn_legion * data.board.pawn_team);
-				if (!legions[pions[i][2]])
-				{
-					legions[pions[i][2]] = new Array();
+				var nLegion = jQuery.inArray(data.board[i].legion_shape + data.board[i].legion_color, tabTypeLegion);
+				//Dans se cas ce type de légion n'a pas encore été rencontré on l'ajoute au tableau
+				if(nLegion == -1) {
+					tabTypeLegion.push(data.board[i].legion_shape + data.board[i].legion_color);
+					nLegion = tabTypeLegion.length-1;
+
+					legions.push([data.board[i].legion_color, data.board[i].legion_shape]);
 				}
-				legions[pions[i][2]][0] = data.board[i].legion_color;
-				legions[pions[i][2]][1] = data.board[i].legion_shape;
+				pions.push([data.board[i].u, data.board[i].w, nLegion]);
 			}
 			// armure
 			else if (data.board[i].type == "auguste.engine.entity.pawn.armor")
 			{
-				armor[i] = new Array();
-				armor[i][0] = data.board[i].u;
-				armor[i][1] = data.board[i].w;
+				armor.push([data.board[i].u, data.board[i].w]);
 			}
 			// laurier
 			else if (data.board[i].type == "auguste.engine.entity.pawn.laurel")
 			{
-				pions[i] = new Array();
-				pions[i][0] = data.board[i].u;
-				pions[i][1] = data.board[i].w;
-				pions[i][2] = -1;
+				pions.push([data.board[i].u, data.board[i].w, -1]);
 			}
 		}
 		this.boardCreate(5, pions, legions, 0, armor);
-		
-/*var pions = new Array();
-
-pions[0] = new Array();
-pions[0][0] = -4;
-pions[0][1] = -4;
-pions[0][2] = 0;
-
-pions[1] = new Array();
-pions[1][0] = -3;
-pions[1][1] = -2;
-pions[1][2] = 1;
-
-pions[2] = new Array();
-pions[2][0] = -1;
-pions[2][1] = 0;
-pions[2][2] = 2;
-
-pions[3] = new Array();
-pions[3][0] = 0;
-pions[3][1] = -2;
-pions[3][2] = 2;
-
-pions[4] = new Array();
-pions[4][0] = 0;
-pions[4][1] = 4;
-pions[4][2] = 2;
-
-pions[5] = new Array();
-pions[5][0] = 1;
-pions[5][1] = 0;
-pions[5][2] = 2;
-
-pions[6] = new Array();
-pions[6][0] = 2;
-pions[6][1] = 0;
-pions[6][2] = 2;
-
-pions[7] = new Array();
-pions[7][0] = 2;
-pions[7][1] = 2;
-pions[7][2] = 2;
-
-pions[8] = new Array();
-pions[8][0] = 3;
-pions[8][1] = -4;
-pions[8][2] = 2;
-
-pions[9] = new Array();
-pions[9][0] = 3;
-pions[9][1] = 0;
-pions[9][2] = 2;
-
-pions[10] = new Array();
-pions[10][0] = 3;
-pions[10][1] = 1;
-pions[10][2] = 2;
-
-pions[11] = new Array();
-pions[11][0] = 4;
-pions[11][1] = -3;
-pions[11][2] = 2;
-
-pions[12] = new Array();
-pions[12][0] = 2;
-pions[12][1] = 1;
-pions[12][2] = 2;
-
-pions[13] = new Array();
-pions[13][0] = 1;
-pions[13][1] = 1;
-pions[13][2] = 2;
-
-pions[14] = new Array();
-pions[14][0] = 1;
-pions[14][1] = 3;
-pions[14][2] = 2;
-
-pions[15] = new Array();
-pions[15][0] = 0;
-pions[15][1] = 2;
-pions[15][2] = 2;
-
-pions[16] = new Array();
-pions[16][0] = 0;
-pions[16][1] = 3;
-pions[16][2] = 2;
-
-pions[17] = new Array();
-pions[17][0] = 0;
-pions[17][1] = 1;
-pions[17][2] = 1;
-
-pions[18] = new Array();
-pions[18][0] = -1;
-pions[18][1] = 1;
-pions[18][2] = 1;
-
-//la legion -1 est le laurier
-pions[19] = new Array();
-pions[19][0] = -2;
-pions[19][1] = -3;
-pions[19][2] = -1;
-
-pions[20] = new Array();
-pions[20][0] = -3;
-pions[20][1] = -3;
-pions[20][2] = 1;
-
-pions[21] = new Array();
-pions[21][0] = -2;
-pions[21][1] = -2;
-pions[21][2] = 1;
-
-var armor = new Array();
-
-armor[0] = new Array();
-armor[0][0] = 0;
-armor[0][1] = -5;
-
-armor[1] = new Array();
-armor[1][0] = -3;
-armor[1][1] = -1;
-
-armor[2] = new Array();
-armor[2][0] = -3;
-armor[2][1] = -2;
-
-armor[3] = new Array();
-armor[3][0] = 0;
-armor[3][1] = 4;
-
-armor[4] = new Array();
-armor[4][0] = -3;
-armor[4][1] = -4;
-
-var legions = new Array();
-legions[0] = new Array();
-legions[0][0] = "#FF0000";
-legions[0][1] = "hexagon";
-
-legions[1] = new Array();
-legions[1][0] = "#00FF00";
-legions[1][1] = "hexagon";
-
-legions[2] = new Array();
-legions[2][0] = "#0000FF";
-legions[2][1] = "square";
-
-t.boardCreate(6, pions, legions, 2, armor);*/
 	},
 	boardCreate: function(s, pawn, legion, nGroup, arm) {
-		//t = $(this);
-
 		oneHundredPercent(first);
 		first = false;
 
@@ -618,8 +475,18 @@ t.boardCreate(6, pions, legions, 2, armor);*/
 						sides: 6,
 						rotate: 90,
 						click: function(layer) {
-							depEnd = [layer.coordX-size+1, layer.coordY-size+1];
-							alert(depStart + ' -> ' + depEnd);
+						depEnd = [layer.coordX-size+1, layer.coordY-size+1];
+						var json = JSON.stringify(
+						{
+					        "command": "GAME_MOVE",
+					        "room_id": save_game_config.room_id,
+					        "start_u": depStart[0],
+					        "start_w": depStart[1],
+					        "end_u": depEnd[0],
+					        "end_w": depEnd[1]
+					    });
+					    //alert(depStart+" -> "+depEnd);
+						sendText(json);
 						}
 					});
 				}
@@ -643,7 +510,17 @@ t.boardCreate(6, pions, legions, 2, armor);*/
 						rotate: 90,
 						click: function(layer) {
 							depEnd = [layer.coordX-size+1, layer.coordY-size+1];
-							alert(depStart + ' -> ' + depEnd);
+							var json = JSON.stringify(
+						{
+					        "command": "GAME_MOVE",
+					        "room_id": save_game_config.room_id,
+					        "start_u": depStart[0],
+					        "start_w": depStart[1],
+					        "end_u": depEnd[0],
+					        "end_w": depEnd[1]
+					    });
+					    //alert(depStart+" -> "+depEnd);
+						sendText(json);
 						}
 					});
 				}
@@ -669,6 +546,9 @@ t.boardCreate(6, pions, legions, 2, armor);*/
 
 			 	if(legions[pawns[i][2]][1] == 'square') {
 					shape = 4;
+				}
+				else if(legions[pawns[i][2]][1] == 'triangle') {
+					shape = 3;
 				}
 				else {
 					shape = 6;
@@ -696,7 +576,9 @@ t.boardCreate(6, pions, legions, 2, armor);*/
 					//t.removeLayers();
 					/*t.clearCanvas();
 					t.boardCreate(size, pawns, legions);*/
-					if(layer.group == playerGroup) {
+					//Rajouter cette condition pour ne controler qu'une légion
+					//if(layer.group == playerGroup) {
+						actuGroup = layer.group;
 						depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
 						depEnd = null;
 						t.restoreCanvas();
@@ -715,7 +597,7 @@ t.boardCreate(6, pions, legions, 2, armor);*/
 							});
 						}
 						harden();
-					}
+					//}
 		/*var end = new Date().getTime();
 		alert(end - start);*/
 				}
@@ -740,7 +622,8 @@ t.boardCreate(6, pions, legions, 2, armor);*/
 						//t.removeLayers();
 						/*t.clearCanvas();
 						t.boardCreate(size, pawns, legions);*/
-						if(layer.group == playerGroup) {
+						//if(layer.group == playerGroup) {
+							actuGroup = layer.group;
 							depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
 							depEnd = null;
 							t.restoreCanvas();
@@ -759,7 +642,7 @@ t.boardCreate(6, pions, legions, 2, armor);*/
 								});
 							}
 							harden();
-						}
+						//}
 		/*var end = new Date().getTime();
 		alert(end - start);*/
 					}
