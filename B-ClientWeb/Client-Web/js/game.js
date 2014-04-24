@@ -210,7 +210,7 @@ function newPlayer(team, player)
     //label pour le legion_number
     var lblLegion = $("<label>Nombre de légions</label>");
     //input pour le legion_number
-    var inpLegion = $("<input type='number' min='1' step='1' value='1' name='legion_number' class='" + team + "' />");
+    var inpLegion = $("<input title='Nombre de légions' type='number' min='1' step='1' value='1' name='legion_number' class='" + team + "' />");
     //label pour la forme du pion
     var lblForm = $("<label>Forme du pion</label>");
     //select pour la forme du pion

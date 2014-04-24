@@ -2,5 +2,5 @@
 
 <ul id="joinGameView">
 	<p>Cliquez sur le nom d'une partie pour la rejoindre.</p>
-	<input type="button" value="Rafraîchir" onclick="gameList()">
+	<input title='Rafraîchir' type="button" value="Rafraîchir" onclick="gameList()">
 </ul>

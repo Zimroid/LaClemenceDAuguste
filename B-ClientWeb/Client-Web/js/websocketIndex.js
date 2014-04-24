@@ -14,6 +14,10 @@ function process(evt)
 			myName = '';
 			reloadChat(sitePath + "/index.php?script=1&page=deconnect");
 		}
+		else if (data.type == "must_be_logged")
+		{
+			reloadContent(sitePath + "/index.php?script=1&page=subscribe");
+		}
 		else
 		{
 			alert(data.type);
@@ -80,10 +84,12 @@ function process(evt)
 	else if(command == "list_games")
 	{
 		$(".game").remove();
+		var text = '';
 		for (var i = 0 ; i < data.games.length ; i++)
 		{
-			$("#joinGameView").append("<li class='game' onclick='gameJoin(" + data.games[i].room_id + ")'>" + data.games[i].game_name + "</li>");
+			text += "<li class='game' onclick='gameJoin(" + data.games[i].room_id + ")'>" + data.games[i].game_name + "</li>";
 		}
+		$("#joinGameView").append(text);
 		if (sitePage == 'joinGame')
 		{
 			gameList("on_update");
@@ -99,11 +105,15 @@ function process(evt)
 			$("#noTeam").html('');
 			var pViewers = $("<p>Spectateurs</p>");
 			$("#noTeam").append(pViewers);
+			var text1 = '';
+			var text2 = '';
 			for (var i = 0 ; i < data.users.length ; i++)
 			{
-				$("#noTeam").append("<span class='viewers'>" + data.users[i].user_name + "</span><br>");
-				$("[name='playerName']").append("<option value='" + data.users[i].user_id + "'>" + data.users[i].user_name + "</option>");
+				text1 += "<span class='viewers'>" + data.users[i].user_name + "</span><br>";
+				text2 += "<option value='" + data.users[i].user_id + "'>" + data.users[i].user_name + "</option>";
 			}
+			$("#noTeam").append(text1);
+			$("[name='playerName']").append(text2);
 		}
 		else if (mode == 'fast' && data.users[1] && myName == data.users[0].user_name)
 		{

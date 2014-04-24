@@ -4,8 +4,8 @@
 ?>
 <h2>Panneau de configuration de la partie <span id="game_name"><?php if (isset($_GET['name'])) echo $_GET['name']; ?></span></h2>
 <form autocomplete="off" onsubmit="return false;" >
-	<input type="hidden" id="type_game" value='normal'>
-	<input type="hidden" id="room_id" value="<?php if (isset($_GET['id'])) echo $_GET['id']; ?>">
+	<input title='Type de partie' type="hidden" id="type_game" value='normal'>
+	<input title='Identifiant de la salle' type="hidden" id="room_id" value="<?php if (isset($_GET['id'])) echo $_GET['id']; ?>">
 	<label for="player_number">Nombre de joueurs :</label>
 	<input type="number" id="player_number" name="player_number" onfocusout="gameConfig();" />
 	<label for="board_size">Taille du plateau :</label>
@@ -25,7 +25,7 @@
 					<select name="playerName" class="1" onselectionchange="gameConfig();">
 					</select>
 					<label>Nombre de légions</label>
-					<input type="number" min="1" step="1" value="1" name="legion_number" class="1" onfocusout="gameConfig();" />
+					<input title='Nombre de légions' type="number" min="1" step="1" value="1" name="legion_number" class="1" onfocusout="gameConfig();" />
 					<label>Forme du pion</label>
 					<select name="pawn" class="1" onselectionchange="gameConfig();">
 						<option name="square">Carré</option>
@@ -58,7 +58,7 @@
 			<p>Spectateurs</p>
 		</div>
 	</fieldset>
-	<input type="button" id="valid" value="GO !" onclick="gameStart(<?php if (isset($_GET['id'])) echo $_GET['id']; ?>)"/>
+	<input title='Lancer la partie' type="button" id="valid" value="GO !" onclick="gameStart(<?php if (isset($_GET['id'])) echo $_GET['id']; ?>)"/>
 </form>
 <?php
 	}
@@ -66,8 +66,8 @@
 	{
 ?>
 <h2>En attente d'un joueur ...</h2>
-<input type="hidden" id="type_game" value='fast'>
-<input type="button" id="start" value="Lancer la partie" onclick="gameStart(<?php if (isset($_GET['id'])) echo $_GET['id']; ?>)">
+<input title='Type de partie' type="hidden" id="type_game" value='fast'>
+<input title='Lancer la partie' type="button" id="start" value="Lancer la partie" onclick="gameStart(<?php if (isset($_GET['id'])) echo $_GET['id']; ?>)">
 <?php
 	}
 ?>

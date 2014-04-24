@@ -15,9 +15,9 @@
 ?>
 		<!-- Connexion -->
 		<form onsubmit="return false;" autocomplete="off">
-			<input type="text" name="user" id="user" placeholder="Pseudo" onkeypress="if (event.keyCode == 13) connexion(true,'','')" />
-			<input type="password" name="password" id="password" placeholder="Mot de passe" onkeypress="if (event.keyCode == 13) connexion(true,'','')" />
-			<input type="button" value="Me connecter" onclick="connexion(true,'','');" /><br>
+			<input title='Pseudo' type="text" name="user" id="user" placeholder="Pseudo" onkeypress="if (event.keyCode == 13) connexion(true,'','')" />
+			<input title='Mot de passe' type="password" name="password" id="password" placeholder="Mot de passe" onkeypress="if (event.keyCode == 13) connexion(true,'','')" />
+			<input title='Connexion' type="button" value="Me connecter" onclick="connexion(true,'','');" /><br>
 		</form>
 		<!-- Lien vers page d'inscription -->
 		<a id='subscribeScript' href='<?php echo $sitePath; ?>/subscribe'>M'inscrire au jeu</a>
@@ -35,7 +35,7 @@
 <!-- Div d'envoi d'un message-->
 <div id="chatSend">
 	<form onsubmit="addMessage(); return false;" autocomplete="off" >
-		<textarea id="message" name="message" onkeypress="toucheEntree(event)"></textarea>
-		<input type="submit" id="valid" value="Envoyer" />
+		<textarea title='Message' id="message" name="message" onkeypress="toucheEntree(event)"></textarea>
+		<input title='Envoyer un message' type="submit" id="valid" value="Envoyer" />
 	</form>
 </div>

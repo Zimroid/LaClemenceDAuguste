@@ -1,11 +1,13 @@
 header
 {
-	height: 70px;
+	height:		150px;
+	padding: 	5%;
+	text-align:	center;
 }
 #title
 {
 	margin: 	0px;
-	padding: 	12%;
+	padding: 	5%;
 	text-align:	center;
 }
 nav
@@ -34,29 +36,29 @@ nav > ul > li
 }
 nav > ul > li.liHome
 {
-	background-image: url('images/home.png');
+	background-image:	url('images/home.png');
 }
 nav > ul > li.liRules
 {
-	background-image: url();
+	background-image:	url('images/book.png');
 }
 nav > ul > li.liFAQ
 {
-	background-image: url();
+	background-image:	url('images/question.png');
 }
 nav > ul > li.liContact
 {
-	background-image: url();
+	background-image:	url('images/envelope.png');
 }
 nav > ul > li.liDownload
 {
-	background-image: url();
+	background-image:	url('images/download.png');
 }
 nav > ul > li.liCreate
 {
-	background-image: url();
+	background-image:	url('images/file.png');
 }
 nav > ul > li.liJoin
 {
-	background-image: url();
+	background-image:	url('images/stack.png');
 }

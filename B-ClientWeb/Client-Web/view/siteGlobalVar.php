@@ -1,4 +1,4 @@
 <?php
-	$siteName = "Auguste";
+	$siteName = "Octavio";
 	$sitePath = "/site";
 ?>

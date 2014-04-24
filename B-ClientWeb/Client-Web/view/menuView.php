@@ -1,4 +1,5 @@
 <header>
+	<img src="css/images/augusteLogo.png" alt="Logo">
 	<a id='titleScript' href='<?php echo $sitePath; ?>'><h1 id="title"><?php echo $siteName; ?></h1></a>
 </header>
 

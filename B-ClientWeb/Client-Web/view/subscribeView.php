@@ -10,7 +10,7 @@
 <label for="confirmSubscribe">Confirmation : </label>
 <input type="password" name="confSubscribe" id="confirmSubscribe" placeholder="Confirmer" onkeypress="if (event.keyCode == 13) inscription()">
 <br/>
-<input type="button" value="M'inscrire" onclick="inscription();" />
+<input title='Inscription' type="button" value="M'inscrire" onclick="inscription();" />
 	
 <p>
 Ajouter vérification :
