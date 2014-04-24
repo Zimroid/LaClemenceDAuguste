@@ -140,26 +140,18 @@ public class Room implements GameListener
      */
     public void addAction(User user, JSONObject json) throws JSONException
     {
-        Legion legion = null;
-        for (Entry<Player, Integer> entry : this.playing.entrySet())
-        {
-            if (entry.getValue() == user.getId())
-            {
-                legion = entry.getKey().getLegions().get(json.getInt("legion_id"));
-            }
-        }
-        
         Cell cell = this.game.getBoard().getCell(new Point(json.getInt("start_u"), json.getInt("start_w")));
         Action action = null;
         if (cell != null)
         {
-            if (cell.getPawn() != null && cell.getPawn().getLegion() == legion)
+            if (cell.getPawn() != null && cell.getPawn().getLegion().getPosition() == json.getInt("legion_id")
+                    && this.playing.get(cell.getPawn().getLegion().getPlayer()) == user.getId())
             {
                 Cell newCell = this.game.getBoard().getCell(new Point(json.getInt("end_u"), json.getInt("end_w")));
                 if (newCell != null)
                 {
                     Movement movement = new Movement(cell.getPawn(), newCell);
-                    action = new Action(legion, movement, null);
+                    action = new Action(cell.getPawn().getLegion(), movement, null);
                 }
             }
         }
