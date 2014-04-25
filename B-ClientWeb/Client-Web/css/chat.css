@@ -5,6 +5,7 @@
     border-bottom:  2px solid #666666;
     padding-bottom: 0.5em;
     padding-top:    0.5em;
+    text-align:		center;
 }
 
 #chatHeader input[type="text"], #chatHeader input[type="password"]
@@ -46,6 +47,27 @@
 
 #chatSend > form > #valid
 {
-    width:  100%;
-    height: 30%;
+	background:		radial-gradient(#00FF00,#00FF00,#FFFFFF);
+	border:			0px;
+	color:			#FFFFFF;
+	cursor:			pointer;
+	font-weight:	bold;
+    width:			100%;
+    height:			30%;
+}
+
+#connect
+{
+	border:			0px;
+}
+
+#deconnect
+{
+	background:		radial-gradient(#FF0000,#FF0000,#FFFFFF,#FFFFFF,#FFFFFF);
+	border:			0px;
+	color:			#FFFFFF;
+	cursor:			pointer;
+	font-weight:	bold;
+	height:			70%;
+	width:			100%;
 }

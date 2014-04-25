@@ -26,7 +26,7 @@ function reloadChat(url)
 			pageChat = document.getElementById("chatBox");
 			pageChat.innerHTML = xhr.responseText;
 		}
-	}
+	};
 	
 	// Paramètres
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
