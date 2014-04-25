@@ -74,7 +74,7 @@ public class Game
         this.moves = new ArrayList<>();
         this.tenailles = new ArrayList<>();
         this.battles = new ArrayList<>();
-        this.timer = new GameTimer(this,turnDuration);
+        //this.timer = new GameTimer(this,turnDuration);
     }
     
     public Game(int turnDuration)
@@ -95,7 +95,10 @@ public class Game
         }
         a.getLegion().setAction(a);
         this.actions.add(a);
-        if (this.actions.size() == this.legions.size()) timer.notify();
+        if (this.actions.size() == this.legions.size()) 
+        {
+            if(this.getListener() != null) this.getListener().onTurnEnd(); // timer.notify();
+        }
     }
     
     public void nextTurn()
@@ -125,8 +128,8 @@ public class Game
                 a.getLegion().setAction(null);
             }
             this.actions.clear();
-            this.timer = new GameTimer(this,turnDuration);
-            this.timer.start();
+            //this.timer = new GameTimer(this,turnDuration);
+            //this.timer.start();
         }
         return res;
     }
@@ -524,7 +527,7 @@ public class Game
             }
         }
         initCell(0,0,new Laurel(),0);        // Laurel
-        this.timer.start();
+        //this.timer.start();
     }
     
     private boolean canMoveLaurel(Legion l, Pawn laurel)

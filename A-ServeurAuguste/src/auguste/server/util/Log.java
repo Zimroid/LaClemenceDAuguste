@@ -66,7 +66,8 @@ public class Log
      */
     public static void debug(Exception e)
     {
-        Log.debug(e.getMessage());
+        Log.debug(e.getClass().getName() + ":" + e.getMessage());
+        e.printStackTrace();
     }
     
 }

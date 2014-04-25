@@ -218,6 +218,13 @@ public class Server extends WebSocketServer
             Log.debug(e);
             ClientCommand.sendError(socket, "server_error");
         }
+        catch (Exception e)
+        {
+            // Autre errur
+            Log.error("Error");
+            Log.debug(e);
+            ClientCommand.sendError(socket, "server_error");
+        }
     }
 
     /**

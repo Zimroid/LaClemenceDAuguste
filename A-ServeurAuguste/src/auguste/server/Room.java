@@ -91,6 +91,7 @@ public class Room implements GameListener
     {
         // Initialisation des attributs
         this.id   = id;
+        this.state = State.WAITING;
         
         // Paramètrage de la configuration par défaut
         try
@@ -121,10 +122,11 @@ public class Room implements GameListener
      */
     public void start() throws JSONException
     {
-        if (this.getState() == State.WAITING)
+        if (this.state == State.WAITING)
         {
+            this.state = State.RUNNING;
             this.game = new Game(this, this.configuration.getLong("game_turn_duration"));
-            this.game.setTurnDuration(this.configuration.getLong("game_turn_duration"));
+            //this.game.setTurnDuration(this.configuration.getLong("game_turn_duration"));
             this.game.setBoard(new Board(this.configuration.getInt("game_board_size")));
             for (Player player : this.playing.keySet()) this.game.addPlayer(player);
             this.game.initBoard();
@@ -479,7 +481,7 @@ public class Room implements GameListener
                     for (Legion legion : player.getLegions())
                     {
                         legionData = new JSONObject();
-                        legionData.put("legion_id", legion.getPosition());
+                        legionData.put("legion_position", legion.getPosition());
                         legionData.put("legion_color", legion.getColor());
                         legionData.put("legion_shape", legion.getShape());
                         legionsToAdd.put(legionData);
