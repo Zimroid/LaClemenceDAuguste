@@ -1,5 +1,5 @@
 <header>
-	<span onclick='reloadContent(sitePath + "/index.php?script=1&page=news");'><img id="logo" src="css/images/augusteLogo.png" alt="Logo"></span>
+	<span onclick="reloadContent(sitePath + '/index.php?script=1');"><img id="logo" src="css/images/augusteLogo.png" alt="Logo"></span>
 	<a id='titleScript' onclick="sitePage = 'home';" href='<?php echo $sitePath; ?>'><h1 id="title"><?php echo $siteName; ?></h1></a>
 </header>
 

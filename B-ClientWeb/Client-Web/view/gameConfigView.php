@@ -24,29 +24,30 @@
 					<label>Joueur</label>
 					<select name="playerName" class="1" onselectionchange="gameConfig();">
 					</select>
-					<label>Nombre de légions</label>
-					<input title='Nombre de légions' type="number" min="1" step="1" value="1" name="legion_number" class="1" onfocusout="gameConfig();" />
-					<label>Forme du pion</label>
-					<select name="pawn" class="1" onselectionchange="gameConfig();">
-						<option name="square">Carré</option>
-						<option name="circle">Cercle</option>
-						<option name="triangle">Triangle</option>
-					</select>
 					<label>Couleur du pion</label>
-					<select name="color" class="1" onselectionchange="gameConfig();">
+					<select class="color" class="1" onselectionchange="gameConfig();">
 						<option name="#FF0000">Rouge</option>
 						<option name="#00FF00">Vert</option>
 						<option name="#0000FF">Bleu</option>
 					</select>
-					<label>Position sur le plateau</label>
-					<select name="position" class="1" onselectionchange="gameConfig();">
-						<option name="5">Gauche</option>
-						<option name="4">Bas gauche</option>
-						<option name="3">Bas droit</option>
-						<option name="2">Droit</option>
-						<option name="1">Haut droit</option>
-						<option name="0">Haut gauche</option>
-					</select>
+					<button id="legion1_1" onclick="newLegion(1,1,2)">Nouvelle légion</button>
+					<div name="legion" id="legion1_1_1">
+						<label>Forme du pion</label>
+						<select class="pawn" class="1" onselectionchange="gameConfig();">
+							<option name="square">Carré</option>
+							<option name="circle">Cercle</option>
+							<option name="triangle">Triangle</option>
+						</select>
+						<label>Position sur le plateau</label>
+						<select class="position" class="1" onselectionchange="gameConfig();">
+							<option name="5">Gauche</option>
+							<option name="4">Bas gauche</option>
+							<option name="3">Bas droit</option>
+							<option name="2">Droit</option>
+							<option name="1">Haut droit</option>
+							<option name="0">Haut gauche</option>
+						</select>
+					</div>
 				</div>
 			</div>
 			<div id="team2" name="team">

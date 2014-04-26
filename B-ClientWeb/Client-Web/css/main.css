@@ -24,6 +24,11 @@ a {
 	text-decoration:	none;
 }
 
+div[name="legion"]
+{
+	text-indent:	12px;
+}
+
 #menu
 {
     width:          190px;

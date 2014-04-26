@@ -103,6 +103,7 @@ function process(evt)
 		if (mode == 'normal')
 		{
 			$("#noTeam").html('');
+			$("[name='playerName']").html('');
 			var pViewers = $("<p>Spectateurs</p>");
 			$("#noTeam").append(pViewers);
 			var text1 = '';
