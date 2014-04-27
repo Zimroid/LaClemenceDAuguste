@@ -103,15 +103,40 @@ function process(evt)
 		if (mode == 'normal')
 		{
 			$("#noTeam").html('');
-			$("[name='playerName']").html('');
 			var pViewers = $("<p>Spectateurs</p>");
 			$("#noTeam").append(pViewers);
 			var text1 = '';
 			var text2 = '';
+			var texttest = '';
+			// parcours des utilisateurs du panneau de config
 			for (var i = 0 ; i < data.users.length ; i++)
 			{
-				text1 += "<span class='viewers'>" + data.users[i].user_name + "</span><br>";
-				text2 += "<option value='" + data.users[i].user_id + "'>" + data.users[i].user_name + "</option>";
+				texttest = "<option value='" + data.users[i].user_id + "'>" + data.users[i].user_name + "</option>";
+				// parcours des select des utilisateurs
+				if ($("[name='playerName'] option").length != 0)
+				{
+					// utilisateur déjà ajouté
+					var userOK = false;
+					$.each($("[name='playerName'] option"),function(key,value){
+						// parcours des options du select
+						if (value == $.parseHTML(texttest))
+						{
+							userOK = true;
+						}
+					});
+					// ajout de l'utilisateur si non trouvé
+					if (!userOK)
+					{
+						text1 += "<span class='viewers'>" + data.users[i].user_name + "</span><br>";
+						text2 += texttest;
+					}
+				}
+				// si la liste est vide
+				else
+				{
+					text1 += "<span class='viewers'>" + data.users[i].user_name + "</span><br>";
+					text2 += texttest;
+				}
 			}
 			$("#noTeam").append(text1);
 			$("[name='playerName']").append(text2);

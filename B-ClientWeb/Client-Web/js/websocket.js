@@ -1,10 +1,10 @@
 //var websocket = new WebSocket("ws://localhost:47135");
 var websocket = new WebSocket("ws://130.79.214.172:47135");
+//var queue = [];
 
-websocket.onmessage = function(evt) { onMessage(evt) };
-websocket.onerror   = function(evt) { onError(evt)   };
-websocket.onopen    = function(evt) { onOpen(evt)    };
-
+websocket.onmessage = function(evt) { onMessage(evt); };
+websocket.onerror   = function(evt) { onError(evt);   };
+websocket.onopen    = function(evt) { onOpen(evt);    };
 
 function onOpen(evt)
 {
@@ -29,7 +29,15 @@ function sendText(json)
 function onMessage(evt)
 {
     console.log("received: " + evt.data);
-    
 	// Traitement des données reçues
-    process(evt);
+	process(evt);
+	//queue.push(evt);
 }
+
+/*setInterval(function(){
+	while (queue.length != 0)
+	{
+		process(queue[0]);
+		queue.shift();
+	}
+},10);*/

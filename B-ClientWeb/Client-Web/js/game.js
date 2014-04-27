@@ -90,11 +90,11 @@ function gameConfig()
 					for (var i = 0 ; i < nbrLegion ; i++)
 					{
 						// forme des pions du joueur
-						stringJSON += '{"legion_shape": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children('#legion' + nbrTeam + '_' + nbrPlayer + '_' + (i + 1)).children(".pawn").attr("name") + '",';
+						stringJSON += '{"legion_shape": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children('#legion' + nbrTeam + '_' + nbrPlayer + '_' + (i + 1)).children(".pawn").val() + '",';
 						// couleur des pions du joueur
-						stringJSON += '"legion_color": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children(".color").attr("name") + '",';
+						stringJSON += '"legion_color": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children(".color").val() + '",';
 						// position sur le plateau du joueur
-						stringJSON += '"legion_position": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children('#legion' + nbrTeam + '_' + nbrPlayer + '_' + (i + 1)).children(".position").attr("name") + '"}';
+						stringJSON += '"legion_position": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children('#legion' + nbrTeam + '_' + nbrPlayer + '_' + (i + 1)).children(".position").val() + '"}';
 						if ((i + 1) < nbrLegion)
 						{
 							stringJSON += ',';
@@ -132,7 +132,7 @@ function gameConfig()
 	stringJSON += ']}';
    
     // envoi de la config
-    alert(stringJSON);
+    // alert(stringJSON);
 	var json = stringJSON;
     
     sendText(json);
@@ -217,9 +217,9 @@ function newPlayer(team, player)
     //select pour la color
     var selColor = $("<select class='color' class='" + team + "'></select>");
     //options pour la color
-    var optColor = $("<option name='#FF0000'>Rouge</option>");
-    var optColor2 = $("<option name='#00FF00'>Vert</option>");
-    var optColor3 = $("<option name='#0000FF'>Bleu</option>");
+    var optColor = $("<option value='#FF0000'>Rouge</option>");
+    var optColor2 = $("<option value='#00FF00'>Vert</option>");
+    var optColor3 = $("<option value='#0000FF'>Bleu</option>");
     //bouton pour la création d'un nouveau joueur dans la team
     var NLButton = $("<button id='legion"+ team + '_' + player +"' onclick='newLegion(" + team + "," + player + ",1)'>Nouvelle légion</button>");
 
@@ -242,20 +242,20 @@ function newLegion(team, player, legion)
     //select pour la forme du pion
     var selForm = $("<select class='pawn' class='" + team + "'></select>");
     //options pour le selForm
-    var optForm = $("<option name='square'>Carré</option>");
-    var optForm2 = $("<option name='circle'>Cercle</option>");
-    var optForm3 = $("<option name='triangle'>Triangle</option>");
+    var optForm = $("<option value='square'>Carré</option>");
+    var optForm2 = $("<option value='circle'>Cercle</option>");
+    var optForm3 = $("<option value='triangle'>Triangle</option>");
     //label pour la position sur le plateau
     var lblPosit = $("<label>Position sur le plateau</label>");
     //select pour la position sur le plateau
     var selPosit = $("<select class='position' class='" + team + "'></select>");
     //options pour le selPosit
-    var optPosit = $("<option name='5'>Gauche</option>");
-	var optPosit2 = $("<option name='4'>Bas gauche</option>");
-	var optPosit3 = $("<option name='3'>Bas droit</option>");
-	var optPosit4 = $("<option name='2'>Droit</option>");
-	var optPosit5 = $("<option name='1'>Haut droit</option>");
-	var optPosit6 = $("<option name='0'>Haut gauche</option>");
+    var optPosit = $("<option value='5'>Gauche</option>");
+	var optPosit2 = $("<option value='4'>Bas gauche</option>");
+	var optPosit3 = $("<option value='3'>Bas droit</option>");
+	var optPosit4 = $("<option value='2'>Droit</option>");
+	var optPosit5 = $("<option value='1'>Haut droit</option>");
+	var optPosit6 = $("<option value='0'>Haut gauche</option>");
 	
 	selForm.append(optForm, optForm2, optForm3);
     selPosit.append(optPosit, optPosit2, optPosit3, optPosit4, optPosit5, optPosit6);

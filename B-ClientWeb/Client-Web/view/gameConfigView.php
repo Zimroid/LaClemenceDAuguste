@@ -26,26 +26,26 @@
 					</select>
 					<label>Couleur du pion</label>
 					<select class="color" class="1" onselectionchange="gameConfig();">
-						<option name="#FF0000">Rouge</option>
-						<option name="#00FF00">Vert</option>
-						<option name="#0000FF">Bleu</option>
+						<option value="#FF0000">Rouge</option>
+						<option value="#00FF00">Vert</option>
+						<option value="#0000FF">Bleu</option>
 					</select>
 					<button id="legion1_1" onclick="newLegion(1,1,2)">Nouvelle légion</button>
 					<div name="legion" id="legion1_1_1">
 						<label>Forme du pion</label>
 						<select class="pawn" class="1" onselectionchange="gameConfig();">
-							<option name="square">Carré</option>
-							<option name="circle">Cercle</option>
-							<option name="triangle">Triangle</option>
+							<option value="square">Carré</option>
+							<option value="circle">Cercle</option>
+							<option value="triangle">Triangle</option>
 						</select>
 						<label>Position sur le plateau</label>
 						<select class="position" class="1" onselectionchange="gameConfig();">
-							<option name="5">Gauche</option>
-							<option name="4">Bas gauche</option>
-							<option name="3">Bas droit</option>
-							<option name="2">Droit</option>
-							<option name="1">Haut droit</option>
-							<option name="0">Haut gauche</option>
+							<option value="5">Gauche</option>
+							<option value="4">Bas gauche</option>
+							<option value="3">Bas droit</option>
+							<option value="2">Droit</option>
+							<option value="1">Haut droit</option>
+							<option value="0">Haut gauche</option>
 						</select>
 					</div>
 				</div>
