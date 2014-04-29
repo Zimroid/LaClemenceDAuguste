@@ -56,7 +56,7 @@
 			</div>
 		</div>
 		<div id="noTeam" name="noTeam">
-			<p>Spectateurs</p>
+			<h3>Présents dans la salle :</h3>
 		</div>
 	</fieldset>
 	<input title='Lancer la partie' type="button" id="valid" value="GO !" onclick="gameStart(<?php if (isset($_GET['id'])) echo $_GET['id']; ?>)"/>

@@ -31,7 +31,7 @@ function gameStart(room_id)
         "room_id": room_id
         
     });
-
+	sitePage = 'gameStart';
     sendText(json);
 }
 

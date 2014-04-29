@@ -10,6 +10,7 @@
 
 #chatHeader input[type="text"], #chatHeader input[type="password"]
 {
+	border-radius:	5px;
     width:          100px;
 }
 
@@ -47,7 +48,7 @@
 
 #chatSend > form > #valid
 {
-	background:		radial-gradient(#00FF00,#00FF00,#FFFFFF);
+	background:		radial-gradient(#4CAE4C,#4CAE4C,#FFFFFF);
 	border:			0px;
 	color:			#FFFFFF;
 	cursor:			pointer;

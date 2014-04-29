@@ -5,6 +5,8 @@
 			var game_id = 0;
 			var save_game_config = '';
 			var save_game_turn = '';
+			var save_game_users1 = '';
+			var save_game_users2 = '';
 			var myId = 0;
 			var myName = '';
 		</script>

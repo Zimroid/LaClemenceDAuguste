@@ -68,7 +68,11 @@ function process(evt)
 	{	
 		save_game_config = data;
 		// si une partie normale est lancée
-		reloadContent(sitePath + "/index.php?script=1&page=gameConfig&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
+		if (sitePage != 'gameConfig')
+		{
+			reloadContent(sitePath + "/index.php?script=1&page=gameConfig&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
+		}
+		sitePage = 'gameConfig';
 	}
 
 	// Si on nous envoie un plateau de jeu
@@ -102,44 +106,63 @@ function process(evt)
 		var mode = $("#type_game").val();
 		if (mode == 'normal')
 		{
-			$("#noTeam").html('');
-			var pViewers = $("<p>Spectateurs</p>");
-			$("#noTeam").append(pViewers);
 			var text1 = '';
 			var text2 = '';
-			var texttest = '';
 			// parcours des utilisateurs du panneau de config
 			for (var i = 0 ; i < data.users.length ; i++)
 			{
-				texttest = "<option value='" + data.users[i].user_id + "'>" + data.users[i].user_name + "</option>";
-				// parcours des select des utilisateurs
-				if ($("[name='playerName'] option").length != 0)
-				{
-					// utilisateur déjà ajouté
-					var userOK = false;
-					$.each($("[name='playerName'] option"),function(key,value){
-						// parcours des options du select
-						if (value == $.parseHTML(texttest))
+				$.each($("[name='playerName']"),function(key,value){
+					// parcours des select des utilisateurs
+					if ($(this).children('option').length)
+					{
+						// utilisateur déjà ajouté
+						var userOK = false;
+						$.each($($(this).children('option')),function(key,value){
+							// parcours des options du select
+							if ($(this).html() == data.users[i].user_name)
+							{
+								userOK = true;
+							}
+						});
+						// ajout de l'utilisateur si non trouvé
+						if (!userOK)
 						{
-							userOK = true;
+							text1 += "<span class='viewers'>" + data.users[i].user_name + "</span><br>";
+							text2 += "<option value='" + data.users[i].user_id + "'>" + data.users[i].user_name + "</option>";
 						}
-					});
-					// ajout de l'utilisateur si non trouvé
-					if (!userOK)
+					}
+					// si la liste est vide
+					else
 					{
 						text1 += "<span class='viewers'>" + data.users[i].user_name + "</span><br>";
-						text2 += texttest;
+						text2 += "<option value='" + data.users[i].user_id + "'>" + data.users[i].user_name + "</option>";
 					}
+				});
+			}
+			if (text1 != '' && text2 != '')
+			{
+				save_game_users1 = text1;
+				save_game_users2 = text2;
+				if ($("#noTeam").length && $("[name='playerName']").length)
+				{
+					$("#noTeam").append(save_game_users1);
+					$("[name='playerName']").append(save_game_users2);
 				}
-				// si la liste est vide
 				else
 				{
-					text1 += "<span class='viewers'>" + data.users[i].user_name + "</span><br>";
-					text2 += texttest;
+					if (sitePage == "gameConfig")
+					{
+						while (!$("#noTeam").length && !$("[name='playerName']").length)
+						{
+							if ($("#noTeam").length && $("[name='playerName']").length)
+							{
+								$("#noTeam").append(save_game_users1);
+								$("[name='playerName']").append(save_game_users2);
+							}
+						}
+					}
 				}
 			}
-			$("#noTeam").append(text1);
-			$("[name='playerName']").append(text2);
 		}
 		else if (mode == 'fast' && data.users[1] && myName == data.users[0].user_name)
 		{
