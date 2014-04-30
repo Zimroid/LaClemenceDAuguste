@@ -197,7 +197,7 @@ function newTeam()
     var NPButton = $("<button id='button" + numberTeam + "' name='button" + numberTeam + "' onclick='newPlayer(" + numberTeam + ",1)'>Nouveau joueur</button>");
 
     divTeams.append(ptitle, NPButton, divTeam);
-    gameConfig();
+    newPlayer(numberTeam,1);
 }
 
 function newPlayer(team, player)
@@ -223,10 +223,16 @@ function newPlayer(team, player)
     //bouton pour la création d'un nouveau joueur dans la team
     var NLButton = $("<button id='legion"+ team + '_' + player +"' onclick='newLegion(" + team + "," + player + ",1)'>Nouvelle légion</button>");
 
+	var users_options = '';
+	for (var i = 0 ; i < save_game_users.length ; i++)
+	{
+		users_options += "<option value='" + save_game_users[i].user_id + "'>" + save_game_users[i].user_name + "</option>";
+	}
+	selPlay.append(users_options);
     selColor.append(optColor, optColor2, optColor3);
     divPlay.append(lblPlay, selPlay, lblColor, selColor, NLButton);
     divTeam.append(divPlay);
-    gameConfig();
+    newLegion(team,player,1);
 }
 
 function newLegion(team, player, legion)
@@ -261,5 +267,4 @@ function newLegion(team, player, legion)
     selPosit.append(optPosit, optPosit2, optPosit3, optPosit4, optPosit5, optPosit6);
     divLegion.append(lblForm, selForm, lblPosit, selPosit);
     divPlay.append(divLegion);
-    gameConfig();
 }

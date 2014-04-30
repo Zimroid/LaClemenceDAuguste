@@ -29,13 +29,16 @@ function reloadContent(url)
 			{
 				if($("#board_players").length != 0)
 				{
-					if (save_game_config.teams[0].players[0].player_user_id == myId)
+					if (save_game_config.configuration.game_mode == 'fast')
 					{
-						$("#board_players").append($("<span>Vous avez les pions rouges.</span>"));
-					}
-					else if (save_game_config.teams[1].players[0].player_user_id == myId)
-					{
-						$("#board_players").append($("<span>Vous avez les pions verts.</span>"));
+						if (save_game_config.teams[0].players[0].player_user_id == myId)
+						{
+							$("#board_players").append($("<span>Vous avez les pions rouges.</span>"));
+						}
+						else if (save_game_config.teams[1].players[0].player_user_id == myId)
+						{
+							$("#board_players").append($("<span>Vous avez les pions verts.</span>"));
+						}
 					}
 					/*var player_1 = $("<span>" + save_game_config.teams[0].players[0].player_user_id + " : Pions rouges. </span>");
 					var player_2 = $("<span>" + save_game_config.teams[1].players[0].player_user_id + " : Pions verts. </span>");

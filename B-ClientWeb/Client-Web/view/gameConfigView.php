@@ -6,8 +6,6 @@
 <form autocomplete="off" onsubmit="return false;" >
 	<input title='Type de partie' type="hidden" id="type_game" value='normal'>
 	<input title='Identifiant de la salle' type="hidden" id="room_id" value="<?php if (isset($_GET['id'])) echo $_GET['id']; ?>">
-	<label for="player_number">Nombre de joueurs :</label>
-	<input type="number" id="player_number" name="player_number" onfocusout="gameConfig();" />
 	<label for="board_size">Taille du plateau :</label>
 	<input type="number" id="board_size" name="board_size" onfocusout="gameConfig();" value="5" />
 	<label for="turn_duration">Durée d'un tour (en secondes) :</label>
