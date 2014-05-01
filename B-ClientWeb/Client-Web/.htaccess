@@ -43,7 +43,7 @@ Options -Indexes
 
 <IfModule mod_deflate.c>
 	# compression avec MOD_DEFLATE
-	AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/atom+xml application/rss+xml application/xml application/javascript
+	AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/atom+xml application/rss+xml application/xml application/javascript application/x-font-ttf
 	
 	# les proxys ne doivent pas décompresser le contenu à la place de l'internaute
 	Header append Vary User-Agent env=!dont-vary

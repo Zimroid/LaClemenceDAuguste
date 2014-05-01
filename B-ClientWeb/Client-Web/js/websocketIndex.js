@@ -18,6 +18,10 @@ function process(evt)
 		{
 			reloadContent(sitePath + "/index.php?script=1&page=subscribe");
 		}
+		else if (data.type == "not_owner_of_this_room")
+		{
+			alert("Vous n'êtes pas autorisé à modifier la configuration d'une partie dont vous n'êtes pas l'hôte.");
+		}
 		else
 		{
 			alert(data.type);
@@ -128,13 +132,15 @@ function process(evt)
 			// parcours des utilisateurs du panneau de config
 			for (var i = 0 ; i < save_game_users.length ; i++)
 			{
-				$.each($("[name='playerName']"),function(key,value){
+				$.each($("[name='playerName']"),function(key,value)
+				{
 					// parcours des select des utilisateurs
 					if ($(this).children('option').length)
 					{
 						// utilisateur déjà ajouté
 						var userOK = false;
-						$.each($($(this).children('option')),function(key,value){
+						$.each($($(this).children('option')),function(key,value)
+						{
 							// parcours des options du select
 							if ($(this).html() == save_game_users[i].user_name)
 							{
@@ -168,14 +174,17 @@ function process(evt)
 					{
 						text1 += "<span class='viewers'>" + save_game_users[i].user_name + "</span><br>";
 						text2 += "<option value='" + save_game_users[i].user_id + "'>" + save_game_users[i].user_name + "</option>";
+						return false;
 					}
 				});
 			}
 			// identification d'un départ de joueur
 			if (save_game_users_prec.length != 0)
 			{
-				$("#noTeam span.viewers").remove(":contains('" + save_game_users_prec[0].user_name + "')");
-				$("[name='playerName'] option").remove(":contains('" + save_game_users_prec[0].user_name + "')");
+				//$("#noTeam span.viewers").remove(":contains('" + save_game_users_prec[0].user_name + "')");
+				//$("[name='playerName'] option").remove(":contains('" + save_game_users_prec[0].user_name + "')");
+				$("#noTeam").find("span.viewers").remove(":contains('" + save_game_users_prec[0].user_name + "')");
+				$("[name='playerName']").find("option").remove(":contains('" + save_game_users_prec[0].user_name + "')");
 			}
 			if (text1 != '' && text2 != '')
 			{
@@ -184,7 +193,7 @@ function process(evt)
 					$("#noTeam").append(text1);
 					$("[name='playerName']").append(text2);
 				}
-				else
+				/*else
 				{
 					if (sitePage == "gameConfig")
 					{
@@ -198,7 +207,7 @@ function process(evt)
 							}
 						}
 					}
-				}
+				}*/
 			}
 		}
 		else if (mode == 'fast' && data.users[1] && myName == data.users[0].user_name)

@@ -86,7 +86,7 @@ function gameConfig()
 					// id du joueur
 					stringJSON += '{"player_user_id":' + parseInt($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val(),10) + ',"legions":[';
 					// nombre de légions du joueur
-					nbrLegion += $('#player' + nbrTeam + '_' + nbrPlayer).children("[name='legion']").length;
+					nbrLegion = $('#player' + nbrTeam + '_' + nbrPlayer).children("[name='legion']").length;
 					for (var i = 0 ; i < nbrLegion ; i++)
 					{
 						// forme des pions du joueur
@@ -211,11 +211,11 @@ function newPlayer(team, player)
     //label du joueur dont on fait la config
     var lblPlay = $("<label>Joueur</label>");
     //select du joueur dont on fait la config
-    var selPlay = $("<select name='playerName' class='" + team + "'></select>");
+    var selPlay = $("<select name='playerName' class='" + team + "' onchange='gameConfig();'></select>");
     //label pour la color
     var lblColor = $("<label>Couleur du pion</label>");
     //select pour la color
-    var selColor = $("<select class='color' class='" + team + "'></select>");
+    var selColor = $("<select class='color' class='" + team + "' onchange='gameConfig();'></select>");
     //options pour la color
     var optColor = $("<option value='#FF0000'>Rouge</option>");
     var optColor2 = $("<option value='#00FF00'>Vert</option>");
@@ -246,7 +246,7 @@ function newLegion(team, player, legion)
 	//label pour la forme du pion
     var lblForm = $("<label>Forme du pion</label>");
     //select pour la forme du pion
-    var selForm = $("<select class='pawn' class='" + team + "'></select>");
+    var selForm = $("<select class='pawn' class='" + team + "' onchange='gameConfig();'></select>");
     //options pour le selForm
     var optForm = $("<option value='square'>Carré</option>");
     var optForm2 = $("<option value='circle'>Cercle</option>");
@@ -254,7 +254,7 @@ function newLegion(team, player, legion)
     //label pour la position sur le plateau
     var lblPosit = $("<label>Position sur le plateau</label>");
     //select pour la position sur le plateau
-    var selPosit = $("<select class='position' class='" + team + "'></select>");
+    var selPosit = $("<select class='position' class='" + team + "' onchange='gameConfig();'></select>");
     //options pour le selPosit
     var optPosit = $("<option value='5'>Gauche</option>");
 	var optPosit2 = $("<option value='4'>Bas gauche</option>");
