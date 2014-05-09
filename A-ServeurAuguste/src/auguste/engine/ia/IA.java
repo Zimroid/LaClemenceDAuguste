@@ -58,7 +58,7 @@ public class IA {
                     m = pseudoRandomMove(b,l);
                     break;
             }
-            res.add(new Action(l,m));
+            if(m != null) res.add(new Action(l,m));
         }
         endBotTurn(b);
         return res;
@@ -82,7 +82,8 @@ public class IA {
             armorOk = (pawn instanceof Soldier)?!((Soldier)pawn).isArmored():false;
             cells = game.nearbyEmptyCells(game.friendlyGroup(pawn),armorOk);
             
-            return new Movement(pawn,cells.get(rand.nextInt(cells.size())));
+            if(cells.isEmpty()) return null;
+            else return new Movement(pawn,cells.get(rand.nextInt(cells.size())));
         }
         else return null;
     }
@@ -108,7 +109,8 @@ public class IA {
                 cells = game.nearbyEmptyCells(game.friendlyGroup(pawn),armorOk);
             }
             
-            return new Movement(pawn,cells.get(rand.nextInt(cells.size())));
+            if(cells.isEmpty()) return null;
+            else return new Movement(pawn,cells.get(rand.nextInt(cells.size())));
         }
         else return null;
     }
