@@ -16,6 +16,7 @@
 
 package auguste.engine.entity;
 
+import auguste.engine.entity.pawn.Laurel;
 import java.awt.Point;
 import java.util.ArrayList;
 
@@ -35,7 +36,6 @@ public class Board
     /**
     * Instanciation d'un plateau avec sa taille et la partie relative.
     * @param size La taille du plateau
-    * @param game La partie relative au plateau
     */
     public Board(int size)
     {

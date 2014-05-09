@@ -42,6 +42,12 @@ public class Action {
         this.card = card;
     }
     
+    public Action(Legion legion, Movement movement) {
+        this.legion = legion;
+        this.movement = movement;
+        this.card = null;
+    }
+    
     /**
      * @return the player
      */

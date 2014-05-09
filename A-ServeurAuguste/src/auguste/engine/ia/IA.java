@@ -17,9 +17,15 @@
 package auguste.engine.ia;
 
 import auguste.engine.entity.Bot;
+import auguste.engine.entity.Cell;
 import auguste.engine.entity.Game;
+import auguste.engine.entity.Legion;
 import auguste.engine.entity.action.Action;
+import auguste.engine.entity.action.Movement;
+import auguste.engine.entity.pawn.Pawn;
+import auguste.engine.entity.pawn.Soldier;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -28,6 +34,7 @@ import java.util.ArrayList;
 public class IA {
     
     private Game game;
+    private Random rand = new Random();
     
     public IA(Game g)
     {
@@ -36,6 +43,73 @@ public class IA {
     
     public ArrayList<Action> activateBot(Bot b)
     {
-        return null;
+        ArrayList<Action> res = new ArrayList<>();
+        Movement m;
+        for(Legion l : b.getPlayer().getLegions())
+        {
+            switch(b.getStrategy()) {
+                case random:
+                    m = randomMove(b,l);
+                    break;
+                case pseudoRandom:
+                    m = pseudoRandomMove(b,l);
+                    break;
+                default:
+                    m = pseudoRandomMove(b,l);
+                    break;
+            }
+            res.add(new Action(l,m));
+        }
+        endBotTurn(b);
+        return res;
+    }
+    
+    private void endBotTurn(Bot b)
+    {
+        b.setPlayedLaurel(false);
+    }
+    
+    private Movement randomMove(Bot b, Legion l)
+    {
+        ArrayList<Pawn> pawns = l.getLivingPawns();
+        if(pawns.size() > 0) {
+            
+            Pawn pawn;
+            boolean armorOk;
+            ArrayList<Cell> cells;
+            
+            pawn = pawns.get(rand.nextInt(pawns.size()));
+            armorOk = (pawn instanceof Soldier)?!((Soldier)pawn).isArmored():false;
+            cells = game.nearbyEmptyCells(game.friendlyGroup(pawn),armorOk);
+            
+            return new Movement(pawn,cells.get(rand.nextInt(cells.size())));
+        }
+        else return null;
+    }
+    
+    private Movement pseudoRandomMove(Bot b, Legion l)
+    {
+        ArrayList<Pawn> pawns = l.getLivingPawns();
+        if(pawns.size() > 0) {
+            
+            Pawn pawn;
+            boolean armorOk;
+            ArrayList<Cell> cells;
+            
+            if(!b.getPlayedLaurel() && game.canMoveLaurel(l,game.getLaurel()) && !game.nearbyEmptyCells(game.getLaurel(),false).isEmpty() && rand.nextInt(100)<75) {
+                pawn = game.getLaurel();
+                armorOk = false;
+                cells = game.nearbyEmptyCells(pawn,armorOk);
+                b.setPlayedLaurel(true);
+            }
+            else {
+                pawn = pawns.get(rand.nextInt(pawns.size()));
+                armorOk = (pawn instanceof Soldier)?!((Soldier)pawn).isArmored():false;
+                cells = game.nearbyEmptyCells(game.friendlyGroup(pawn),armorOk);
+            }
+            
+            return new Movement(pawn,cells.get(rand.nextInt(cells.size())));
+        }
+        else return null;
     }
 }

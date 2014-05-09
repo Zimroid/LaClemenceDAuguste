@@ -13,33 +13,71 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package auguste.engine.entity;
 
 /**
  *
  * @author Zwyk
  */
-public class Bot extends Player {
+public class Bot {
+
+    private Strategy strategy = null;
+    private Player player;
+    private boolean playedLaurel = false;
+
+    public Bot(Player p) {
+        this.player = p;
+    }
     
-    private int difficulty = 0;
-    
-    public Bot()
-    {
-        super();
+    public Bot(Player p, Strategy strategy) {
+        this(p);
+        this.strategy = strategy;
     }
 
     /**
-     * @return the difficulty
+     * @return the strategy
      */
-    public int getDifficulty() {
-        return difficulty;
+    public Strategy getStrategy() {
+        return strategy;
     }
 
     /**
-     * @param difficulty the difficulty to set
+     * @param strategy the strategy to set
      */
-    public void setDifficulty(int difficulty) {
-        this.difficulty = difficulty;
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
+    }
+
+    /**
+     * @return the player
+     */
+    public Player getPlayer() {
+        return player;
+    }
+
+    /**
+     * @param player the player to set
+     */
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    /**
+     * @return the playedLaurel
+     */
+    public boolean getPlayedLaurel() {
+        return playedLaurel;
+    }
+
+    /**
+     * @param playedLaurel the playedLaurel to set
+     */
+    public void setPlayedLaurel(boolean playedLaurel) {
+        this.playedLaurel = playedLaurel;
+    }
+    
+    public enum Strategy {
+        random,
+        pseudoRandom
     }
 }

@@ -23,10 +23,8 @@ public class AugusteTests {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException {
-        Team tOne = new Team();
-        tOne.setNum(1);
-        Team tTwo = new Team();
-        tTwo.setNum(2);
+        Team tOne = new Team(1);
+        Team tTwo = new Team(2);
         Player pOne = new Player(1);
         Player pTwo = new Player(2);
         pOne.setTeam(tOne);
@@ -53,13 +51,31 @@ public class AugusteTests {
         Game g = new Game(1);
         g.addPlayer(pOne);
         g.addPlayer(pTwo);
-        Board b = new Board(5);
+        Board b = new Board(9);
         g.setBoard(b);
+        
+        boolean end = false;
+        
+        pOne.setBot(new Bot(pOne,Bot.Strategy.pseudoRandom));
+        pOne.setConnected(false);
+        pTwo.setBot(new Bot(pTwo,Bot.Strategy.pseudoRandom));
+        pTwo.setConnected(false);
         
         g.initBoard();
         showBoard(b);
         
-        g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-4,-4)).getPawn(),b.getCell(new Point(-2,-2))),null));
+        while(!end) {
+            if(g.applyActions()==null) {
+                g.nextTurn();
+            }
+            else {
+                System.out.println(g.getWinner());
+                end = true;
+            }
+            showBoard(b);
+        }
+        
+        /*g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-4,-4)).getPawn(),b.getCell(new Point(-2,-2))),null));
         g.addAction(new Action(lFour,new Movement(b.getCell(new Point(-4,0)).getPawn(),b.getCell(new Point(-2,0))),null));
         g.addAction(new Action(lSix,new Movement(b.getCell(new Point(0,-3)).getPawn(),b.getCell(new Point(0,-2))),null));
         g.applyActions();
@@ -72,7 +88,7 @@ public class AugusteTests {
         g.nextTurn();
         showBoard(b);
         
-        /*g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-2,-2)).getPawn(),b.getCell(new Point(-1,-1))),null));
+        g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-2,-2)).getPawn(),b.getCell(new Point(-1,-1))),null));
         g.applyActions();
         g.nextTurn();
         showBoard(b);
@@ -107,6 +123,16 @@ public class AugusteTests {
         System.out.println(g.applyActions());
         g.nextTurn();
         showBoard(b);*/
+    }
+    
+    private static void addMove(Game g, Legion l, int xd, int yd, int xa, int ya) {
+        g.addAction(new Action(l,new Movement(g.getBoard().getCell(new Point(xd,yd)).getPawn(),g.getBoard().getCell(new Point(xa,ya))),null));
+    }
+    
+    private static void next(Game g) {
+        g.applyActions();
+        g.nextTurn();
+        showBoard(g.getBoard());
     }
     
     private static void showBoard(Board b){

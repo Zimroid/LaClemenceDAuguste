@@ -42,6 +42,12 @@ public class Team
     {
         this.players = new ArrayList<>();
     }
+    
+    public Team(int num)
+    {
+        this();
+        this.num = num;
+    }
 
     /**
      * @return the players

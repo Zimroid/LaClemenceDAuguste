@@ -29,6 +29,7 @@ public class Pawn
     // Variables métier
     private Legion legion;
     private Cell cell;
+    private boolean deleted = false;
     
     /**
     * Instanciation d'un pion avec la légion.
@@ -69,5 +70,19 @@ public class Pawn
     public void setCell(Cell cell)
     {
         this.cell = cell;
+    }
+
+    /**
+     * @return the deleted
+     */
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    /**
+     * @param deleted the deleted to set
+     */
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

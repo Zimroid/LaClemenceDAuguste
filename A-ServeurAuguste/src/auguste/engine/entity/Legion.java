@@ -102,6 +102,16 @@ public class Legion
     {
         return pawns;
     }
+
+    /**
+     * @return the living pawns
+     */
+    public ArrayList<Pawn> getLivingPawns()
+    {
+        ArrayList<Pawn> res = new ArrayList<>();
+        for(Pawn p : pawns) if(!p.isDeleted()) res.add(p);
+        return res;
+    }
     
     /**
      * @param pawn The pawn to add

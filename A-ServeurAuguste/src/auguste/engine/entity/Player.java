@@ -31,6 +31,8 @@ public class Player
     private final ArrayList<Legion> legions;
     private Team team;
     private Game game = null;
+    private Bot bot = null;
+    private boolean connected;
     
     /**
      * Instanciation d'un utilisateur avec les valeurs données.
@@ -40,11 +42,25 @@ public class Player
     {
         this();
         this.num = num;
+        this.connected = true;
+    }
+    
+    public Player(int num, Team team)
+    {
+        this(num);
+        this.team = team;
+    }
+    
+    public Player(int num, Team team, boolean connected)
+    {
+        this(num,team);
+        this.connected = connected;
     }
     
     public Player()
     {
         this.legions = new ArrayList<>();
+        this.connected = true;
     }
 
     /**
@@ -122,5 +138,33 @@ public class Player
     public String toString()
     {
         return "Joueur (" + num + ") - " + this.getTeam();
+    }
+
+    /**
+     * @return the bot
+     */
+    public Bot getBot() {
+        return bot;
+    }
+
+    /**
+     * @param bot the bot to set
+     */
+    public void setBot(Bot bot) {
+        this.bot = bot;
+    }
+
+    /**
+     * @return the connected
+     */
+    public boolean isConnected() {
+        return connected;
+    }
+
+    /**
+     * @param connected the connected to set
+     */
+    public void setConnected(boolean connected) {
+        this.connected = connected;
     }
 }

@@ -25,6 +25,7 @@ import auguste.engine.entity.pawn.Laurel;
 import auguste.engine.entity.pawn.Pawn;
 import auguste.engine.entity.pawn.Soldier;
 import auguste.engine.entity.pawn.Wall;
+import auguste.engine.ia.IA;
 import auguste.engine.turnData.Battle;
 import auguste.engine.turnData.Move;
 import auguste.engine.turnData.Tenaille;
@@ -43,7 +44,8 @@ public class Game
     private long turnDuration;
     private final ArrayList<Team> teams;
     private final ArrayList<Legion> legions;
-    
+    private Laurel laurel;
+    private Legion winner;
     private final ArrayList<Action> actions;
     private GameTimer timer;
     private int turn = 1;
@@ -57,6 +59,7 @@ public class Game
     // Variables métier
     private final ArrayList<Player> players;
     private Board board;
+    private IA ia;
     
     /**
     * Instanciation d'une partie avec son gérant.
@@ -74,6 +77,7 @@ public class Game
         this.moves = new ArrayList<>();
         this.tenailles = new ArrayList<>();
         this.battles = new ArrayList<>();
+        this.ia = new IA(this);
         //this.timer = new GameTimer(this,turnDuration);
     }
     
@@ -107,6 +111,18 @@ public class Game
         moves.clear();
         tenailles.clear();
         battles.clear();
+        playBots();
+    }
+    
+    private void playBots()
+    {
+        for(Player p : players)
+        {
+            if(p.getBot() != null && !p.isConnected())
+            {
+                actions.addAll(ia.activateBot(p.getBot()));
+            }
+        }
     }
     
     /**
@@ -116,8 +132,8 @@ public class Game
     public Legion applyActions()
     {
         calculateMoves();
-        Legion res = applyMoves();
-        if(res == null)
+        winner = applyMoves();
+        if(winner == null)
         {
             calculateTenailles();
             applyTenailles();
@@ -131,7 +147,7 @@ public class Game
             //this.timer = new GameTimer(this,turnDuration);
             //this.timer.start();
         }
-        return res;
+        return winner;
     }
     
     /**
@@ -222,18 +238,28 @@ public class Game
             p1 = c1.getPawn();
             p2 = c2.getPawn();
             
-            p1.setCell(c2);
-            if(p2 != null && p2 instanceof Armor)
+            if(!m.isDies())
             {
-                p2.setCell(null);
-                ((Soldier)p1).setArmored(true);
+                p1.setCell(c2);
+                if(p2 != null && p2 instanceof Armor)
+                {
+                    p2.setCell(null);
+                    ((Soldier)p1).setArmored(true);
+                }
+                else if(p1 instanceof Laurel && c2.getTent() != null)
+                {
+                    res = c2.getTent();
+                    break;
+                }
+                c2.setPawn(p1);
+                c1.setPawn(null);
             }
-            else if(p1 instanceof Laurel && c2.getTent() != null)
+            else
             {
-                res = c2.getTent();
+                c1.setPawn(null);
+                p1.setCell(null);
+                p1.setDeleted(true);
             }
-            c2.setPawn(p1);
-            c1.setPawn(null);
         }
         return res;
     }
@@ -328,6 +354,7 @@ public class Game
     {
         Pawn p1;
         Pawn p2;
+        Pawn p;
         int orientation;
         for(Tenaille t : tenailles)
         {
@@ -337,12 +364,14 @@ public class Game
             if(p1 != null && p2 != null)
             {
                 orientation = getOrientation(p1.getCell(),p2.getCell());
-                for(Cell c = p1.getCell(); c != p2.getCell(); c = getCell(c,orientation))
+                for(Cell c = p1.getCell(); c != p2.getCell() && c != null; c = getCell(c,orientation))
                 {
-                    if(c != p1.getCell() && c.getPawn() != null && c.getPawn() instanceof Soldier)
+                    if(c != null && c != p1.getCell() && c.getPawn() != null && c.getPawn() instanceof Soldier)
                     {
-                        c.getPawn().setCell(null);
+                        p = c.getPawn();
+                        p.setCell(null);
                         c.setPawn(null);
+                        p.setDeleted(true);
                     }
                 }
             }
@@ -380,7 +409,7 @@ public class Game
                     if(!exists)
                     {
                         orientation = getOrientation(p1.getCell(),p.getCell());
-                        battleRes = lineForce(p1,(orientation+3)%6) - lineForce(p,(orientation+3)%6);
+                        battleRes = lineForce(p1,(orientation+3)%6) - lineForce(p,orientation);
                         battles.add(new Battle(p1.getCell().getP(),p.getCell().getP(),battleRes==0?null:battleRes<0?p1.getCell().getP():p.getCell().getP()));
                     }
                 }
@@ -392,7 +421,8 @@ public class Game
     {
         int res = p1.isArmored()?2:1;
         
-        Pawn p = getCell(p1.getCell(),orientation).getPawn();
+        Cell c = getCell(p1.getCell(),orientation);
+        Pawn p = c!=null?c.getPawn():null;
         while(p != null && p instanceof Soldier && p.getLegion().getPlayer().getTeam() == p1.getLegion().getPlayer().getTeam())
         {
             res += 1;
@@ -413,16 +443,21 @@ public class Game
         {
             p1 = board.getCell(b.getP1()).getPawn();
             p2 = board.getCell(b.getP2()).getPawn();
-            dies = b.getDies()!=null?board.getCell(b.getP2()).getPawn():null;
-            if(dies == p1)
+            dies = b.getDies()!=null?board.getCell(b.getDies()).getPawn():null;
+            if(p1 != null && p2 != null)
             {
-                p1.getCell().setPawn(null);
-                p1.setCell(null);
-            }
-            else if(dies == p2)
-            {
-                p2.getCell().setPawn(null);
-                p2.setCell(null);
+                if(dies == p1)
+                {
+                    p1.getCell().setPawn(null);
+                    p1.setCell(null);
+                    p1.setDeleted(true);
+                }
+                else if(dies == p2)
+                {
+                    p2.getCell().setPawn(null);
+                    p2.setCell(null);
+                    p2.setDeleted(true);
+                }
             }
         }
     }
@@ -527,11 +562,13 @@ public class Game
                     break;
             }
         }
-        initCell(0,0,new Laurel(),0);        // Laurel
+        laurel = new Laurel();
+        initCell(0,0,laurel,0);        // Laurel
         //this.timer.start();
+        playBots();
     }
     
-    private boolean canMoveLaurel(Legion l, Pawn laurel)
+    public boolean canMoveLaurel(Legion l, Pawn laurel)
     {
         boolean res = false;
         for(Cell c : nearbyCells(laurel.getCell()))
@@ -551,12 +588,12 @@ public class Game
      * @param m Mouvement
      * @return Mouvement correct ou non
      */
-    private boolean correctMove(Movement m)
+    public boolean correctMove(Movement m)
     {
         return correctMove(m,false);
     }
     
-    private boolean correctMove(Movement m, boolean isLaurel)
+    public boolean correctMove(Movement m, boolean isLaurel)
     {
         if(isLaurel)
         {
@@ -568,14 +605,14 @@ public class Game
         }
     }
     
-    private ArrayList<Cell> nearbyEmptyCells(Pawn pawn, boolean armorIsOk)
+    public ArrayList<Cell> nearbyEmptyCells(Pawn pawn, boolean armorIsOk)
     {
         ArrayList<Pawn> l = new ArrayList<>();
         l.add(pawn);
         return nearbyEmptyCells(l,armorIsOk);
     }
     
-    private ArrayList<Cell> nearbyEmptyCells(ArrayList<Pawn> group, boolean armorIsOk)
+    public ArrayList<Cell> nearbyEmptyCells(ArrayList<Pawn> group, boolean armorIsOk)
     {
         ArrayList<Cell> res = new ArrayList<>();
         
@@ -592,7 +629,7 @@ public class Game
         return res;
     }
     
-    private ArrayList<Pawn> friendlyGroup(Pawn p)
+    public ArrayList<Pawn> friendlyGroup(Pawn p)
     {
         ArrayList<Pawn> res = new ArrayList<>();
         ArrayList<Pawn> next = new ArrayList<>();
@@ -629,7 +666,7 @@ public class Game
         return res;
     }
     
-    private ArrayList<Pawn> nearbyFriends(Pawn p)
+    public ArrayList<Pawn> nearbyFriends(Pawn p)
     {
         ArrayList<Pawn> res = new ArrayList<>();
         ArrayList<Cell> cells = nearbyCells(p.getCell());
@@ -646,7 +683,7 @@ public class Game
         return res;
     }
     
-    private ArrayList<Soldier> nearbyEnnemies(Pawn p)
+    public ArrayList<Soldier> nearbyEnnemies(Pawn p)
     {
         ArrayList<Soldier> res = new ArrayList<>();
         ArrayList<Cell> cells = nearbyCells(p.getCell());
@@ -663,7 +700,7 @@ public class Game
         return res;
     }
     
-    private ArrayList<Cell> nearbyCells(Cell c)
+    public ArrayList<Cell> nearbyCells(Cell c)
     {
         ArrayList<Cell> res = new ArrayList<>();
         int x = c.getP().x;
@@ -803,6 +840,7 @@ public class Game
         Cell c = board.getCell(board.getRotatedPosition(new Point(x,y), rotation));
         c.setPawn(pawn);
         pawn.setCell(c);
+        if(pawn.getLegion() != null) pawn.getLegion().getPawns().add(pawn);
         if(tent) c.setTent(pawn.getLegion());
     }        
     
@@ -957,5 +995,26 @@ public class Game
             if (legion.getPosition() == position) return legion;
         }
         return null;
+    }
+    
+    /**
+     * @return the laurel
+     */
+    public Laurel getLaurel() {
+        return laurel;
+    }
+
+    /**
+     * @param laurel the laurel to set
+     */
+    public void setLaurel(Laurel laurel) {
+        this.laurel = laurel;
+    }
+
+    /**
+     * @return the winner
+     */
+    public Legion getWinner() {
+        return winner;
     }
 }
