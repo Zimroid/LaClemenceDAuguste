@@ -181,8 +181,6 @@ function process(evt)
 			// identification d'un départ de joueur
 			if (save_game_users_prec.length != 0)
 			{
-				//$("#noTeam span.viewers").remove(":contains('" + save_game_users_prec[0].user_name + "')");
-				//$("[name='playerName'] option").remove(":contains('" + save_game_users_prec[0].user_name + "')");
 				$("#noTeam").find("span.viewers").remove(":contains('" + save_game_users_prec[0].user_name + "')");
 				$("[name='playerName']").find("option").remove(":contains('" + save_game_users_prec[0].user_name + "')");
 			}
@@ -193,21 +191,6 @@ function process(evt)
 					$("#noTeam").append(text1);
 					$("[name='playerName']").append(text2);
 				}
-				/*else
-				{
-					if (sitePage == "gameConfig")
-					{
-						// attente du chargement du DOM
-						while (!$("#noTeam").length && !$("[name='playerName']").length)
-						{
-							if ($("#noTeam").length && $("[name='playerName']").length)
-							{
-								$("#noTeam").append(text1);
-								$("[name='playerName']").append(text2);
-							}
-						}
-					}
-				}*/
 			}
 		}
 		else if (mode == 'fast' && data.users[1] && myName == data.users[0].user_name)
