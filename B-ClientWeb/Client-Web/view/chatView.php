@@ -5,7 +5,7 @@
 	{
 ?>
 		<div>Nom d'utilisateur : <?php echo $_SESSION['username']; ?></div>
-		<button onclick="deconnexion();">Déconnexion</button>
+		<button id="deconnect" onclick="deconnexion();">Déconnexion</button>
 <?php
 	}
 	
@@ -17,10 +17,10 @@
 		<form onsubmit="return false;" autocomplete="off">
 			<input title='Pseudo' type="text" name="user" id="user" placeholder="Pseudo" onkeypress="if (event.keyCode == 13) connexion(true,'','')" />
 			<input title='Mot de passe' type="password" name="password" id="password" placeholder="Mot de passe" onkeypress="if (event.keyCode == 13) connexion(true,'','')" />
-			<input title='Connexion' type="button" value="Me connecter" onclick="connexion(true,'','');" /><br>
+			<input id="connect" title='Connexion' type="button" value="Me connecter" onclick="connexion(true,'','');" /><br>
+			<!-- Lien vers page d'inscription -->
+			<a id='subscribeScript' href='<?php echo $sitePath; ?>/index.php?page=subscribe'>M'inscrire au jeu</a>
 		</form>
-		<!-- Lien vers page d'inscription -->
-		<a id='subscribeScript' href='<?php echo $sitePath; ?>/subscribe'>M'inscrire au jeu</a>
 		
 <?php
 	}

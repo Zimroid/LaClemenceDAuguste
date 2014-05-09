@@ -14,7 +14,7 @@ var rayon;
 var first = true;
 //Le numéro du joueur
 var playerGroup;
-//la liste des armures
+//la liste des armures [pawnX, pawnY, equipé(true/false)]
 var armor;
 //clavier
 var keys = new Array();
@@ -24,19 +24,43 @@ var depStart;
 var depEnd;
 //Le groupe du pions cliqué
 var actuGroup;
+//l'id de la légion actuellement selctionné
+var actuLegionId
 
 // choppe toutes les coordonnées des cases adjacente à la case donné
-function getProx(pawnX, pawnY)
+function getProx(pawnX, pawnY, isHard)
 {
 	var res = new Array();
+	var hard = new Array();
+
+	if(isHard) {
+		var x;
+		var y;
+		var coordX;
+		var coordY;
+
+		//on remplis hard avec toutes les coordonnées des armures non équipé
+		for(var i=0;i<armor.length;i++)
+		{
+			if(!armor[i][2]) {
+				x = armor[i][0]+size-1;
+				y = armor[i][1]+size-1;
+				coordX = virtual[x][y][0];
+				coordY = virtual[x][y][1];
+				hard.push(coordX + ',' + coordY);
+			}
+		}
+	}
 
 	//Si on est pas au bord gauche on choppe la case de gauche
 	if(pawnY > 0) {
+		if((isHard && jQuery.inArray(virtual[pawnX][pawnY-1][0] +','+ virtual[pawnX][pawnY-1][1], hard) == -1) || !isHard)
 		res.push([virtual[pawnX][pawnY-1][0], virtual[pawnX][pawnY-1][1]]);
 	}
 
 	//Si on est pas au bord droit on choppe la case de droite
 	if(pawnY < virtual[pawnX].length-1) {
+		if((isHard && jQuery.inArray(virtual[pawnX][pawnY+1][0] +','+ virtual[pawnX][pawnY+1][1], hard) == -1) || !isHard)
 		res.push([virtual[pawnX][pawnY+1][0], virtual[pawnX][pawnY+1][1]]);
 	}
 
@@ -44,6 +68,7 @@ function getProx(pawnX, pawnY)
 	if(pawnX > 0) {
 		//et si la ligne du dessus à moins de case que la notre et qu'on est en fin de ligne on ne prend pas la case
 		if(!(virtual[pawnX-1].length < virtual[pawnX].length && pawnY == virtual[pawnX].length-1)) {
+			if((isHard && jQuery.inArray(virtual[pawnX-1][pawnY][0] +','+ virtual[pawnX-1][pawnY][1], hard) == -1) || !isHard)
 			res.push([virtual[pawnX-1][pawnY][0], virtual[pawnX-1][pawnY][1]]);
 		}
 	}
@@ -52,27 +77,32 @@ function getProx(pawnX, pawnY)
 	if(pawnX < virtual.length-1) {
 		//et si la ligne du dessous à moins de case que la notre et qu'on est en fin de ligne on ne prend pas la case
 		if(!(virtual[pawnX+1].length < virtual[pawnX].length && pawnY == virtual[pawnX].length-1)) {
+			if((isHard && jQuery.inArray(virtual[pawnX+1][pawnY][0] +','+ virtual[pawnX+1][pawnY][1], hard) == -1) || !isHard)
 			res.push([virtual[pawnX+1][pawnY][0], virtual[pawnX+1][pawnY][1]]);
 		}
 	}
 
 	//Si on est au dessus de la ligne du milieu (ligne comprise) et qu'on est ni tout à gauche ni tout en haut on choppe la case haut gauche
 	if(pawnX < size && pawnX > 0 && pawnY > 0) {
+		if((isHard && jQuery.inArray(virtual[pawnX-1][pawnY-1][0] +','+ virtual[pawnX-1][pawnY-1][1], hard) == -1) || !isHard)
 		res.push([virtual[pawnX-1][pawnY-1][0], virtual[pawnX-1][pawnY-1][1]]);
 	}
 
 	//Si on est au dessus de la ligne du milieu (ligne non comprise) on ajoute forcément la case bas droite
 	if(pawnX < size-1) {
+		if((isHard && jQuery.inArray(virtual[pawnX+1][pawnY+1][0] +','+ virtual[pawnX+1][pawnY+1][1], hard) == -1) || !isHard)
 		res.push([virtual[pawnX+1][pawnY+1][0], virtual[pawnX+1][pawnY+1][1]]);
 	}
 
 	//Si on est en dessous de la ligne du milieu (ligne comprise) et qu'on est ni tout à gauche ni tout en bas on choppe la case bas gauche
 	if(pawnX >= size-1 && pawnX < virtual.length-1 && pawnY > 0) {
+		if((isHard && jQuery.inArray(virtual[pawnX+1][pawnY-1][0] +','+ virtual[pawnX+1][pawnY-1][1], hard) == -1) || !isHard)
 		res.push([virtual[pawnX+1][pawnY-1][0], virtual[pawnX+1][pawnY-1][1]]);
 	}
 
 	//Si on est en dessous de la ligne du milieu (ligne non comprise) on ajoute forcément la case haut droite
 	if(pawnX > size-1) {
+		if((isHard && jQuery.inArray(virtual[pawnX-1][pawnY+1][0] +','+ virtual[pawnX-1][pawnY+1][1], hard) == -1) || !isHard)
 		res.push([virtual[pawnX-1][pawnY+1][0], virtual[pawnX-1][pawnY+1][1]]);
 	}
 
@@ -80,10 +110,10 @@ function getProx(pawnX, pawnY)
 }
 
 //choppe toutes les coordonnées des case autour d'un groupe (d'une case donné)
-function getZoneProx(pawnX, pawnY, group)
+function getZoneProx(pawnX, pawnY, group, isHard)
 {
 	//Chercher les cases adjacentes à la case
-	var res = getProx(pawnX, pawnY);
+	var res = getProx(pawnX, pawnY, isHard);
 
 	// On met dans pawn les coordonnées des pions pour ne pas selectioner leurs cases
 	var pawn = new Array();
@@ -112,7 +142,7 @@ function getZoneProx(pawnX, pawnY, group)
 					var xVirtual = getXVirtual(res[i][0], res[i][1]);
 					var yVirtual = getYVirtual(res[i][0], res[i][1], xVirtual);
 					//alert(xVirtual+", "+yVirtual);
-					var resTmp = getZoneProx(xVirtual, yVirtual, group);
+					var resTmp = getZoneProx(xVirtual, yVirtual, group, isHard);
 					for(j = 0; j < resTmp.length; j++)
 					{
 						res.push(resTmp[j]);
@@ -132,8 +162,10 @@ function getZoneProx(pawnX, pawnY, group)
 function getZoneLaurel(pawnX, pawnY)
 {
 	var res = new Array();
-	//On cherche tous les pions de notre groupe à proximité du laurié
-	var prox = getProx(pawnX, pawnY);
+	//On cherche toutes les cases ou le laurier leut se déplacer (le laurier ne peut se déplacer sur les armures on le concidère donc comme un pions en armure)
+	var prox = getProx(pawnX, pawnY, true);
+	//On cherche tous les pions à coté du laurier (on regarde aussi sur les cases armures car les pions venant de séquiper d'une armure sont encore concidéré comme étant une armure)
+	var detect = getProx(pawnX, pawnY, false);
 	var proxyPawn = new Array();
 
 	// On met dans pawn les coordonnées des pions pour trouver lesquels sont à proximité
@@ -152,17 +184,26 @@ function getZoneLaurel(pawnX, pawnY)
 		pawn.push(coordX + ',' + coordY);
 	}
 
-	for (var i =0; i < prox.length; i++)
+	for (var i = 0; i < detect.length; i++)
 	{
-		if(jQuery.inArray(prox[i][0] + ',' + prox[i][1], pawn) != -1) {
-			proxyPawn.push(prox[i]);
+		if(jQuery.inArray(detect[i][0] + ',' + detect[i][1], pawn) != -1) {
+			proxyPawn.push(detect[i]);
 		}
 	}
 
-	//On trouve toutes les cases vide qui touchent directement uniquement les pions trouvé
+	for (var i = 0; i < prox.length; i++)
+	{
+		if(jQuery.inArray(prox[i][0] + ',' + prox[i][1], pawn) == -1) {
+			res.push(prox[i]);
+		}
+	}
+
+	//On liste les légions autour du laurier
+	var legionsDisp = new Array();
 	for (var i = 0; i < proxyPawn.length; i++)
 	{
-		pawnX = getXVirtual(proxyPawn[i][0], proxyPawn[i][1]);
+		//alert("ok => " + proxyPawn[i][2]);
+		/*pawnX = getXVirtual(proxyPawn[i][0], proxyPawn[i][1]);
 		pawnY = getYVirtual(proxyPawn[i][0], proxyPawn[i][1], pawnX);
 		prox = getProx(pawnX, pawnY);
 		for (var j = 0; j < prox.length; j++)
@@ -171,9 +212,25 @@ function getZoneLaurel(pawnX, pawnY)
 			if(jQuery.inArray(prox[j][0] + ',' + prox[j][1], pawn) == -1) {
 				res.push(prox[j]);
 			}
+		}*/
+		pawnX = getXVirtual(proxyPawn[i][0], proxyPawn[i][1]);
+		pawnY = getYVirtual(proxyPawn[i][0], proxyPawn[i][1], pawnX);
+		var tmp = getPawns(pawnX-size+1, pawnY-size+1);
+		alert("tmp => " + tmp);
+		if(jQuery.inArray(tmp[2], legionsDisp) == -1) {
+			legionsDisp.push(tmp[2]);
 		}
 	}
-	return res;
+
+	//Si on a trouvé qu'un seul type de légion autour du laurier on renvois directement les cases dispo et on assigne la légionId pour le déplacement
+	if(legionsDisp.length == 1) {
+		actuLegionId = legions[legionsDisp[0]][2];
+		return res;
+	}
+	else {
+		alert("plusieurs légions, ou 0 x)");
+		return new Array();
+	}
 }
 
 //Detemine le X (la ligne) de la case grace à sa position en px
@@ -240,7 +297,7 @@ function oneHundredPercent(first)
 
 	if(first) {
 		$( window ).resize(function() {
-			t.boardCreate(size, pawns, legions, playerGroup, armor);
+			t.boardCreate(size, pawns, legions, playerGroup, armor, new Array(), new Array());
 		});
 	}
 }
@@ -291,10 +348,12 @@ function harden()
 						var json = JSON.stringify(
 						{
 					        "command": "GAME_MOVE",
-					        "u_start": depStart[0],
-					        "w_start": depStart[1],
-					        "u_end": depEnd[0],
-					        "w_end": depEnd[1]
+					        "room_id": save_game_config.room_id,
+					        "start_u": depStart[0],
+					        "start_w": depStart[1],
+					        "end_u": depEnd[0],
+					        "end_w": depEnd[1],
+					        "legion_id": actuLegionId
 					    });
 						sendText(json);
 					}
@@ -307,6 +366,7 @@ function harden()
 				var group = p[2];
 				var color = legions[group][0];
 				var shape;
+				var legionId;
 				if(pawns[i][2] >= 0) {
 					if(legions[group][1] == 'square') {
 						shape = 4;
@@ -317,47 +377,97 @@ function harden()
 					else {
 						shape = 6;
 					}
+					legionId = legions[group][2];
 				}
 				if(p[2] >= 0) {
-					t.drawPolygon({
-						pawnX: pawnX,
-						pawnY: pawnY,
-						group: group,
-						layer: true,
-						fillStyle: color,
-						strokeStyle: 'black',
-						strokeWidth: 8,
-						x: coordX,
-						y: coordY,
-						radius: rayon/2,
-						sides: shape,
-						rotate: 90,
-						click: function(layer) {
-							if(layer.group == playerGroup) {
-								depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
-								depEnd = null;
-								t.restoreCanvas();
-								var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array());
-								for(i = 0; i < tab.length; i++)
-								{
-									t.drawPolygon({
-										fillStyle: '#BBBBFF',
-										strokeStyle: 'black',
-										strokeWidth: 2,
-										x: tab[i][0],
-										y: tab[i][1],
-										radius: rayon,
-										sides: 6,
-										rotate: 90
-									});
-								}
-								harden();
+
+
+				//le fond du pion (pour qu'on puisse activer la même fonction peu importe à quelle endroit on a cliqué sur la case du pion)
+				t.drawPolygon({
+					name: pawnX+','+pawnY+'fond',
+					pawnX: pawnX,
+					pawnY: pawnY,
+					legionId: legionId,
+					group: group,
+					layer: true,
+					fillStyle: '#FFFFFF',
+					strokeStyle: 'black',
+					strokeWidth: 2,
+					x: coordX,
+					y: coordY,
+					radius: rayon,
+					sides: 6,
+					rotate: 90,
+					click: function(layer) {
+							actuGroup = layer.group;
+							depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
+							depEnd = null;
+							actuLegionId = layer.legionId;
+							t.restoreCanvas();
+							var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array(), true);
+							for(i = 0; i < tab.length; i++)
+							{
+								t.drawPolygon({
+									fillStyle: '#BBBBFF',
+									strokeStyle: 'black',
+									strokeWidth: 2,
+									x: tab[i][0],
+									y: tab[i][1],
+									radius: rayon,
+									sides: 6,
+									rotate: 90
+								});
 							}
+							harden();
+					}
+				});
+
+
+				t.removeLayer(pawnX+','+pawnY);
+				t.drawPolygon({
+					name: pawnX+','+pawnY,
+					pawnX: pawnX,
+					pawnY: pawnY,
+					legionId: legionId,
+					group: group,
+					layer: true,
+					fillStyle: color,
+					strokeStyle: 'black',
+					strokeWidth: 8,
+					x: coordX,
+					y: coordY,
+					radius: rayon/2,
+					sides: shape,
+					rotate: 90,
+					click: function(layer) {
+						actuGroup = layer.group;
+						depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
+						depEnd = null;
+						actuLegionId = layer.legionId;
+						t.restoreCanvas();
+						var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array(), true);
+						for(i = 0; i < tab.length; i++)
+						{
+							t.drawPolygon({
+								fillStyle: '#BBBBFF',
+								strokeStyle: 'black',
+								strokeWidth: 2,
+								x: tab[i][0],
+								y: tab[i][1],
+								radius: rayon,
+								sides: 6,
+								rotate: 90
+							});
 						}
-					});
-				}
+						harden();
+					}
+				});
+
+
+
 			}
 		}
+	}
 }
 
 function keyPress(e)
@@ -380,6 +490,10 @@ jQuery.fn.extend({
 		var armor = new Array();
 		// tableau des legions
 		var legions = new Array();
+		// tableau des tentes
+		var tent = new Array();
+		// tableau des mouvements
+		var move = new Array();
 		for (var i = 0 ; i < data.board.length ; i++)
 		{
 			// soldat
@@ -391,14 +505,17 @@ jQuery.fn.extend({
 					tabTypeLegion.push(data.board[i].legion_shape + data.board[i].legion_color);
 					nLegion = tabTypeLegion.length-1;
 
-					legions.push([data.board[i].legion_color, data.board[i].legion_shape]);
+					legions.push([data.board[i].legion_color, data.board[i].legion_shape, data.board[i].legion_id]);
 				}
 				pions.push([data.board[i].u, data.board[i].w, nLegion]);
+				if(data.board[i].legion_armor) {
+					armor.push([data.board[i].u, data.board[i].w, true]);
+				}
 			}
 			// armure
 			else if (data.board[i].type == "auguste.engine.entity.pawn.armor")
 			{
-				armor.push([data.board[i].u, data.board[i].w]);
+				armor.push([data.board[i].u, data.board[i].w, false]);
 			}
 			// laurier
 			else if (data.board[i].type == "auguste.engine.entity.pawn.laurel")
@@ -406,9 +523,14 @@ jQuery.fn.extend({
 				pions.push([data.board[i].u, data.board[i].w, -1]);
 			}
 		}
-		this.boardCreate(5, pions, legions, 0, armor);
+		for (var i = 0 ; i < data.moves.length ; i++)
+		{
+			move.push([data.moves[i].destroyed, data.moves[i].start_u, data.moves[i].start_w, data.moves[i].end_u, data.moves[i].end_w]);
+		}
+		this.boardCreate(5, pions, legions, 0, armor, tent, move);
 	},
-	boardCreate: function(s, pawn, legion, nGroup, arm) {
+	boardCreate: function(s, pawn, legion, nGroup, arm, tent, move)
+	{
 		oneHundredPercent(first);
 		first = false;
 
@@ -483,7 +605,8 @@ jQuery.fn.extend({
 					        "start_u": depStart[0],
 					        "start_w": depStart[1],
 					        "end_u": depEnd[0],
-					        "end_w": depEnd[1]
+					        "end_w": depEnd[1],
+					        "legion_id": actuLegionId
 					    });
 					    //alert(depStart+" -> "+depEnd);
 						sendText(json);
@@ -517,7 +640,8 @@ jQuery.fn.extend({
 					        "start_u": depStart[0],
 					        "start_w": depStart[1],
 					        "end_u": depEnd[0],
-					        "end_w": depEnd[1]
+					        "end_w": depEnd[1],
+					        "legion_id": actuLegionId
 					    });
 					    //alert(depStart+" -> "+depEnd);
 						sendText(json);
@@ -527,6 +651,7 @@ jQuery.fn.extend({
 			}
 		}
 		this.resPawn();
+		this.move(move);
 		t.saveCanvas();
 	},
 
@@ -541,6 +666,7 @@ jQuery.fn.extend({
 			
 			var color;
 			var shape;
+			var legionId;
 			if(pawns[i][2] >= 0) {
 				color = legions[pawns[i][2]][0];
 
@@ -553,14 +679,18 @@ jQuery.fn.extend({
 				else {
 					shape = 6;
 				}
+				legionId = legions[pawns[i][2]][2];
 			}
+
 
 			var group = pawns[i][2];
 
 			//le fond du pion (pour qu'on puisse activer la même fonction peu importe à quelle endroit on a cliqué sur la case du pion)
 			t.drawPolygon({
+				name: pawnX+','+pawnY+'fond',
 				pawnX: pawnX,
 				pawnY: pawnY,
+				legionId: legionId,
 				group: group,
 				layer: true,
 				fillStyle: '#FFFFFF',
@@ -581,8 +711,9 @@ jQuery.fn.extend({
 						actuGroup = layer.group;
 						depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
 						depEnd = null;
+						actuLegionId = layer.legionId;
 						t.restoreCanvas();
-						var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array());
+						var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array(), false);
 						for(i = 0; i < tab.length; i++)
 						{
 							t.drawPolygon({
@@ -605,8 +736,10 @@ jQuery.fn.extend({
 			//Dans le cas d'un pion
 			if(pawns[i][2] >= 0) {
 				t.drawPolygon({
+					name: pawnX+','+pawnY,
 					pawnX: pawnX,
 					pawnY: pawnY,
+					legionId: legionId,
 					group: group,
 					layer: true,
 					fillStyle: color,
@@ -626,8 +759,9 @@ jQuery.fn.extend({
 							actuGroup = layer.group;
 							depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
 							depEnd = null;
+							actuLegionId = layer.legionId;
 							t.restoreCanvas();
-							var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array());
+							var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array(), false);
 							for(i = 0; i < tab.length; i++)
 							{
 								t.drawPolygon({
@@ -658,6 +792,7 @@ jQuery.fn.extend({
 					source = 'js/plateau/laurel.png';
 				}
 				t.drawImage({
+					name: pawnX+','+pawnY,
 					pawnX: pawnX,
 					pawnY: pawnY,
 					source: source,
@@ -700,6 +835,39 @@ jQuery.fn.extend({
 
 	getDeplacement: function()
 	{
-		return [depStart, depEnd];
+		return [depStart, depEnd, actuLegionId];
+	},
+
+	move: function(move)
+	{
+		for(var i = 0; i < move.length; i++)
+		{
+			var coord = virtual[move[i][3]+size-1][move[i][4]+size-1];
+			//alert((move[i][1])+','+(move[i][2]));
+			t.moveLayer((move[i][1]+size-1)+','+(move[i][2]+size-1)+'fond', -1);
+			t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1)+'fond', {
+			  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1
+			}, 0);
+			t.moveLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), -1);
+			t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), {
+			  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1
+			}, 1000,
+			function(layer) {
+				harden();
+			});
+
+			for(var j = 0; j < pawns.length; j++)
+			{
+				if(pawns[j][0] == move[i][1] && pawns[j][1] == move[i][2]) {
+					pawns[j] = [move[i][3], move[i][4], pawns[j][2]];
+				}
+			}
+			for(var j = 0; j < armor.length; j++)
+			{
+				if(armor[j][0] == move[i][1] && armor[j][1] == move[i][2]) {
+					armor[j] = [move[i][3], move[i][4], armor[j][2]];
+				}
+			}
+		}
 	}
 });

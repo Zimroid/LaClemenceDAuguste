@@ -1,6 +1,6 @@
 <header>
-	<img src="css/images/augusteLogo.png" alt="Logo">
-	<a id='titleScript' href='<?php echo $sitePath; ?>'><h1 id="title"><?php echo $siteName; ?></h1></a>
+	<span onclick="reloadContent(sitePath + '/index.php?script=1');"><img id="logo" src="css/images/augusteLogo.png" alt="Logo"></span>
+	<a id='titleScript' onclick="sitePage = 'home';" href='<?php echo $sitePath; ?>'><h1 id="title"><?php echo $siteName; ?></h1></a>
 </header>
 
 <!-- MENU -->
@@ -8,7 +8,7 @@
 	<div class="navDivider"></div>
 	<ul class="navNav">
 		<li class="liHome">
-			<a id='homeScript' onclick="sitePage = 'home';" href='<?php echo $sitePath; ?>'>Accueil</a>
+			<a id='homeScript' onclick="sitePage = 'home';" href='<?php echo $sitePath; ?>/index.php?page=news'>Accueil</a>
 		</li>
 		<li class="liRules">
 			<a id='rulesScript' onclick="sitePage = 'rules';" href="<?php echo $sitePath; ?>/index.php?page=rules">Règles</a>
