@@ -177,6 +177,28 @@ public class Room implements GameListener
      */
     public void addTurnData(JSONObject json) throws JSONException
     {
+        // Ajout des informations
+        JSONObject informations = new JSONObject();
+        informations.put("board_size", this.game.getBoard().getSize());
+        JSONArray legions = new JSONArray();
+        JSONObject legionData;
+        Legion legion;
+        for (int i = 0; i < 6; i++)
+        {
+            legion = this.game.getLegion(i);
+            if (legion != null)
+            {
+                legionData = new JSONObject();
+                legionData.put("legion_id", legion.getPosition());
+                legionData.put("legion_shape", legion.getShape());
+                legionData.put("legion_color", legion.getColor());
+                legionData.put("legion_owner", this.users.get(this.playing.get(legion.getPlayer())).getName());
+                legions.put(legionData);
+            }
+        }
+        informations.put("legions", legions);
+        json.put("informations", informations);
+        
         // Ajout du plateau
         JSONArray boardData = new JSONArray();
         JSONObject cellData;
