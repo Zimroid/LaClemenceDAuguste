@@ -5,7 +5,7 @@
             <url>src/auguste/server/Room.java</url>
             <bookmark id="1">
                 <name/>
-                <line>103</line>
+                <line>104</line>
                 <key/>
             </bookmark>
         </file>
@@ -14,9 +14,6 @@
         <group>
             <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/engine/entity/Game.java</file>
             <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/server/Room.java</file>
-            <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/engine/GameTimer.java</file>
-            <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/server/command/ClientCommand.java</file>
-            <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/auguste/server/command/client/GameMove.java</file>
         </group>
     </open-files>
 </project-private>

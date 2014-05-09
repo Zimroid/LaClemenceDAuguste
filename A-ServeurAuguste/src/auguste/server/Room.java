@@ -25,6 +25,7 @@ import auguste.engine.entity.Player;
 import auguste.engine.entity.Team;
 import auguste.engine.entity.action.Action;
 import auguste.engine.entity.action.Movement;
+import auguste.engine.entity.pawn.Laurel;
 import auguste.engine.entity.pawn.Soldier;
 import auguste.engine.turnData.Battle;
 import auguste.engine.turnData.Move;
@@ -144,16 +145,15 @@ public class Room implements GameListener
     {
         Cell cell = this.game.getBoard().getCell(new Point(json.getInt("start_u"), json.getInt("start_w")));
         Action action = null;
-        if (cell != null)
+        if (this.playing.get(this.game.getLegion(json.getInt("legion_id")).getPlayer()) == user.getId() && cell != null)
         {
-            if (cell.getPawn() != null && cell.getPawn().getLegion().getPosition() == json.getInt("legion_id")
-                    && this.playing.get(cell.getPawn().getLegion().getPlayer()) == user.getId())
+            if (cell.getPawn() != null)
             {
                 Cell newCell = this.game.getBoard().getCell(new Point(json.getInt("end_u"), json.getInt("end_w")));
                 if (newCell != null)
                 {
                     Movement movement = new Movement(cell.getPawn(), newCell);
-                    action = new Action(cell.getPawn().getLegion(), movement, null);
+                    action = new Action(this.game.getLegion(json.getInt("legion_id")), movement, null);
                 }
             }
         }

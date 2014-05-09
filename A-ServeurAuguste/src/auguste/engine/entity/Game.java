@@ -396,7 +396,8 @@ public class Game
         while(p != null && p instanceof Soldier && p.getLegion().getPlayer().getTeam() == p1.getLegion().getPlayer().getTeam())
         {
             res += 1;
-            p = getCell(p.getCell(),orientation).getPawn();
+            if (getCell(p.getCell(),orientation) != null) p = getCell(p.getCell(),orientation).getPawn();
+            else p = null;
         }
         
         return res;
@@ -947,5 +948,14 @@ public class Game
      */
     public int getTurn() {
         return turn;
+    }
+    
+    public Legion getLegion(int position)
+    {
+        for (Legion legion : this.legions)
+        {
+            if (legion.getPosition() == position) return legion;
+        }
+        return null;
     }
 }
