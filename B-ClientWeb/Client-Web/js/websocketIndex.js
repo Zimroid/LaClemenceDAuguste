@@ -71,12 +71,17 @@ function process(evt)
 	else if(command == "game_confirm")
 	{	
 		save_game_config = data;
+		// si une partie rapide est lancée
+		if (data.configuration.game_mode == 'fast' && (data.teams[0].players[0].player_user_id != 0) && (data.teams[1].players[0].player_user_id != 0))
+		{
+			gameStart(data.room_id);
+		}
 		// si une partie normale est lancée
-		if (sitePage != 'gameConfig')
+		else if (sitePage != 'gameConfig')
 		{
 			reloadContent(sitePath + "/index.php?script=1&page=gameConfig&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
+			sitePage = 'gameConfig';
 		}
-		sitePage = 'gameConfig';
 	}
 
 	// Si on nous envoie un plateau de jeu
@@ -159,9 +164,9 @@ function process(evt)
 						// ajout de l'utilisateur si non trouvé
 						if (!userOK)
 						{
-							if (text1.indexOf("<span class='viewers'>" + save_game_users[i].user_name + "</span><br>") == -1)
+							if (text1.indexOf("<p class='viewers'>" + save_game_users[i].user_name + "</p>") == -1)
 							{
-								text1 += "<span class='viewers'>" + save_game_users[i].user_name + "</span><br>";
+								text1 += "<p class='viewers'>" + save_game_users[i].user_name + "</p>";
 							}
 							if (text2.indexOf("<option value='" + save_game_users[i].user_id + "'>" + save_game_users[i].user_name + "</option>") == -1)
 							{
@@ -172,7 +177,7 @@ function process(evt)
 					// si la liste est vide
 					else
 					{
-						text1 += "<span class='viewers'>" + save_game_users[i].user_name + "</span><br>";
+						text1 += "<p class='viewers'>" + save_game_users[i].user_name + "</p>";
 						text2 += "<option value='" + save_game_users[i].user_id + "'>" + save_game_users[i].user_name + "</option>";
 						return false;
 					}
@@ -181,7 +186,7 @@ function process(evt)
 			// identification d'un départ de joueur
 			if (save_game_users_prec.length != 0)
 			{
-				$("#noTeam").find("span.viewers").remove(":contains('" + save_game_users_prec[0].user_name + "')");
+				$("#noTeam").find("p.viewers").remove(":contains('" + save_game_users_prec[0].user_name + "')");
 				$("[name='playerName']").find("option").remove(":contains('" + save_game_users_prec[0].user_name + "')");
 			}
 			if (text1 != '' && text2 != '')

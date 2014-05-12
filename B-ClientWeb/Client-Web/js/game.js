@@ -192,11 +192,14 @@ function newTeam()
     //div pour la team avec son numéro
     var divTeam = $("<div id='team" + numberTeam + "' name='team'>");
     //titre de la div
-    var ptitle = $("<p id='title" + numberTeam + "' name='title" + numberTeam + "'>Team " + numberTeam + "</p>");
+    var ptitle = $("<span id='title" + numberTeam + "' name='title" + numberTeam + "'>Team " + numberTeam + "</span>");
     //bouton pour la création d'un nouveau joueur dans la team
-    var NPButton = $("<button id='button" + numberTeam + "' name='button" + numberTeam + "' onclick='newPlayer(" + numberTeam + ",1)'>Nouveau joueur</button>");
+    var NPButton = $("<button class='newPlayerButton' id='button" + numberTeam + "' name='button" + numberTeam + "' onclick='newPlayer(" + numberTeam + ",1)'>Nouveau joueur</button>");
+    //bouton de suppression de la team
+    var DTButton = $("<button class='dropTeamButton' onclick='dropTeam(\"team" + numberTeam + "\")'>Supprimer la team</button>");
 
-    divTeams.append(ptitle, NPButton, divTeam);
+	divTeam.append(ptitle, NPButton, DTButton);
+    divTeams.append(divTeam);
     newPlayer(numberTeam,1);
 }
 
@@ -208,8 +211,8 @@ function newPlayer(team, player)
     var divTeam = $("#team" + team);
     //div de config pour le nouveau player
     var divPlay = $("<div name='player' id='player" + team + "_" + player + "'></div>");
-    //label du joueur dont on fait la config
-    var lblPlay = $("<label>Joueur</label>");
+    //span du joueur dont on fait la config
+    var pPlay = $("<span>Joueur " + player + "</span>");
     //select du joueur dont on fait la config
     var selPlay = $("<select name='playerName' class='" + team + "' onchange='gameConfig();'></select>");
     //label pour la color
@@ -221,7 +224,9 @@ function newPlayer(team, player)
     var optColor2 = $("<option value='#00FF00'>Vert</option>");
     var optColor3 = $("<option value='#0000FF'>Bleu</option>");
     //bouton pour la création d'un nouveau joueur dans la team
-    var NLButton = $("<button id='legion"+ team + '_' + player +"' onclick='newLegion(" + team + "," + player + ",1)'>Nouvelle légion</button>");
+    var NLButton = $("<button class='newLegionButton' id='legion"+ team + '_' + player +"' onclick='newLegion(" + team + "," + player + ",1)'>Nouvelle légion</button>");
+    //bouton de suppression du player
+    var DPButton = $("<button class='dropPlayerButton' onclick='dropPlayer('player" + team + "_" + player + "')'>Supprimer le joueur</button>");
 
 	var users_options = '';
 	for (var i = 0 ; i < save_game_users.length ; i++)
@@ -230,7 +235,8 @@ function newPlayer(team, player)
 	}
 	selPlay.append(users_options);
     selColor.append(optColor, optColor2, optColor3);
-    divPlay.append(lblPlay, selPlay, lblColor, selColor, NLButton);
+    divPlay.append(pPlay, selPlay, lblColor, selColor, NLButton);
+    if (player != 1) divPlay.append(DPButton);
     divTeam.append(divPlay);
     newLegion(team,player,1);
 }
@@ -243,6 +249,8 @@ function newLegion(team, player, legion)
     var divPlay = $("#player" + team + '_' + player);
     //div de config pour le nouveau player
     var divLegion = $("<div name='legion' id='legion" + team + "_" + player + "_" + legion + "'></div>");
+    //span de la légion dont on fait la config
+    var pLegion = $("<span>Légion " + legion + "</span>");
 	//label pour la forme du pion
     var lblForm = $("<label>Forme du pion</label>");
     //select pour la forme du pion
@@ -262,9 +270,12 @@ function newLegion(team, player, legion)
 	var optPosit4 = $("<option value='2'>Droit</option>");
 	var optPosit5 = $("<option value='1'>Haut droit</option>");
 	var optPosit6 = $("<option value='0'>Haut gauche</option>");
+	//bouton de suppression de la légion
+    var DLButton = $("<button class='dropLegionButton' onclick='dropLegion('legion" + team + "_" + player + "_" + legion + "')'>Supprimer la légion</button>");
 	
 	selForm.append(optForm, optForm2, optForm3);
     selPosit.append(optPosit, optPosit2, optPosit3, optPosit4, optPosit5, optPosit6);
-    divLegion.append(lblForm, selForm, lblPosit, selPosit);
+    divLegion.append(pLegion, lblForm, selForm, lblPosit, selPosit);
+    if (legion != 1) divLegion.append(DLButton);
     divPlay.append(divLegion);
 }

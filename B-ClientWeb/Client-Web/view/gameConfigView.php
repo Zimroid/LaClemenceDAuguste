@@ -2,24 +2,22 @@
 	if (isset($_GET['mode']) && ($_GET['mode'] == 'normal'))
 	{
 ?>
-<h2>Panneau de configuration de la partie <span id="game_name"><?php if (isset($_GET['name'])) echo $_GET['name']; ?></span></h2>
-<form autocomplete="off" onsubmit="return false;" >
-	<input title='Type de partie' type="hidden" id="type_game" value='normal'>
-	<input title='Identifiant de la salle' type="hidden" id="room_id" value="<?php if (isset($_GET['id'])) echo $_GET['id']; ?>">
-	<label for="board_size">Taille du plateau :</label>
-	<input type="number" id="board_size" name="board_size" onchange="gameConfig();" value="5" />
-	<label for="turn_duration">Durée d'un tour (en secondes) :</label>
-	<input type="number" id="turn_duration" name="turn_duration" onchange="gameConfig();" value="30" />
-
+<form autocomplete="off" onsubmit="return false;" id="gameConfigForm">
 	<fieldset>
-		<legend>Nom de la partie</legend>
-		<button onclick="newTeam()">Nouvelle team</button>
+		<legend><h2>Panneau de configuration de la partie <span id="game_name"><?php if (isset($_GET['name'])) echo $_GET['name']; ?></span></h2></legend>
+		<input title='Type de partie' type="hidden" id="type_game" value='normal'>
+		<input title='Identifiant de la salle' type="hidden" id="room_id" value="<?php if (isset($_GET['id'])) echo $_GET['id']; ?>">
+		<label for="board_size">Taille du plateau :</label>
+		<input type="number" id="board_size" name="board_size" onchange="gameConfig();" value="5" />
+		<label for="turn_duration">Durée d'un tour (en secondes) :</label>
+		<input type="number" id="turn_duration" name="turn_duration" onchange="gameConfig();" value="30" />
+		<button class='newTeamButton' onclick="newTeam()">Nouvelle team</button>
 		<div id="allTeams" name="allTeams">
 			<div id="team1" name="team">
-				<p id="title1" name="title1">Team 1</p>
-				<button id="button1" name="button1" onclick="newPlayer(1,2)">Nouveau joueur</button>
+				<span id="title1" name="title1">Team 1</span>
+				<button class='newPlayerButton' id="button1" name="button1" onclick="newPlayer(1,2)">Nouveau joueur</button>
 				<div name="player" id="player1_1">
-					<label>Joueur</label>
+					<span>Joueur 1</span>
 					<select name="playerName" class="1" onchange="gameConfig();">
 					</select>
 					<label>Couleur du pion</label>
@@ -28,8 +26,9 @@
 						<option value="#00FF00">Vert</option>
 						<option value="#0000FF">Bleu</option>
 					</select>
-					<button id="legion1_1" onclick="newLegion(1,1,2)">Nouvelle légion</button>
+					<button class='newLegionButton' id="legion1_1" onclick="newLegion(1,1,2)">Nouvelle légion</button>
 					<div name="legion" id="legion1_1_1">
+						<span>Légion 1</span>
 						<label>Forme du pion</label>
 						<select class="pawn" class="1" onchange="gameConfig();">
 							<option value="square">Carré</option>
@@ -49,10 +48,10 @@
 				</div>
 			</div>
 			<div id="team2" name="team">
-				<p id="title2" name="title2">Team 2</p>
-				<button id="button2" name="button2" onclick="newPlayer(2,2)">Nouveau joueur</button>
+				<span id="title2" name="title2">Team 2</span>
+				<button class='newPlayerButton' id="button2" name="button2" onclick="newPlayer(2,2)">Nouveau joueur</button>
 				<div name="player" id="player2_1">
-					<label>Joueur</label>
+					<span>Joueur 1</span>
 					<select name="playerName" class="2" onchange="gameConfig();">
 					</select>
 					<label>Couleur du pion</label>
@@ -61,8 +60,9 @@
 						<option value="#00FF00">Vert</option>
 						<option value="#0000FF">Bleu</option>
 					</select>
-					<button id="legion1_1" onclick="newLegion(1,1,2)">Nouvelle légion</button>
+					<button class='newLegionButton' id="legion2_1" onclick="newLegion(2,1,2)">Nouvelle légion</button>
 					<div name="legion" id="legion2_1_1">
+						<span>Légion 1</span>
 						<label>Forme du pion</label>
 						<select class="pawn" class="2" onchange="gameConfig();">
 							<option value="square">Carré</option>
@@ -85,8 +85,8 @@
 		<div id="noTeam" name="noTeam">
 			<h3>Présents dans la salle :</h3>
 		</div>
+		<input title='Lancer la partie' type="button" id="valid" value="GO !" onclick="gameStart(<?php if (isset($_GET['id'])) echo $_GET['id']; ?>)"/>
 	</fieldset>
-	<input title='Lancer la partie' type="button" id="valid" value="GO !" onclick="gameStart(<?php if (isset($_GET['id'])) echo $_GET['id']; ?>)"/>
 </form>
 <?php
 	}
