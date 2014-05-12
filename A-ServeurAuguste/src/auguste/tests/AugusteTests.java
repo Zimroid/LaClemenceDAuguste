@@ -17,12 +17,13 @@ import auguste.engine.entity.pawn.Armor;
 import auguste.engine.entity.pawn.Laurel;
 import auguste.engine.entity.pawn.Soldier;
 import java.awt.Point;
+import java.io.IOException;
 public class AugusteTests {
     
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         Team tOne = new Team(1);
         Team tTwo = new Team(2);
         Player pOne = new Player(1);
@@ -73,6 +74,7 @@ public class AugusteTests {
                 end = true;
             }
             showBoard(b);
+            //System.in.read();
         }
         
         /*g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-4,-4)).getPawn(),b.getCell(new Point(-2,-2))),null));
