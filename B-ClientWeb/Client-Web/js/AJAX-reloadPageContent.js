@@ -16,7 +16,7 @@ function reloadContent(url)
 		return;
 	}
 	
-	xhr.open("POST", url, true);
+	xhr.open("POST", url, false);
 	
 	// Execution au retour
 	xhr.onreadystatechange = function()

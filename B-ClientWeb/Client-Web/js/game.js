@@ -84,7 +84,14 @@ function gameConfig()
 				if ($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val() != null)
 				{
 					// id du joueur
-					stringJSON += '{"player_user_id":' + parseInt($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val(),10) + ',"legions":[';
+					if (parseInt($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val(),10) == 0)
+					{
+						stringJSON += '{"player_user_id":0,"bot":"random","legions":[';
+					}
+					else
+					{
+						stringJSON += '{"player_user_id":' + parseInt($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val(),10) + ',"legions":[';
+					}
 					// nombre de légions du joueur
 					nbrLegion = $('#player' + nbrTeam + '_' + nbrPlayer).children("[name='legion']").length;
 					for (var i = 0 ; i < nbrLegion ; i++)
@@ -196,11 +203,17 @@ function newTeam()
     //bouton pour la création d'un nouveau joueur dans la team
     var NPButton = $("<button class='newPlayerButton' id='button" + numberTeam + "' name='button" + numberTeam + "' onclick='newPlayer(" + numberTeam + ",1)'>Nouveau joueur</button>");
     //bouton de suppression de la team
-    var DTButton = $("<button class='dropTeamButton' onclick='dropTeam(\"team" + numberTeam + "\")'>Supprimer la team</button>");
+    var DTButton = $("<button class='dropTeamButton' onclick='dropTeam(\"" + numberTeam + "\")'>Supprimer la team</button>");
 
 	divTeam.append(ptitle, NPButton, DTButton);
     divTeams.append(divTeam);
     newPlayer(numberTeam,1);
+}
+
+function dropTeam(idTeam)
+{
+	$("#team"+idTeam).remove();
+	gameConfig();
 }
 
 function newPlayer(team, player)
@@ -226,7 +239,7 @@ function newPlayer(team, player)
     //bouton pour la création d'un nouveau joueur dans la team
     var NLButton = $("<button class='newLegionButton' id='legion"+ team + '_' + player +"' onclick='newLegion(" + team + "," + player + ",1)'>Nouvelle légion</button>");
     //bouton de suppression du player
-    var DPButton = $("<button class='dropPlayerButton' onclick='dropPlayer('player" + team + "_" + player + "')'>Supprimer le joueur</button>");
+    var DPButton = $("<button class='dropPlayerButton' onclick='dropPlayer(\"" + team + "_" + player + "\")'>Supprimer le joueur</button>");
 
 	var users_options = '';
 	for (var i = 0 ; i < save_game_users.length ; i++)
@@ -239,6 +252,12 @@ function newPlayer(team, player)
     if (player != 1) divPlay.append(DPButton);
     divTeam.append(divPlay);
     newLegion(team,player,1);
+}
+
+function dropPlayer(idPlayer)
+{
+	$("#player"+idPlayer).remove();
+	gameConfig();
 }
 
 function newLegion(team, player, legion)
@@ -271,11 +290,17 @@ function newLegion(team, player, legion)
 	var optPosit5 = $("<option value='1'>Haut droit</option>");
 	var optPosit6 = $("<option value='0'>Haut gauche</option>");
 	//bouton de suppression de la légion
-    var DLButton = $("<button class='dropLegionButton' onclick='dropLegion('legion" + team + "_" + player + "_" + legion + "')'>Supprimer la légion</button>");
+    var DLButton = $("<button class='dropLegionButton' onclick='dropLegion(\"" + team + "_" + player + "_" + legion + "\")'>Supprimer la légion</button>");
 	
 	selForm.append(optForm, optForm2, optForm3);
     selPosit.append(optPosit, optPosit2, optPosit3, optPosit4, optPosit5, optPosit6);
     divLegion.append(pLegion, lblForm, selForm, lblPosit, selPosit);
     if (legion != 1) divLegion.append(DLButton);
     divPlay.append(divLegion);
+}
+
+function dropLegion(idLegion)
+{
+	$("#legion"+idLegion).remove();
+	gameConfig();
 }

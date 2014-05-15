@@ -79,8 +79,8 @@ function process(evt)
 		// si une partie normale est lancée
 		else if (sitePage != 'gameConfig')
 		{
-			reloadContent(sitePath + "/index.php?script=1&page=gameConfig&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
 			sitePage = 'gameConfig';
+			reloadContent(sitePath + "/index.php?script=1&page=gameConfig&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
 		}
 	}
 
@@ -133,7 +133,7 @@ function process(evt)
 			}
 			save_game_users.splice(data.users.length,us);
 			var text1 = '';
-			var text2 = '';
+			var text2 = '<option value="0">ROBOT</option>';
 			// parcours des utilisateurs du panneau de config
 			for (var i = 0 ; i < save_game_users.length ; i++)
 			{
