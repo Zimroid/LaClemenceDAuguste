@@ -2,6 +2,9 @@ package auguste.client.entity;
 
 import auguste.client.command.manager.CommandClientManager;
 import auguste.client.command.manager.CommandServerManager;
+import auguste.client.engine.Battle;
+import auguste.client.engine.Move;
+import auguste.client.engine.Tenaille;
 import auguste.client.interfaces.UpdateListener;
 import auguste.client.reseau.ClientSocket;
 
@@ -25,18 +28,22 @@ public class Client
     private final List<UpdateListener> interfaces;
     private static Client INSTANCE;
     
-    private volatile List<Game> gameAvailable;
-    private volatile User currentUser;
-    private volatile Queue<ChatMessageReceived> chatMessageReceived;
-    private volatile String confirmMessage;
-    private volatile List<Game> games;
+    private List<Game> gameAvailable;
+    private List<Game> games;
+    private User currentUser;
+    
+    private UserInterfaceManager IUM;
+    
+    private String confirmMessage;
     
     private Client() throws URISyntaxException
     {
         this.socket = ClientSocket.getInstance();
-        this.interfaces = new ArrayList<>();
-        this.chatMessageReceived = new LinkedList<>();
-        this.games = new ArrayList<>();
+        this.interfaces 	= new ArrayList<>();
+        this.games 			= new ArrayList<>();
+        
+        this.IUM = UserInterfaceManager.getInstance();
+        
         this.socket.connect();
     }
     
@@ -104,15 +111,40 @@ public class Client
     /**
      * @return the chatMessageReceived
      */
-    public Queue<ChatMessageReceived> getChatMessageReceived() {
-        return chatMessageReceived;
+    public Queue<ChatMessageReceived> getChatMessage(int id) 
+    {
+    	Queue<ChatMessageReceived> res = new LinkedList<>();
+    	
+    	this.IUM.addQueueMessageChat(id, res);
+    	
+        return res;
     }
-
-    /**
-     * @param chatMessageReceived the chatMessageReceived to set
-     */
-    public void setChatMessageReceived(Queue<ChatMessageReceived> chatMessageReceived) {
-        this.chatMessageReceived = chatMessageReceived;
+    
+    public Queue<Battle> getBattles(int id)
+    {
+    	Queue<Battle> res = new LinkedList<>();
+    	
+    	this.IUM.addQueueBattle(id, res);
+    	
+    	return res;
+    }
+    
+    public Queue<Move> getMoves(int id)
+    {
+    	Queue<Move> res = new LinkedList<>();
+    	
+    	this.IUM.addQueueMove(id, res);
+    	
+    	return res;
+    }
+    
+    public Queue<Tenaille> getTenailles(int id)
+    {
+    	Queue<Tenaille> res = new LinkedList<>();
+    	
+    	this.IUM.addQueueTenaille(id, res);
+    	
+    	return res;
     }
 
     public String getConfirmMessage() 

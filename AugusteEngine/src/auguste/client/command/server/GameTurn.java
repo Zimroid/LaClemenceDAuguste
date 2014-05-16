@@ -28,6 +28,7 @@ import auguste.client.engine.Tenaille;
 import auguste.client.engine.UW;
 import auguste.client.engine.Wall;
 import auguste.client.entity.Game;
+import auguste.client.entity.UserInterfaceManager;
 import auguste.client.interfaces.UpdateListener;
 
 import org.json.JSONArray;
@@ -65,10 +66,13 @@ public class GameTurn extends CommandServer
 	public static final String LEGION_COLOR = 	"legion_color";
 	public static final String LEGION_SHAPE = 	"legion_shape";
 	public static final String BATTLES = 		"battles";
+	
+	private UserInterfaceManager ium;
     
     public GameTurn()
     {
         super();
+        this.ium = UserInterfaceManager.getInstance();
     }
     
     @Override
@@ -82,6 +86,10 @@ public class GameTurn extends CommandServer
         this.setTenailles(game);
         this.setBoard(game);
         this.setBattles(game);
+        
+        ium.fillQueueBattle(id);
+        ium.fillQueueMove(id);
+        ium.fillQueueTenaille(id);
         
         game.sendTurn();
         
@@ -107,7 +115,7 @@ public class GameTurn extends CommandServer
         	
         	Tenaille tenaille = new Tenaille(begTenaille, endTenaille, game.getBoard());
         	
-        	game.getTenailles().add(tenaille);
+        	this.ium.addTenaille(game.getId(), tenaille);
         }
     }
     
@@ -124,7 +132,7 @@ public class GameTurn extends CommandServer
         	Move m = new Move(p, uwBeg, uwEnd, game.getBoard());
         	m.setDestroyed(json.getBoolean(DESTROYED));
         	
-        	game.getMoves().add(m);
+        	this.ium.addMoves(game.getId(), m);
         }
     }
     
@@ -145,7 +153,7 @@ public class GameTurn extends CommandServer
     		
     		Battle battle = new Battle(u1,w1,u2,w2,uLoser,wLoser, game.getBoard());
     		
-    		game.getBattles().add(battle);
+    		this.ium.addBattles(game.getId(), battle);
     	}
     }
     
