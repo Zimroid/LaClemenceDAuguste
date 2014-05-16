@@ -30,6 +30,7 @@ public class CSL implements UpdateListener
 {
     private final Client client;
     private boolean stop;
+    private Queue<ChatMessageReceived> chatMessage;
     
     /**
      *
@@ -47,7 +48,8 @@ public class CSL implements UpdateListener
      */
     public void run() throws JSONException, URISyntaxException
     {
-        stop = false;
+        this.stop = false;
+        this.chatMessage = this.client.getChatMessage(0);
 
         while(!stop)
         {
@@ -213,7 +215,7 @@ public class CSL implements UpdateListener
      */
     public void sendChat() 
     {
-        Queue<ChatMessageReceived> allCMR = client.getChatMessageReceived();
+        Queue<ChatMessageReceived> allCMR = this.chatMessage;
         for(int i = 0; i<allCMR.size(); i++)
         {
             ChatMessageReceived cmr = allCMR.remove();

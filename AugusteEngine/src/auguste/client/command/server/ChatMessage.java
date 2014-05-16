@@ -7,6 +7,7 @@
 package auguste.client.command.server;
 
 import auguste.client.entity.ChatMessageReceived;
+import auguste.client.entity.UserInterfaceManager;
 import auguste.client.interfaces.UpdateListener;
 
 import java.util.Date;
@@ -23,9 +24,12 @@ public class ChatMessage extends CommandServer
     public static final String TEXT =       "text";
     public static final String DATE =       "date";
     
+    private UserInterfaceManager IUM;
+    
     public ChatMessage()
     {
         super();
+        this.IUM = UserInterfaceManager.getInstance();
     }
 
     @Override
@@ -40,7 +44,9 @@ public class ChatMessage extends CommandServer
         cmr.setMessage(message);
         cmr.setDate(date);
         
-        this.getClient().getChatMessageReceived().add(cmr);
+        IUM.addMessageChat(0, cmr);
+        
+        IUM.fillQueueChatMessage(0);
         
         for(UpdateListener ul : this.getClient().getInterfaces())
         {
