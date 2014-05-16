@@ -116,13 +116,13 @@ public class Game
     
     private void playBots()
     {
-        for(Player p : players)
+        players.stream().filter((p) -> (p.getBot() != null && !p.isConnected())).forEach((p) ->
         {
-            if(p.getBot() != null && !p.isConnected())
+            ia.activateBot(p.getBot()).stream().forEach((a) ->
             {
-                actions.addAll(ia.activateBot(p.getBot()));
-            }
-        }
+                addAction(a);
+            });
+        });
     }
     
     /**
