@@ -43,6 +43,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
+import octavio.engine.entity.Bot;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -131,7 +132,7 @@ public class Room implements GameListener
             this.game.setBoard(new Board(this.configuration.getInt("game_board_size")));
             for (Player player : this.playing.keySet()) this.game.addPlayer(player);
             this.game.initBoard();
-            this.broadcast((new GameTurn(this)).toString());
+            this.broadcast((new GameTurn(this, false)).toString());
         }
     }
     
@@ -167,7 +168,7 @@ public class Room implements GameListener
     @Override
     public void onTurnEnd()
     {
-        this.broadcast((new GameTurn(this)).toString());
+        this.broadcast((new GameTurn(this, true)).toString());
     }
     
     /**
@@ -192,7 +193,8 @@ public class Room implements GameListener
                 legionData.put("legion_id", legion.getPosition());
                 legionData.put("legion_shape", legion.getShape());
                 legionData.put("legion_color", legion.getColor());
-                legionData.put("legion_owner", this.users.get(this.playing.get(legion.getPlayer())).getName());
+                if (this.playing.get(legion.getPlayer()) == 0) legionData.put("legion_owner", "Bot");
+                else legionData.put("legion_owner", this.users.get(this.playing.get(legion.getPlayer())).getName());
                 legions.put(legionData);
             }
         }
@@ -202,14 +204,14 @@ public class Room implements GameListener
         // Ajout du plateau
         JSONArray boardData = new JSONArray();
         JSONObject cellData;
-        for (Cell cell : this.game.getBoard().getCells())
+        for (Cell cell : this.game.getBoard().getCells().values())
         {
             if (cell.getPawn() != null)
             {
                 cellData = new JSONObject();
                 cellData.put("u", cell.getP().getX());
                 cellData.put("w", cell.getP().getY());
-                cellData.put("type", cell.getPawn().getClass().getName().toLowerCase());
+                cellData.put("type", cell.getPawn().getClass().getSimpleName().toLowerCase());
                 
                 if (cell.getTent() != null)
                 {
@@ -294,6 +296,78 @@ public class Room implements GameListener
         
         // Début du prochain tour
         this.game.nextTurn();
+    }/**
+     *
+     * @param json
+     * @throws org.json.JSONException
+     */
+    public void addInitialTurnData(JSONObject json) throws JSONException
+    {
+        // Ajout des informations
+        JSONObject informations = new JSONObject();
+        informations.put("board_size", this.game.getBoard().getSize());
+        JSONArray legions = new JSONArray();
+        JSONObject legionData;
+        Legion legion;
+        for (int i = 0; i < 6; i++)
+        {
+            legion = this.game.getLegion(i);
+            if (legion != null)
+            {
+                legionData = new JSONObject();
+                legionData.put("legion_id", legion.getPosition());
+                legionData.put("legion_shape", legion.getShape());
+                legionData.put("legion_color", legion.getColor());
+                if (this.playing.get(legion.getPlayer()) == 0) legionData.put("legion_owner", "Bot");
+                else legionData.put("legion_owner", this.users.get(this.playing.get(legion.getPlayer())).getName());
+                legions.put(legionData);
+            }
+        }
+        informations.put("legions", legions);
+        json.put("informations", informations);
+        
+        // Ajout du plateau
+        JSONArray boardData = new JSONArray();
+        JSONObject cellData;
+        for (Cell cell : this.game.getBoard().getCells().values())
+        {
+            if (cell.getPawn() != null)
+            {
+                cellData = new JSONObject();
+                cellData.put("u", cell.getP().getX());
+                cellData.put("w", cell.getP().getY());
+                cellData.put("type", cell.getPawn().getClass().getSimpleName().toLowerCase());
+                
+                if (cell.getTent() != null)
+                {
+                    cellData.put("tent_color", cell.getTent().getColor());
+                    cellData.put("tent_shape", cell.getTent().getShape());
+                    cellData.put("tent_legion", cell.getTent().getPosition());
+                }
+
+                if (cell.getPawn() instanceof Soldier)
+                {
+                    cellData.put("legion_armor", ((Soldier)cell.getPawn()).isArmored());
+                    cellData.put("legion_id", ((Soldier)cell.getPawn()).getLegion().getPosition());
+                    cellData.put("legion_color", cell.getPawn().getLegion().getColor());
+                    cellData.put("legion_shape", cell.getPawn().getLegion().getShape());
+                }
+                boardData.put(cellData);
+            }
+            else if (cell.getTent() != null)
+            {
+                cellData = new JSONObject();
+                cellData.put("u", cell.getP().getX());
+                cellData.put("w", cell.getP().getY());
+                cellData.put("tent_color", cell.getTent().getColor());
+                cellData.put("tent_shape", cell.getTent().getShape());
+                cellData.put("tent_legion", cell.getTent().getPosition());
+                boardData.put(cellData);
+            }
+        }
+        json.put("board", boardData);
+        
+        
     }
     
     /**
@@ -414,11 +488,21 @@ public class Room implements GameListener
                     newPlayer.setTeam(newTeam);
                     
                     // Attribution du joueur à l'utilisateur
-                    int userId = playerData.getInt("player_user_id");
-                    if (this.getUsers().containsKey(userId))
+                    if (playerData.has("bot"))
                     {
-                        //throw new NotInThisRoomException(this, userId);
-                        this.playing.put(newPlayer, userId);
+                        Bot.Strategy strategy = playerData.getString("bot").equals("random") ? Bot.Strategy.random : Bot.Strategy.pseudoRandom;
+                        newPlayer.setBot(new Bot(newPlayer, strategy));
+                        newPlayer.setConnected(false);
+                        this.playing.put(newPlayer, 0); 
+                    }
+                    else
+                    {
+                        int userId = playerData.getInt("player_user_id");
+                        if (this.getUsers().containsKey(userId))
+                        {
+                            //throw new NotInThisRoomException(this, userId);
+                            this.playing.put(newPlayer, userId);
+                        }
                     }
 
                     // Ajout des légions

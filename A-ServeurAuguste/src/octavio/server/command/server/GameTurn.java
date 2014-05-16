@@ -31,15 +31,17 @@ public class GameTurn extends ServerCommand
     /**
      * Remplit le JSON avec les données du tour.
      * @param room Salon de la partie
+     * @param initial
      */
-    public GameTurn(Room room)
+    public GameTurn(Room room, boolean initial)
     {
         // Constructeur de la classe mère
         super("game_turn", room);
         
         try
         {
-            room.addTurnData(this.getJSON());
+            if (initial) room.addInitialTurnData(this.getJSON());
+            else room.addTurnData(this.getJSON());
         }
         catch (JSONException e)
         {

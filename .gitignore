@@ -26,3 +26,4 @@ B-ClientWeb/Client-Web/model/config.php
 *.jar
 *.class
 *.properties
+/A-ServeurAuguste/dist/
