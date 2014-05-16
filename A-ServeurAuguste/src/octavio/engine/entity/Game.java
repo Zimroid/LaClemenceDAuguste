@@ -275,7 +275,7 @@ public class Game
         boolean wall;
         boolean exists;
         
-        for(Cell c : board.getCells())
+        for(Cell c : board.getCells().values())
         {
             if(c.getPawn() instanceof Soldier)
             {
@@ -389,7 +389,7 @@ public class Game
         int battleRes;
         boolean exists;
         
-        for(Cell c : board.getCells())
+        for(Cell c : board.getCells().values())
         {
             if(c.getPawn() != null && c.getPawn() instanceof Soldier)
             {

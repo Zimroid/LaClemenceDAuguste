@@ -16,9 +16,10 @@
 
 package octavio.engine.entity;
 
-import octavio.engine.entity.pawn.Laurel;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Classe représentant un plateau.
@@ -31,7 +32,7 @@ public class Board
     private final int size;
     
     // Variables métier
-    private final ArrayList<Cell> cells;
+    private final HashMap<Point,Cell> cells;
     
     /**
     * Instanciation d'un plateau avec sa taille et la partie relative.
@@ -40,7 +41,7 @@ public class Board
     public Board(int size)
     {
         this.size = size;
-        this.cells = new ArrayList<>();
+        this.cells = new HashMap<>();
         this.fillCells();
     }
         
@@ -139,7 +140,7 @@ public class Board
     /**
      * @return the cells
      */
-    public ArrayList<Cell> getCells()
+    public HashMap<Point,Cell> getCells()
     {
         return cells;
     }
@@ -150,16 +151,7 @@ public class Board
      */
     public Cell getCell(Point p)
     {
-        Cell res = null;
-        for(Cell c : cells)
-        {
-            if(c.getP().x == p.x && c.getP().y == p.y)
-            {
-                res = c;
-                break;
-            }
-        }
-        return res;
+        return cells.get(p);
     }
     
     /**
@@ -168,7 +160,7 @@ public class Board
     private void fillCells() {
         for(int x = -(size - 1); x < size; x++ ) {
             for(int y = -(size - 1); y < (size - Math.abs(x)); y++) {
-                this.cells.add(new Cell(this,new Point(x,y)));
+                this.cells.put(new Point(x,y),new Cell(this,new Point(x,y)));
             }
         }
     }

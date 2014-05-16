@@ -144,17 +144,21 @@ public class AugusteTests {
     }
     
     private static void showBoard(Board b){
-        for(Cell c : b.getCells()) {
-            if(c.getP().y == -(b.getSize()-1)) {
-                for(int i = 0;i <= Math.abs(c.getP().x);i++) {
+        Cell c;
+        for(int x = -(b.getSize() - 1); x < b.getSize(); x++ ) {
+            for(int y = -(b.getSize() - 1); y < (b.getSize() - Math.abs(x)); y++) {
+                c = b.getCell(new Point(x,y));
+                if(c.getP().y == -(b.getSize()-1)) {
+                    for(int i = 0;i <= Math.abs(c.getP().x);i++) {
+                        System.out.print(" ");
+                    }
+                }
+                System.out.print((c.getPawn() instanceof Soldier)?(((Soldier)c.getPawn()).isArmored()?"S":c.getTent()!=null?"T":"s"):(c.getPawn() instanceof Laurel)?"L":(c.getPawn() instanceof Armor)?"A":c.getTent()!=null?"t":".");
+                if(c.getP().y+Math.abs(c.getP().x) == b.getSize()-1) {
+                    System.out.println();
+                } else {
                     System.out.print(" ");
                 }
-            }
-            System.out.print((c.getPawn() instanceof Soldier)?(((Soldier)c.getPawn()).isArmored()?"S":c.getTent()!=null?"T":"s"):(c.getPawn() instanceof Laurel)?"L":(c.getPawn() instanceof Armor)?"A":c.getTent()!=null?"t":".");
-            if(c.getP().y+Math.abs(c.getP().x) == b.getSize()-1) {
-                System.out.println();
-            } else {
-                System.out.print(" ");
             }
         }
         System.out.println();
