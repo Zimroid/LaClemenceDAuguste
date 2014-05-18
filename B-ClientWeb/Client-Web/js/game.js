@@ -33,7 +33,7 @@ function gameStart(room_id)
     });
 	sitePage = 'gameStart';
     sendText(json);
-    $('#chatMessages').html("Chat de la partie " + save_game_config.configuration.game_name + "<br>");
+    $('#chatMessagesGame').html("Chat de la partie " + save_game_config.configuration.game_name + "<br>Pour participer à de meilleures conversations, merci de rester courtois et d'éviter le langage SMS.");
 }
 
 function gameConfig()

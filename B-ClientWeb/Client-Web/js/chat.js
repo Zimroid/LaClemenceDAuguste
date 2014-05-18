@@ -4,34 +4,39 @@
  */
 
 // Envoi d'un message
-function addMessage()
+function addMessage(isGameChat)
 {
-    var message = $("#message").val();
-    message = htmlspecialchars(message);
-    
-    if(message != "")
-    {
-    	if (save_game_config.room_id != 0)
-    	{
+  	if (typeof(save_game_config.room_id) != 'undefined' && save_game_config.room_id != 0 && isGameChat)
+   	{
+   		var message = $("#messageGame").val();
+   		message = htmlspecialchars(message);
+   		if(message != "")
+   		{
     		var json = JSON.stringify(
 			{
 	            "command": "CHAT_SEND",
 	            "room_id": save_game_config.room_id,
 	            "message": message
 	        });
-    	}
-    	else
-    	{
+	        $("#messageGame").val("");
+        	sendText(json);
+     		}
+   	}
+   	else if (!isGameChat)
+   	{
+   		var message = $("#message").val();
+   		message = htmlspecialchars(message);
+   		if(message != "")
+   		{
     		var json = JSON.stringify(
 			{
 	            "command": "CHAT_SEND",
 	            "message": message
 	        });
-    	}
-
-        $("#message").val("");
-        sendText(json);
-    }
+	        $("#message").val("");
+        	sendText(json);
+       	}
+   	}
 }
 
 // Affichage d'un message
@@ -44,11 +49,13 @@ function showMessage(jsonData)
     messagesList.scrollTop = messagesList.scrollHeight;
 }
 
-function toucheEntree(event)
+function toucheEntree(event,isGameChat)
 {
 	if ((event.keyCode == 13) && (event.shiftKey)) this.value += '\n';
 	else if (event.keyCode == 13) {
-		addMessage();
+		addMessage(isGameChat);
 		event.preventDefault();
 	}
 }
+
+$('#chatTabs').tabs();

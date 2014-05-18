@@ -16,7 +16,7 @@ function reloadChat(url)
 		return;
 	}
 	
-	xhr.open("GET", url, true);
+	xhr.open("GET", url, false);
 	
 	// Execution au retour
 	xhr.onreadystatechange = function()
@@ -33,4 +33,6 @@ function reloadChat(url)
 	
 	// Envoi
 	xhr.send();
+	
+	$('#chatTabs').tabs();
 }

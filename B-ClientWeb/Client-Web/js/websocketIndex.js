@@ -14,6 +14,10 @@ function process(evt)
 			myName = '';
 			reloadChat(sitePath + "/index.php?script=1&page=deconnect");
 		}
+		else if (data.type == "already_in_this_room")
+		{
+			alert("Vous avez déjà rejoint cette partie.");
+		}
 		else if (data.type == "must_be_logged")
 		{
 			reloadContent(sitePath + "/index.php?script=1&page=subscribe");
@@ -39,7 +43,14 @@ function process(evt)
 	// Réception message
 	else if(command == "chat_message")
 	{
-		var messagesList = document.getElementById("chatMessages");
+		if (typeof(data.room_id) != 'undefined' && data.room_id != 0)
+		{
+			var messagesList = document.getElementById("chatMessagesGame");
+		}
+		else
+		{
+			var messagesList = document.getElementById("chatMessages");
+		}
 		var d = new Date(data.date);
 		var h = d.getHours();
 		var m = d.getMinutes();

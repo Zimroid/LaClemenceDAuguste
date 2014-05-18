@@ -1,9 +1,10 @@
 #chatHeader{border-bottom:2px solid #666666;height:3em;padding-bottom:0.5em;padding-left:1em;padding-top:0.5em;text-align:center;}
 #chatHeader input[type="text"],#chatHeader input[type="password"]{border-radius:5px;width:95px;}
-#chatMessages{bottom:0;height:calc(100% - 9em);overflow-x:hidden;overflow-y:auto;padding-left:1em;padding-top:0.5em;position:relative;word-wrap:break-word;}
-#chatSend{bottom:6px;height:5em;position:absolute;text-align:center;width:100%;}
-#chatSend > form{height:100%;}
-#chatSend > form > #message{height:calc(70% - 6px);resize:none;width:calc(100% - 6px);}
-#chatSend > form > #valid{background-color:#448844;border-radius:5px;color:#FFFFFF;cursor:pointer;font-weight:bold;height:30%;width:100%;}
+#chatMessages,#chatMessagesGame{bottom:0;height:calc(100% - 9em);overflow-x:hidden;overflow-y:auto;padding-left:1em;padding-top:0.5em;position:relative;word-wrap:break-word;}
+#chatSend,#chatSendGame{bottom:6px;height:5em;position:absolute;text-align:center;width:100%;}
+#chatSend > form,#chatSendGame > form{height:100%;}
+#chatSend > form > #message,#chatSendGame > form > #messageGame{height:calc(70% - 6px);resize:none;width:calc(100% - 6px);}
+#chatSend > form > #valid,#chatSendGame > form > #validGame{background-color:#448844;border-radius:5px;color:#FFFFFF;cursor:pointer;font-weight:bold;height:30%;width:100%;}
 #connect{background-color:#00CCFF;border-radius:5px;color:#FFFFFF;cursor:pointer;font-weight:bold;height:50%;}
 #deconnect{background-color:#FF4444;border-radius:5px;color:#FFFFFF;cursor:pointer;font-weight:bold;height:50%;}
+.tabs{border:1px solid black;display:inline-block;padding:2px;text-decoration:none;}

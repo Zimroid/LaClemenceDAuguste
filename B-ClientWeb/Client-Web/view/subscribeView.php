@@ -3,17 +3,11 @@
 <!-- Inscription -->
 <label for="userSubscribe">Pseudo : </label>
 <input type="text" name="userSubscribe" id="userSubscribe" placeholder="Pseudo" onkeypress="if (event.keyCode == 13) inscription()">
-<br/>
+<br>
 <label for="passwordSubscribe">Mot de passe : </label>
 <input type="password" name="passwordSubscribe" id="passwordSubscribe" placeholder="Mot de passe" onkeypress="if (event.keyCode == 13) inscription()">
-<br/>
+<br>
 <label for="confirmSubscribe">Confirmation : </label>
 <input type="password" name="confSubscribe" id="confirmSubscribe" placeholder="Confirmer" onkeypress="if (event.keyCode == 13) inscription()">
-<br/>
-<input title='Inscription' type="button" value="M'inscrire" onclick="inscription();" />
-	
-<p>
-Ajouter vérification :
-- disponibilité username
-- compléxité mot de passe ...
-</p>
+<br>
+<input title='Inscription' type="button" value="M'inscrire" onclick="inscription();">
