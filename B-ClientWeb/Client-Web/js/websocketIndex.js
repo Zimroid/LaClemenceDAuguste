@@ -133,7 +133,7 @@ function process(evt)
 			}
 			save_game_users.splice(data.users.length,us);
 			var text1 = '';
-			var text2 = '<option value="0">ROBOT</option>';
+			var text2 = '';
 			// parcours des utilisateurs du panneau de config
 			for (var i = 0 ; i < save_game_users.length ; i++)
 			{

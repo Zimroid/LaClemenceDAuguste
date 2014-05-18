@@ -34,7 +34,7 @@
 
 <!-- Div d'envoi d'un message-->
 <div id="chatSend">
-	<form onsubmit="addMessage(); return false;" autocomplete="off" >
+	<form id="formChat" onsubmit="addMessage(); return false;" autocomplete="off" >
 		<textarea title='Message' id="message" name="message" onkeypress="toucheEntree(event)"></textarea>
 		<input title='Envoyer un message' type="submit" id="valid" value="Envoyer" />
 	</form>

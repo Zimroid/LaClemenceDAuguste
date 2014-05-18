@@ -4,19 +4,30 @@
  */
 
 // Envoi d'un message
-function addMessage(id)
+function addMessage()
 {
     var message = $("#message").val();
     message = htmlspecialchars(message);
     
     if(message != "")
     {
-        var json = JSON.stringify(
-		{
-            "command": "CHAT_SEND",
-            "game_id": id,
-            "message": message
-        });
+    	if (save_game_config.room_id != 0)
+    	{
+    		var json = JSON.stringify(
+			{
+	            "command": "CHAT_SEND",
+	            "room_id": save_game_config.room_id,
+	            "message": message
+	        });
+    	}
+    	else
+    	{
+    		var json = JSON.stringify(
+			{
+	            "command": "CHAT_SEND",
+	            "message": message
+	        });
+    	}
 
         $("#message").val("");
         sendText(json);

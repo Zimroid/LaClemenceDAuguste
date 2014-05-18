@@ -33,6 +33,7 @@ function gameStart(room_id)
     });
 	sitePage = 'gameStart';
     sendText(json);
+    $('#chatMessages').html("Chat de la partie " + save_game_config.configuration.game_name + "<br>");
 }
 
 function gameConfig()
@@ -99,7 +100,7 @@ function gameConfig()
 						// forme des pions du joueur
 						stringJSON += '{"legion_shape": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children('#legion' + nbrTeam + '_' + nbrPlayer + '_' + (i + 1)).children(".pawn").val() + '",';
 						// couleur des pions du joueur
-						stringJSON += '"legion_color": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children(".color").val() + '",';
+						stringJSON += '"legion_color": "' + $('#player' + nbrTeam + '_' + nbrPlayer).parent().children(".color").val() + '",';
 						// position sur le plateau du joueur
 						stringJSON += '"legion_position": "' + $('#player' + nbrTeam + '_' + nbrPlayer).children('#legion' + nbrTeam + '_' + nbrPlayer + '_' + (i + 1)).children(".position").val() + '"}';
 						if ((i + 1) < nbrLegion)
@@ -111,20 +112,25 @@ function gameConfig()
 				}
 				else
 				{
-					stringJSON += '{"player_user_id": 0,"legions": []}';
+					stringJSON += '{"player_user_id": -1,"legions": []}';
 				}
 				if ((nbrPlayer + 1) <= $('#team' + nbrTeam).children('[name="player"]').length)
 				{
 					stringJSON += ',';
 				}
 			}
-			// il n'y a plus de joueurs dans cette team
+			/*// il n'y a plus de joueurs dans cette team
 			else
 			{
 				if ((nbrPlayer + 1) <= $('#player' + nbrTeam + '_' + nbrPlayer).children('[name="player"]').length)
 				{
 					stringJSON += ',';
 				}
+				break;
+			}*/
+			else if ((nbrPlayer + 1) <= $('#player' + nbrTeam + '_' + nbrPlayer).children('[name="player"]').length)
+			{
+				stringJSON += ',';
 				break;
 			}
 		}
@@ -200,12 +206,26 @@ function newTeam()
     var divTeam = $("<div id='team" + numberTeam + "' name='team'>");
     //titre de la div
     var ptitle = $("<span id='title" + numberTeam + "' name='title" + numberTeam + "'>Team " + numberTeam + "</span>");
+    //label pour la color
+    var lblColor = $("<label>Couleur du pion</label>");
+    //select pour la color
+    var selColor = $("<select class='color' class='" + numberTeam + "' onchange='gameConfig();'></select>");
+    //options pour la color
+    var optColor = $("<option value='#000000'>Noir</option>");
+    var optColor2 = $("<option value='#FF0000'>Rouge</option>");
+    var optColor3 = $("<option value='#FFFF00'>Jaune</option>");
+    var optColor4 = $("<option value='#00FF00'>Vert</option>");
+    var optColor5 = $("<option value='#00FFFF'>Cyan</option>");
+    var optColor6 = $("<option value='#0000FF'>Bleu</option>");
+    var optColor7 = $("<option value='#FF00FF'>Magenta</option>");
+    var optColor8 = $("<option value='#FFFFFF'>Blanc</option>");
     //bouton pour la création d'un nouveau joueur dans la team
     var NPButton = $("<button class='newPlayerButton' id='button" + numberTeam + "' name='button" + numberTeam + "' onclick='newPlayer(" + numberTeam + ",1)'>Nouveau joueur</button>");
     //bouton de suppression de la team
     var DTButton = $("<button class='dropTeamButton' onclick='dropTeam(\"" + numberTeam + "\")'>Supprimer la team</button>");
 
-	divTeam.append(ptitle, NPButton, DTButton);
+	selColor.append(optColor, optColor2, optColor3, optColor4, optColor5, optColor6, optColor7, optColor8);
+	divTeam.append(ptitle, lblColor, selColor, NPButton, DTButton);
     divTeams.append(divTeam);
     newPlayer(numberTeam,1);
 }
@@ -227,15 +247,7 @@ function newPlayer(team, player)
     //span du joueur dont on fait la config
     var pPlay = $("<span>Joueur " + player + "</span>");
     //select du joueur dont on fait la config
-    var selPlay = $("<select name='playerName' class='" + team + "' onchange='gameConfig();'></select>");
-    //label pour la color
-    var lblColor = $("<label>Couleur du pion</label>");
-    //select pour la color
-    var selColor = $("<select class='color' class='" + team + "' onchange='gameConfig();'></select>");
-    //options pour la color
-    var optColor = $("<option value='#FF0000'>Rouge</option>");
-    var optColor2 = $("<option value='#00FF00'>Vert</option>");
-    var optColor3 = $("<option value='#0000FF'>Bleu</option>");
+    var selPlay = $("<select name='playerName' class='" + team + "' onchange='gameConfig();'><option value='0'>ROBOT</option></select>");
     //bouton pour la création d'un nouveau joueur dans la team
     var NLButton = $("<button class='newLegionButton' id='legion"+ team + '_' + player +"' onclick='newLegion(" + team + "," + player + ",1)'>Nouvelle légion</button>");
     //bouton de suppression du player
@@ -247,8 +259,7 @@ function newPlayer(team, player)
 		users_options += "<option value='" + save_game_users[i].user_id + "'>" + save_game_users[i].user_name + "</option>";
 	}
 	selPlay.append(users_options);
-    selColor.append(optColor, optColor2, optColor3);
-    divPlay.append(pPlay, selPlay, lblColor, selColor, NLButton);
+    divPlay.append(pPlay, selPlay, NLButton);
     if (player != 1) divPlay.append(DPButton);
     divTeam.append(divPlay);
     newLegion(team,player,1);

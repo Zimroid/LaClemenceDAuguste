@@ -25,7 +25,7 @@ var depEnd;
 //Le groupe du pions cliqué
 var actuGroup;
 //l'id de la légion actuellement selctionné
-var actuLegionId
+var actuLegionId;
 
 // choppe toutes les coordonnées des cases adjacente à la case donné
 function getProx(pawnX, pawnY, isHard)
@@ -497,7 +497,7 @@ jQuery.fn.extend({
 		for (var i = 0 ; i < data.board.length ; i++)
 		{
 			// soldat
-			if (data.board[i].type == "auguste.engine.entity.pawn.soldier")
+			if (data.board[i].type == "soldier")
 			{
 				var nLegion = jQuery.inArray(data.board[i].legion_shape + data.board[i].legion_color, tabTypeLegion);
 				//Dans se cas ce type de légion n'a pas encore été rencontré on l'ajoute au tableau
@@ -513,12 +513,12 @@ jQuery.fn.extend({
 				}
 			}
 			// armure
-			else if (data.board[i].type == "auguste.engine.entity.pawn.armor")
+			else if (data.board[i].type == "armor")
 			{
 				armor.push([data.board[i].u, data.board[i].w, false]);
 			}
 			// laurier
-			else if (data.board[i].type == "auguste.engine.entity.pawn.laurel")
+			else if (data.board[i].type == "laurel")
 			{
 				pions.push([data.board[i].u, data.board[i].w, -1]);
 			}
@@ -786,7 +786,7 @@ jQuery.fn.extend({
 			else {
 				var source;
 				if (keys.toString().substr(keys.toString().length-29, keys.toString().length) == "38,38,40,40,37,39,37,39,66,65") {
-				    source = 'js/plateau/138.png'
+				    source = 'js/plateau/138.png';
 				}
 				else {
 					source = 'js/plateau/laurel.png';

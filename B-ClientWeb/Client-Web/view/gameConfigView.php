@@ -15,16 +15,22 @@
 		<div id="allTeams" name="allTeams">
 			<div id="team1" name="team">
 				<span id="title1" name="title1">Team 1</span>
+				<label>Couleur du pion</label>
+				<select class="color" class="1" onchange="gameConfig();">
+					<option value="#000000">Noir</option>
+					<option value="#FF0000">Rouge</option>
+					<option value="#FFFF00">Jaune</option>
+					<option value="#00FF00">Vert</option>
+					<option value="#00FFFF">Cyan</option>
+					<option value="#0000FF">Bleu</option>
+					<option value="#FF00FF">Magenta</option>
+					<option value="#FFFFFF">Blanc</option>
+				</select>
 				<button class='newPlayerButton' id="button1" name="button1" onclick="newPlayer(1,2)">Nouveau joueur</button>
 				<div name="player" id="player1_1">
 					<span>Joueur 1</span>
 					<select name="playerName" class="1" onchange="gameConfig();">
-					</select>
-					<label>Couleur du pion</label>
-					<select class="color" class="1" onchange="gameConfig();">
-						<option value="#FF0000">Rouge</option>
-						<option value="#00FF00">Vert</option>
-						<option value="#0000FF">Bleu</option>
+						<option value="0">ROBOT</option>
 					</select>
 					<button class='newLegionButton' id="legion1_1" onclick="newLegion(1,1,2)">Nouvelle légion</button>
 					<div name="legion" id="legion1_1_1">
@@ -49,16 +55,22 @@
 			</div>
 			<div id="team2" name="team">
 				<span id="title2" name="title2">Team 2</span>
+				<label>Couleur du pion</label>
+				<select class="color" class="1" onchange="gameConfig();">
+					<option value="#000000">Noir</option>
+					<option value="#FF0000">Rouge</option>
+					<option value="#FFFF00">Jaune</option>
+					<option value="#00FF00">Vert</option>
+					<option value="#00FFFF">Cyan</option>
+					<option value="#0000FF">Bleu</option>
+					<option value="#FF00FF">Magenta</option>
+					<option value="#FFFFFF">Blanc</option>
+				</select>
 				<button class='newPlayerButton' id="button2" name="button2" onclick="newPlayer(2,2)">Nouveau joueur</button>
 				<div name="player" id="player2_1">
 					<span>Joueur 1</span>
 					<select name="playerName" class="2" onchange="gameConfig();">
-					</select>
-					<label>Couleur du pion</label>
-					<select class="color" class="2" onchange="gameConfig();">
-						<option value="#FF0000">Rouge</option>
-						<option value="#00FF00">Vert</option>
-						<option value="#0000FF">Bleu</option>
+						<option value="0">ROBOT</option>
 					</select>
 					<button class='newLegionButton' id="legion2_1" onclick="newLegion(2,1,2)">Nouvelle légion</button>
 					<div name="legion" id="legion2_1_1">
