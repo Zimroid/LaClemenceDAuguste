@@ -132,7 +132,7 @@ public class Room implements GameListener
             this.game.setBoard(new Board(this.configuration.getInt("game_board_size")));
             for (Player player : this.playing.keySet()) this.game.addPlayer(player);
             this.game.initBoard();
-            this.broadcast((new GameTurn(this, false)).toString());
+            this.broadcast((new GameTurn(this, true)).toString());
         }
     }
     
@@ -168,7 +168,7 @@ public class Room implements GameListener
     @Override
     public void onTurnEnd()
     {
-        this.broadcast((new GameTurn(this, true)).toString());
+        this.broadcast((new GameTurn(this, false)).toString());
     }
     
     /**
