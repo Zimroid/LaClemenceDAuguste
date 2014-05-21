@@ -1,0 +1,26 @@
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\ant-build\Octavio.ap_ \
+ : C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\res\drawable\icon.png \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\res\drawable-hdpi\icon.png \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\res\drawable-ldpi\icon.png \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\res\drawable-mdpi\icon.png \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\res\drawable-xhdpi\icon.png \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\res\values\strings.xml \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\res\xml\config.xml \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\ant-build\res\drawable\icon.png \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\ant-build\res\drawable-hdpi\icon.png \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\ant-build\res\drawable-ldpi\icon.png \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\ant-build\res\drawable-mdpi\icon.png \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\ant-build\res\drawable-xhdpi\icon.png \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\_where-is-www.txt \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\cordova.js \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\cordova_plugins.js \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\css \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\img \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\index.html \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\js \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\panda.html \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\js\jquery-1.11.0.min.js \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\js\jquery-ui-1.10.4.custom.min.js \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\js\switchPage.js \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\ant-build\AndroidManifest.xml \

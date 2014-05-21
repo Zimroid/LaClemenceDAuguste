@@ -1,0 +1,19 @@
+<script type="text/javascript" src="script/sha1.js"></script>
+
+<div id='logo'>
+	<img src="ressources/logo100.png"/>
+</div>
+
+<div id='formView'>
+	<h2>Connexion [Nom Serveur]</h2>
+
+	<!-- Connexion -->
+	<form onsubmit="return false;" autocomplete="off">
+		<input title='Pseudo' type="text" name="user" id="user" placeholder="Pseudo" onkeypress="if (event.keyCode == 13) connexion(true,'','')" />
+		<input title='Mot de passe' type="password" name="password" id="password" placeholder="Mot de passe" onkeypress="if (event.keyCode == 13) connexion(true,'','')" />
+		<input id="connect" title='Connexion' type="button" value="Me connecter" onclick="connexion(true,'','');" /><br>
+	</form>
+	
+	<!-- Inscription (redirection) -->
+	<button onclick="loadPage('home_serverSelectView')">Inscription</button>
+</div>
