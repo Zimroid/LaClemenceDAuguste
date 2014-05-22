@@ -82,6 +82,12 @@ public class Game
         //this.timer = new GameTimer(this,turnDuration);
     }
     
+    public Game(GameListener listener, long turnDuration, Board b)
+    {
+        this(listener,turnDuration);
+        this.board = b;
+    }
+    
     public Game(int turnDuration)
     {
         this(null, turnDuration);
@@ -477,6 +483,48 @@ public class Game
         }
     }
     
+    public void initBoard(ArrayList<Pawn> pawns)
+    {
+        for(Pawn p : pawns) {
+            p.getCell().setPawn(p);
+            if(p.getLegion() != null) {
+                p.getLegion().getPawns().add(p);
+                if(p instanceof Soldier) pawnsAlive++;
+            }
+        }
+        for(Legion l: legions)
+        {
+            switch(board.getSize())
+            {
+                case 3:
+                    board.getCell(board.getRotatedPosition(new Point(-2,-2), l.getPosition())).setTent(l);
+                    break;
+                case 5:
+                    board.getCell(board.getRotatedPosition(new Point(-4,-4), l.getPosition())).setTent(l);
+                    board.getCell(board.getRotatedPosition(new Point(-4,-3), l.getPosition())).setTent(l);
+                    board.getCell(board.getRotatedPosition(new Point(-3,-4), l.getPosition())).setTent(l);
+                    break;
+                case 7:
+                    board.getCell(board.getRotatedPosition(new Point(-6,-6), l.getPosition())).setTent(l);
+                    board.getCell(board.getRotatedPosition(new Point(-6,-5), l.getPosition())).setTent(l);
+                    board.getCell(board.getRotatedPosition(new Point(-5,-6), l.getPosition())).setTent(l);
+                    break;
+                case 9:
+                    board.getCell(board.getRotatedPosition(new Point(-8,-8), l.getPosition())).setTent(l);
+                    board.getCell(board.getRotatedPosition(new Point(-8,-7), l.getPosition())).setTent(l);
+                    board.getCell(board.getRotatedPosition(new Point(-7,-8), l.getPosition())).setTent(l);
+                    break;
+                case 11:
+                    board.getCell(board.getRotatedPosition(new Point(-10,-10), l.getPosition())).setTent(l);
+                    board.getCell(board.getRotatedPosition(new Point(-10,-9), l.getPosition())).setTent(l);
+                    board.getCell(board.getRotatedPosition(new Point(-9,-10), l.getPosition())).setTent(l);
+                    board.getCell(board.getRotatedPosition(new Point(-10,-8), l.getPosition())).setTent(l);
+                    board.getCell(board.getRotatedPosition(new Point(-8,-10), l.getPosition())).setTent(l);
+                    break;
+            }
+        }
+    }
+    
     /**
     * Initialise le plateau.
     */
@@ -581,6 +629,39 @@ public class Game
         initCell(0,0,laurel,0);        // Laurel
         //this.timer.start();
         playBots();
+    }
+    
+    /**
+    * Initialise une case.
+     * @param x pos x
+     * @param y pos y
+     * @param pawn pion
+     * @param rotation nombre de rotations
+     * @param tent s'il y a une tente
+    */
+    public void initCell(int x, int y, Pawn pawn, int rotation, boolean tent)
+    {
+        Cell c = board.getCell(board.getRotatedPosition(new Point(x,y), rotation));
+        c.setPawn(pawn);
+        pawn.setCell(c);
+        if(pawn.getLegion() != null) {
+            pawn.getLegion().getPawns().add(pawn);
+            if(pawn instanceof Soldier) pawnsAlive++;
+        }
+        if(tent) c.setTent(pawn.getLegion());
+    }        
+    
+    /**
+    * Initialise une case sans tente.
+     * @param x pos x
+     * @param y pos y
+     * @param pawn pion
+     * @param rotation nombre de rotations
+    */
+    public void initCell(int x, int y, Pawn pawn, int rotation)
+    {
+        initCell(x,y,pawn,rotation,false);
+        
     }
     
     public boolean canMoveLaurel(Legion l, Pawn laurel)
@@ -726,8 +807,8 @@ public class Game
                         new Point(x,y+1),
                         new Point(x-1,y),
                         new Point(x+1,y),
-                        new Point(x-1,(x>0?y+1:y-1)),
-                        new Point(x+1,(x<0?y+1:y-1)));
+                        new Point(x-1,y+(((x*2)-1)%2)),     //new Point(x-1,(x>0?y+1:y-1)),
+                        new Point(x+1,y-(((x*2)+1)%2)));    //new Point(x+1,(x<0?y+1:y-1)));
         
         for(Point p : pArray)
         {
@@ -840,39 +921,6 @@ public class Game
         }
         
         return res;
-    }
-    
-    /**
-    * Initialise une case.
-     * @param x pos x
-     * @param y pos y
-     * @param pawn pion
-     * @param rotation nombre de rotations
-     * @param tent s'il y a une tente
-    */
-    public void initCell(int x, int y, Pawn pawn, int rotation, boolean tent)
-    {
-        Cell c = board.getCell(board.getRotatedPosition(new Point(x,y), rotation));
-        c.setPawn(pawn);
-        pawn.setCell(c);
-        if(pawn.getLegion() != null) {
-            pawn.getLegion().getPawns().add(pawn);
-            if(pawn instanceof Soldier) pawnsAlive++;
-        }
-        if(tent) c.setTent(pawn.getLegion());
-    }        
-    
-    /**
-    * Initialise une case sans tente.
-     * @param x pos x
-     * @param y pos y
-     * @param pawn pion
-     * @param rotation nombre de rotations
-    */
-    public void initCell(int x, int y, Pawn pawn, int rotation)
-    {
-        initCell(x,y,pawn,rotation,false);
-        
     }
 
     /**

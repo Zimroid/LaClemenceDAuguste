@@ -114,4 +114,13 @@ public class IA {
         }
         else return null;
     }
+    
+    private int cellsDistance(Cell c1, Cell c2) {
+        int x1 = c1.getP().x;
+        int y1 = c1.getP().y;
+        int x2 = c2.getP().x;
+        int y2 = c2.getP().y;
+        
+        return Math.abs(x2 - x1) + Math.abs(y2 - y1);
+    }
 }

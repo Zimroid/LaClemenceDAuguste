@@ -60,7 +60,7 @@ public class AugusteTests {
         Game g = new Game(1);
         g.addPlayer(pOne);
         g.addPlayer(pTwo);
-        Board b = new Board(3);
+        Board b = new Board(9);
         g.setBoard(b);
         
         /*RandomCollection rc = new RandomCollection(new Random());
@@ -79,9 +79,15 @@ public class AugusteTests {
             if(res == nb) un++;
             else huit++;
         }
-        System.out.println("5 : " + cinq/essais*rc.getTotal() + " - 1 : " + un/essais*rc.getTotal() + " - 8 : " + huit/essais*rc.getTotal());*/
+        System.out.println("1 : " + un/essais*rc.getTotal() + " - 8 : " + huit/essais*rc.getTotal());*/
         
-        boolean end = false;
+        System.out.println( Math.min(
+Math.abs(8 - 7) + Math.abs(8 - 7),
+Math.abs(2 * 9 - 8 - (2 * 9 - 7) + Math.abs(8 - 7)
+)
+));
+        
+        /*boolean end = false;
         
         pOne.setBot(new Bot(pOne,Bot.Strategy.pseudoRandom));
         pOne.setConnected(false);
@@ -105,7 +111,7 @@ public class AugusteTests {
             }
             showBoard(b);
             //System.in.read();
-        }
+        }*/
         
         /*g.addAction(new Action(lOne,new Movement(b.getCell(new Point(-4,-4)).getPawn(),b.getCell(new Point(-2,-2))),null));
         g.addAction(new Action(lFour,new Movement(b.getCell(new Point(-4,0)).getPawn(),b.getCell(new Point(-2,0))),null));
