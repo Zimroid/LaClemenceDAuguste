@@ -11,12 +11,17 @@ function process(evt)
 		// Déconnexion
 		if(data.type == "logged_out")
 		{
+			myId = '';
 			myName = '';
 			reloadChat(sitePath + "/index.php?script=1&page=deconnect");
 		}
 		else if (data.type == "already_in_this_room")
 		{
 			alert("Vous avez déjà rejoint cette partie.");
+		}
+		else if (data.type == "log_error")
+		{
+			alert("Erreur d'identification.");
 		}
 		else if (data.type == "must_be_logged")
 		{

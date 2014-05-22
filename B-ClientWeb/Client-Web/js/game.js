@@ -87,7 +87,7 @@ function gameConfig()
 					// id du joueur
 					if (parseInt($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val(),10) == 0)
 					{
-						stringJSON += '{"player_user_id":0,"bot":"random","legions":[';
+						stringJSON += '{"player_user_id":0,"bot":"pseudoRandom","legions":[';
 					}
 					else
 					{

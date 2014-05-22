@@ -26,6 +26,8 @@ var depEnd;
 var actuGroup;
 //l'id de la légion actuellement selctionné
 var actuLegionId;
+//Pour savoir ou se situe les armures vide
+var armorComp;
 
 // choppe toutes les coordonnées des cases adjacente à la case donné
 function getProx(pawnX, pawnY, isHard)
@@ -200,6 +202,7 @@ function getZoneLaurel(pawnX, pawnY)
 
 	//On liste les légions autour du laurier
 	var legionsDisp = new Array();
+	var proxy = new Array();
 	for (var i = 0; i < proxyPawn.length; i++)
 	{
 		//alert("ok => " + proxyPawn[i][2]);
@@ -216,22 +219,81 @@ function getZoneLaurel(pawnX, pawnY)
 		pawnX = getXVirtual(proxyPawn[i][0], proxyPawn[i][1]);
 		pawnY = getYVirtual(proxyPawn[i][0], proxyPawn[i][1], pawnX);
 		var tmp = getPawns(pawnX-size+1, pawnY-size+1);
-		alert("tmp => " + tmp);
+		proxy.push(tmp);
 		if(jQuery.inArray(tmp[2], legionsDisp) == -1) {
 			legionsDisp.push(tmp[2]);
 		}
 	}
-
-	//Si on a trouvé qu'un seul type de légion autour du laurier on renvois directement les cases dispo et on assigne la légionId pour le déplacement
+	// Si on a trouvé qu'un seul type de légion autour du laurier on renvois directement les cases dispo et on assigne la légionId pour le déplacement
 	if(legionsDisp.length == 1) {
 		actuLegionId = legions[legionsDisp[0]][2];
 		return res;
 	}
-	else {
-		alert("plusieurs légions, ou 0 x)");
-		return new Array();
+	// Si 2 ou plus
+	else if(legionsDisp.length > 1) {
+		panelSelectLegion(proxy, res);
+	}
+	// Si 0
+	return new Array();
+}
+
+//Pour déplacer le laurier quand il y a plusieurs légion autour, met en subbriance ProxyPawn, quand un proxyPawn est cliqué on met en subriance go avec la légion du proxyPawn
+function panelSelectLegion(proxyPawn, go)
+{
+	for (var i = 0 ; i < proxyPawn.length ; i++)
+	{
+		t.setLayer((proxyPawn[i][0]+size-1)+','+(proxyPawn[i][1]+size-1)+'fond', {
+			fillStyle: '#FFFFC0',
+			click:function(layer){
+				alert("okok");//@todo faire une fonction qui va mettre en subriance les cases go et qui ensuite va remetre le style et les fonction par défaut des cases proxyPawn
+				//laurelGo(proxyPawn, go, layer.legionId);
+
+			}
+		});
+		t.setLayer((proxyPawn[i][0]+size-1)+','+(proxyPawn[i][1]+size-1), {
+			fillStyle: '#000000',
+			click:function(layer){
+				alert("cool2" + layer.x);//@todo dupliquer la fonction au dessus
+			}
+		});
 	}
 }
+
+/*function laurelGo(proxyPawn, go, legion)
+{
+	//pour tout les proxyPawn remetre le fond en blanc et mettre le click
+	click:function(layer){
+		actuLegionId = layer.legionId;
+		t.setLayer(layer.pawnX+','+layer.pawnY+'fond', {
+			fillStyle: '#FFFFFF',
+			click:function(layer){
+				actuGroup = layer.group;
+				depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
+				depEnd = null;
+				actuLegionId = layer.legionId;
+				t.restoreCanvas();
+				var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array(), false);
+				for(i = 0; i < tab.length; i++)
+				{
+					t.drawPolygon({
+						fillStyle: '#BBBBFF',
+						strokeStyle: 'black',
+						strokeWidth: 2,
+						x: tab[i][0],
+						y: tab[i][1],
+						radius: rayon,
+						sides: 6,
+						rotate: 90
+					});
+				}
+				harden();
+			}
+		});
+	}
+	mettre en actuLegionId (pour le déplacement) en foncion de la légion du pawn clické
+	mettre en bleu les cases go
+}
+*/
 
 //Detemine le X (la ligne) de la case grace à sa position en px
 function getXVirtual(x, y)
@@ -305,167 +367,66 @@ function oneHundredPercent(first)
 function harden()
 {
 	for (var i = 0; i < armor.length; i++)
+	{
+		var pawn = new Array();
+		var pawnX;
+		var pawnY;
+		var coordXPawn;
+		var coordYPawn;
+
+		for(var j = 0; j < pawns.length; j++)
 		{
-			var pawn = new Array();
-			var pawnX;
-			var pawnY;
-			var coordXPawn;
-			var coordYPawn;
+			pawnX = pawns[j][0]+size-1;
+			pawnY = pawns[j][1]+size-1;
+			coordXPawn = virtual[pawnX][pawnY][0];
+			coordYPawn = virtual[pawnX][pawnY][1];
+			pawn.push(coordXPawn + ',' + coordYPawn);
+		}
 
-			for(var j = 0; j < pawns.length; j++)
-			{
-				pawnX = pawns[j][0]+size-1;
-				pawnY = pawns[j][1]+size-1;
-				coordXPawn = virtual[pawnX][pawnY][0];
-				coordYPawn = virtual[pawnX][pawnY][1];
-				pawn.push(coordXPawn + ',' + coordYPawn);
-			}
+		var armorX = armor[i][0]+size-1;
+		var armorY = armor[i][1]+size-1;
+		var coordX = virtual[armorX][armorY][0];
+		var coordY = virtual[armorX][armorY][1];
 
-			var armorX = armor[i][0]+size-1;
-			var armorY = armor[i][1]+size-1;
-			var coordX = virtual[armorX][armorY][0];
-			var coordY = virtual[armorX][armorY][1];
-
-			//Si l'armure n'est placer sur aucun pion
-			if(jQuery.inArray(coordX + ',' + coordY, pawn) == -1) {
-				pawnX = getXVirtual(coordX, coordY);
-				pawnY = getYVirtual(coordX, coordY, pawnX);
-				t.drawPolygon({
-					pawnX: pawnX,
-					pawnY: pawnY,
-					layer: true,
-					fillStyle: '#FFFFFF',
-					strokeStyle: 'black',
-					strokeWidth: 8,
-					x: coordX,
-					y: coordY,
-					radius: rayon/2,
-					sides: 4,
-					rotate: 0,
-					click: function(layer) {
-						depEnd = [layer.pawnX-size+1, layer.pawnY-size+1];
-						//alert(depStart + ' -> ' + depEnd);
-						var json = JSON.stringify(
-						{
-					        "command": "GAME_MOVE",
-					        "room_id": save_game_config.room_id,
-					        "start_u": depStart[0],
-					        "start_w": depStart[1],
-					        "end_u": depEnd[0],
-					        "end_w": depEnd[1],
-					        "legion_id": actuLegionId
-					    });
-						sendText(json);
-					}
-				});
-			}
-			else {
-				pawnX = getXVirtual(coordX, coordY);
-				pawnY = getYVirtual(coordX, coordY, pawnX);
-				var p = getPawns(pawnX-size+1, pawnY-size+1);
-				var group = p[2];
-				var color = legions[group][0];
-				var shape;
-				var legionId;
-				if(pawns[i][2] >= 0) {
-					if(legions[group][1] == 'square') {
-						shape = 4;
-					}
-					else if(legions[group][1] == 'triangle') {
-						shape = 3;
-					}
-					else {
-						shape = 6;
-					}
-					legionId = legions[group][2];
+		//Si l'armure n'est placer sur aucun pion
+		if(jQuery.inArray(coordX + ',' + coordY, pawn) == -1) {
+			pawnX = getXVirtual(coordX, coordY);
+			pawnY = getYVirtual(coordX, coordY, pawnX);
+			t.drawPolygon({
+				name: pawnX+','+pawnY+'armor',
+				pawnX: pawnX,
+				pawnY: pawnY,
+				layer: true,
+				fillStyle: '#FFFFFF',
+				strokeStyle: 'black',
+				strokeWidth: 8,
+				x: coordX,
+				y: coordY,
+				radius: rayon/2,
+				sides: 4,
+				rotate: 0,
+				click: function(layer) {
+					depEnd = [layer.pawnX-size+1, layer.pawnY-size+1];
+					var json = JSON.stringify(
+					{
+				        "command": "GAME_MOVE",
+				        "room_id": save_game_config.room_id,
+				        "start_u": depStart[0],
+				        "start_w": depStart[1],
+				        "end_u": depEnd[0],
+				        "end_w": depEnd[1],
+				        "legion_id": actuLegionId
+				    });
+					sendText(json);
 				}
-				if(p[2] >= 0) {
-
-
-				//le fond du pion (pour qu'on puisse activer la même fonction peu importe à quelle endroit on a cliqué sur la case du pion)
-				t.drawPolygon({
-					name: pawnX+','+pawnY+'fond',
-					pawnX: pawnX,
-					pawnY: pawnY,
-					legionId: legionId,
-					group: group,
-					layer: true,
-					fillStyle: '#FFFFFF',
-					strokeStyle: 'black',
-					strokeWidth: 2,
-					x: coordX,
-					y: coordY,
-					radius: rayon,
-					sides: 6,
-					rotate: 90,
-					click: function(layer) {
-							actuGroup = layer.group;
-							depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
-							depEnd = null;
-							actuLegionId = layer.legionId;
-							t.restoreCanvas();
-							var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array(), true);
-							for(i = 0; i < tab.length; i++)
-							{
-								t.drawPolygon({
-									fillStyle: '#BBBBFF',
-									strokeStyle: 'black',
-									strokeWidth: 2,
-									x: tab[i][0],
-									y: tab[i][1],
-									radius: rayon,
-									sides: 6,
-									rotate: 90
-								});
-							}
-							harden();
-					}
-				});
-
-
-				t.removeLayer(pawnX+','+pawnY);
-				t.drawPolygon({
-					name: pawnX+','+pawnY,
-					pawnX: pawnX,
-					pawnY: pawnY,
-					legionId: legionId,
-					group: group,
-					layer: true,
-					fillStyle: color,
-					strokeStyle: 'black',
-					strokeWidth: 8,
-					x: coordX,
-					y: coordY,
-					radius: rayon/2,
-					sides: shape,
-					rotate: 90,
-					click: function(layer) {
-						actuGroup = layer.group;
-						depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
-						depEnd = null;
-						actuLegionId = layer.legionId;
-						t.restoreCanvas();
-						var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array(), true);
-						for(i = 0; i < tab.length; i++)
-						{
-							t.drawPolygon({
-								fillStyle: '#BBBBFF',
-								strokeStyle: 'black',
-								strokeWidth: 2,
-								x: tab[i][0],
-								y: tab[i][1],
-								radius: rayon,
-								sides: 6,
-								rotate: 90
-							});
-						}
-						harden();
-					}
-				});
-
-
-
-			}
+			});
+		}
+		else {
+			pawnX = getXVirtual(coordX, coordY);
+			pawnY = getYVirtual(coordX, coordY, pawnX);
+			t.setLayer(pawnX+','+pawnY, {
+				strokeWidth: 8
+			});
 		}
 	}
 }
@@ -494,6 +455,8 @@ jQuery.fn.extend({
 		var tent = new Array();
 		// tableau des mouvements
 		var move = new Array();
+		
+		armorComp = new Array();
 		for (var i = 0 ; i < data.board.length ; i++)
 		{
 			// soldat
@@ -516,6 +479,7 @@ jQuery.fn.extend({
 			else if (data.board[i].type == "armor")
 			{
 				armor.push([data.board[i].u, data.board[i].w, false]);
+				armorComp.push(data.board[i].u +','+ data.board[i].w);
 			}
 			// laurier
 			else if (data.board[i].type == "laurel")
@@ -523,9 +487,11 @@ jQuery.fn.extend({
 				pions.push([data.board[i].u, data.board[i].w, -1]);
 			}
 		}
-		for (var i = 0 ; i < data.moves.length ; i++)
-		{
-			move.push([data.moves[i].destroyed, data.moves[i].start_u, data.moves[i].start_w, data.moves[i].end_u, data.moves[i].end_w]);
+		if(typeof data.moves != 'undefined') {
+			for (var i = 0 ; i < data.moves.length ; i++)
+			{
+				move.push([data.moves[i].destroyed, data.moves[i].start_u, data.moves[i].start_w, data.moves[i].end_u, data.moves[i].end_w]);
+			}
 		}
 		this.boardCreate(5, pions, legions, 0, armor, tent, move);
 	},
@@ -848,13 +814,28 @@ jQuery.fn.extend({
 			t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1)+'fond', {
 			  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1
 			}, 0);
+			
 			t.moveLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), -1);
-			t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), {
-			  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1
-			}, 1000,
-			function(layer) {
-				harden();
-			});
+			//si on se déplace sur une armure vide
+			/*alert(armorComp);
+			alert(move[i][3] +','+ move[i][4]);*/
+			if(jQuery.inArray(move[i][3] +','+ move[i][4], armorComp) != -1) {
+				t.removeLayer((move[i][3]+size-1)+','+(move[i][4]+size-1+'armor'));
+				t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), {
+				  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1, strokeWidth: 8
+				}, 1000,
+				function(layer) {
+					//harden();
+				});
+			}
+			else {
+				t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), {
+				  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1
+				}, 1000,
+				function(layer) {
+					//harden();
+				});
+			}
 
 			for(var j = 0; j < pawns.length; j++)
 			{

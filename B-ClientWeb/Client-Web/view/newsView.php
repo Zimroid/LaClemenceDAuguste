@@ -16,3 +16,5 @@
 		echo '</ul>';
 	}
 ?>
+
+<div id="rigoloDiv"></div>

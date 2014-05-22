@@ -5,7 +5,7 @@
         <title><?php echo $siteName; ?></title>
 		<meta charset="utf-8" />
         <meta name="viewport" content="width=device-width">
-        <meta name="description" content="Application La Clémence d'<?php echo $siteName; ?> réalisée par le Conseil Sept">
+        <meta name="description" content="Application <?php echo $siteName; ?> réalisée par le Conseil Sept">
         
         <link rel="icon" type="image/png" href="favicon.png" />
 		<link rel="stylesheet" href="<?php echo $sitePath; ?>/css/chat.css" type="text/css">

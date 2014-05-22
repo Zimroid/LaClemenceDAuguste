@@ -4,8 +4,7 @@
 	if(isset($_SESSION['username']) AND $_SESSION['username'] != null) 
 	{
 ?>
-		<div>Nom d'utilisateur : <?php echo $_SESSION['username']; ?></div>
-		<button id="deconnect" onclick="deconnexion();">Déconnexion</button>
+		<div><p>Nom d'utilisateur : <?php echo $_SESSION['username'].' '; ?><button id="deconnect" onclick="deconnexion();">Déconnexion</button></p></div>
 <?php
 	}
 	
@@ -26,9 +25,9 @@
 	}
 ?>
 </div>
-
+<div class="navDivider"></div>
 <div id="chatTabs">
-	<ul>
+	<ul id ="ulTabs">
 		<li class="tabs"><a href="#normalChat">Chat général</a></li>
 		<li class="tabs"><a href="#gameChat">Chat de partie</a></li>
 	</ul>
@@ -36,7 +35,7 @@
 	<div id="normalChat">
 		<!-- Div d'affichage des messages -->
 		<div id="chatMessages">
-			Bonjour et bienvenue sur le chat général du site ! Pour participer à de meilleures conversations, merci de rester courtois et d'éviter le langage SMS.
+			Bonjour et bienvenue sur le chat général du site ! Pour participer à de meilleures conversations, merci de rester courtois et d'éviter le langage SMS.<br>
 		</div>
 		
 		<!-- Div d'envoi d'un message-->

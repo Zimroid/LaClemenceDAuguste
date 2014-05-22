@@ -50,10 +50,7 @@ function inscription()
 	
     if(user != "" && pass != "" && conf != "" && pass == conf)
     {
-    	$("#user").val(user);
-        $("#password").val(pass);
         pass = CryptoJS.SHA1(pass)+'';
-		conf = CryptoJS.SHA1(conf)+'';
 		
         var json = JSON.stringify(
 		{

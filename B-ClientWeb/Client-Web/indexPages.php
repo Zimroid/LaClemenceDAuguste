@@ -1,4 +1,13 @@
 <?php
+	// boutons pour masquer les colonnes
+	if(isset($_GET['page']) && ($_GET['page'] != 'connect' && $_GET['page'] != 'deconnect'))
+	{
+		echo '<div id="buttonsReduct">
+				<span id="buttonReductMenu" class="bReduct" onclick="slideColumn(\'menu\')">Menu</span>
+				<span id="buttonReductChat" class="bReduct" onclick="slideColumn(\'chat\')">Chat</span>
+			</div>';
+	}
+
 	// Pages basiques
 	if(isset($_GET['page']) && $_GET['page'] == 'news')
 	{
@@ -88,6 +97,10 @@
 	// Page par défaut
 	else
 	{
+		echo '<div id="buttonsReduct">
+				<span id="buttonReductMenu" class="bReduct" onclick="slideColumn(\'menu\')">Menu</span>
+				<span id="buttonReductChat" class="bReduct" onclick="slideColumn(\'chat\')">Chat</span>
+			</div>';
 		$pageCtr->news();
 	}
 ?>
