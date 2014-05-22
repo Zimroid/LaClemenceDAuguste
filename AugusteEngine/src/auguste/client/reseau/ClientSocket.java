@@ -21,8 +21,8 @@ import org.java_websocket.handshake.ServerHandshake;
 public class ClientSocket extends WebSocketClient
 {
 	private static final String ADDRESS = "130.79.214.172";
-	//private static final String PORT = "47135";
-	private static final String PORT = "16302";
+	private static final String PORT = "47135";
+	//private static final String PORT = "16302";
 	private static final String CONNECTION_STRING = "ws://"+ADDRESS+":"+PORT;
 	
 	private static ClientSocket INSTANCE;

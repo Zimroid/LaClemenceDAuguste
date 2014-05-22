@@ -20,9 +20,10 @@ import org.json.JSONException;
  */
 public class ChatMessage extends CommandServer
 {    
-    public static final String AUTHOR =     "author";
+    public static final String AUTHOR =     "user_name";
     public static final String TEXT =       "text";
     public static final String DATE =       "date";
+    public static final String GAME_ID =	"game_id";
     
     private UserInterfaceManager IUM;
     
@@ -38,19 +39,24 @@ public class ChatMessage extends CommandServer
         String author = this.getJSON().getString(AUTHOR);
         String message= this.getJSON().getString(TEXT);
         Date date = new Date(this.getJSON().getLong(DATE));
+        int id = 0;
+        
+        if(this.getJSON().has(GAME_ID))
+        {
+        	id = this.getJSON().getInt(GAME_ID);
+        }
         
         ChatMessageReceived cmr = new ChatMessageReceived();
         cmr.setAuthor(author);
         cmr.setMessage(message);
         cmr.setDate(date);
-        
+
         IUM.addMessageChat(0, cmr);
-        
         IUM.fillQueueChatMessage(0);
         
         for(UpdateListener ul : this.getClient().getInterfaces())
         {
-            ul.chatUpdate();
+            ul.chatUpdate(id);
         }
     }
 }

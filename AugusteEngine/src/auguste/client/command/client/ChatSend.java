@@ -7,6 +7,7 @@
 package auguste.client.command.client;
 
 import java.net.URISyntaxException;
+
 import org.json.JSONException;
 
 /**
@@ -35,7 +36,7 @@ public class ChatSend extends CommandClient
         
         if(this.getArguments().containsKey(ROOM_ID))
         {
-            gameId = Integer.parseInt((String)this.getArguments().get(ROOM_ID));
+            gameId = (Integer) this.getArguments().get(ROOM_ID);
         }
         
         this.getJSON().put(COMMAND, CHAT_SEND);

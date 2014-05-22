@@ -22,7 +22,7 @@ package auguste.client.interfaces;
  */
 public interface UpdateListener 
 {
-    public void chatUpdate();
+    public void chatUpdate(int id);
     public void userUpdate();
     public void createGameUpdate(int id);
     public void listGameUpdate();

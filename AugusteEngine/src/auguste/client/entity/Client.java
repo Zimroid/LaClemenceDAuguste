@@ -198,4 +198,9 @@ public class Client
         }
         this.addGame(game);
     }
+    
+    public void addInterface(UpdateListener ui)
+    {
+    	this.interfaces.add(ui);
+    }
 }

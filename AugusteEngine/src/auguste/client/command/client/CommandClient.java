@@ -74,7 +74,6 @@ public abstract class CommandClient
     {
         this.json = new JSONObject();
         this.client = Client.getInstance();
-        
     }
     
     /**
@@ -128,6 +127,7 @@ public abstract class CommandClient
      */
     public void execute() 
     {
+    	System.out.println(this.getJSON().toString());
         this.getClient().getClientSocket().send(this.getJSON().toString());
     }
     

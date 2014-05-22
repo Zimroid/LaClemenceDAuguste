@@ -261,7 +261,7 @@ public class CSL implements UpdateListener
     }
 
     @Override
-    public void chatUpdate() 
+    public void chatUpdate(int id) 
     {
         this.sendChat();
     }

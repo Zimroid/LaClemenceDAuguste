@@ -2,6 +2,7 @@ package auguste.client.entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -51,26 +52,62 @@ public class UserInterfaceManager
 	 */
 	public void addTenaille(int gameId, Tenaille tenaille)
 	{
-		Queue<Tenaille> queueTenaille = this.getTenailles(gameId);
-		queueTenaille.add(tenaille);
+		if(this.getTenailles(gameId) == null)
+		{
+			Queue<Tenaille> newQueue = new LinkedList<>();
+			this.tenailles.put(gameId, newQueue);
+			newQueue.add(tenaille);
+		}
+		else
+		{
+			Queue<Tenaille> queueTenaille = this.getTenailles(gameId);
+			queueTenaille.add(tenaille);
+		}
 	}
 	
 	public void addMoves(int gameId, Move move)
 	{
-		Queue<Move> queueMove = this.getMoves(gameId);
-		queueMove.add(move);
+		if(this.getMoves(gameId) == null)
+		{
+			Queue<Move> newQueue = new LinkedList<>();
+			this.moves.put(gameId, newQueue);
+			newQueue.add(move);
+		}
+		else
+		{
+			Queue<Move> queueMove = this.getMoves(gameId);
+			queueMove.add(move);
+		}
 	}
 	
 	public void addBattles(int gameId, Battle battle)
 	{
-		Queue<Battle> queueBattle = this.getBattles(gameId);
-		queueBattle.add(battle);
+		if(this.getBattles(gameId) == null)
+		{
+			Queue<Battle> newQueue = new LinkedList<>();
+			this.battles.put(gameId, newQueue);
+			newQueue.add(battle);
+		}
+		else
+		{
+			Queue<Battle> queueBattle = this.getBattles(gameId);
+			queueBattle.add(battle);
+		}
 	}
 	
 	public void addMessageChat(int gameId, ChatMessageReceived message)
 	{
-		Queue<ChatMessageReceived> queueMessage = this.getChatMessageReceived(gameId);
-		queueMessage.add(message);
+		if(this.getChatMessageReceived(gameId) == null)
+		{
+			Queue<ChatMessageReceived> newQueue = new LinkedList<>();
+			this.messages.put(gameId, newQueue);
+			newQueue.add(message);
+		}
+		else
+		{
+			Queue<ChatMessageReceived> queueMessage = this.getChatMessageReceived(gameId);
+			queueMessage.add(message);
+		}
 	}
 	
 	/*
