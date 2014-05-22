@@ -1,0 +1,21 @@
+<div id='logo'>
+	<img src="ressources/logo100.png"/>
+	<br/>
+</div>
+
+<div id='formView'>
+	<button onclick="loadPage('home_onlineChoiceView.html')">Changer de serveur</button>
+	<br/>
+	
+	<!-- Choix serveur -->
+	<label for="iId">IP serveur : </label>
+	<input type="text" name="nameId" id="iId" placeholder="IP" onkeypress="if (event.keyCode == 13) otherServerValidation()">
+	<br/>
+	
+	<label for="pId">Port : </label>
+	<input type="text" name="namePort" id="pId" placeholder="Port" onkeypress="if (event.keyCode == 13) otherServerValidation()">
+	<br/>
+	
+	<input type="button" value="Recherche du serveur" onclick="otherServerValidation();" />
+</div>
+
