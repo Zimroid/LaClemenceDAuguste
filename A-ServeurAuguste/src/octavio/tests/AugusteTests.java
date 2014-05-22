@@ -10,11 +10,14 @@ package octavio.tests;
  *
  * @author Zwyk
  */
-import octavio.engine.entity.Cell;
+import java.awt.Point;
+import java.io.IOException;
+import java.util.Random;
 import octavio.engine.entity.Board;
-import octavio.engine.entity.Legion;
 import octavio.engine.entity.Bot;
+import octavio.engine.entity.Cell;
 import octavio.engine.entity.Game;
+import octavio.engine.entity.Legion;
 import octavio.engine.entity.Player;
 import octavio.engine.entity.Team;
 import octavio.engine.entity.action.Action;
@@ -22,8 +25,7 @@ import octavio.engine.entity.action.Movement;
 import octavio.engine.entity.pawn.Armor;
 import octavio.engine.entity.pawn.Laurel;
 import octavio.engine.entity.pawn.Soldier;
-import java.awt.Point;
-import java.io.IOException;
+import octavio.engine.util.RandomCollection;
 public class AugusteTests {
     
     /**
@@ -58,8 +60,26 @@ public class AugusteTests {
         Game g = new Game(1);
         g.addPlayer(pOne);
         g.addPlayer(pTwo);
-        Board b = new Board(9);
+        Board b = new Board(3);
         g.setBoard(b);
+        
+        /*RandomCollection rc = new RandomCollection(new Random());
+        Board nb = new Board(1);
+        Board nbh = new Board(8);
+        rc.add(1, nb);
+        rc.add(8, nbh);
+        rc.add(1, nb);
+        double cinq = 0;
+        double huit = 0;
+        double un = 0;
+        Board res;
+        int essais = 1000000;
+        for(int i = 0 ; i < essais ; i++) {
+            res = (Board)rc.next();
+            if(res == nb) un++;
+            else huit++;
+        }
+        System.out.println("5 : " + cinq/essais*rc.getTotal() + " - 1 : " + un/essais*rc.getTotal() + " - 8 : " + huit/essais*rc.getTotal());*/
         
         boolean end = false;
         
@@ -70,13 +90,17 @@ public class AugusteTests {
         
         g.initBoard();
         showBoard(b);
-        
-        while(!end) {
-            if(g.applyActions()==null) {
+        long t = System.currentTimeMillis();
+        int i = 0;
+        int limit = 0;
+        while(!end && (limit>0?i<limit:true)) {
+            i++;
+            if(g.applyActions()==false) {
                 g.nextTurn();
             }
             else {
-                System.out.println(g.getWinner());
+                long tt = System.currentTimeMillis() - t;
+                System.out.println("Winner (" + i + " tours en " + tt + "ms soit " + (double)tt/i + "ms/tour) : " + g.getWinner());
                 end = true;
             }
             showBoard(b);
