@@ -46,6 +46,7 @@ public class Game
     private final ArrayList<Legion> legions;
     private Laurel laurel;
     private Legion winner;
+    private int pawnsAlive = 0;
     private final ArrayList<Action> actions;
     private GameTimer timer;
     private int turn = 1;
@@ -104,6 +105,14 @@ public class Game
             if(this.getListener() != null) this.getListener().onTurnEnd(); // timer.notify();
         }
     }
+
+    /**
+     * @return the pawnsAlive
+     */
+    public int getPawnsAlive()
+    {
+        return pawnsAlive;
+    }
     
     public void nextTurn()
     {
@@ -129,11 +138,12 @@ public class Game
     * Applique les actions.
     * @return Legion gagnane (null si partie non terminée)
     */
-    public Legion applyActions()
+    public boolean applyActions()
     {
         calculateMoves();
-        winner = applyMoves();
-        if(winner == null)
+        boolean ends;
+        ends = applyMoves();
+        if(ends == false)
         {
             calculateTenailles();
             applyTenailles();
@@ -147,7 +157,7 @@ public class Game
             //this.timer = new GameTimer(this,turnDuration);
             //this.timer.start();
         }
-        return winner;
+        return ends;
     }
     
     /**
@@ -224,13 +234,13 @@ public class Game
         }
     }
     
-    private Legion applyMoves()
+    private boolean applyMoves()
     {
         Cell c1;
         Cell c2;
         Pawn p1;
         Pawn p2;
-        Legion res = null;
+        boolean ends = false;
         for(Move m : moves)
         {
             c1 = board.getCell(m.getP1());
@@ -248,8 +258,8 @@ public class Game
                 }
                 else if(p1 instanceof Laurel && c2.getTent() != null)
                 {
-                    res = c2.getTent();
-                    break;
+                    ends = true;
+                    winner = c2.getTent();
                 }
                 c2.setPawn(p1);
                 c1.setPawn(null);
@@ -259,9 +269,12 @@ public class Game
                 c1.setPawn(null);
                 p1.setCell(null);
                 p1.setDeleted(true);
+                pawnsAlive--;
             }
+            if(pawnsAlive == 0) ends = true;
+            if(ends == true) break;
         }
-        return res;
+        return ends;
     }
     
     /**
@@ -372,6 +385,7 @@ public class Game
                         p.setCell(null);
                         c.setPawn(null);
                         p.setDeleted(true);
+                        pawnsAlive--;
                     }
                 }
             }
@@ -384,7 +398,6 @@ public class Game
     public void calculateBattles()
     {
         Soldier p1;
-        Soldier p2;
         int orientation;
         int battleRes;
         boolean exists;
@@ -451,12 +464,14 @@ public class Game
                     p1.getCell().setPawn(null);
                     p1.setCell(null);
                     p1.setDeleted(true);
+                    pawnsAlive--;
                 }
                 else if(dies == p2)
                 {
                     p2.getCell().setPawn(null);
                     p2.setCell(null);
                     p2.setDeleted(true);
+                    pawnsAlive--;
                 }
             }
         }
@@ -840,7 +855,10 @@ public class Game
         Cell c = board.getCell(board.getRotatedPosition(new Point(x,y), rotation));
         c.setPawn(pawn);
         pawn.setCell(c);
-        if(pawn.getLegion() != null) pawn.getLegion().getPawns().add(pawn);
+        if(pawn.getLegion() != null) {
+            pawn.getLegion().getPawns().add(pawn);
+            if(pawn instanceof Soldier) pawnsAlive++;
+        }
         if(tent) c.setTent(pawn.getLegion());
     }        
     

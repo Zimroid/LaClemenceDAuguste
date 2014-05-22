@@ -174,56 +174,56 @@ public class Server extends WebSocketServer
             // Commande inconnue
             Log.out("Unknown command");
             Log.debug(e);
-            ClientCommand.sendError(socket, "unknown_command");
+            ClientCommand.sendError(socket, "unknown_command", e);
         }
         catch (AuthentificationException e)
         {
             // Commande nécessitant d'être authentifié
             Log.out("Must be logged");
             Log.debug(e);
-            ClientCommand.sendError(socket, "must_be_logged");
+            ClientCommand.sendError(socket, "must_be_logged", e);
         }
         catch (InexistantRoomException e)
         {
             // Salon inexistant
             Log.out("Inexistant room");
             Log.debug(e);
-            ClientCommand.sendError(socket, "inexistant_room");
+            ClientCommand.sendError(socket, "inexistant_room", e);
         }
         catch (NotInThisRoomException e)
         {
             // Utilisateur absent du salon
             Log.out("Not in this room");
             Log.debug(e);
-            ClientCommand.sendError(socket, "not_in_this_room");
+            ClientCommand.sendError(socket, "not_in_this_room", e);
         }
         catch (RuleException e)
         {
             // Action contre les règles
             Log.out("Unauthorized move");
             Log.debug(e);
-            ClientCommand.sendError(socket, "rule_error");
+            ClientCommand.sendError(socket, "rule_error", e);
         }
         catch (JSONException e)
         {
             // JSON reçu éronné ou incomplet
             Log.error("JSON error");
             Log.debug(e);
-            ClientCommand.sendError(socket, "json_error");
+            ClientCommand.sendError(socket, "json_error", e);
         }
         catch (SQLException e)
         {
             // Erreur SQL
             Log.error("SQL error");
             Log.debug(e);
-            ClientCommand.sendError(socket, "server_error");
+            ClientCommand.sendError(socket, "server_error", e);
         }
         catch (RuntimeException e)
         {
             // Autre errur
             Log.error("Error");
             Log.debug(e);
-            ClientCommand.sendError(socket, "server_error");
+            ClientCommand.sendError(socket, "server_error", e);
         }
     }
 
