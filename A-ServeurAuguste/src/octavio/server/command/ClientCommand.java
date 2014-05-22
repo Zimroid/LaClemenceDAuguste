@@ -121,6 +121,13 @@ public abstract class ClientCommand
                 (new MessageError(type)).toString()
         );
     }
+    public static void sendError(WebSocket socket, String type, Exception e)
+    {
+        ClientCommand.send(
+                socket,
+                (new MessageError(type, e)).toString()
+        );
+    }
     
     // Attributs de la commande
     private WebSocket  socket;  // Socket ayant reçu la commande

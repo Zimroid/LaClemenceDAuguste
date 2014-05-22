@@ -46,5 +46,21 @@ public class MessageError extends ServerCommand
             Log.debug(e);
         }
     }
+    public MessageError(String type, Exception ex)
+    {
+        // Constructeur de la classe mère
+        super("message_error");
+        
+        // Création du JSON
+        try
+        {
+            this.getJSON().put("type", type);
+            this.getJSON().put("exception", ex.toString() + ":" + ex.getMessage());
+        }
+        catch (JSONException e)
+        {
+            Log.debug(e);
+        }
+    }
     
 }
