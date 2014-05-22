@@ -21,8 +21,8 @@ function loadPage(url) {
 /**
  * Function called when page has finished loading.
  */
-function init() {
+function initSwitch() {
 
     // Load first page into container
-    loadPage("panda.html");
+    loadPage("home_onlineChoiceView.html");
 }
