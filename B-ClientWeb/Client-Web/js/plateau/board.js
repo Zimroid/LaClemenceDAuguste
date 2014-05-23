@@ -28,6 +28,9 @@ var actuGroup;
 var actuLegionId;
 //Pour savoir ou se situe les armures vide
 var armorComp;
+//Pour placer les tentes
+var tent;
+var tentComp;
 
 // choppe toutes les coordonnées des cases adjacente à la case donné
 function getProx(pawnX, pawnY, isHard)
@@ -240,60 +243,112 @@ function getZoneLaurel(pawnX, pawnY)
 //Pour déplacer le laurier quand il y a plusieurs légion autour, met en subbriance ProxyPawn, quand un proxyPawn est cliqué on met en subriance go avec la légion du proxyPawn
 function panelSelectLegion(proxyPawn, go)
 {
+	//alert(proxyPawn);
 	for (var i = 0 ; i < proxyPawn.length ; i++)
 	{
+		//alert(proxyPawn[i][0] +','+ proxyPawn[i][1]);
 		t.setLayer((proxyPawn[i][0]+size-1)+','+(proxyPawn[i][1]+size-1)+'fond', {
 			fillStyle: '#FFFFC0',
 			click:function(layer){
-				alert("okok");//@todo faire une fonction qui va mettre en subriance les cases go et qui ensuite va remetre le style et les fonction par défaut des cases proxyPawn
-				//laurelGo(proxyPawn, go, layer.legionId);
+				//alert("okok");//@todo faire une fonction qui va mettre en subriance les cases go et qui ensuite va remetre le style et les fonction par défaut des cases proxyPawn
+				laurelGo(proxyPawn, go, layer.legionId);
 
 			}
 		});
 		t.setLayer((proxyPawn[i][0]+size-1)+','+(proxyPawn[i][1]+size-1), {
-			fillStyle: '#000000',
 			click:function(layer){
-				alert("cool2" + layer.x);//@todo dupliquer la fonction au dessus
+				//alert("cool2" + layer.x);//@todo dupliquer la fonction au dessus
+				laurelGo(proxyPawn, go, layer.legionId);
 			}
 		});
+
 	}
 }
 
-/*function laurelGo(proxyPawn, go, legion)
+function laurelGo(proxyPawn, go, legion)
 {
-	//pour tout les proxyPawn remetre le fond en blanc et mettre le click
-	click:function(layer){
-		actuLegionId = layer.legionId;
-		t.setLayer(layer.pawnX+','+layer.pawnY+'fond', {
+	for (var i = 0 ; i < proxyPawn.length ; i++)
+	{
+		t.setLayer((proxyPawn[i][0]+size-1)+','+(proxyPawn[i][1]+size-1)+'fond', {
 			fillStyle: '#FFFFFF',
 			click:function(layer){
-				actuGroup = layer.group;
-				depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
-				depEnd = null;
 				actuLegionId = layer.legionId;
-				t.restoreCanvas();
-				var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array(), false);
-				for(i = 0; i < tab.length; i++)
-				{
-					t.drawPolygon({
-						fillStyle: '#BBBBFF',
-						strokeStyle: 'black',
-						strokeWidth: 2,
-						x: tab[i][0],
-						y: tab[i][1],
-						radius: rayon,
-						sides: 6,
-						rotate: 90
-					});
-				}
-				harden();
+				t.setLayer(layer.pawnX+','+layer.pawnY+'fond', {
+					fillStyle: '#FFFFFF',
+					click:function(layer){
+						actuGroup = layer.group;
+						depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
+						depEnd = null;
+						actuLegionId = layer.legionId;
+						t.restoreCanvas();
+						var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array(), false);
+						for(i = 0; i < tab.length; i++)
+						{
+							t.drawPolygon({
+								fillStyle: '#BBBBFF',
+								strokeStyle: 'black',
+								strokeWidth: 2,
+								x: tab[i][0],
+								y: tab[i][1],
+								radius: rayon,
+								sides: 6,
+								rotate: 90
+							});
+						}
+						harden();
+					}
+				});
+			}
+		});
+		t.setLayer((proxyPawn[i][0]+size-1)+','+(proxyPawn[i][1]+size-1), {
+			click:function(layer){
+				actuLegionId = layer.legionId;
+				t.setLayer(layer.pawnX+','+layer.pawnY, {
+					click:function(layer){
+						actuGroup = layer.group;
+						depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
+						depEnd = null;
+						actuLegionId = layer.legionId;
+						t.restoreCanvas();
+						var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array(), false);
+						for(i = 0; i < tab.length; i++)
+						{
+							t.drawPolygon({
+								fillStyle: '#BBBBFF',
+								strokeStyle: 'black',
+								strokeWidth: 2,
+								x: tab[i][0],
+								y: tab[i][1],
+								radius: rayon,
+								sides: 6,
+								rotate: 90
+							});
+						}
+						harden();
+					}
+				});
 			}
 		});
 	}
-	mettre en actuLegionId (pour le déplacement) en foncion de la légion du pawn clické
-	mettre en bleu les cases go
+
+	actuLegionId = legion;
+	t.restoreCanvas();
+	for(var i = 0; i < go.length; i++)
+	{
+		t.drawPolygon({
+			fillStyle: '#BBBBFF',
+			strokeStyle: 'black',
+			strokeWidth: 2,
+			x: go[i][0],
+			y: go[i][1],
+			radius: rayon,
+			sides: 6,
+			rotate: 90
+		});
+	}
+	harden();
 }
-*/
+
 
 //Detemine le X (la ligne) de la case grace à sa position en px
 function getXVirtual(x, y)
@@ -425,7 +480,8 @@ function harden()
 			pawnX = getXVirtual(coordX, coordY);
 			pawnY = getYVirtual(coordX, coordY, pawnX);
 			t.setLayer(pawnX+','+pawnY, {
-				strokeWidth: 8
+				strokeWidth: 8,
+				hard: true
 			});
 		}
 	}
@@ -442,6 +498,14 @@ function keyPress(e)
 jQuery.fn.extend({
 	initBoard: function(data)
 	{
+		
+		$("#buttonReductMenu").click(function() {
+			t.boardCreate(size, pawns, legions, playerGroup, armor, tent, new Array());
+		});
+		$("#buttonReductChat").click(function() {
+			t.boardCreate(size, pawns, legions, playerGroup, armor, tent, new Array());
+		});
+		
 		t = $(this);
 		//Ce tableau nous servira à savoir à quelle légion appartient un pions
 		var tabTypeLegion = new Array();
@@ -452,11 +516,13 @@ jQuery.fn.extend({
 		// tableau des legions
 		var legions = new Array();
 		// tableau des tentes
-		var tent = new Array();
+		tent = new Array();
 		// tableau des mouvements
 		var move = new Array();
 		
 		armorComp = new Array();
+		
+		tentComp = new Array();
 		for (var i = 0 ; i < data.board.length ; i++)
 		{
 			// soldat
@@ -486,6 +552,11 @@ jQuery.fn.extend({
 			{
 				pions.push([data.board[i].u, data.board[i].w, -1]);
 			}
+			
+			if(typeof data.board[i].tent_color != 'undefined') {
+				tent.push([data.board[i].u, data.board[i].w, data.board[i].tent_color]);
+				tentComp.push(data.board[i].u +','+ data.board[i].w);
+			}
 		}
 		if(typeof data.moves != 'undefined') {
 			for (var i = 0 ; i < data.moves.length ; i++)
@@ -493,7 +564,7 @@ jQuery.fn.extend({
 				move.push([data.moves[i].destroyed, data.moves[i].start_u, data.moves[i].start_w, data.moves[i].end_u, data.moves[i].end_w]);
 			}
 		}
-		this.boardCreate(5, pions, legions, 0, armor, tent, move);
+		this.boardCreate(data.informations.board_size, pions, legions, 0, armor, tent, move);
 	},
 	boardCreate: function(s, pawn, legion, nGroup, arm, tent, move)
 	{
@@ -507,8 +578,8 @@ jQuery.fn.extend({
 		armor = arm;
 		
 		rayon = (t.width()-2)/(Math.sqrt(3)*(2*size-1));
-		if(rayon > t.height()/(3*size-1)) {
-			rayon = t.height()/(3*size-1);
+		if(rayon > (t.height()-2)/(3*size-1)) {
+			rayon = (t.height()-2)/(3*size-1);
 		}
 		// diametre d'une case = la taille du canvas / le nombre de case sur la plus grande ligne (size*2-1)
 
@@ -534,7 +605,7 @@ jQuery.fn.extend({
 		//@TODO faire une fonction de zomm et de déplacement
 
 		var xStart = (t.width()-Math.sqrt(3)*rayon*(size*2-1))/2+(Math.sqrt(3)*rayon/2*size-1)+2;
-		var yStart = (t.height()-(size*rayon*2+(size-1)*rayon))/2+rayon;
+		var yStart = (t.height()-2-(size*rayon*2+(size-1)*rayon))/2+rayon+2;
 
 		// Utilisation du clavier pour un futur zoom ?
 		jQuery(document).keydown(keyPress);
@@ -550,12 +621,20 @@ jQuery.fn.extend({
 
 					virtual[size*2-2-i][j][0] = virtual[i][j][0];
 
+					var caseColor;
+					if(jQuery.inArray((i-size+1) +','+ (j-size+1), tentComp) != -1) {
+						caseColor = tent[jQuery.inArray((i-size+1) +','+ (j-size+1), tentComp)][2];
+					}
+					else {
+						caseColor = 'black';
+					}
+					
 					t.drawPolygon({
 						coordX: i,
 						coordY: j,
 						layer: true,
 						fillStyle: '#FFFFFF',
-						strokeStyle: 'black',
+						strokeStyle: caseColor,
 						strokeWidth: 2,
 						x: virtual[i][j][0],
 						y: virtual[i][j][1],
@@ -584,13 +663,21 @@ jQuery.fn.extend({
 				for(j=0; j < (size*2-1) - (i+1)%size; j++)
 				{
 					virtual[i][j][1] = yStart + i*(rayon*2 - rayon/2);
-
+					
+					var caseColor;
+					if(jQuery.inArray((i-size+1) +','+ (j-size+1), tentComp) != -1) {
+						caseColor = tent[jQuery.inArray((i-size+1) +','+ (j-size+1), tentComp)][2];
+					}
+					else {
+						caseColor = 'black';
+					}
+					
 					t.drawPolygon({
 						coordX: i,
 						coordY: j,
 						layer: true,
 						fillStyle: '#FFFFFF',
-						strokeStyle: 'black',
+						strokeStyle: caseColor,
 						strokeWidth: 2,
 						x: virtual[i][j][0],
 						y: virtual[i][j][1],
@@ -650,21 +737,23 @@ jQuery.fn.extend({
 
 
 			var group = pawns[i][2];
+			
 
 			//le fond du pion (pour qu'on puisse activer la même fonction peu importe à quelle endroit on a cliqué sur la case du pion)
 			t.drawPolygon({
 				name: pawnX+','+pawnY+'fond',
+				hard:false,
 				pawnX: pawnX,
 				pawnY: pawnY,
 				legionId: legionId,
 				group: group,
 				layer: true,
 				fillStyle: '#FFFFFF',
-				strokeStyle: 'black',
-				strokeWidth: 2,
+				//strokeStyle: caseColor,
+				//strokeWidth: 2,
 				x: coordX,
 				y: coordY,
-				radius: rayon,
+				radius: rayon-2,
 				sides: 6,
 				rotate: 90,
 				click: function(layer) {
@@ -679,7 +768,7 @@ jQuery.fn.extend({
 						depEnd = null;
 						actuLegionId = layer.legionId;
 						t.restoreCanvas();
-						var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array(), false);
+						var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array(), layer.hard);
 						for(i = 0; i < tab.length; i++)
 						{
 							t.drawPolygon({
@@ -703,6 +792,7 @@ jQuery.fn.extend({
 			if(pawns[i][2] >= 0) {
 				t.drawPolygon({
 					name: pawnX+','+pawnY,
+					hard:false,
 					pawnX: pawnX,
 					pawnY: pawnY,
 					legionId: legionId,
@@ -727,7 +817,7 @@ jQuery.fn.extend({
 							depEnd = null;
 							actuLegionId = layer.legionId;
 							t.restoreCanvas();
-							var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array(), false);
+							var tab = getZoneProx(layer.pawnX, layer.pawnY, new Array(), layer.hard);
 							for(i = 0; i < tab.length; i++)
 							{
 								t.drawPolygon({
@@ -823,6 +913,12 @@ jQuery.fn.extend({
 				t.removeLayer((move[i][3]+size-1)+','+(move[i][4]+size-1+'armor'));
 				t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), {
 				  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1, strokeWidth: 8
+				}, 1000,
+				function(layer) {
+					//harden();
+				});
+				t.setLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), {
+				  hard: true
 				}, 1000,
 				function(layer) {
 					//harden();
