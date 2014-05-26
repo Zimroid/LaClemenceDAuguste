@@ -20,6 +20,7 @@ function gameCreate(arg)
 	    });
         $("#message").val("");
         sendText(json);
+        $('#chatMessagesGame').html("Chat de la partie " + gameName + "<br>Pour participer à de meilleures conversations, merci de rester courtois et d'éviter le langage SMS.");
     }
 }
 
@@ -33,7 +34,6 @@ function gameStart(room_id)
     });
 	sitePage = 'gameStart';
     sendText(json);
-    $('#chatMessagesGame').html("Chat de la partie " + save_game_config.configuration.game_name + "<br>Pour participer à de meilleures conversations, merci de rester courtois et d'éviter le langage SMS.");
 }
 
 function gameConfig()

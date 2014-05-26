@@ -8,8 +8,30 @@ function process(evt)
 	// Erreur connexion utilisateur
 	if(command == "message_error")
 	{
-		// Déconnexion
-		if(data.type == "logged_out")
+		switch (data.type)
+		{
+			case 'already_in_this_room':
+				alert("Vous avez déjà rejoint cette partie.");
+				break;
+			case 'log_error':
+				alert("Erreur d'identification.");
+				break;
+			case 'logged_out':
+				myId = '';
+				myName = '';
+				reloadChat(sitePath + "/index.php?script=1&page=deconnect");
+				break;
+			case 'must_be_logged':
+				reloadContent(sitePath + "/index.php?script=1&page=subscribe");
+				break;
+			case 'not_owner_of_this_room':
+				alert("Vous n'êtes pas autorisé à modifier la configuration d'une partie dont vous n'êtes pas l'hôte.");
+				break;
+			default:
+				alert(data.type);
+				break;
+		}
+		/*if(data.type == "logged_out")
 		{
 			myId = '';
 			myName = '';
@@ -34,7 +56,7 @@ function process(evt)
 		else
 		{
 			alert(data.type);
-		}
+		}*/
 	}
 	
 	// Reussite connexion utilisateur
