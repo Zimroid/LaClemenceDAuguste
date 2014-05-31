@@ -52,11 +52,11 @@ function slideColumn(columnName)
 			$('#chatBox').css('display','block');
 			if ($('#menu').css('display') == 'none')
 			{
-				$('#mainPage').css('width','calc(100% - 350px - 2em)');
+				$('#mainPage').css('width','calc(100% - 400px - 2em)');
 			}
 			else
 			{
-				$('#mainPage').css('width','calc(100% - 550px - 2em)');
+				$('#mainPage').css('width','calc(100% - 600px - 2em)');
 			}
 		}
 		else
@@ -64,7 +64,7 @@ function slideColumn(columnName)
 			$('#chatBox').css('display','none');
 			if ($('#menu').css('display') == 'none')
 			{
-				$('#mainPage').css('width','98%');
+				$('#mainPage').css('width','96%');
 			}
 			else
 			{
