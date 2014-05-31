@@ -13,6 +13,12 @@ function process(evt)
 			case 'already_in_this_room':
 				alert("Vous avez déjà rejoint cette partie.");
 				break;
+			case 'inexistant_room':
+				alert("Cette salle n'existe pas.");
+				break;
+			case 'json_error':
+				alert("Paramètres de commande incorrects.");
+				break;
 			case 'log_error':
 				alert("Erreur d'identification.");
 				break;
@@ -26,6 +32,15 @@ function process(evt)
 				break;
 			case 'not_owner_of_this_room':
 				alert("Vous n'êtes pas autorisé à modifier la configuration d'une partie dont vous n'êtes pas l'hôte.");
+				break;
+			case 'rule_error':
+				alert("Ce coup n'est pas autorisé.");
+				break;
+			case 'server_error':
+				alert("Erreur serveur.");
+				break;
+			case 'unknown_command':
+				alert("Cette commande n'existe pas.");
 				break;
 			default:
 				alert(data.type);

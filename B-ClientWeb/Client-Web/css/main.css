@@ -19,6 +19,7 @@ legend{border:1px solid black;}
 #gameConfigForm{margin:2px;}
 #mainPage{height:100%;margin-left:calc(180px + 1em);overflow:auto;padding-right:1em;position:absolute;width:calc(100% - 550px - 2em);}
 #menu{background:linear-gradient(to right,#FFFFFF,#EEEEEE) repeat scroll 0 0 rgba(0,0,0,0);border-right:1px solid #999;height:100%;position:absolute;width:190px;}
+#smallMenu{background:linear-gradient(to right,#FFFFFF,#EEEEEE) repeat scroll 0 0 rgba(0,0,0,0);border:1px solid #999;}
 #valid,#validGame{background-color:#448844;border-radius:5px;color:#FFFFFF;cursor:pointer;font-weight:bold;}
 .bReduct{background-color:#CCCCCC;border:1px solid black;cursor:pointer;font-size:10px;}
 .dropLegionButton,.dropPlayerButton,.dropTeamButton,.newLegionButton,.newPlayerButton,.newTeamButton{text-align:right;}
