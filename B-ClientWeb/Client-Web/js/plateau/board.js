@@ -251,28 +251,33 @@ function panelSelectLegion(proxyPawn, go)
 			fillStyle: '#FFFFC0',
 			click:function(layer){
 				//alert("okok");//@todo faire une fonction qui va mettre en subriance les cases go et qui ensuite va remetre le style et les fonction par défaut des cases proxyPawn
-				laurelGo(proxyPawn, go, layer.legionId);
+				actuLegionId = layer.legionId;
+				//laurelGo(proxyPawn, go, layer.legionId);
+				laurelGo(proxyPawn, go);
 
 			}
 		});
 		t.setLayer((proxyPawn[i][0]+size-1)+','+(proxyPawn[i][1]+size-1), {
 			click:function(layer){
 				//alert("cool2" + layer.x);//@todo dupliquer la fonction au dessus
-				laurelGo(proxyPawn, go, layer.legionId);
+				actuLegionId = layer.legionId;
+				//laurelGo(proxyPawn, go, layer.legionId);
+				laurelGo(proxyPawn, go);
 			}
 		});
 
 	}
 }
 
-function laurelGo(proxyPawn, go, legion)
+//function laurelGo(proxyPawn, go, legion)
+function laurelGo(proxyPawn, go)
 {
 	for (var i = 0 ; i < proxyPawn.length ; i++)
 	{
 		t.setLayer((proxyPawn[i][0]+size-1)+','+(proxyPawn[i][1]+size-1)+'fond', {
 			fillStyle: '#FFFFFF',
 			click:function(layer){
-				actuLegionId = layer.legionId;
+				//actuLegionId = layer.legionId;
 				t.setLayer(layer.pawnX+','+layer.pawnY+'fond', {
 					fillStyle: '#FFFFFF',
 					click:function(layer){
@@ -285,7 +290,7 @@ function laurelGo(proxyPawn, go, legion)
 						for(i = 0; i < tab.length; i++)
 						{
 							t.drawPolygon({
-								fillStyle: '#BBBBFF',
+								fillStyle: 'rgba(200, 200, 255, 0.3)',
 								strokeStyle: 'black',
 								strokeWidth: 2,
 								x: tab[i][0],
@@ -295,14 +300,14 @@ function laurelGo(proxyPawn, go, legion)
 								rotate: 90
 							});
 						}
-						harden();
+						//harden();
 					}
 				});
 			}
 		});
 		t.setLayer((proxyPawn[i][0]+size-1)+','+(proxyPawn[i][1]+size-1), {
 			click:function(layer){
-				actuLegionId = layer.legionId;
+				//actuLegionId = layer.legionId;
 				t.setLayer(layer.pawnX+','+layer.pawnY, {
 					click:function(layer){
 						actuGroup = layer.group;
@@ -314,7 +319,7 @@ function laurelGo(proxyPawn, go, legion)
 						for(i = 0; i < tab.length; i++)
 						{
 							t.drawPolygon({
-								fillStyle: '#BBBBFF',
+								fillStyle: 'rgba(200, 200, 255, 0.3)',
 								strokeStyle: 'black',
 								strokeWidth: 2,
 								x: tab[i][0],
@@ -324,19 +329,19 @@ function laurelGo(proxyPawn, go, legion)
 								rotate: 90
 							});
 						}
-						harden();
+						//harden();
 					}
 				});
 			}
 		});
 	}
 
-	actuLegionId = legion;
-	t.restoreCanvas();
+	//actuLegionId = legion;
+	//t.restoreCanvas();
 	for(var i = 0; i < go.length; i++)
 	{
 		t.drawPolygon({
-			fillStyle: '#BBBBFF',
+			fillStyle: 'rgba(200, 200, 255, 0.3)',
 			strokeStyle: 'black',
 			strokeWidth: 2,
 			x: go[i][0],
@@ -346,7 +351,7 @@ function laurelGo(proxyPawn, go, legion)
 			rotate: 90
 		});
 	}
-	harden();
+	//harden();
 }
 
 
@@ -414,7 +419,8 @@ function oneHundredPercent(first)
 
 	if(first) {
 		$( window ).resize(function() {
-			t.boardCreate(size, pawns, legions, playerGroup, armor, new Array(), new Array());
+			t.boardCreate(size, pawns, legions, playerGroup, armor, tent, new Array());
+			//harden();
 		});
 	}
 }
@@ -482,7 +488,7 @@ function harden()
 			t.setLayer(pawnX+','+pawnY, {
 				strokeWidth: 8,
 				hard: true
-			});
+			}).drawLayers();
 		}
 	}
 }
@@ -564,6 +570,47 @@ jQuery.fn.extend({
 				move.push([data.moves[i].destroyed, data.moves[i].start_u, data.moves[i].start_w, data.moves[i].end_u, data.moves[i].end_w]);
 			}
 		}
+		if(typeof data.battles != 'undefined') {
+			for (var i = 0 ; i < data.battles.length ; i++)
+			{
+				move.push([true, data.battles[i].loser_u, data.battles[i].loser_w, data.battles[i].loser_u, data.battles[i].loser_w]);
+			}
+		}
+		if(typeof data.tenailles != 'undefined') {
+			for (var i = 0 ; i < data.tenailles.length ; i++)
+			{
+				var start;
+				var end;
+				if(data.tenailles[i].front1_w <= data.tenailles[i].front2_w) {
+					start = [data.tenailles[i].front1_u, data.tenailles[i].front1_w];
+					end = [data.tenailles[i].front2_u, data.tenailles[i].front2_w];
+				}
+				else
+				{
+					start = [data.tenailles[i].front2_u, data.tenailles[i].front2_w];
+					end = [data.tenailles[i].front1_u, data.tenailles[i].front1_w];
+				}
+				while((start[0]+','+start[1]) != (end[0]+','+end[1])) {
+					
+					if(start[0] > end[0]) {
+						start[0]--;
+					}
+					else if(start[0] < end[0]) {
+						start[0]++;
+					}
+					if(start[1] > end[1]) {
+						start[1]--;
+					}
+					else if(start[1] < end[1]) {
+						start[1]++;
+					}
+					//alert(start[0] +', '+ start[1]);
+					if((start[0]+','+start[1]) != (end[0]+','+end[1])) {
+						move.push([true, start[0], start[1], start[0], start[1]]);
+					}
+				}
+			}
+		}
 		this.boardCreate(data.informations.board_size, pions, legions, 0, armor, tent, move);
 	},
 	boardCreate: function(s, pawn, legion, nGroup, arm, tent, move)
@@ -622,11 +669,14 @@ jQuery.fn.extend({
 					virtual[size*2-2-i][j][0] = virtual[i][j][0];
 
 					var caseColor;
+					var caseBig;
 					if(jQuery.inArray((i-size+1) +','+ (j-size+1), tentComp) != -1) {
 						caseColor = tent[jQuery.inArray((i-size+1) +','+ (j-size+1), tentComp)][2];
+						caseBig = rayon*2/3;
 					}
 					else {
 						caseColor = 'black';
+						caseBig = rayon;
 					}
 					
 					t.drawPolygon({
@@ -638,7 +688,7 @@ jQuery.fn.extend({
 						strokeWidth: 2,
 						x: virtual[i][j][0],
 						y: virtual[i][j][1],
-						radius: rayon,
+						radius: caseBig,
 						sides: 6,
 						rotate: 90,
 						click: function(layer) {
@@ -665,11 +715,14 @@ jQuery.fn.extend({
 					virtual[i][j][1] = yStart + i*(rayon*2 - rayon/2);
 					
 					var caseColor;
+					var caseBig;
 					if(jQuery.inArray((i-size+1) +','+ (j-size+1), tentComp) != -1) {
 						caseColor = tent[jQuery.inArray((i-size+1) +','+ (j-size+1), tentComp)][2];
+						caseBig = rayon*2/3;
 					}
 					else {
 						caseColor = 'black';
+						caseBig = rayon;
 					}
 					
 					t.drawPolygon({
@@ -681,7 +734,7 @@ jQuery.fn.extend({
 						strokeWidth: 2,
 						x: virtual[i][j][0],
 						y: virtual[i][j][1],
-						radius: rayon,
+						radius: caseBig,
 						sides: 6,
 						rotate: 90,
 						click: function(layer) {
@@ -748,7 +801,7 @@ jQuery.fn.extend({
 				legionId: legionId,
 				group: group,
 				layer: true,
-				fillStyle: '#FFFFFF',
+				fillStyle: 'rgba(255, 255, 255, 0.05)',
 				//strokeStyle: caseColor,
 				//strokeWidth: 2,
 				x: coordX,
@@ -772,7 +825,7 @@ jQuery.fn.extend({
 						for(i = 0; i < tab.length; i++)
 						{
 							t.drawPolygon({
-								fillStyle: '#BBBBFF',
+								fillStyle: 'rgba(200, 200, 255, 0.3)',
 								strokeStyle: 'black',
 								strokeWidth: 2,
 								x: tab[i][0],
@@ -782,7 +835,7 @@ jQuery.fn.extend({
 								rotate: 90
 							});
 						}
-						harden();
+						//harden();
 					//}
 		/*var end = new Date().getTime();
 		alert(end - start);*/
@@ -821,7 +874,7 @@ jQuery.fn.extend({
 							for(i = 0; i < tab.length; i++)
 							{
 								t.drawPolygon({
-									fillStyle: '#BBBBFF',
+									fillStyle: 'rgba(200, 200, 255, 0.3)',
 									strokeStyle: 'black',
 									strokeWidth: 2,
 									x: tab[i][0],
@@ -831,7 +884,7 @@ jQuery.fn.extend({
 									rotate: 90
 								});
 							}
-							harden();
+							//harden();
 						//}
 		/*var end = new Date().getTime();
 		alert(end - start);*/
@@ -869,7 +922,7 @@ jQuery.fn.extend({
 						for(i = 0; i < tab.length; i++)
 						{
 							t.drawPolygon({
-								fillStyle: '#BBBBFF',
+								fillStyle: 'rgba(200, 200, 255, 0.3)',
 								strokeStyle: 'black',
 								strokeWidth: 2,
 								x: tab[i][0],
@@ -879,7 +932,7 @@ jQuery.fn.extend({
 								rotate: 90
 							});
 						}
-						harden();
+						//harden();
 		/*var end = new Date().getTime();
 		alert(end - start);*/
 					}
@@ -901,22 +954,51 @@ jQuery.fn.extend({
 			var coord = virtual[move[i][3]+size-1][move[i][4]+size-1];
 			//alert((move[i][1])+','+(move[i][2]));
 			t.moveLayer((move[i][1]+size-1)+','+(move[i][2]+size-1)+'fond', -1);
-			t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1)+'fond', {
-			  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1
-			}, 0);
+			//si le pion est détruit
+			if(move[i][0]) {
+				t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1)+'fond', {
+				  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1, radius: 0
+				}, 0);
+			}
+			else {
+				t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1)+'fond', {
+				  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1
+				}, 0);
+			}
 			
 			t.moveLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), -1);
 			//si on se déplace sur une armure vide
 			/*alert(armorComp);
 			alert(move[i][3] +','+ move[i][4]);*/
 			if(jQuery.inArray(move[i][3] +','+ move[i][4], armorComp) != -1) {
+
+				//On supprime l'armure
+				for(var k = 0; k < armor.length; k++)
+				{
+					if(move[i][3]+','+move[i][4] == armor[k][0]+','+armor[k][1]) {
+						armor[k][2] = true;
+					}
+				}
+				//alert([move[i][3], move[i][4], false] + ' => ' + armor);
+
 				t.removeLayer((move[i][3]+size-1)+','+(move[i][4]+size-1+'armor'));
-				t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), {
-				  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1, strokeWidth: 8
-				}, 1000,
-				function(layer) {
-					//harden();
-				});
+				//si le pion est détruit
+				if(move[i][0]) {
+					t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), {
+					  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1, strokeWidth: 8, radius: 0
+					}, 1000,
+					function(layer) {
+						//harden();
+					});
+				}
+				else {
+					t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), {
+					  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1, strokeWidth: 8
+					}, 1000,
+					function(layer) {
+						//harden();
+					});
+				}
 				t.setLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), {
 				  hard: true
 				}, 1000,
@@ -925,24 +1007,57 @@ jQuery.fn.extend({
 				});
 			}
 			else {
-				t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), {
-				  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1
-				}, 1000,
-				function(layer) {
-					//harden();
-				});
+				//si le pion est détruit
+				if(move[i][0]) {
+					t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), {
+					  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1, radius: 0
+					}, 1000,
+					function(layer) {
+						//harden();
+					});
+				}
+				else {
+					t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), {
+					  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1
+					}, 1000,
+					function(layer) {
+						//harden();
+					});
+				}
+
 			}
 
 			for(var j = 0; j < pawns.length; j++)
 			{
 				if(pawns[j][0] == move[i][1] && pawns[j][1] == move[i][2]) {
-					pawns[j] = [move[i][3], move[i][4], pawns[j][2]];
+					//si le pion est détruit
+					if(move[i][0]) {
+						pawns.splice(j, 1);
+					}
+					else {
+						//pawns[j] = [move[i][3], move[i][4], pawns[j][2]];
+						pawns[j][0] = move[i][3];
+						pawns[j][1] = move[i][4];
+
+						t.setLayer((move[i][1]+size-1)+','+(move[i][2]+size-1)+'fond', {
+							name: (move[i][3]+size-1)+','+(move[i][4]+size-1)+'fond'
+						});
+						t.setLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), {
+							name: (move[i][3]+size-1)+','+(move[i][4]+size-1)
+						});
+					}
 				}
 			}
 			for(var j = 0; j < armor.length; j++)
 			{
 				if(armor[j][0] == move[i][1] && armor[j][1] == move[i][2]) {
-					armor[j] = [move[i][3], move[i][4], armor[j][2]];
+					//si le pion est détruit
+					if(move[i][0]) {
+						armor.splice(j, 1);
+					}
+					else {
+						armor[j] = [move[i][3], move[i][4], armor[j][2]];
+					}
 				}
 			}
 		}
