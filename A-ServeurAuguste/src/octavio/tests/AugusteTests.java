@@ -40,19 +40,19 @@ public class AugusteTests {
         pOne.setTeam(tOne);
         pTwo.setTeam(tTwo);
         Legion lOne = new Legion(pOne);
-        //pOne.addLegion(lOne);
+        pOne.addLegion(lOne);
         lOne.setPosition(0);
         Legion lTwo = new Legion(pOne);
         pOne.addLegion(lTwo);
         lTwo.setPosition(2);
         Legion lThree = new Legion(pOne);
-        //pOne.addLegion(lThree);
+        pOne.addLegion(lThree);
         lThree.setPosition(4);
         Legion lFour = new Legion(pTwo);
-        //pTwo.addLegion(lFour);
+        pTwo.addLegion(lFour);
         lFour.setPosition(1);
         Legion lFive = new Legion(pTwo);
-        //pTwo.addLegion(lFive);
+        pTwo.addLegion(lFive);
         lFive.setPosition(3);
         Legion lSix = new Legion(pTwo);
         pTwo.addLegion(lSix);
@@ -61,14 +61,14 @@ public class AugusteTests {
         g = new Game(1000);
         g.addPlayer(pOne);
         g.addPlayer(pTwo);
-        Board b = new Board(5);
+        Board b = new Board(11);
         g.setBoard(b);
         
         g.initBoard();
         showBoard(b);
         
         
-        addMove(-1, -4, -1, -3);
+        /*addMove(-1, -4, -1, -3);
         next();
         addMove(-1, -3, -1, -2);
         next();
@@ -110,7 +110,7 @@ public class AugusteTests {
         
         Thread.sleep(10000);
         g.getTimer().cancel();
-        g.getTimer().purge();
+        g.getTimer().purge();*/
         
         /*addMove(-4, -4, -2, -2);
         next();
@@ -154,7 +154,7 @@ public class AugusteTests {
         
         //System.out.println(distance(-1,-1,-2,-2,9));
         
-        /*boolean end = false;
+        boolean end = false;
         
         pOne.setBot(new Bot(pOne,Bot.Strategy.distribuedRandom));
         pOne.setConnected(false);
@@ -176,7 +176,8 @@ public class AugusteTests {
             }
             showBoard(b);
             //System.in.read();
-        }*/
+        }
+        
         
         /*addMove(-8, 0, -3, 0);
         addMove(0, -8, 0, -3);

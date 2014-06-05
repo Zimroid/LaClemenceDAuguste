@@ -108,11 +108,21 @@ public class Game
             }
             a.getLegion().setAction(a);
             this.actions.add(a);
-            if (this.actions.size() == this.legions.size()) 
+            if (this.actions.size() == nbAliveLegions()) 
             {
                 if(this.getListener() != null) this.getListener().onTurnEnd(); // timer.notify();
             }
         }
+    }
+    
+    public int nbAliveLegions()
+    {
+        int res = 0;
+        for(Legion l : legions)
+        {
+            if(l.getLivingPawns().size() > 0) res++;
+        }
+        return res;
     }
 
     /**
