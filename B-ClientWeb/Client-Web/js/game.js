@@ -20,6 +20,7 @@ function gameCreate(arg)
 	    });
         $("#message").val("");
         sendText(json);
+        $('#chatMessagesGame').html("Chat de la partie " + gameName + "<br>Pour participer à de meilleures conversations, merci de rester courtois et d'éviter le langage SMS.");
     }
 }
 
@@ -33,7 +34,6 @@ function gameStart(room_id)
     });
 	sitePage = 'gameStart';
     sendText(json);
-    $('#chatMessagesGame').html("Chat de la partie " + save_game_config.configuration.game_name + "<br>Pour participer à de meilleures conversations, merci de rester courtois et d'éviter le langage SMS.");
 }
 
 function gameConfig()
@@ -85,7 +85,11 @@ function gameConfig()
 				if ($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val() != null)
 				{
 					// id du joueur
-					if (parseInt($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val(),10) == 0)
+					if (parseInt($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val(),10) == -1)
+					{
+						stringJSON += '{"player_user_id":0,"bot":"random","legions":[';
+					}
+					else if (parseInt($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val(),10) == 0)
 					{
 						stringJSON += '{"player_user_id":0,"bot":"pseudoRandom","legions":[';
 					}
@@ -211,7 +215,6 @@ function newTeam()
     //select pour la color
     var selColor = $("<select class='color' class='" + numberTeam + "' onchange='gameConfig();'></select>");
     //options pour la color
-    var optColor = $("<option value='#000000'>Noir</option>");
     var optColor2 = $("<option value='#FF0000'>Rouge</option>");
     var optColor3 = $("<option value='#FFFF00'>Jaune</option>");
     var optColor4 = $("<option value='#00FF00'>Vert</option>");
@@ -247,7 +250,7 @@ function newPlayer(team, player)
     //span du joueur dont on fait la config
     var pPlay = $("<span>Joueur " + player + "</span>");
     //select du joueur dont on fait la config
-    var selPlay = $("<select name='playerName' class='" + team + "' onchange='gameConfig();'><option value='0'>ROBOT</option></select>");
+    var selPlay = $("<select name='playerName' class='" + team + "' onchange='gameConfig();'><option value='-1'>ROBOT Random</option><option value='0'>ROBOT Pseudo-Random</option></select>");
     //bouton pour la création d'un nouveau joueur dans la team
     var NLButton = $("<button class='newLegionButton' id='legion"+ team + '_' + player +"' onclick='newLegion(" + team + "," + player + ",1)'>Nouvelle légion</button>");
     //bouton de suppression du player

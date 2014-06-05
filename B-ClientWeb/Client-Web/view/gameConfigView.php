@@ -17,7 +17,6 @@
 				<span id="title1" name="title1">Team 1</span>
 				<label>Couleur du pion</label>
 				<select class="color" class="1" onchange="gameConfig();">
-					<option value="#000000">Noir</option>
 					<option value="#FF0000">Rouge</option>
 					<option value="#FFFF00">Jaune</option>
 					<option value="#00FF00">Vert</option>
@@ -30,7 +29,8 @@
 				<div name="player" id="player1_1">
 					<span>Joueur 1</span>
 					<select name="playerName" class="1" onchange="gameConfig();">
-						<option value="0">ROBOT</option>
+						<option value="-1">ROBOT Random</option>
+						<option value="0">ROBOT Pseudo-Random</option>
 					</select>
 					<button class='newLegionButton' id="legion1_1" onclick="newLegion(1,1,2)">Nouvelle légion</button>
 					<div name="legion" id="legion1_1_1">
@@ -57,7 +57,6 @@
 				<span id="title2" name="title2">Team 2</span>
 				<label>Couleur du pion</label>
 				<select class="color" class="1" onchange="gameConfig();">
-					<option value="#000000">Noir</option>
 					<option value="#FF0000">Rouge</option>
 					<option value="#FFFF00">Jaune</option>
 					<option value="#00FF00">Vert</option>
@@ -70,7 +69,8 @@
 				<div name="player" id="player2_1">
 					<span>Joueur 1</span>
 					<select name="playerName" class="2" onchange="gameConfig();">
-						<option value="0">ROBOT</option>
+						<option value="-1">ROBOT Random</option>
+						<option value="0">ROBOT Pseudo-Random</option>
 					</select>
 					<button class='newLegionButton' id="legion2_1" onclick="newLegion(2,1,2)">Nouvelle légion</button>
 					<div name="legion" id="legion2_1_1">

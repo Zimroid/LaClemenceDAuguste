@@ -18,6 +18,7 @@ function slideColumn(columnName)
 	{
 		if ($('#menu').css('display') == 'none')
 		{
+			$('#smallMenu').css('display','none');
 			$('#menu').css('display','block');
 			$('#mainPage').css('margin-left','calc(180px + 1em)');
 			if ($('#chatBox').css('display') == 'none')
@@ -31,15 +32,16 @@ function slideColumn(columnName)
 		}
 		else
 		{
+			$('#smallMenu').css('display','block');
 			$('#menu').css('display','none');
-			$('#mainPage').css('margin-left','5px');
+			$('#mainPage').css('margin-left','50px');
 			if ($('#chatBox').css('display') == 'none')
 			{
-				$('#mainPage').css('width','98%');
+				$('#mainPage').css('width','96%');
 			}
 			else
 			{
-				$('#mainPage').css('width','calc(100% - 350px - 2em)');
+				$('#mainPage').css('width','calc(100% - 400px - 2em)');
 			}
 		}
 	}
@@ -50,11 +52,11 @@ function slideColumn(columnName)
 			$('#chatBox').css('display','block');
 			if ($('#menu').css('display') == 'none')
 			{
-				$('#mainPage').css('width','calc(100% - 350px - 2em)');
+				$('#mainPage').css('width','calc(100% - 400px - 2em)');
 			}
 			else
 			{
-				$('#mainPage').css('width','calc(100% - 550px - 2em)');
+				$('#mainPage').css('width','calc(100% - 600px - 2em)');
 			}
 		}
 		else
@@ -62,7 +64,7 @@ function slideColumn(columnName)
 			$('#chatBox').css('display','none');
 			if ($('#menu').css('display') == 'none')
 			{
-				$('#mainPage').css('width','98%');
+				$('#mainPage').css('width','96%');
 			}
 			else
 			{
