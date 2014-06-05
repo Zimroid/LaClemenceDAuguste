@@ -256,7 +256,7 @@ public class AugusteTests {
         addMove(g.getBoard().getCell(new Point(xd,yd)).getPawn().getLegion(),xd,yd,xa,ya);
     }
     
-    private static void next() {
+    private static void next() throws InterruptedException {
         g.applyActions();
         g.nextTurn();
         showBoard(g.getBoard());

@@ -186,12 +186,28 @@ public class Game
         });
     }
     
+    public boolean allPlayersAreBots()
+    {
+        boolean res = true;
+        for(Player p : players)
+        {
+            if(p.isConnected())
+            {
+                res = false;
+                break;
+            }
+        }
+        return res;
+    }
+    
     /**
     * Applique les actions.
     * @return Legion gagnane (null si partie non terminée)
+     * @throws java.lang.InterruptedException
     */
-    public boolean applyActions()
+    public boolean applyActions() throws InterruptedException
     {
+        if(allPlayersAreBots()) Thread.sleep(1000);
         calculateMoves();
         boolean ends;
         ends = applyMoves();
