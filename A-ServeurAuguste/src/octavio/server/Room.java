@@ -244,7 +244,16 @@ public class Room implements GameListener
         
         // Application des actions et ajout du prochain timeout
         json.put("turn_timeout", (new Date((new Date()).getTime() + this.configuration.getLong("game_turn_duration"))).getTime());
-        boolean ends = this.game.applyActions();
+        
+        boolean ends = false;
+        try 
+        {
+            ends = this.game.applyActions();
+        }
+        catch (InterruptedException e)
+        {
+            
+        }
         
         // Ajout des déplacements
         JSONArray movesData = new JSONArray();
