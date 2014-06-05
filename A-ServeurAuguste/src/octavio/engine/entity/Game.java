@@ -113,6 +113,14 @@ public class Game
     }
 
     /**
+     * @return the legions
+     */
+    public ArrayList<Legion> getLegions()
+    {
+        return legions;
+    }
+
+    /**
      * @return the pawnsAlive
      */
     public int getPawnsAlive()
@@ -379,10 +387,10 @@ public class Game
         {
             p1 = board.getCell(t.getP1()).getPawn();
             p2 = board.getCell(t.getP2()).getPawn();
-            
             if(p1 != null && p2 != null)
             {
                 orientation = getOrientation(p1.getCell(),p2.getCell());
+                System.out.println(p1.getCell().getP() + " - " + p2.getCell().getP() + " - " + orientation);
                 for(Cell c = p1.getCell(); c != p2.getCell() && c != null; c = getCell(c,orientation))
                 {
                     if(c != null && c != p1.getCell() && c.getPawn() != null && c.getPawn() instanceof Soldier)
@@ -821,76 +829,101 @@ public class Game
         return res;
     }
     
-    // NB : Orientation c2 par rapport à c1 de 0 à 5 dans le sens horaires avec 0 = haut droite
+    // NB : Orientation c2 par rapport à c1 de 0 à 5 dans le sens horaires avec 0 = haut gauche
     public int getOrientation(Cell c1, Cell c2)
     {
         int res = -1;
         Point p1 = c1.getP();
         Point p2 = c2.getP();
         
+        boolean reverse = false;
+        if(p1.x < p2.x) {
+            reverse = true;
+            Point temp = p1;
+            p1 = p2;
+            p2 = temp;
+        }
+        
         if(p1.x == p2.x)
         {
             if(p1.y < p2.y)
             {
-                res = 1;
+                res = 2;
             }
             else if(p1.y > p2.y)
             {
-                res = 4;
+                res = 5;
             }
         }
-        else if(p1.x > p2.x)
+        else
         {
             if(p1.x > 0)
             {
-                if(p1.y == p2.y)
+                if(p1.x == p2.x+1)
                 {
-                    res = 5;
+                    if(p1.y == p2.y)
+                    {
+                        res = 0;
+                    }
+                    else if(p1.y+1 == p2.y)
+                    {
+                        res = 1;
+                    }
                 }
-                else if(p1.y < p2.y)
+                else if(p2.x <= 0)
                 {
-                    res = 0;
+                    if(p1.y < p2.y)
+                    {
+                        res = 1;
+                    }
+                    else if(p1.y >= p2.y)
+                    {
+                        res = 0;
+                    }
+                }
+                else if(p2.x > 0)
+                {
+                    if(p1.y == p2.y)
+                    {
+                        res = 3;
+                    }
+                    else if(p1.y > p2.y)
+                    {
+                        res = 4;
+                    }
+                }
+            }
+            else if(p1.x < 0)
+            {
+                if(p1.x == p2.x+1 || p2.x < 0)
+                {
+                    if(p1.y > p2.y)
+                    {
+                        res = 0;
+                    }
+                    else if(p1.y == p2.y)
+                    {
+                        res = 1;
+                    }
                 }
             }
             else
             {
-                if(p1.y > p2.y)
+                if(p2.x < 0)
                 {
-                    res = 5;
-                }
-                else if(p1.y == p2.y)
-                {
-                    res = 0;
-                }
-            }
-        }
-        else if(p1.x < p2.x)
-        {
-            if(p1.x < 0)
-            {
-                if(p1.y == p2.y)
-                {
-                    res = 3;
-                }
-                else if(p1.y < p2.y)
-                {
-                    res = 2;
-                }
-            }
-            else
-            {
-                if(p1.y > p2.y)
-                {
-                    res = 3;
-                }
-                else if(p1.y == p2.y)
-                {
-                    res = 2;
+                    if(p1.y == p2.y)
+                    {
+                        res = 1;
+                    }
+                    else if(p1.y > p2.y)
+                    {
+                        res = 0;
+                    }
                 }
             }
         }
         
-        return res;
+        return res==-1?res:reverse?(res+3)%6:res;
     }
     
     public Cell getCell(Cell c, int orientation)
@@ -901,22 +934,22 @@ public class Game
         switch(orientation)
         {
             case 0:
-                res = board.getCell(new Point(p.x-1,p.x>0?p.y+1:p.y));
+                res = board.getCell(new Point(p.x-1,p.x>0?p.y:p.y-1));
                 break;
             case 1:
-                res = board.getCell(new Point(p.x,p.y+1));
+                res = board.getCell(new Point(p.x-1,p.x>0?p.y+1:p.y));
                 break;
             case 2:
-                res = board.getCell(new Point(p.x+1,p.x<0?p.y+1:p.y));
+                res = board.getCell(new Point(p.x,p.y+1));
                 break;
             case 3:
-                res = board.getCell(new Point(p.x+1,p.x<0?p.y:p.y-1));
+                res = board.getCell(new Point(p.x+1,p.x<0?p.y+1:p.y));
                 break;
             case 4:
-                res = board.getCell(new Point(p.x,p.y-1));
+                res = board.getCell(new Point(p.x+1,p.x<0?p.y:p.y-1));
                 break;
             case 5:
-                res = board.getCell(new Point(p.x-1,p.x>0?p.y:p.y-1));
+                res = board.getCell(new Point(p.x,p.y-1));
                 break;
         }
         
