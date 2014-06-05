@@ -84,6 +84,12 @@
 		$pageCtr->subscribe();
 	}
 	
+	// Page Compte
+	else if(isset($_GET['page']) && $_GET['page'] == 'account')
+	{
+		$pageCtr->account();
+	}
+	
 	// Page Chat : gestion utilisateur
 	else if(isset($_GET['page']) && $_GET['page'] == 'connect')
 	{

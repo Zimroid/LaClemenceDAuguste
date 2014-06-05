@@ -39,6 +39,7 @@ function connexion(bool,us,pa)
     {
     	alert("Un des champs n'est pas rempli.");
     }
+    
 }
 
 // Inscription au jeu
@@ -62,6 +63,59 @@ function inscription()
         sendText(json);
     }
     else if (pass != conf)
+    {
+    	alert("Les deux champs de mot de passe ne sont pas identiques.");
+    }
+    else
+    {
+    	alert("Un des champs n'est pas rempli.");
+    }
+}
+
+// Modification du nom de compte
+function modifier_nom()
+{
+	var userold = myName;
+	var usernew = htmlspecialchars($("#userAccount").val());
+	
+    if(userold != "" && usernew != "")
+    {
+        var json = JSON.stringify(
+		{
+			"command": "ACCOUNT_EDIT_NAME",
+			"user_name_old": userold,
+			"user_name_new": usernew
+        });
+
+        sendText(json);
+    }
+    else
+    {
+    	alert("Un des champs n'est pas rempli.");
+    }
+}
+
+// Modification du mot de passe
+function modifier_pass()
+{
+	var user = myName;
+	var passnew = htmlspecialchars($("#passwordModif").val());
+	var passnew2 = htmlspecialchars($("#passwordModif2").val());
+	
+    if(user != "" && passnew != "" && passnew2 != "" && passnew == passnew2)
+    {
+    	passnew = CryptoJS.SHA1(passnew)+'';
+		
+        var json = JSON.stringify(
+		{
+			"command": "ACCOUNT_EDIT_PASS",
+			"user_name": user,
+			"user_password": passnew
+        });
+
+        sendText(json);
+    }
+    else if (passnew != passnew2)
     {
     	alert("Les deux champs de mot de passe ne sont pas identiques.");
     }

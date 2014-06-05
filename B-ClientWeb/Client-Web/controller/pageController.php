@@ -72,5 +72,11 @@ class pageController
 	{
 		include 'view/subscribeView.php';
 	}
+	
+	// Compte
+	public function account()
+	{
+		include 'view/accountView.php';
+	}
 }
 ?>

@@ -4,7 +4,11 @@
 	if(isset($_SESSION['username']) AND $_SESSION['username'] != null) 
 	{
 ?>
-		<div><p>Nom d'utilisateur : <?php echo $_SESSION['username'].' '; ?><button id="deconnect" onclick="deconnexion();">Déconnexion</button></p></div>
+		<div>
+			<span>Nom d'utilisateur : <?php echo $_SESSION['username'].' '; ?></span><br>
+			<button id="deconnect" onclick="deconnexion();">Déconnexion</button>
+			<a id='accountScript' href='<?php echo $sitePath; ?>/index.php?page=account'>Mon compte</a>
+		</div>
 <?php
 	}
 	
