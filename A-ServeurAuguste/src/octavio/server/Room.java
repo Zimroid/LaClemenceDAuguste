@@ -244,7 +244,7 @@ public class Room implements GameListener
         
         // Application des actions et ajout du prochain timeout
         json.put("turn_timeout", (new Date((new Date()).getTime() + this.configuration.getLong("game_turn_duration"))).getTime());
-        this.game.applyActions();
+        boolean ends = this.game.applyActions();
         
         // Ajout des déplacements
         JSONArray movesData = new JSONArray();
@@ -293,6 +293,13 @@ public class Room implements GameListener
             battlesData.put(battleData);
         }
         json.put("battles", battlesData);
+        
+        if (ends)
+        {
+            json.put("winner", this.game.getWinner().getPosition());
+            this.game.getTimer().cancel();
+            this.game.getTimer().purge();
+        }
         
         // Début du prochain tour
         this.game.nextTurn();
