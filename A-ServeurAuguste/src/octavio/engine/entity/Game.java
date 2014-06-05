@@ -16,6 +16,11 @@
 
 package octavio.engine.entity;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Timer;
 import octavio.engine.GameListener;
 import octavio.engine.GameTimer;
 import octavio.engine.entity.action.Action;
@@ -29,10 +34,6 @@ import octavio.engine.ia.IA;
 import octavio.engine.turnData.Battle;
 import octavio.engine.turnData.Move;
 import octavio.engine.turnData.Tenaille;
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Classe représentant une partie.
@@ -45,10 +46,10 @@ public class Game
     private final ArrayList<Team> teams;
     private final ArrayList<Legion> legions;
     private Laurel laurel;
-    private Legion winner;
+    private Legion winner = null;
     private int pawnsAlive = 0;
     private final ArrayList<Action> actions;
-    private GameTimer timer;
+    private Timer timer;
     private int turn = 1;
     
     // Variables pour l'affichage client
@@ -79,7 +80,6 @@ public class Game
         this.tenailles = new ArrayList<>();
         this.battles = new ArrayList<>();
         this.ia = new IA(this);
-        //this.timer = new GameTimer(this,turnDuration);
     }
     
     public Game(GameListener listener, long turnDuration, Board b)
@@ -99,17 +99,38 @@ public class Game
     */
     public void addAction(Action a)
     {
-        Legion l = a.getLegion();
-        if(l.getAction() != null)
+        if(winner==null)
         {
-            this.actions.remove(l.getAction());
+            Legion l = a.getLegion();
+            if(l.getAction() != null)
+            {
+                this.actions.remove(l.getAction());
+            }
+            a.getLegion().setAction(a);
+            this.actions.add(a);
+            if (this.actions.size() == nbAliveLegions()) 
+            {
+                if(this.getListener() != null) this.getListener().onTurnEnd(); // timer.notify();
+            }
         }
-        a.getLegion().setAction(a);
-        this.actions.add(a);
-        if (this.actions.size() == this.legions.size()) 
+    }
+    
+    public int nbAliveLegions()
+    {
+        int res = 0;
+        for(Legion l : legions)
         {
-            if(this.getListener() != null) this.getListener().onTurnEnd(); // timer.notify();
+            if(l.getLivingPawns().size() > 0) res++;
         }
+        return res;
+    }
+
+    /**
+     * @return the legions
+     */
+    public ArrayList<Legion> getLegions()
+    {
+        return legions;
     }
 
     /**
@@ -119,6 +140,22 @@ public class Game
     {
         return pawnsAlive;
     }
+
+    /**
+     * @return the timer
+     */
+    public Timer getTimer()
+    {
+        return timer;
+    }
+
+    /**
+     * @param timer the timer to set
+     */
+    public void setTimer(Timer timer)
+    {
+        this.timer = timer;
+    }
     
     public void nextTurn()
     {
@@ -126,6 +163,15 @@ public class Game
         moves.clear();
         tenailles.clear();
         battles.clear();
+        timer.cancel();
+        timer.purge();
+        turn();
+    }
+    
+    public void turn()
+    {
+        timer = new Timer();
+        timer.schedule(new GameTimer(this), turnDuration);
         playBots();
     }
     
@@ -140,12 +186,28 @@ public class Game
         });
     }
     
+    public boolean allPlayersAreBots()
+    {
+        boolean res = true;
+        for(Player p : players)
+        {
+            if(p.isConnected())
+            {
+                res = false;
+                break;
+            }
+        }
+        return res;
+    }
+    
     /**
     * Applique les actions.
     * @return Legion gagnane (null si partie non terminée)
+     * @throws java.lang.InterruptedException
     */
-    public boolean applyActions()
+    public boolean applyActions() throws InterruptedException
     {
+        if(allPlayersAreBots()) Thread.sleep(1000);
         calculateMoves();
         boolean ends;
         ends = applyMoves();
@@ -163,6 +225,7 @@ public class Game
             //this.timer = new GameTimer(this,turnDuration);
             //this.timer.start();
         }
+        
         return ends;
     }
     
@@ -379,10 +442,10 @@ public class Game
         {
             p1 = board.getCell(t.getP1()).getPawn();
             p2 = board.getCell(t.getP2()).getPawn();
-            
             if(p1 != null && p2 != null)
             {
                 orientation = getOrientation(p1.getCell(),p2.getCell());
+                System.out.println(p1.getCell().getP() + " - " + p2.getCell().getP() + " - " + orientation);
                 for(Cell c = p1.getCell(); c != p2.getCell() && c != null; c = getCell(c,orientation))
                 {
                     if(c != null && c != p1.getCell() && c.getPawn() != null && c.getPawn() instanceof Soldier)
@@ -627,8 +690,7 @@ public class Game
         }
         laurel = new Laurel();
         initCell(0,0,laurel,0);        // Laurel
-        //this.timer.start();
-        playBots();
+        turn();
     }
     
     /**
@@ -821,76 +883,101 @@ public class Game
         return res;
     }
     
-    // NB : Orientation c2 par rapport à c1 de 0 à 5 dans le sens horaires avec 0 = haut droite
+    // NB : Orientation c2 par rapport à c1 de 0 à 5 dans le sens horaires avec 0 = haut gauche
     public int getOrientation(Cell c1, Cell c2)
     {
         int res = -1;
         Point p1 = c1.getP();
         Point p2 = c2.getP();
         
+        boolean reverse = false;
+        if(p1.x < p2.x) {
+            reverse = true;
+            Point temp = p1;
+            p1 = p2;
+            p2 = temp;
+        }
+        
         if(p1.x == p2.x)
         {
             if(p1.y < p2.y)
             {
-                res = 1;
+                res = 2;
             }
             else if(p1.y > p2.y)
             {
-                res = 4;
+                res = 5;
             }
         }
-        else if(p1.x > p2.x)
+        else
         {
             if(p1.x > 0)
             {
-                if(p1.y == p2.y)
+                if(p1.x == p2.x+1)
                 {
-                    res = 5;
+                    if(p1.y == p2.y)
+                    {
+                        res = 0;
+                    }
+                    else if(p1.y+1 == p2.y)
+                    {
+                        res = 1;
+                    }
                 }
-                else if(p1.y < p2.y)
+                else if(p2.x <= 0)
                 {
-                    res = 0;
+                    if(p1.y < p2.y)
+                    {
+                        res = 1;
+                    }
+                    else if(p1.y >= p2.y)
+                    {
+                        res = 0;
+                    }
+                }
+                else if(p2.x > 0)
+                {
+                    if(p1.y == p2.y)
+                    {
+                        res = 3;
+                    }
+                    else if(p1.y > p2.y)
+                    {
+                        res = 4;
+                    }
+                }
+            }
+            else if(p1.x < 0)
+            {
+                if(p1.x == p2.x+1 || p2.x < 0)
+                {
+                    if(p1.y > p2.y)
+                    {
+                        res = 0;
+                    }
+                    else if(p1.y == p2.y)
+                    {
+                        res = 1;
+                    }
                 }
             }
             else
             {
-                if(p1.y > p2.y)
+                if(p2.x < 0)
                 {
-                    res = 5;
-                }
-                else if(p1.y == p2.y)
-                {
-                    res = 0;
-                }
-            }
-        }
-        else if(p1.x < p2.x)
-        {
-            if(p1.x < 0)
-            {
-                if(p1.y == p2.y)
-                {
-                    res = 3;
-                }
-                else if(p1.y < p2.y)
-                {
-                    res = 2;
-                }
-            }
-            else
-            {
-                if(p1.y > p2.y)
-                {
-                    res = 3;
-                }
-                else if(p1.y == p2.y)
-                {
-                    res = 2;
+                    if(p1.y == p2.y)
+                    {
+                        res = 1;
+                    }
+                    else if(p1.y > p2.y)
+                    {
+                        res = 0;
+                    }
                 }
             }
         }
         
-        return res;
+        return res==-1?res:(reverse?(res+3)%6:res);
     }
     
     public Cell getCell(Cell c, int orientation)
@@ -901,22 +988,22 @@ public class Game
         switch(orientation)
         {
             case 0:
-                res = board.getCell(new Point(p.x-1,p.x>0?p.y+1:p.y));
+                res = board.getCell(new Point(p.x-1,p.x>0?p.y:p.y-1));
                 break;
             case 1:
-                res = board.getCell(new Point(p.x,p.y+1));
+                res = board.getCell(new Point(p.x-1,p.x>0?p.y+1:p.y));
                 break;
             case 2:
-                res = board.getCell(new Point(p.x+1,p.x<0?p.y+1:p.y));
+                res = board.getCell(new Point(p.x,p.y+1));
                 break;
             case 3:
-                res = board.getCell(new Point(p.x+1,p.x<0?p.y:p.y-1));
+                res = board.getCell(new Point(p.x+1,p.x<0?p.y+1:p.y));
                 break;
             case 4:
-                res = board.getCell(new Point(p.x,p.y-1));
+                res = board.getCell(new Point(p.x+1,p.x<0?p.y:p.y-1));
                 break;
             case 5:
-                res = board.getCell(new Point(p.x-1,p.x>0?p.y:p.y-1));
+                res = board.getCell(new Point(p.x,p.y-1));
                 break;
         }
         
@@ -1017,20 +1104,6 @@ public class Game
      */
     public ArrayList<Battle> getBattles() {
         return battles;
-    }
-
-    /**
-     * @return the timer
-     */
-    public GameTimer getTimer() {
-        return timer;
-    }
-
-    /**
-     * @param timer the timer to set
-     */
-    public void setTimer(GameTimer timer) {
-        this.timer = timer;
     }
 
     /**

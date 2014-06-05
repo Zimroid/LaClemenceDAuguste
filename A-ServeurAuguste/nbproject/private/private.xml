@@ -12,9 +12,10 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/octavio/server/Server.java</file>
-            <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/octavio/server/command/ClientCommand.java</file>
-            <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/octavio/server/command/server/MessageError.java</file>
+            <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/octavio/server/Room.java</file>
+            <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/octavio/engine/entity/Game.java</file>
+            <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/octavio/server/command/client/RoomCreate.java</file>
+            <file>file:/C:/Users/neooz_000/Documents/GitHub/LaClemenceDAuguste/A-ServeurAuguste/src/octavio/server/Main.java</file>
         </group>
     </open-files>
 </project-private>

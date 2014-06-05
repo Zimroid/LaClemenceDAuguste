@@ -35,4 +35,5 @@ function reloadChat(url)
 	xhr.send();
 	
 	$('#chatTabs').tabs();
+	load();
 }

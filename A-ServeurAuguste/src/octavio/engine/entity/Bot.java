@@ -78,6 +78,7 @@ public class Bot {
     
     public enum Strategy {
         random,
-        pseudoRandom
+        pseudoRandom,
+        distribuedRandom
     }
 }

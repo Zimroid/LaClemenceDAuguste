@@ -14,30 +14,41 @@
  * limitations under the License.
  */
 
-package octavio.engine;
+package octavio.engine.ia.entity;
 
-import java.util.TimerTask;
-import octavio.engine.entity.Game;
+import java.util.ArrayList;
+import octavio.engine.entity.Cell;
+import octavio.engine.entity.pawn.Pawn;
 
 /**
  *
  * @author Zwyk
  */
-public class GameTimer extends TimerTask {
+public class GroupMovement
+{
+    private final ArrayList<Pawn> group;
+    private final Cell cell;
     
-    private final Game game;
-    private final int turn;
-    
-    public GameTimer(Game g)
+    public GroupMovement(ArrayList<Pawn> group, Cell cell) {
+        this.group = group;
+        this.cell = cell;
+    }
+
+    /**
+     * @return the cell
+     */
+    public Cell getCell()
     {
-        this.game = g;
-        this.turn = game.getTurn();
+        return cell;
+    }
+
+    /**
+     * @return the group
+     */
+    public ArrayList<Pawn> getGroup()
+    {
+        return group;
     }
     
-    @Override
-    public synchronized void run()
-    {
-        if(game.getListener() != null) game.getListener().onTurnEnd();
-        else game.nextTurn();
-    }
+    
 }
