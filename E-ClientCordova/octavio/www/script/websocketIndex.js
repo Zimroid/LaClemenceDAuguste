@@ -73,17 +73,43 @@ function process(evt)
 	// ATTENTION NOM DE COMMANDE NON DEFINITIVE !!!
 	else if(command == "game_confirm")
 	{	
-		save_game_config = data;
-		// si une partie rapide est lancée
-		if (data.configuration.game_mode == 'fast' && (data.teams[0].players[0].player_user_id != 0) && (data.teams[1].players[0].player_user_id != 0))
+		localStorage.save_game_config = dataString;
+		localStorage.mode = data.configuration.game_mode;
+		
+		localStorage.roomId = data.configuration.room_id;
+		alert(localStorage.roomId);
+		alert(data.configuration);
+		
+		// Mode de jeu : rapide
+		if (data.configuration.game_mode == 'fast')
 		{
-			gameStart(data.room_id);
+			/*
+			if ( ( data.teams[0].players[0].player_user_id != -1) && (data.teams[1].players[0].player_user_id != -1) 
+			&& ( ( data.teams[0].players[0].player_user_id == 0 ) || ( data.teams[1].players[0].player_user_id == 0) ) )
+			{
+				gameStart(data.room_id);
+			}
+			*/
 		}
-		// si une partie normale est lancée
-		else if (sitePage != 'gameConfig')
+		// Mode de jeu : normal
+		else if (data.configuration.game_mode == 'normal')
+		{	
+			// Configuration de partie
+			if (localStorage.sitePage != 'gameConfig')
+			{
+				alert("Partie Normale --> Game_confirm");
+				
+				/*
+				localStorage.sitePage = 'gameConfig';
+				//reloadContent(sitePath + "/index.php?script=1&page=gameConfig&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
+				loadPage('home_subscribeView.html');
+				*/
+			}
+		}
+		// Mode de jeu incorrect
+		else
 		{
-			sitePage = 'gameConfig';
-			reloadContent(sitePath + "/index.php?script=1&page=gameConfig&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
+			alert("Mode de jeu incorrect !");
 		}
 	}
 
@@ -91,9 +117,13 @@ function process(evt)
 	// ATTENTION NOM DE COMMANDE NON DEFINITIVE !!!
 	else if(command == "game_turn")
 	{
-		save_game_turn = data;
+		localStorage.save_game_turn = dataString;
+		
 		// Qu'on soit n'importe où, ou qu'on recharge la page principale pour arriver en jeu (cas pour un nouveau tour, un début de partie voir une reconnexion)
-		reloadContent(sitePath + "/index.php?script=1&page=game");
+		// reloadContent(sitePath + "/index.php?script=1&page=game");
+		
+		// Chargement page jeu ...
+		loadPage('gameView.html');
 	}
 	
 	// Si on demande la liste des parties
@@ -115,7 +145,13 @@ function process(evt)
 	// Réception liste des joueurs d'une partie
 	else if(command == "game_users")
 	{
-		var mode = $("#type_game").val();
+		var mode = localStorage.mode;		
+		
+		/*
+		
+			PARTIE NORMALE
+			
+		
 		if (mode == 'normal')
 		{
 			// copie du tableau d'utilisateurs précédent (pour identifier les départs de joueurs)
@@ -201,22 +237,33 @@ function process(evt)
 				}
 			}
 		}
-		else if (mode == 'fast' && data.users[1] && myName == data.users[0].user_name)
+		
+		else 
+		
+		*/
+		
+		if (mode == 'fast' && data.users[0] && typeof(localStorage.save_game_config) != "undefined" && localStorage.save_game_config != "")
 		{
-			save_game_config.command = "GAME_CONFIGURATION";
-			save_game_config.teams[0].players[0].player_user_id = data.users[0].user_id;
-			save_game_config.teams[1].players[0].player_user_id = data.users[1].user_id;
-			save_game_config.game_turn_duration = save_game_config.configuration.game_turn_duration;
-			save_game_config.game_mode = save_game_config.configuration.game_mode;
-			save_game_config.game_board_size = save_game_config.configuration.game_board_size;
-			save_game_config.game_name = save_game_config.configuration.game_name;
-			var json = JSON.stringify(save_game_config);
+			var gameDataTemp = JSON.parse(localStorage.save_game_config);
+			
+			gameDataTemp.command = "GAME_CONFIGURATION";
+			gameDataTemp.teams[0].players[0].player_user_id = 9; //data.users[0].user_id;
+			gameDataTemp.teams[1].players[0].player_user_id = 0;							// ------------- CECI EST UN BOT !!!!
+			gameDataTemp.teams[1].players[0].bot = "pseudoRandom";
+			gameDataTemp.game_turn_duration = 	gameDataTemp.configuration.game_turn_duration;
+			gameDataTemp.game_mode = 			gameDataTemp.configuration.game_mode;
+			gameDataTemp.game_board_size = 		gameDataTemp.configuration.game_board_size;
+			gameDataTemp.game_name = 			gameDataTemp.configuration.game_name;
+			
+			var json = JSON.stringify(gameDataTemp);
 			sendText(json);
 		}
+		/**/
 	}
 	
 	else
 	{
+		// Partie rapide -> Configuration (Ajout d'un bot)
 		alert(dataString);
 	}
 }

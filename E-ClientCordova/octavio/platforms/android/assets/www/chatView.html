@@ -1,15 +1,26 @@
-<!-- Div d'affichage des messages -->
-<div id="chatMessages">
-	Bonjour et bienvenue sur le chat ! Merci de rester courtois et d'éviter le langage SMS.
-	<br/>
+<div id='chat'>
+	<!-- Div d'affichage des messages -->
+	<div id="chatMessages">
+		Bonjour et bienvenue sur le chat ! Merci de rester courtois et d'éviter le langage SMS.
+		<br/>
+	</div>
+
+	<!-- Div d'envoi d'un message-->
+	<div id="chatSend">
+		<button onClick="deconnexion();">Deconnexion</button>
+			
+		<form onsubmit="addMessage(); return false;" autocomplete="off" >
+			<textarea title='Message' id="message" name="message" onkeypress="toucheEntree(event)"></textarea>
+			<input title='Envoyer un message' type="submit" id="valid" value="Envoyer" />
+		</form>
+	</div>
 </div>
 
-<!-- Div d'envoi d'un message-->
-<div id="chatSend">
-	<button onClick="deconnexion();">Deconnexion</button>
-		
-	<form onsubmit="addMessage(); return false;" autocomplete="off" >
-		<textarea title='Message' id="message" name="message" onkeypress="toucheEntree(event)"></textarea>
-		<input title='Envoyer un message' type="submit" id="valid" value="Envoyer" />
-	</form>
-</div>
+<h2>Création d'une nouvelle partie</h2>
+
+<label for="gameName">Nom de la partie : </label>
+<input type="text" name="gameName" id="gameName" onkeypress="if (event.keyCode == 13) gameCreate('')" />
+<button onclick="gameCreate('')" >Partie normale</button>
+<button onclick="gameCreate('defaut')" >Partie rapide</button>
+
+<button onclick="gameCreateTest()">TEST</button>

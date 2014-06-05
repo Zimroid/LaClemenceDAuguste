@@ -11,6 +11,13 @@ function loadPage(url) {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
 		{
 			document.getElementById('container').innerHTML = xmlhttp.responseText;
+			
+			// Si présence d'un canevas "board" -> Lancement système de jeu
+			if($("#board").length != 0)
+			{				
+				console.log(localStorage.save_game_turn);
+				$("#board").initBoard(JSON.parse(localStorage.save_game_turn));
+			}
         }
     };
 	

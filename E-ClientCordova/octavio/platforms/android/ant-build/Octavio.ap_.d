@@ -17,6 +17,10 @@ C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\pla
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\content \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\cordova.js \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\cordova_plugins.js \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\gameConfigView.html \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\gameCreateTest.html \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\gameFastWaiting.html \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\gameView.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\home_connectionView.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\home_onlineChoiceView.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\home_serverSelectView.html \
@@ -26,8 +30,10 @@ C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\pla
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\ressources\logo100.png \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\chat.js \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\game.js \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\jquery-1.11.0.min.js \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\jquery-ui-1.10.4.custom.min.js \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\plateau \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\server.js \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\sha1.js \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\switchPage.js \
@@ -35,4 +41,9 @@ C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\pla
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\util.js \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\websocket.js \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\websocketIndex.js \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\plateau\138.png \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\plateau\board.js \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\plateau\jcanvas.min.js \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\plateau\laurel.png \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\plateau\Zygarde Board.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\ant-build\AndroidManifest.xml \
