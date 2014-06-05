@@ -16,32 +16,28 @@
 
 package octavio.engine;
 
+import java.util.TimerTask;
 import octavio.engine.entity.Game;
 
 /**
  *
  * @author Zwyk
  */
-public class GameTimer extends Thread {
+public class GameTimer extends TimerTask {
     
     private final Game game;
-    private final long duration;
+    private final int turn;
     
-    public GameTimer(Game g, long d)
+    public GameTimer(Game g)
     {
         this.game = g;
-        this.duration = d;
+        this.turn = game.getTurn();
     }
     
     @Override
     public synchronized void run()
     {
-        try
-        {
-            this.wait(duration);
-        } catch (InterruptedException ex)
-        {
-        }
         if(game.getListener() != null) game.getListener().onTurnEnd();
+        else game.nextTurn();
     }
 }

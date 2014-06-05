@@ -58,7 +58,7 @@ public class AugusteTests {
         pTwo.addLegion(lSix);
         lSix.setPosition(5);
         
-        g = new Game(1);
+        g = new Game(1000);
         g.addPlayer(pOne);
         g.addPlayer(pTwo);
         Board b = new Board(5);
@@ -107,6 +107,10 @@ public class AugusteTests {
         addMove(2, -2, 2, -3);
         next();
         next();
+        
+        Thread.sleep(10000);
+        g.getTimer().cancel();
+        g.getTimer().purge();
         
         /*addMove(-4, -4, -2, -2);
         next();

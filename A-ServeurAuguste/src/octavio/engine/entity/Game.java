@@ -16,6 +16,11 @@
 
 package octavio.engine.entity;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Timer;
 import octavio.engine.GameListener;
 import octavio.engine.GameTimer;
 import octavio.engine.entity.action.Action;
@@ -29,10 +34,6 @@ import octavio.engine.ia.IA;
 import octavio.engine.turnData.Battle;
 import octavio.engine.turnData.Move;
 import octavio.engine.turnData.Tenaille;
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Classe représentant une partie.
@@ -45,10 +46,10 @@ public class Game
     private final ArrayList<Team> teams;
     private final ArrayList<Legion> legions;
     private Laurel laurel;
-    private Legion winner;
+    private Legion winner = null;
     private int pawnsAlive = 0;
     private final ArrayList<Action> actions;
-    private GameTimer timer;
+    private Timer timer;
     private int turn = 1;
     
     // Variables pour l'affichage client
@@ -79,7 +80,6 @@ public class Game
         this.tenailles = new ArrayList<>();
         this.battles = new ArrayList<>();
         this.ia = new IA(this);
-        //this.timer = new GameTimer(this,turnDuration);
     }
     
     public Game(GameListener listener, long turnDuration, Board b)
@@ -99,16 +99,19 @@ public class Game
     */
     public void addAction(Action a)
     {
-        Legion l = a.getLegion();
-        if(l.getAction() != null)
+        if(winner==null)
         {
-            this.actions.remove(l.getAction());
-        }
-        a.getLegion().setAction(a);
-        this.actions.add(a);
-        if (this.actions.size() == this.legions.size()) 
-        {
-            if(this.getListener() != null) this.getListener().onTurnEnd(); // timer.notify();
+            Legion l = a.getLegion();
+            if(l.getAction() != null)
+            {
+                this.actions.remove(l.getAction());
+            }
+            a.getLegion().setAction(a);
+            this.actions.add(a);
+            if (this.actions.size() == this.legions.size()) 
+            {
+                if(this.getListener() != null) this.getListener().onTurnEnd(); // timer.notify();
+            }
         }
     }
 
@@ -127,6 +130,22 @@ public class Game
     {
         return pawnsAlive;
     }
+
+    /**
+     * @return the timer
+     */
+    public Timer getTimer()
+    {
+        return timer;
+    }
+
+    /**
+     * @param timer the timer to set
+     */
+    public void setTimer(Timer timer)
+    {
+        this.timer = timer;
+    }
     
     public void nextTurn()
     {
@@ -134,6 +153,15 @@ public class Game
         moves.clear();
         tenailles.clear();
         battles.clear();
+        timer.cancel();
+        timer.purge();
+        turn();
+    }
+    
+    public void turn()
+    {
+        timer = new Timer();
+        timer.schedule(new GameTimer(this), turnDuration);
         playBots();
     }
     
@@ -171,6 +199,7 @@ public class Game
             //this.timer = new GameTimer(this,turnDuration);
             //this.timer.start();
         }
+        
         return ends;
     }
     
@@ -635,8 +664,7 @@ public class Game
         }
         laurel = new Laurel();
         initCell(0,0,laurel,0);        // Laurel
-        //this.timer.start();
-        playBots();
+        turn();
     }
     
     /**
@@ -923,7 +951,7 @@ public class Game
             }
         }
         
-        return res==-1?res:reverse?(res+3)%6:res;
+        return res==-1?res:(reverse?(res+3)%6:res);
     }
     
     public Cell getCell(Cell c, int orientation)
@@ -1050,20 +1078,6 @@ public class Game
      */
     public ArrayList<Battle> getBattles() {
         return battles;
-    }
-
-    /**
-     * @return the timer
-     */
-    public GameTimer getTimer() {
-        return timer;
-    }
-
-    /**
-     * @param timer the timer to set
-     */
-    public void setTimer(GameTimer timer) {
-        this.timer = timer;
     }
 
     /**
