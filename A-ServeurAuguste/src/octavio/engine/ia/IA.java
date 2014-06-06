@@ -58,21 +58,24 @@ public class IA {
         
         for(Legion l : b.getPlayer().getLegions())
         {
-            switch(b.getStrategy()) {
-                case random:
-                    m = randomMove(b,l);
-                    break;
-                case pseudoRandom:
-                    m = pseudoRandomMove(b,l);
-                    break;
-                case distribuedRandom:
-                    m = distribuedRandomMove(b,l);
-                    break;
-                default:
-                    m = pseudoRandomMove(b,l);
-                    break;
+            if(l.getLivingPawns().size() > 0)
+            {
+                switch(b.getStrategy()) {
+                    case random:
+                        m = randomMove(b,l);
+                        break;
+                    case pseudoRandom:
+                        m = pseudoRandomMove(b,l);
+                        break;
+                    case distribuedRandom:
+                        m = distribuedRandomMove(b,l);
+                        break;
+                    default:
+                        m = pseudoRandomMove(b,l);
+                        break;
+                }
+                res.add(new Action(l,m));
             }
-            res.add(new Action(l,m));
         }
         
         botTurnEnd(b);
