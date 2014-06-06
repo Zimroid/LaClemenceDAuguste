@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import octavio.engine.GameListener;
 import octavio.engine.GameTimer;
 import octavio.engine.entity.action.Action;
@@ -179,10 +181,20 @@ public class Game
     {
         players.stream().filter((p) -> (p.getBot() != null && !p.isConnected())).forEach((p) ->
         {
-            ia.activateBot(p.getBot()).stream().forEach((a) ->
-            {
-                addAction(a);
-            });
+            (new Thread() {
+                @Override
+                public void run() {
+                    if(allPlayersAreBots()) try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        System.err.println("AllPlayersAreBots Sleep interrupted");
+                    }
+                    ia.activateBot(p.getBot()).stream().forEach((a) ->
+                    {
+                        addAction(a);
+                    });
+                }
+            }).start();
         });
     }
     
@@ -207,7 +219,6 @@ public class Game
     */
     public boolean applyActions() throws InterruptedException
     {
-        if(allPlayersAreBots()) Thread.sleep(1000);
         calculateMoves();
         boolean ends;
         ends = applyMoves();
