@@ -23,7 +23,6 @@
 					<option value="#00FFFF">Cyan</option>
 					<option value="#0000FF">Bleu</option>
 					<option value="#FF00FF">Magenta</option>
-					<option value="#FFFFFF">Blanc</option>
 				</select>
 				<button class='newPlayerButton' id="button1" name="button1" onclick="newPlayer(1,2)">Nouveau joueur</button>
 				<div name="player" id="player1_1">
@@ -63,7 +62,6 @@
 					<option value="#00FFFF">Cyan</option>
 					<option value="#0000FF">Bleu</option>
 					<option value="#FF00FF">Magenta</option>
-					<option value="#FFFFFF">Blanc</option>
 				</select>
 				<button class='newPlayerButton' id="button2" name="button2" onclick="newPlayer(2,2)">Nouveau joueur</button>
 				<div name="player" id="player2_1">

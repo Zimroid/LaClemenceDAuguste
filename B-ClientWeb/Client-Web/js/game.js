@@ -215,19 +215,18 @@ function newTeam()
     //select pour la color
     var selColor = $("<select class='color' class='" + numberTeam + "' onchange='gameConfig();'></select>");
     //options pour la color
-    var optColor2 = $("<option value='#FF0000'>Rouge</option>");
-    var optColor3 = $("<option value='#FFFF00'>Jaune</option>");
-    var optColor4 = $("<option value='#00FF00'>Vert</option>");
-    var optColor5 = $("<option value='#00FFFF'>Cyan</option>");
-    var optColor6 = $("<option value='#0000FF'>Bleu</option>");
-    var optColor7 = $("<option value='#FF00FF'>Magenta</option>");
-    var optColor8 = $("<option value='#FFFFFF'>Blanc</option>");
+    var optColor = $("<option value='#FF0000'>Rouge</option>");
+    var optColor2 = $("<option value='#FFFF00'>Jaune</option>");
+    var optColor3 = $("<option value='#00FF00'>Vert</option>");
+    var optColor4 = $("<option value='#00FFFF'>Cyan</option>");
+    var optColor5 = $("<option value='#0000FF'>Bleu</option>");
+    var optColor6 = $("<option value='#FF00FF'>Magenta</option>");
     //bouton pour la création d'un nouveau joueur dans la team
     var NPButton = $("<button class='newPlayerButton' id='button" + numberTeam + "' name='button" + numberTeam + "' onclick='newPlayer(" + numberTeam + ",1)'>Nouveau joueur</button>");
     //bouton de suppression de la team
     var DTButton = $("<button class='dropTeamButton' onclick='dropTeam(\"" + numberTeam + "\")'>Supprimer la team</button>");
 
-	selColor.append(optColor, optColor2, optColor3, optColor4, optColor5, optColor6, optColor7, optColor8);
+	selColor.append(optColor, optColor2, optColor3, optColor4, optColor5, optColor6);
 	divTeam.append(ptitle, lblColor, selColor, NPButton, DTButton);
     divTeams.append(divTeam);
     newPlayer(numberTeam,1);

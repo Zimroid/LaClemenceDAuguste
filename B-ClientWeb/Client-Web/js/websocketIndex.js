@@ -144,6 +144,19 @@ function process(evt)
 		save_game_turn = data;
 		// Qu'on soit n'importe où, ou qu'on recharge la page principale pour arriver en jeu (cas pour un nouveau tour, un début de partie voir une reconnexion)
 		reloadContent(sitePath + "/index.php?script=1&page=game");
+		clearInterval(inter);
+		var timer = save_game_config.configuration.game_turn_duration/1000;
+		$("#timer").val(timer);
+		$("#timer").attr('max',timer);
+		inter = setInterval(function()
+		{
+			if (timer != 0)
+			{
+				$("#timer").val(timer-1);
+				timer--;
+			}
+		},1000);
+		// clearInterval(inter);
 	}
 	
 	// Si on demande la liste des parties

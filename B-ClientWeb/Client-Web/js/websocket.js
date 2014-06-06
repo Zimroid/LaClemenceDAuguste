@@ -37,6 +37,14 @@ function onMessage(evt)
 setInterval(function(){
 	while (queue.length != 0)
 	{
+		/*if (queue[0].data.indexOf('"command":"game_turn"') != -1)
+		{
+			setTimeout(function(){process(queue[0]);},2000);
+		}
+		else
+		{
+			process(queue[0]);
+		}*/
 		process(queue[0]);
 		queue.shift();
 	}
