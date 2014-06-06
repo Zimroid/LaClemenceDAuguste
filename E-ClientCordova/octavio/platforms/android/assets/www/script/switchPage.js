@@ -12,6 +12,9 @@ function loadPage(url) {
 		{
 			document.getElementById('container').innerHTML = xmlhttp.responseText;
 			
+			// Si page config
+			$("#game_name").html(localStorage.gameName);
+			
 			// Si présence d'un canevas "board" -> Lancement système de jeu
 			if($("#board").length != 0)
 			{				

@@ -1,8 +1,8 @@
 <form autocomplete="off" onsubmit="return false;" id="gameConfigForm">
 	<fieldset>
-		<legend><h2>Panneau de configuration de la partie <span id="game_name"><?php if (isset($_GET['name'])) echo $_GET['name']; ?></span></h2></legend>
+		<legend><h2>Panneau de configuration de la partie <span id="game_name"></span></h2></legend>
 		<input title='Type de partie' type="hidden" id="type_game" value='normal'>
-		<input title='Identifiant de la salle' type="hidden" id="room_id" value="<?php if (isset($_GET['id'])) echo $_GET['id']; ?>">
+		<input title='Identifiant de la salle' type="hidden" id="room_id" value="INSERT ID HERE">
 		<label for="board_size">Taille du plateau :</label>
 		<input type="number" id="board_size" name="board_size" onchange="gameConfig();" value="5" />
 		<label for="turn_duration">Durée d'un tour (en secondes) :</label>
@@ -93,6 +93,6 @@
 		<div id="noTeam" name="noTeam">
 			<h3>Présents dans la salle :</h3>
 		</div>
-		<input title='Lancer la partie' type="button" id="valid" value="GO !" onclick="gameStart(<?php if (isset($_GET['id'])) echo $_GET['id']; ?>)"/>
+		<input title='Lancer la partie' type="button" id="valid" value="GO !" onclick="gameStart(localStorage.roomId);"/>
 	</fieldset>
 </form>

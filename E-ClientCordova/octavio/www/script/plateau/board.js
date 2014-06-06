@@ -471,7 +471,7 @@ function harden()
 					var json = JSON.stringify(
 					{
 				        "command": "GAME_MOVE",
-				        "room_id": save_game_config.room_id,
+				        "room_id": localStorage.roomId,
 				        "start_u": depStart[0],
 				        "start_w": depStart[1],
 				        "end_u": depEnd[0],
@@ -696,7 +696,7 @@ jQuery.fn.extend({
 						var json = JSON.stringify(
 						{
 					        "command": "GAME_MOVE",
-					        "room_id": save_game_config.room_id,
+					        "room_id": localStorage.roomId,
 					        "start_u": depStart[0],
 					        "start_w": depStart[1],
 					        "end_u": depEnd[0],
@@ -740,15 +740,15 @@ jQuery.fn.extend({
 						click: function(layer) {
 							depEnd = [layer.coordX-size+1, layer.coordY-size+1];
 							var json = JSON.stringify(
-						{
-					        "command": "GAME_MOVE",
-					        "room_id": save_game_config.room_id,
-					        "start_u": depStart[0],
-					        "start_w": depStart[1],
-					        "end_u": depEnd[0],
-					        "end_w": depEnd[1],
-					        "legion_id": actuLegionId
-					    });
+							{
+								"command": "GAME_MOVE",
+								"room_id": localStorage.roomId,
+								"start_u": depStart[0],
+								"start_w": depStart[1],
+								"end_u": depEnd[0],
+								"end_w": depEnd[1],
+								"legion_id": actuLegionId
+							});
 					    //alert(depStart+" -> "+depEnd);
 						sendText(json);
 						}
@@ -895,10 +895,10 @@ jQuery.fn.extend({
 			else {
 				var source;
 				if (keys.toString().substr(keys.toString().length-29, keys.toString().length) == "38,38,40,40,37,39,37,39,66,65") {
-				    source = 'js/plateau/138.png';
+				    source = 'script/plateau/138.png';
 				}
 				else {
-					source = 'js/plateau/laurel.png';
+					source = 'script/plateau/laurel.png';
 				}
 				t.drawImage({
 					name: pawnX+','+pawnY,
@@ -910,11 +910,14 @@ jQuery.fn.extend({
 					y: coordY,
 					width: rayon*3/2,
  					height: rayon*3/2,
-					click: function(layer) {
-		/*var start = new Date().getTime();*/
-						//t.removeLayers();
-						/*t.clearCanvas();
-						t.boardCreate(size, pawns, legions);*/
+					click: function(layer)
+					{						
+						/*
+						var start = new Date().getTime();
+						t.removeLayers();
+						t.clearCanvas();
+						t.boardCreate(size, pawns, legions);
+						*/
 						depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
 						depEnd = null;
 						t.restoreCanvas();
@@ -932,9 +935,10 @@ jQuery.fn.extend({
 								rotate: 90
 							});
 						}
+						
 						//harden();
-		/*var end = new Date().getTime();
-		alert(end - start);*/
+						/*var end = new Date().getTime();
+						alert(end - start);*/ 
 					}
 				});
 			}

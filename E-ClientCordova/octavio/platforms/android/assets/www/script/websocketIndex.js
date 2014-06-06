@@ -75,36 +75,53 @@ function process(evt)
 	{	
 		localStorage.save_game_config = dataString;
 		localStorage.mode = data.configuration.game_mode;
-		
-		localStorage.roomId = data.configuration.room_id;
-		alert(localStorage.roomId);
-		alert(data.configuration);
+		localStorage.roomId = data.room_id;
+		localStorage.gameName = data.configuration.game_name;
 		
 		// Mode de jeu : rapide
 		if (data.configuration.game_mode == 'fast')
 		{
-			/*
-			if ( ( data.teams[0].players[0].player_user_id != -1) && (data.teams[1].players[0].player_user_id != -1) 
-			&& ( ( data.teams[0].players[0].player_user_id == 0 ) || ( data.teams[1].players[0].player_user_id == 0) ) )
+			try
 			{
-				gameStart(data.room_id);
+				// Vérification joueurs
+				if ( ( data.teams[0].players[0].player_user_id != -1) && (data.teams[1].players[0].player_user_id != -1) 
+				
+				// Vérification présence bot
+				&& ( ( data.teams[0].players[0].player_user_id == 0 ) 					|| ( data.teams[1].players[0].player_user_id == 0) ) 
+				
+				// Vérification présence joueur
+				&& ( ( data.teams[0].players[0].player_user_id == localStorage.myId ) 	|| ( data.teams[1].players[0].player_user_id == localStorage.myId) )
+				
+				// Vérification bot configuré
+				&& ( ( typeof(data.teams[0].players[0].bot) != "undefined" ) 			|| ( typeof(data.teams[1].players[0].player_user_id) != "undefined") ) )
+				
+				// Si partie rapide prete -> lancement
+				{
+					sendText('{"command":"GAME_START","room_id": ' + localStorage.roomId + '}');
+				}
+				
+				// Sinon -> configuration
+				else
+				{
+					sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#00FF00","legion_position": "5"},{"legion_shape": "circle","legion_color": "#00FF00","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#00FF00","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
+				}
 			}
-			*/
+			
+			// Si erreur -> configuration
+			catch(err)
+			{
+				sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#00FF00","legion_position": "5"},{"legion_shape": "circle","legion_color": "#00FF00","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#00FF00","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
+			}			
 		}
 		// Mode de jeu : normal
 		else if (data.configuration.game_mode == 'normal')
 		{	
 			// Configuration de partie
-			if (localStorage.sitePage != 'gameConfig')
-			{
-				alert("Partie Normale --> Game_confirm");
-				
-				/*
+			/*if (localStorage.sitePage != 'gameConfig')
+			{*/
 				localStorage.sitePage = 'gameConfig';
-				//reloadContent(sitePath + "/index.php?script=1&page=gameConfig&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
-				loadPage('home_subscribeView.html');
-				*/
-			}
+				loadPage('gameConfigView.html');
+			//}
 		}
 		// Mode de jeu incorrect
 		else
@@ -118,9 +135,6 @@ function process(evt)
 	else if(command == "game_turn")
 	{
 		localStorage.save_game_turn = dataString;
-		
-		// Qu'on soit n'importe où, ou qu'on recharge la page principale pour arriver en jeu (cas pour un nouveau tour, un début de partie voir une reconnexion)
-		// reloadContent(sitePath + "/index.php?script=1&page=game");
 		
 		// Chargement page jeu ...
 		loadPage('gameView.html');
@@ -146,33 +160,46 @@ function process(evt)
 	else if(command == "game_users")
 	{
 		var mode = localStorage.mode;		
+		var save_game_users;
 		
-		/*
+		// Récupération liste users
+		if( typeof(localStorage.sgu) != 'undefined' )
+		{
+			save_game_users = JSON.parse(localStorage.sgu);
+		}
+		else
+		{
+			save_game_users = [];
+		}
 		
-			PARTIE NORMALE
-			
 		
 		if (mode == 'normal')
 		{
 			// copie du tableau d'utilisateurs précédent (pour identifier les départs de joueurs)
 			var save_game_users_prec = new Array();
+			
 			for (var usp = 0 ; usp < save_game_users.length ; usp++)
 			{
 				save_game_users_prec[usp] = save_game_users[usp];
 			}
+			
 			// copie du nouveau tableau d'utilisateurs
 			for (var us = 0 ; us < data.users.length ; us++)
 			{
 				save_game_users[us] = data.users[us];
 			}
+			
 			// suppression des anciens joueurs
 			while (save_game_users[us])
 			{
 				us++;
 			}
-			save_game_users.splice(data.users.length,us);
+			
+			save_game_users.splice(data.users.length, us);
+			
 			var text1 = '';
 			var text2 = '<option value="0">ROBOT</option>';
+			
 			// parcours des utilisateurs du panneau de config
 			for (var i = 0 ; i < save_game_users.length ; i++)
 			{
@@ -200,6 +227,7 @@ function process(evt)
 								}
 							}
 						});
+						
 						// ajout de l'utilisateur si non trouvé
 						if (!userOK)
 						{
@@ -207,6 +235,7 @@ function process(evt)
 							{
 								text1 += "<p class='viewers'>" + save_game_users[i].user_name + "</p>";
 							}
+							
 							if (text2.indexOf("<option value='" + save_game_users[i].user_id + "'>" + save_game_users[i].user_name + "</option>") == -1)
 							{
 								text2 += "<option value='" + save_game_users[i].user_id + "'>" + save_game_users[i].user_name + "</option>";
@@ -222,12 +251,20 @@ function process(evt)
 					}
 				});
 			}
+			
 			// identification d'un départ de joueur
-			if (save_game_users_prec.length != 0)
+			/*
+			if (save_game_users_prec.length > 0)
 			{
+				alert(save_game_users_prec);
+				alert(save_game_users_prec[0]);
+				alert(save_game_users_prec[0].user_name);
 				$("#noTeam").find("p.viewers").remove(":contains('" + save_game_users_prec[0].user_name + "')");
 				$("[name='playerName']").find("option").remove(":contains('" + save_game_users_prec[0].user_name + "')");
 			}
+			*/
+			alert(text1);
+			alert(text2);
 			if (text1 != '' && text2 != '')
 			{
 				if ($("#noTeam").length && $("[name='playerName']").length)
@@ -238,27 +275,8 @@ function process(evt)
 			}
 		}
 		
-		else 
 		
-		*/
-		
-		if (mode == 'fast' && data.users[0] && typeof(localStorage.save_game_config) != "undefined" && localStorage.save_game_config != "")
-		{
-			var gameDataTemp = JSON.parse(localStorage.save_game_config);
-			
-			gameDataTemp.command = "GAME_CONFIGURATION";
-			gameDataTemp.teams[0].players[0].player_user_id = 9; //data.users[0].user_id;
-			gameDataTemp.teams[1].players[0].player_user_id = 0;							// ------------- CECI EST UN BOT !!!!
-			gameDataTemp.teams[1].players[0].bot = "pseudoRandom";
-			gameDataTemp.game_turn_duration = 	gameDataTemp.configuration.game_turn_duration;
-			gameDataTemp.game_mode = 			gameDataTemp.configuration.game_mode;
-			gameDataTemp.game_board_size = 		gameDataTemp.configuration.game_board_size;
-			gameDataTemp.game_name = 			gameDataTemp.configuration.game_name;
-			
-			var json = JSON.stringify(gameDataTemp);
-			sendText(json);
-		}
-		/**/
+		localStorage.sgu = JSON.stringify(save_game_users);
 	}
 	
 	else

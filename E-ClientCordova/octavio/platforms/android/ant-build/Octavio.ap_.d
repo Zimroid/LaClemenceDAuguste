@@ -18,7 +18,6 @@ C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\pla
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\cordova.js \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\cordova_plugins.js \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\gameConfigView.html \
-C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\gameCreateTest.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\gameFastWaiting.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\gameView.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\home_connectionView.html \
@@ -43,6 +42,7 @@ C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\pla
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\websocketIndex.js \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\plateau\138.png \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\plateau\board.js \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\plateau\jcanvas.js \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\plateau\jcanvas.min.js \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\plateau\laurel.png \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\plateau\Zygarde Board.html \

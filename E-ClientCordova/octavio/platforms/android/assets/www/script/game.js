@@ -28,11 +28,7 @@ function gameCreate(arg)
 		$("#message").val("");
         $('#chatMessagesGame').html("Chat de la partie " + gameName + "<br />Pour participer à de meilleures conversations, merci de rester courtois et d'éviter le langage SMS.");
 		
-		// Type de partie
-    	if (arg == 'defaut')
-    	{
-	        loadPage('gameFastWaiting.html');
-        }
+		loadPage('gameFastWaiting.html');
     }
 	else
 	{
@@ -58,11 +54,13 @@ function gameConfig()
 {
 	// String à changer en JSON
 	var stringJSON = '';
-    // paramètres globaux de la partie
+	
+    // Paramètres partie
     var roomId = '';
     var gameName = '';
     var boardSize = 5;
     var turnDuration = 30;
+	
     if ((typeof htmlspecialchars($("#room_id").val()) != 'undefined') && (htmlspecialchars($("#room_id").val()) != ''))
     {
     	roomId = htmlspecialchars($("#room_id").val());
@@ -80,6 +78,7 @@ function gameConfig()
     	turnDuration = htmlspecialchars($("#turn_duration").val());
     }
     turnDuration = turnDuration * 1000;
+	
     
     stringJSON = '{"command": "GAME_CONFIGURATION","room_id": ' + roomId + ',"game_name": "' + gameName + '","game_mode": "normal","game_board_size": ' + boardSize + ',"game_turn_duration": ' + turnDuration + ',"teams":[';
     
@@ -212,6 +211,10 @@ function gameJoin(game)
     sendText(json);
 }
 
+/******
+	------ Configuration de partie !
+*/
+
 function newTeam()
 {
     //div contenant toutes les team (sans les observateurs)
@@ -272,9 +275,9 @@ function newPlayer(team, player)
     var DPButton = $("<button class='dropPlayerButton' onclick='dropPlayer(\"" + team + "_" + player + "\")'>Supprimer le joueur</button>");
 
 	var users_options = '';
-	for (var i = 0 ; i < save_game_users.length ; i++)
+	for (var i = 0 ; i < localStorage.save_game_users.length ; i++)
 	{
-		users_options += "<option value='" + save_game_users[i].user_id + "'>" + save_game_users[i].user_name + "</option>";
+		users_options += "<option value='" + localStorage.save_game_users[i].user_id + "'>" + localStorage.save_game_users[i].user_name + "</option>";
 	}
 	selPlay.append(users_options);
     divPlay.append(pPlay, selPlay, NLButton);
@@ -338,19 +341,4 @@ function dropLegion(idLegion)
 function gameCreateTest()
 {
 	loadPage('gameCreateTest.html');
-}
-
-function alpha()
-{
-	sendText('{"command":"ROOM_CREATE","game_name":"test","game_type":"normal"}');
-}
-
-function beta()
-{
-
-}
-
-function gamma()
-{
-
 }
