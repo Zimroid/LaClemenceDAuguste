@@ -156,7 +156,6 @@ function process(evt)
 				timer--;
 			}
 		},1000);
-		// clearInterval(inter);
 	}
 	
 	// Si on demande la liste des parties

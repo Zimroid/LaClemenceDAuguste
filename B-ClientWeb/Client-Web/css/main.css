@@ -11,6 +11,7 @@ html{height:100%;}
 iframe{height:200px;width:100%;}
 input.color{width:55px;}
 legend{border:1px solid black;}
+progress{width:100%;}
 #board_players{margin-top:20px;}
 #buttonsReduct{position:absolute;width:100%;}
 #buttonReductChat{margin-top:5px;float:right;}
