@@ -75,15 +75,13 @@ function inscription()
 // Modification du nom de compte
 function modifier_nom()
 {
-	var userold = myName;
 	var usernew = htmlspecialchars($("#userAccount").val());
 	
-    if(userold != "" && usernew != "")
+    if(usernew != "")
     {
         var json = JSON.stringify(
 		{
 			"command": "ACCOUNT_EDIT_NAME",
-			"user_name_old": userold,
 			"user_name_new": usernew
         });
 
@@ -98,19 +96,20 @@ function modifier_nom()
 // Modification du mot de passe
 function modifier_pass()
 {
-	var user = myName;
+	var passold = htmlspecialchars($("#passwordOld").val());
 	var passnew = htmlspecialchars($("#passwordModif").val());
 	var passnew2 = htmlspecialchars($("#passwordModif2").val());
 	
-    if(user != "" && passnew != "" && passnew2 != "" && passnew == passnew2)
+    if(passnew != "" && passnew2 != "" && passnew == passnew2)
     {
+    	passold = CryptoJS.SHA1(passold)+'';
     	passnew = CryptoJS.SHA1(passnew)+'';
 		
         var json = JSON.stringify(
 		{
 			"command": "ACCOUNT_EDIT_PASS",
-			"user_name": user,
-			"user_password": passnew
+			"user_password_old": passold,
+			"user_password_new": passnew
         });
 
         sendText(json);

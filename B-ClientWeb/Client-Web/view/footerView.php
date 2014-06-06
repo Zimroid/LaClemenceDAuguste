@@ -6,6 +6,7 @@
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/jquery/js/jquery-1.11.0.min.js"></script>
         <script type="text/javascript" src="<?php echo $sitePath; ?>/jquery/js/jquery-ui-1.10.4.custom.min.js"></script>
         <script type="text/javascript" src="<?php echo $sitePath; ?>/js/load.js"></script>
+        <script type="text/javascript" src="<?php echo $sitePath; ?>/js/traitementsboard.js"></script>
         <script type="text/javascript" src="<?php echo $sitePath; ?>/js/AJAX-reloadPageContent.js"></script>
 		<script type="text/javascript" src="<?php echo $sitePath; ?>/js/AJAX-reloadChatContent.js"></script>
 		<?php
