@@ -309,9 +309,11 @@ public class Room implements GameListener
             else json.put("winner_team", -1);
             if (this.game.getWinner() != null) json.put("winner_team", this.game.getWinner().getPosition());
             else json.put("winner_legion", -1);
+            json.put("hashtaglol", "lol");
             this.game.getTimer().cancel();
             this.game.getTimer().purge();
         }
+            json.put("hashtagxd", "xd");
         
         // Début du prochain tour
         this.game.nextTurn();
