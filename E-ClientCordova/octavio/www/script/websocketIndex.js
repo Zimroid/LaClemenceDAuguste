@@ -8,27 +8,43 @@ function process(evt)
 	// Erreur
 	if(command == "message_error")
 	{
-		// Déconnexion
-		if(data.type == "logged_out")
+		switch (data.type)
 		{
-			localStorage.myId = '';
-			localStorage.myName = '';
-			loadPage("home_onlineChoiceView.html");
-		}
-		
-		else if (data.type == "must_be_logged")
-		{
-			loadPage('home_serverSelectView.html');
-		}
-		
-		else if (data.type == "not_owner_of_this_room")
-		{
-			alert("Vous n'êtes pas autorisé à modifier la configuration d'une partie dont vous n'êtes pas l'hôte.");
-		}
-		
-		else
-		{
-			alert(data.type);
+			case 'already_in_this_room':
+				alert("Vous avez déjà rejoint cette partie.");
+				break;
+			case 'inexistant_room':
+				alert("Cette salle n'existe pas.");
+				break;
+			case 'json_error':
+				alert("Paramètres de commande incorrects.");
+				break;
+			case 'log_error':
+				alert("Erreur d'identification.");
+				break;
+			case 'logged_out':
+				myId = '';
+				myName = '';
+				reloadChat(sitePath + "/index.php?script=1&page=deconnect");
+				break;
+			case 'must_be_logged':
+				reloadContent(sitePath + "/index.php?script=1&page=subscribe");
+				break;
+			case 'not_owner_of_this_room':
+				alert("Vous n'êtes pas autorisé à modifier la configuration d'une partie dont vous n'êtes pas l'hôte.");
+				break;
+			case 'rule_error':
+				alert("Ce coup n'est pas autorisé.");
+				break;
+			case 'server_error':
+				alert("Erreur serveur.");
+				break;
+			case 'unknown_command':
+				alert("Cette commande n'existe pas.");
+				break;
+			default:
+				alert(data.type);
+				break;
 		}
 	}
 	
@@ -138,6 +154,56 @@ function process(evt)
 		
 		// Chargement page jeu ...
 		loadPage('gameView.html');
+		
+		// Gestion timer
+		clearInterval(inter);
+		if (data.winner_team && data.winner_legion)
+		{
+			if (data.winner_team == -1)
+			{
+				alert("Match nul.");
+			}
+			else
+			{
+				var nomteam = '';
+				if (data.winner_legion == -1)
+				{
+					for (var i = 0; i < save_game_users; i++)
+					{
+						if (save_game_users[i].user_id == data.winner_team)
+						{
+							nomteam += save_game_users[i].user_name+', ';
+						}
+					}
+					alert("Il n'y a plus d'adversaires. La team de " + nomteam + "a gagné.");
+				}
+				else
+				{
+					for (var i = 0; i < save_game_users; i++)
+					{
+						if (save_game_users[i].user_id == data.winner_team)
+						{
+							nomteam += save_game_users[i].user_name+', ';
+						}
+					}
+					alert("Le laurier est dans une tente. La team de " + nomteam + "a gagné.");
+				}
+			}
+		}
+		else
+		{
+			var timer = save_game_config.configuration.game_turn_duration/1000;
+			$("#timer").val(timer);
+			$("#timer").attr('max',timer);
+			inter = setInterval(function()
+			{
+				if (timer != 0)
+				{
+					$("#timer").val(timer-1);
+					timer--;
+				}
+			},1000);
+		}
 	}
 	
 	// Si on demande la liste des parties

@@ -5,7 +5,7 @@ function process(evt)
 	var data = JSON.parse(dataString);
 	var command = data.command;
 	
-	// Erreur connexion utilisateur
+	// Erreur
 	if(command == "message_error")
 	{
 		switch (data.type)
