@@ -31,6 +31,8 @@ var armorComp;
 //Pour placer les tentes
 var tent;
 var tentComp;
+//Booleen pour savoir si on est dans la version web ou la version android (false par defaut)
+var android = false;
 
 // choppe toutes les coordonnées des cases adjacente à la case donné
 function getProx(pawnX, pawnY, isHard)
@@ -418,6 +420,12 @@ function oneHundredPercent(first)
 	t.attr('height', t.parent().height());
 
 	if(first) {
+		var divZoom = t.parent().clone();
+		divZoom.html('');
+		divZoom.attr('id', "divZoom");
+		divZoom.appendTo(t.parent());
+		t.appendTo(divZoom);
+		divZoom.parent().css('overflow', 'scroll');
 		$( window ).resize(function() {
 			t.boardCreate(size, pawns, legions, playerGroup, armor, tent, new Array());
 			//harden();
@@ -449,6 +457,14 @@ function harden()
 		var coordX = virtual[armorX][armorY][0];
 		var coordY = virtual[armorX][armorY][1];
 
+		var roomId;
+		if(android) {
+			roomId = localStorage.roomId;
+		}
+		else {
+			roomId = save_game_config.room_id;
+		}
+		
 		//Si l'armure n'est placer sur aucun pion
 		if(jQuery.inArray(coordX + ',' + coordY, pawn) == -1) {
 			pawnX = getXVirtual(coordX, coordY);
@@ -471,7 +487,7 @@ function harden()
 					var json = JSON.stringify(
 					{
 				        "command": "GAME_MOVE",
-				        "room_id": localStorage.roomId,
+				        "room_id": roomId,
 				        "start_u": depStart[0],
 				        "start_w": depStart[1],
 				        "end_u": depEnd[0],
@@ -504,13 +520,18 @@ function keyPress(e)
 jQuery.fn.extend({
 	initBoard: function(data)
 	{
-		
-		/*$("#buttonReductMenu").click(function() {
-			t.boardCreate(size, pawns, legions, playerGroup, armor, tent, new Array());
-		});
-		$("#buttonReductChat").click(function() {
-			t.boardCreate(size, pawns, legions, playerGroup, armor, tent, new Array());
-		});*/
+		//Pour savoir si on est dans la version android il suffis de regarder d'autres éléments dans la page qui diffèrent selon les versions
+		if($("#buttonReductMenu").length == 0 && $("#buttonReductChat").length == 0) {
+			android = true;
+		}
+		else {
+			$("#buttonReductMenu").click(function() {
+				t.boardCreate(size, pawns, legions, playerGroup, armor, tent, new Array());
+			});
+			$("#buttonReductChat").click(function() {
+				t.boardCreate(size, pawns, legions, playerGroup, armor, tent, new Array());
+			});
+		}
 		
 		t = $(this);
 		//Ce tableau nous servira à savoir à quelle légion appartient un pions
@@ -649,7 +670,7 @@ jQuery.fn.extend({
 			}
 		}
 
-		//@TODO faire une fonction de zomm et de déplacement
+		//@TODO faire une fonction de zoom et de déplacement
 
 		var xStart = (t.width()-Math.sqrt(3)*rayon*(size*2-1))/2+(Math.sqrt(3)*rayon/2*size-1)+2;
 		var yStart = (t.height()-2-(size*rayon*2+(size-1)*rayon))/2+rayon+2;
@@ -679,6 +700,14 @@ jQuery.fn.extend({
 						caseBig = rayon;
 					}
 					
+					var roomId;
+					if(android) {
+						roomId = localStorage.roomId;
+					}
+					else {
+						roomId = save_game_config.room_id;
+					}
+					
 					t.drawPolygon({
 						coordX: i,
 						coordY: j,
@@ -696,7 +725,7 @@ jQuery.fn.extend({
 						var json = JSON.stringify(
 						{
 					        "command": "GAME_MOVE",
-					        "room_id": localStorage.roomId,
+					        "room_id": roomId,
 					        "start_u": depStart[0],
 					        "start_w": depStart[1],
 					        "end_u": depEnd[0],
@@ -725,6 +754,14 @@ jQuery.fn.extend({
 						caseBig = rayon;
 					}
 					
+					var roomId;
+					if(android) {
+						roomId = localStorage.roomId;
+					}
+					else {
+						roomId = save_game_config.room_id;
+					}
+					
 					t.drawPolygon({
 						coordX: i,
 						coordY: j,
@@ -740,15 +777,15 @@ jQuery.fn.extend({
 						click: function(layer) {
 							depEnd = [layer.coordX-size+1, layer.coordY-size+1];
 							var json = JSON.stringify(
-							{
-								"command": "GAME_MOVE",
-								"room_id": localStorage.roomId,
-								"start_u": depStart[0],
-								"start_w": depStart[1],
-								"end_u": depEnd[0],
-								"end_w": depEnd[1],
-								"legion_id": actuLegionId
-							});
+						{
+					        "command": "GAME_MOVE",
+					        "room_id": roomId,
+					        "start_u": depStart[0],
+					        "start_w": depStart[1],
+					        "end_u": depEnd[0],
+					        "end_w": depEnd[1],
+					        "legion_id": actuLegionId
+					    });
 					    //alert(depStart+" -> "+depEnd);
 						sendText(json);
 						}
@@ -895,10 +932,20 @@ jQuery.fn.extend({
 			else {
 				var source;
 				if (keys.toString().substr(keys.toString().length-29, keys.toString().length) == "38,38,40,40,37,39,37,39,66,65") {
-				    source = 'script/plateau/138.png';
+				    if(android) {
+						source = 'script/plateau/138.png';
+					}
+					else {
+						source = 'js/plateau/138.png';
+					}
 				}
 				else {
-					source = 'script/plateau/laurel.png';
+					if(android) {
+						source = 'script/plateau/laurel.png';
+					}
+					else {
+						source = 'js/plateau/laurel.png';
+					}
 				}
 				t.drawImage({
 					name: pawnX+','+pawnY,
@@ -910,14 +957,11 @@ jQuery.fn.extend({
 					y: coordY,
 					width: rayon*3/2,
  					height: rayon*3/2,
-					click: function(layer)
-					{						
-						/*
-						var start = new Date().getTime();
-						t.removeLayers();
-						t.clearCanvas();
-						t.boardCreate(size, pawns, legions);
-						*/
+					click: function(layer) {
+		/*var start = new Date().getTime();*/
+						//t.removeLayers();
+						/*t.clearCanvas();
+						t.boardCreate(size, pawns, legions);*/
 						depStart = [(layer.pawnX-size+1), (layer.pawnY-size+1)];
 						depEnd = null;
 						t.restoreCanvas();
@@ -935,10 +979,9 @@ jQuery.fn.extend({
 								rotate: 90
 							});
 						}
-						
 						//harden();
-						/*var end = new Date().getTime();
-						alert(end - start);*/ 
+		/*var end = new Date().getTime();
+		alert(end - start);*/
 					}
 				});
 			}
@@ -1065,5 +1108,23 @@ jQuery.fn.extend({
 				}
 			}
 		}
+	},
+
+	zoom: function()
+	{
+		t.parent().width(t.parent().width()*1.5);
+		t.parent().height(t.parent().height()*1.5);
+		t.parent().parent().scrollTop((t.parent().height() - t.parent().parent().height()) / 2);
+		t.parent().parent().scrollLeft((t.parent().width() - t.parent().parent().width()) / 2);
+		t.boardCreate(size, pawns, legions, playerGroup, armor, tent, new Array());
+	},
+
+	dezoom: function()
+	{
+		t.parent().width(t.parent().width()/1.5);
+		t.parent().height(t.parent().height()/1.5);
+		t.parent().parent().scrollTop((t.parent().height() - t.parent().parent().height()) / 2);
+		t.parent().parent().scrollLeft((t.parent().width() - t.parent().parent().width()) / 2);
+		t.boardCreate(size, pawns, legions, playerGroup, armor, tent, new Array());
 	}
 });
