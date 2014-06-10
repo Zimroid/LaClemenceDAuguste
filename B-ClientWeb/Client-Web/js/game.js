@@ -85,11 +85,7 @@ function gameConfig()
 				if ($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val() != null)
 				{
 					// id du joueur
-					if (parseInt($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val(),10) == -1)
-					{
-						stringJSON += '{"player_user_id":0,"bot":"random","legions":[';
-					}
-					else if (parseInt($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val(),10) == 0)
+					if (parseInt($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val(),10) == 0)
 					{
 						stringJSON += '{"player_user_id":0,"bot":"pseudoRandom","legions":[';
 					}
@@ -198,6 +194,17 @@ function gameJoin(game)
     sendText(json);
 }
 
+function gameTurnFinish(game)
+{
+	var json = JSON.stringify(
+    {
+        "command": "FINISH_TURN",
+        "room_id": game
+    });
+    
+    sendText(json);
+}
+
 function newTeam()
 {
     //div contenant toutes les team (sans les observateurs)
@@ -217,10 +224,38 @@ function newTeam()
     //options pour la color
     var optColor = $("<option value='#FF0000'>Rouge</option>");
     var optColor2 = $("<option value='#FFFF00'>Jaune</option>");
-    var optColor3 = $("<option value='#00FF00'>Vert</option>");
-    var optColor4 = $("<option value='#00FFFF'>Cyan</option>");
-    var optColor5 = $("<option value='#0000FF'>Bleu</option>");
-    var optColor6 = $("<option value='#FF00FF'>Magenta</option>");
+    if (allTeams.length == 2)
+    {
+    	var optColor3 = $("<option value='#00FF00'selected>Vert</option>");
+    }
+    else
+    {
+    	var optColor3 = $("<option value='#00FF00'>Vert</option>");
+    }
+    if (allTeams.length == 3)
+    {
+    	var optColor4 = $("<option value='#00FFFF' selected>Cyan</option>");
+    }
+    else
+    {
+    	var optColor4 = $("<option value='#00FFFF'>Cyan</option>");
+    }
+    if (allTeams.length == 4)
+    {
+    	var optColor5 = $("<option value='#0000FF' selected>Bleu</option>");
+    }
+    else
+    {
+    	var optColor5 = $("<option value='#0000FF'>Bleu</option>");
+    }
+    if (allTeams.length == 5)
+    {
+    	var optColor6 = $("<option value='#FF00FF' selected>Magenta</option>");
+    }
+    else
+    {
+    	var optColor6 = $("<option value='#FF00FF'>Magenta</option>");
+    }
     //bouton pour la création d'un nouveau joueur dans la team
     var NPButton = $("<button class='newPlayerButton' id='button" + numberTeam + "' name='button" + numberTeam + "' onclick='newPlayer(" + numberTeam + ",1)'>Nouveau joueur</button>");
     //bouton de suppression de la team
@@ -244,12 +279,14 @@ function newPlayer(team, player)
     var NPButton = $("#button" + team).attr("onclick","newPlayer(" + team + "," + (player + 1) + ")");
     //div de la team du nouveau joueur
     var divTeam = $("#team" + team);
+    //toutes les div de nom player
+    var allPlayers = $("[name='player']");
     //div de config pour le nouveau player
     var divPlay = $("<div name='player' id='player" + team + "_" + player + "'></div>");
     //span du joueur dont on fait la config
     var pPlay = $("<span>Joueur " + player + "</span>");
     //select du joueur dont on fait la config
-    var selPlay = $("<select name='playerName' class='" + team + "' onchange='gameConfig();'><option value='-1'>ROBOT Random</option><option value='0'>ROBOT Pseudo-Random</option></select>");
+    var selPlay = $("<select name='playerName' class='" + team + "' onchange='gameConfig();'><option value='0'>ROBOT</option></select>");
     //bouton pour la création d'un nouveau joueur dans la team
     var NLButton = $("<button class='newLegionButton' id='legion"+ team + '_' + player +"' onclick='newLegion(" + team + "," + player + ",1)'>Nouvelle légion</button>");
     //bouton de suppression du player
@@ -279,6 +316,8 @@ function newLegion(team, player, legion)
     var NLButton = $("#legion" + team + '_' + player).attr("onclick","newLegion(" + team + "," + player + "," + (legion + 1) + ")");
     //div du joueur auquel appartient la légion
     var divPlay = $("#player" + team + '_' + player);
+    //toutes les div de nom legion 
+    var allLegions = $("[name='legion']");
     //div de config pour le nouveau player
     var divLegion = $("<div name='legion' id='legion" + team + "_" + player + "_" + legion + "'></div>");
     //span de la légion dont on fait la config
@@ -290,7 +329,14 @@ function newLegion(team, player, legion)
     //options pour le selForm
     var optForm = $("<option value='square'>Carré</option>");
     var optForm2 = $("<option value='circle'>Cercle</option>");
-    var optForm3 = $("<option value='triangle'>Triangle</option>");
+    if (allLegions.length == 2)
+	{
+    	var optForm3 = $("<option value='triangle' selected>Triangle</option>");
+	}
+	else
+	{
+    	var optForm3 = $("<option value='triangle'>Triangle</option>");
+	}
     //label pour la position sur le plateau
     var lblPosit = $("<label>Position sur le plateau</label>");
     //select pour la position sur le plateau
@@ -298,10 +344,38 @@ function newLegion(team, player, legion)
     //options pour le selPosit
     var optPosit = $("<option value='5'>Gauche</option>");
 	var optPosit2 = $("<option value='4'>Bas gauche</option>");
-	var optPosit3 = $("<option value='3'>Bas droit</option>");
-	var optPosit4 = $("<option value='2'>Droit</option>");
-	var optPosit5 = $("<option value='1'>Haut droit</option>");
-	var optPosit6 = $("<option value='0'>Haut gauche</option>");
+	if (allLegions.length == 2)
+	{
+		var optPosit3 = $("<option value='3' selected>Bas droit</option>");
+	}
+	else
+	{
+		var optPosit3 = $("<option value='3'>Bas droit</option>");
+	}
+	if (allLegions.length == 3)
+	{
+		var optPosit4 = $("<option value='2' selected>Droit</option>");
+	}
+	else
+	{
+		var optPosit4 = $("<option value='2'>Droit</option>");
+	}
+	if (allLegions.length == 4)
+	{
+		var optPosit5 = $("<option value='1' selected>Haut droit</option>");
+	}
+	else
+	{
+		var optPosit5 = $("<option value='1'>Haut droit</option>");
+	}
+	if (allLegions.length == 5)
+	{
+		var optPosit6 = $("<option value='0' selected>Haut gauche</option>");
+	}
+	else
+	{
+		var optPosit6 = $("<option value='0'>Haut gauche</option>");
+	}
 	//bouton de suppression de la légion
     var DLButton = $("<button class='dropLegionButton' onclick='dropLegion(\"" + team + "_" + player + "_" + legion + "\")'>Supprimer la légion</button>");
 	

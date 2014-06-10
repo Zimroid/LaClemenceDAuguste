@@ -14,6 +14,7 @@ function loadPage(url) {
 			
 			// Si page config
 			$("#game_name").html(localStorage.gameName);
+			$("#room_id").val(localStorage.roomId);
 			
 			// Si présence d'un canevas "board" -> Lancement système de jeu
 			if($("#board").length != 0)
