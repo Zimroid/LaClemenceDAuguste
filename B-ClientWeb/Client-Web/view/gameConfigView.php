@@ -35,13 +35,13 @@
 						<span>Légion 1</span>
 						<label>Forme du pion</label>
 						<select class="pawn" class="1" onchange="gameConfig();">
-							<option value="square">Carré</option>
+							<option value="square" selected>Carré</option>
 							<option value="circle">Cercle</option>
 							<option value="triangle">Triangle</option>
 						</select>
 						<label>Position sur le plateau</label>
 						<select class="position" class="1" onchange="gameConfig();">
-							<option value="5">Gauche</option>
+							<option value="5" selected>Gauche</option>
 							<option value="4">Bas gauche</option>
 							<option value="3">Bas droit</option>
 							<option value="2">Droit</option>
@@ -74,13 +74,13 @@
 						<label>Forme du pion</label>
 						<select class="pawn" class="2" onchange="gameConfig();">
 							<option value="square">Carré</option>
-							<option value="circle">Cercle</option>
+							<option value="circle" selected>Cercle</option>
 							<option value="triangle">Triangle</option>
 						</select>
 						<label>Position sur le plateau</label>
 						<select class="position" class="2" onchange="gameConfig();">
 							<option value="5">Gauche</option>
-							<option value="4">Bas gauche</option>
+							<option value="4" selected>Bas gauche</option>
 							<option value="3">Bas droit</option>
 							<option value="2">Droit</option>
 							<option value="1">Haut droit</option>
