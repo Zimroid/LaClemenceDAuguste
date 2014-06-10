@@ -28,6 +28,7 @@ function gameCreate(arg)
 		$("#message").val("");
         $('#chatMessagesGame').html("Chat de la partie " + gameName + "<br />Pour participer à de meilleures conversations, merci de rester courtois et d'éviter le langage SMS.");
 		
+		localStorage.sitePage = 'waiting';
 		loadPage('gameFastWaiting.html');
     }
 	else

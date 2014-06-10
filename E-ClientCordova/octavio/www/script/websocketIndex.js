@@ -117,11 +117,11 @@ function process(evt)
 		else if (data.configuration.game_mode == 'normal')
 		{	
 			// Configuration de partie
-			/*if (localStorage.sitePage != 'gameConfig')
-			{*/
+			if (localStorage.sitePage != 'gameConfig')
+			{
 				localStorage.sitePage = 'gameConfig';
 				loadPage('gameConfigView.html');
-			//}
+			}
 		}
 		// Mode de jeu incorrect
 		else
@@ -172,7 +172,6 @@ function process(evt)
 			save_game_users = [];
 		}
 		
-		
 		if (mode == 'normal')
 		{
 			// copie du tableau d'utilisateurs précédent (pour identifier les départs de joueurs)
@@ -198,7 +197,7 @@ function process(evt)
 			save_game_users.splice(data.users.length, us);
 			
 			var text1 = '';
-			var text2 = '<option value="0">ROBOT</option>';
+			var text2 = '';
 			
 			// parcours des utilisateurs du panneau de config
 			for (var i = 0 ; i < save_game_users.length ; i++)
@@ -253,18 +252,12 @@ function process(evt)
 			}
 			
 			// identification d'un départ de joueur
-			/*
 			if (save_game_users_prec.length > 0)
 			{
-				alert(save_game_users_prec);
-				alert(save_game_users_prec[0]);
-				alert(save_game_users_prec[0].user_name);
 				$("#noTeam").find("p.viewers").remove(":contains('" + save_game_users_prec[0].user_name + "')");
 				$("[name='playerName']").find("option").remove(":contains('" + save_game_users_prec[0].user_name + "')");
 			}
-			*/
-			alert(text1);
-			alert(text2);
+			
 			if (text1 != '' && text2 != '')
 			{
 				if ($("#noTeam").length && $("[name='playerName']").length)
@@ -275,13 +268,13 @@ function process(evt)
 			}
 		}
 		
-		
 		localStorage.sgu = JSON.stringify(save_game_users);
 	}
 	
+	// Commande non-traitée
 	else
 	{
 		// Partie rapide -> Configuration (Ajout d'un bot)
-		alert(dataString);
+		alert("Commande non-traitée :\n" + dataString);
 	}
 }
