@@ -210,10 +210,15 @@ public class IA {
     private HashMap<ArrayList<Pawn>, ArrayList<Cell>> movementPossibilities(ArrayList<ArrayList<Pawn>> groups, Legion l) {
         HashMap<ArrayList<Pawn>, ArrayList<Cell>> res = new  HashMap<>();
         
-        groups.stream().filter((ap) -> (ap.get(0).getLegion() == l)).forEach((ap) ->
+        /*groups.stream().filter((ap) -> (ap.get(0).getLegion() == l)).forEach((ap) ->*/
+        
+        for(ArrayList<Pawn> ap : groups)
         {
-            res.put(ap, game.nearbyEmptyCells(ap, true));
-        });
+            if(ap.get(0).getLegion() == l)
+            {
+                res.put(ap, game.nearbyEmptyCells(ap, true));
+            }
+        }
         
         return res;
     }

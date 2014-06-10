@@ -166,12 +166,14 @@ public class AugusteTests {
         int limit = 0;
         while(!end && (limit>0?i<limit:true)) {
             i++;
-            if(g.applyActions()==false) {
+            //Thread.sleep(10);
+            g.applyActions();
+            if(g.getTwinner() == null){
                 g.nextTurn();
             }
             else {
                 long tt = System.currentTimeMillis() - t;
-                System.out.println("Winner (" + i + " tours en " + tt + "ms soit " + (double)tt/i + "ms/tour) : " + g.getWinner());
+                System.out.println("Winner (" + i + " tours en " + tt + "ms soit " + (double)tt/i + "ms/tour) : " + g.getTwinner());
                 end = true;
             }
             showBoard(b);

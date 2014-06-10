@@ -49,6 +49,7 @@ public class Game
     private final ArrayList<Legion> legions;
     private Laurel laurel;
     private Legion winner = null;
+    private Team twinner = null;
     private int pawnsAlive = 0;
     private final ArrayList<Action> actions;
     private Timer timer;
@@ -165,15 +166,21 @@ public class Game
         moves.clear();
         tenailles.clear();
         battles.clear();
-        timer.cancel();
-        timer.purge();
+        if(listener!=null)
+        {
+            timer.cancel();
+            timer.purge();
+        }
         turn();
     }
     
     public void turn()
     {
-        timer = new Timer();
-        timer.schedule(new GameTimer(this), turnDuration);
+        if(listener!=null)
+        {
+            timer = new Timer();
+            timer.schedule(new GameTimer(this), turnDuration);
+        }
         playBots();
     }
     
@@ -184,7 +191,7 @@ public class Game
             (new Thread() {
                 @Override
                 public void run() {
-                    if(allPlayersAreBots()) try {
+                    if(allPlayersAreBots() && listener!=null) try {
                         Thread.sleep(1000);
                     } catch (InterruptedException ex) {
                         System.err.println("AllPlayersAreBots Sleep interrupted");
@@ -228,16 +235,41 @@ public class Game
             applyTenailles();
             calculateBattles();
             applyBattles();
-            for(Action a : this.actions)
-            {
+            this.actions.stream().forEach((a) -> {
                 a.getLegion().setAction(null);
-            }
+            });
             this.actions.clear();
-            //this.timer = new GameTimer(this,turnDuration);
-            //this.timer.start();
+            teamWinsCheck();
         }
         
         return ends;
+    }
+    
+    private void teamWinsCheck()
+    {
+        Team w = null;
+        boolean hasLegion;
+        int nbT = 0;
+        for(Team t : teams)
+        {
+            hasLegion = false;
+            for(Player p : t.getPlayers())
+            {
+                for(Legion l : p.getLegions())
+                {
+                    if(l.getLivingPawns().size() > 0)
+                    {
+                        w = t;
+                        nbT++;
+                        hasLegion = true;
+                        break;
+                    }
+                }
+                if(hasLegion) break;
+            }
+        }
+        if(nbT == 1) twinner = w;
+        System.out.println(nbT + " : " + twinner);
     }
     
     /**
@@ -340,6 +372,7 @@ public class Game
                 {
                     ends = true;
                     winner = c2.getTent();
+                    twinner = winner.getPlayer().getTeam();
                 }
                 c2.setPawn(p1);
                 c1.setPawn(null);
@@ -1166,5 +1199,12 @@ public class Game
      */
     public Legion getWinner() {
         return winner;
+    }
+
+    /**
+     * @return the twinner
+     */
+    public Team getTwinner() {
+        return twinner;
     }
 }
