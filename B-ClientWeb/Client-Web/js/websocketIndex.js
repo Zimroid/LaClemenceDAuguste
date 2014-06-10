@@ -46,32 +46,6 @@ function process(evt)
 				alert(data.type);
 				break;
 		}
-		/*if(data.type == "logged_out")
-		{
-			myId = '';
-			myName = '';
-			reloadChat(sitePath + "/index.php?script=1&page=deconnect");
-		}
-		else if (data.type == "already_in_this_room")
-		{
-			alert("Vous avez déjà rejoint cette partie.");
-		}
-		else if (data.type == "log_error")
-		{
-			alert("Erreur d'identification.");
-		}
-		else if (data.type == "must_be_logged")
-		{
-			reloadContent(sitePath + "/index.php?script=1&page=subscribe");
-		}
-		else if (data.type == "not_owner_of_this_room")
-		{
-			alert("Vous n'êtes pas autorisé à modifier la configuration d'une partie dont vous n'êtes pas l'hôte.");
-		}
-		else
-		{
-			alert(data.type);
-		}*/
 	}
 	
 	// Reussite connexion utilisateur
@@ -145,17 +119,53 @@ function process(evt)
 		// Qu'on soit n'importe où, ou qu'on recharge la page principale pour arriver en jeu (cas pour un nouveau tour, un début de partie voir une reconnexion)
 		reloadContent(sitePath + "/index.php?script=1&page=game");
 		clearInterval(inter);
-		var timer = save_game_config.configuration.game_turn_duration/1000;
-		$("#timer").val(timer);
-		$("#timer").attr('max',timer);
-		inter = setInterval(function()
+		if (data.winner_team && data.winner_legion)
 		{
-			if (timer != 0)
+			if (data.winner_team == -1)
 			{
-				$("#timer").val(timer-1);
-				timer--;
+				alert("Match nul.");
 			}
-		},1000);
+			else
+			{
+				var nomteam = '';
+				if (data.winner_legion == -1)
+				{
+					for (var i = 0; i < save_game_users; i++)
+					{
+						if (save_game_users[i].user_id == data.winner_team)
+						{
+							nomteam += save_game_users[i].user_name+', ';
+						}
+					}
+					alert("Il n'y a plus d'adversaires. La team de " + nomteam + "a gagné.");
+				}
+				else
+				{
+					for (var i = 0; i < save_game_users; i++)
+					{
+						if (save_game_users[i].user_id == data.winner_team)
+						{
+							nomteam += save_game_users[i].user_name+', ';
+						}
+					}
+					alert("Le laurier est dans une tente. La team de " + nomteam + "a gagné.");
+				}
+			}
+		}
+		else
+		{
+			var timer = save_game_config.configuration.game_turn_duration/1000;
+			$("#timer").val(timer);
+			$("#timer").attr('max',timer);
+			inter = setInterval(function()
+			{
+				if (timer != 0)
+				{
+					$("#timer").val(timer-1);
+					timer--;
+				}
+			},1000);
+		}
 	}
 	
 	// Si on demande la liste des parties
