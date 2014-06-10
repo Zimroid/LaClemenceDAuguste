@@ -305,7 +305,10 @@ public class Room implements GameListener
         
         if (ends)
         {
-            json.put("winner", this.game.getWinner().getPosition());
+            if (this.game.getTwinner() != null) json.put("winner_team", this.game.getTwinner().getNum());
+            else json.put("winner_team", -1);
+            if (this.game.getWinner() != null) json.put("winner_team", this.game.getWinner().getPosition());
+            else json.put("winner_legion", -1);
             this.game.getTimer().cancel();
             this.game.getTimer().purge();
         }
