@@ -13,6 +13,7 @@ input.color{width:55px;}
 legend{border:1px solid black;}
 progress{width:100%;}
 #board_players{margin-top:20px;}
+#board_players,#turn_finish{display:inline-block;}
 #buttonsReduct{position:absolute;width:100%;}
 #buttonReductChat{margin-top:5px;float:right;}
 #canvas{height:90%;margin:auto;margin-top:2%;width:90%;}
