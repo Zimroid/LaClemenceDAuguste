@@ -60,6 +60,18 @@
 			$pageCtr->subscribe();
 		}
 	}
+	else if(isset($_GET['page']) && $_GET['page'] == 'gameConfigViewer')
+	{
+		if (isset($_SESSION['username']))
+		{
+			$pageCtr->gameConfigViewer();
+		}
+		else
+		{
+			$pageCtr->subscribe();
+		}
+	}
+	
 	else if(isset($_GET['page']) && $_GET['page'] == 'game')
 	{
 		if (isset($_SESSION['username']))

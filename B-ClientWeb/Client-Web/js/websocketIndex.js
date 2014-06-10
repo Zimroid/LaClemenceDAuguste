@@ -104,10 +104,50 @@ function process(evt)
 			gameStart(data.room_id);
 		}
 		// si une partie normale est lancée
-		else if (sitePage != 'gameConfig')
+		else if (sitePage != 'gameConfig' && sitePage != 'gameConfigViewer')
 		{
-			sitePage = 'gameConfig';
-			reloadContent(sitePath + "/index.php?script=1&page=gameConfig&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
+			var owner = false;
+
+			for (i = 0; i < save_game_users.length; i++)
+			{
+				if (save_game_users[i].user_id == myId && save_game_users[i].is_owner)
+				{
+					owner = true;
+				}
+			}
+
+			if (owner)
+			{
+				sitePage = 'gameConfig';
+				reloadContent(sitePath + "/index.php?script=1&page=gameConfig&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
+			}
+			else
+			{
+				sitePage = 'gameConfigViewer';
+				reloadContent(sitePath + "/index.php?script=1&page=gameConfigViewer&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
+			}
+		}
+		else if(sitePage == 'gameConfigViewer')
+		{
+			var owner = false;
+
+			for (i = 0; i < save_game_users.length; i++)
+			{
+				if (save_game_users[i].user_id == myId && save_game_users[i].is_owner)
+				{
+					owner = true;
+				}
+			}
+
+			if (!owner)
+			{
+				gameConfigViewer();
+			}
+			else
+			{
+				sitePage = 'gameConfig';
+				reloadContent(sitePath + "/index.php?script=1&page=gameConfig&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
+			}
 		}
 	}
 
