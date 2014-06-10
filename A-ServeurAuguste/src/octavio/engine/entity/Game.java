@@ -269,7 +269,6 @@ public class Game
             }
         }
         if(nbT == 1) twinner = w;
-        System.out.println(nbT + " : " + twinner);
     }
     
     /**
@@ -489,7 +488,6 @@ public class Game
             if(p1 != null && p2 != null)
             {
                 orientation = getOrientation(p1.getCell(),p2.getCell());
-                System.out.println(p1.getCell().getP() + " - " + p2.getCell().getP() + " - " + orientation);
                 for(Cell c = p1.getCell(); c != p2.getCell() && c != null; c = getCell(c,orientation))
                 {
                     if(c != null && c != p1.getCell() && c.getPawn() != null && c.getPawn() instanceof Soldier)
@@ -915,7 +913,7 @@ public class Game
                         new Point(x+1,y),
                         new Point(x-1,y+(((x*2)-1)%2)),     //new Point(x-1,(x>0?y+1:y-1)),
                         new Point(x+1,y-(((x*2)+1)%2)));    //new Point(x+1,(x<0?y+1:y-1)));
-        
+
         for(Point p : pArray)
         {
             if(board.getCell(p) != null)
@@ -923,7 +921,7 @@ public class Game
                 res.add(board.getCell(p));
             }
         }
-        
+
         return res;
     }
     
@@ -983,11 +981,11 @@ public class Game
                 {
                     if(p1.y == p2.y)
                     {
-                        res = 3;
+                        res = 0;
                     }
-                    else if(p1.y > p2.y)
+                    else if(p1.y < p2.y)
                     {
-                        res = 4;
+                        res = 1;
                     }
                 }
             }
