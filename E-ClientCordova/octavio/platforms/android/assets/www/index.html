@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="content/css.css" media="all"/>
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 				
 		<title>Octavio</title>
@@ -10,8 +11,27 @@
 	
     <body onload="initSwitch();" style="width:100%;height:100%;margin:0px;">
 		<h3>Octavio</h3>
+				
 		<div id='container' style="width:100%;height:100%;margin:0px;"></div>
 
+		<div id='chat' class="chat_invisible">
+			<button onclick="$('#chat').attr('class', 'chat_invisible');">Masquer le chat</button>
+		
+			<!-- Div d'affichage des messages -->
+			<div id="chatMessages">
+				Bonjour et bienvenue sur le chat ! Merci de rester courtois et d'éviter le langage SMS.
+				<br/>
+			</div>
+
+			<!-- Div d'envoi d'un message-->
+			<div id="chatSend">					
+				<form onsubmit="addMessage(); return false;" autocomplete="off" >
+					<textarea title='Message' id="message" name="message" onkeypress="toucheEntree(event)"></textarea>
+					<input title='Envoyer un message' type="submit" id="valid" value="Envoyer" />
+				</form>
+			</div>
+		</div>
+		
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript">
             app.initialize();

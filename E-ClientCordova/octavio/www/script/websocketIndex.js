@@ -25,10 +25,10 @@ function process(evt)
 			case 'logged_out':
 				myId = '';
 				myName = '';
-				reloadChat(sitePath + "/index.php?script=1&page=deconnect");
+				loadPage("home_connectionView.html");
 				break;
 			case 'must_be_logged':
-				reloadContent(sitePath + "/index.php?script=1&page=subscribe");
+				loadPage("home_connectionView.html");
 				break;
 			case 'not_owner_of_this_room':
 				alert("Vous n'êtes pas autorisé à modifier la configuration d'une partie dont vous n'êtes pas l'hôte.");
@@ -53,7 +53,7 @@ function process(evt)
 	{
 		localStorage.myId = data.user_id;
 		localStorage.myName = data.user_name;
-		loadPage("chatView.html");
+		loadPage("lobbyView.html");
 	}
 	
 	// Réception message
@@ -119,14 +119,16 @@ function process(evt)
 				// Sinon -> configuration
 				else
 				{
-					sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#00FF00","legion_position": "5"},{"legion_shape": "circle","legion_color": "#00FF00","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#00FF00","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
+					//sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#00FF00","legion_position": "5"},{"legion_shape": "circle","legion_color": "#00FF00","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#00FF00","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
+					sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#0000FF","legion_position": "5"},{"legion_shape": "circle","legion_color": "#0000FF","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#0000FF","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
 				}
 			}
 			
 			// Si erreur -> configuration
 			catch(err)
 			{
-				sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#00FF00","legion_position": "5"},{"legion_shape": "circle","legion_color": "#00FF00","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#00FF00","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
+				//sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#00FF00","legion_position": "5"},{"legion_shape": "circle","legion_color": "#00FF00","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#00FF00","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
+				sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#0000FF","legion_position": "5"},{"legion_shape": "circle","legion_color": "#0000FF","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#0000FF","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
 			}			
 		}
 		// Mode de jeu : normal
@@ -151,12 +153,14 @@ function process(evt)
 	else if(command == "game_turn")
 	{
 		localStorage.save_game_turn = dataString;
+		var save_game_config = JSON.parse(localStorage.save_game_config);
 		
 		// Chargement page jeu ...
 		loadPage('gameView.html');
-		
+				
 		// Gestion timer
-		clearInterval(inter);
+		clearInterval(localStorage.inter);
+		
 		if (data.winner_team && data.winner_legion)
 		{
 			if (data.winner_team == -1)
@@ -193,14 +197,15 @@ function process(evt)
 		else
 		{
 			var timer = save_game_config.configuration.game_turn_duration/1000;
-			$("#timer").val(timer);
+			$("#timer").val(timer/2);
 			$("#timer").attr('max',timer);
-			inter = setInterval(function()
+			
+			localStorage.inter = setInterval(function()
 			{
 				if (timer != 0)
 				{
-					$("#timer").val(timer-1);
 					timer--;
+					$("#timer").val(timer);
 				}
 			},1000);
 		}

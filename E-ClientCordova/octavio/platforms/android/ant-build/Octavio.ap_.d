@@ -13,7 +13,6 @@ C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\pla
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\ant-build\res\drawable-xhdpi\icon.png \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\_where-is-www.txt \
-C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\chatView.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\content \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\cordova.js \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\cordova_plugins.js \
@@ -25,8 +24,10 @@ C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\pla
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\home_serverSelectView.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\home_subscribeView.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\index.html \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\lobbyView.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\ressources \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\content\css.css \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\ressources\logo100.png \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\chat.js \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script\game.js \
