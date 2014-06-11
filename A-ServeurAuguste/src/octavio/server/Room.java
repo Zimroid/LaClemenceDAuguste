@@ -509,7 +509,7 @@ public class Room implements GameListener
                     // Attribution du joueur à l'utilisateur
                     if (playerData.has("bot"))
                     {
-                        Bot.Strategy strategy = playerData.getString("bot").equals("random") ? Bot.Strategy.random : Bot.Strategy.pseudoRandom;
+                        Bot.Strategy strategy = playerData.getString("bot").equals("distribued") ? Bot.Strategy.distributed : Bot.Strategy.pseudoRandom;
                         newPlayer.setBot(new Bot(newPlayer, strategy));
                         newPlayer.setConnected(false);
                         this.playing.put(newPlayer, 0); 

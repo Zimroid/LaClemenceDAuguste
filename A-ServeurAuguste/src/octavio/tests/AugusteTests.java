@@ -12,6 +12,7 @@ package octavio.tests;
  */
 import java.awt.Point;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 import octavio.engine.entity.Board;
 import octavio.engine.entity.Bot;
@@ -156,29 +157,27 @@ public class AugusteTests {
         
         boolean end = false;
         
-        pOne.setBot(new Bot(pOne,Bot.Strategy.distribuedRandom));
+        pOne.setBot(new Bot(pOne,Bot.Strategy.distributed));
         pOne.setConnected(false);
-        pTwo.setBot(new Bot(pTwo,Bot.Strategy.distribuedRandom));
+        pTwo.setBot(new Bot(pTwo,Bot.Strategy.distributed));
         pTwo.setConnected(false);
         
         long t = System.currentTimeMillis();
         int i = 1;
-        int limit = 0;
+        int limit = 1;
         while(!end && (limit>0?i<limit:true)) {
             i++;
-            Thread.sleep(10);
-            if(g.applyActions() == false){
+            synchronized(g) { if(g.applyActions() == false){
                 g.nextTurn();
             }
             else {
                 long tt = System.currentTimeMillis() - t;
-                System.out.println("Winner (" + i + " tours en " + (tt-(10*i)) + "ms soit " + (double)(tt-10)/i + "ms/tour) : " + g.getTwinner());
+                System.out.println("Winner (" + i + " tours en " + (tt) + "ms soit " + (double)(tt)/i + "ms/tour) : " + g.getTwinner());
                 end = true;
-            }
+            }}
             showBoard(b);
             //System.in.read();
         }
-        
         
         /*addMove(-8, 0, -3, 0);
         addMove(0, -8, 0, -3);

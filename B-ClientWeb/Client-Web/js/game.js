@@ -87,7 +87,7 @@ function gameConfig()
 					// id du joueur
 					if (parseInt($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val(),10) == 0)
 					{
-						stringJSON += '{"player_user_id":0,"bot":"pseudoRandom","legions":[';
+						stringJSON += '{"player_user_id":0,"bot":"distribued","legions":[';
 					}
 					else
 					{
@@ -305,17 +305,6 @@ function gameList(argument)
             "command": "QUERY_ROOMS"
         });
     }
-    sendText(json);
-}
-
-function gameUsers(game)
-{
-	var json = JSON.stringify(
-    {
-        "command": "QUERY_USERS",
-        "room_id": game
-    });
-    
     sendText(json);
 }
 

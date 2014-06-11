@@ -16,6 +16,7 @@
 
 package octavio.engine.ia;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -39,11 +40,38 @@ import octavio.engine.util.RandomCollection;
 public class IA {
     
     // Variables de classe
-    private Game game;
-    private Random rand = new Random();
+    private final Game game;
+    private final Random rand = new Random();
     
     // Variables utiles
     private ArrayList<ArrayList<Pawn>> groups;
+    
+    // Weights
+    public final double pawnWeight(Pawn p) {
+        return 1.0;
+    }
+    public final double pawnArrivalWeight(Cell c) {
+        return game.getBoard().getSize()/2*(double)distance(c,game.getLaurel().getCell());
+    }
+    public final double laurelWeight(Legion l) {
+        Laurel lau = game.getLaurel();
+        Cell tent = legionsTent(l);
+        double laurelToTent = (double)distance(lau.getCell(),tent);
+        
+        return (game.getBoard().getSize()/2*laurelToTent)+1;
+    }
+    public final double laurelArrivalWeight(Legion l, Cell c) {
+        Laurel lau = game.getLaurel();
+        Cell tent = legionsTent(l);
+        double cellToTent = (double)distance(c,tent);
+        double laurelToTent = (double)distance(lau.getCell(),tent);
+        
+        return Math.exp(cellToTent/laurelToTent);
+    }
+    
+    public final double cartesianWeight(double pawnWeight, double arrivalWeight) {
+        return pawnWeight*arrivalWeight;
+    }
     
     public IA(Game g)
     {
@@ -67,8 +95,8 @@ public class IA {
                     case pseudoRandom:
                         m = pseudoRandomMove(b,l);
                         break;
-                    case distribuedRandom:
-                        m = distribuedRandomMove(b,l);
+                    case distributed:
+                        m = distributedRandomMove(b,l);
                         break;
                     default:
                         m = pseudoRandomMove(b,l);
@@ -133,17 +161,22 @@ public class IA {
         else return null;
     }
     
-    private Movement distribuedRandomMove(Bot b, Legion l) {
+    private Movement distributedRandomMove(Bot b, Legion l) {
         HashMap<Pawn,Double> pawnPoss = getPawnPoss(l);
         HashMap<GroupMovement,Double> arrivalPoss = getArrivalPoss(l);
         
         RandomCollection movementPoss = getMovePoss(pawnPoss,arrivalPoss);
         
         Movement m = null;
+        boolean ok = false;
         if(movementPoss.getTotal()>0) {
-            m = (Movement) movementPoss.next();
-            //System.out.println("Pawn : " + m.getPawn().getCell().getP() + " - Cell : " + m.getCell().getP());
+            while(!ok) {
+                m = (Movement) movementPoss.next();
+                ok = m.getPawn() != game.getLaurel() || !b.getPlayedLaurel();
+            }
+            
         }
+        else System.out.println(l);
         return m;
     }
     
@@ -163,10 +196,6 @@ public class IA {
         return res;
     }
     
-    private double cartesianWeight(double pawnWeight, double arrivalWeight) {
-        return pawnWeight*arrivalWeight;
-    }
-    
     private HashMap<GroupMovement,Double> getArrivalPoss(Legion l) {
         HashMap<GroupMovement,Double> res = new HashMap<>();
         HashMap<ArrayList<Pawn>, ArrayList<Cell>> poss = movementPossibilities(groups,l);
@@ -175,7 +204,7 @@ public class IA {
         {
             poss.get(group).stream().forEach((c) ->
             {
-                res.put(new GroupMovement(group,c), 1.0);       // TODO : evualuate weight
+                res.put(new GroupMovement(group,c), pawnArrivalWeight(c));
             });
         });
         
@@ -185,7 +214,7 @@ public class IA {
             ArrayList<Cell> ac = game.nearbyEmptyCells(al, false);
             ac.stream().forEach((c) ->
             {
-                res.put(new GroupMovement(al,c), 1.0);          // TODO : evualuate weight
+                res.put(new GroupMovement(al,c), laurelArrivalWeight(l,c));
             });
         }
         
@@ -197,11 +226,11 @@ public class IA {
         
         l.getLivingPawns().stream().forEach((p) ->
         {
-            res.put(p, 1.0);                            // TODO : evualuate weight
+            res.put(p, pawnWeight(p));
         });
         
         if(game.canMoveLaurel(l, game.getLaurel())) {
-            res.put(game.getLaurel(), 100.0);           // TODO : evualuate weight
+            res.put(game.getLaurel(), laurelWeight(l));
         }
         
         return res;
@@ -238,6 +267,10 @@ public class IA {
         return res;
     }
     
+    private Cell legionsTent(Legion l) {
+        return game.getBoard().getCell(game.getBoard().getRotatedPosition(new Point(-(game.getBoard().getSize()-1),0), l.getPosition()));
+    }
+    
     private boolean pawnInGroups(ArrayList<ArrayList<Pawn>> groups, Pawn p) {
         boolean res = false;
         
@@ -254,12 +287,36 @@ public class IA {
         return res;
     }
     
-    private int distance(Cell c1, Cell c2) {
-        int x1 = c1.getP().x;
+    public int nbUneplayedLegionsAroundLaurel(Legion leg) {
+        Laurel l = game.getLaurel();
+        int i = 0;
+        for(Soldier s : game.nearbySoldiers(l)) {
+            if(!leg.getPlayer().getLegions().contains(s.getLegion())) i++;
+        }
+        return i;
+    }
+    
+    public ArrayList<Cell> shortestPath(Cell c1, Cell c2) {
+        ArrayList<Cell> res = new ArrayList<>();
+        Cell temp = c1;
+        
+        while(temp != c2)
+        {
+            temp = game.getCell(temp,game.getOrientation(temp,c2));
+            if(temp == null) System.out.println(c1.getP() + " ; " + c2.getP());
+            res.add(temp);
+        }
+        
+        return res;
+    }
+    
+    public int distance(Cell c1, Cell c2) {
+        /*int x1 = c1.getP().x;
         int y1 = c1.getP().y;
         int x2 = c2.getP().x;
         int y2 = c2.getP().y;
         
-        return Math.abs(x2 - x1) + Math.abs(y2 - y1); // FALSE
+        return Math.abs(x2 - x1) + Math.abs(y2 - y1); // FALSE*/
+        return shortestPath(c1,c2).size();
     }
 }
