@@ -62,7 +62,7 @@ public class AugusteTests {
         g = new Game(1000);
         g.addPlayer(pOne);
         g.addPlayer(pTwo);
-        Board b = new Board(11);
+        Board b = new Board(7);
         g.setBoard(b);
         
         g.initBoard();
@@ -164,9 +164,10 @@ public class AugusteTests {
         
         long t = System.currentTimeMillis();
         int i = 1;
-        int limit = 1;
+        int limit = 0;
         while(!end && (limit>0?i<limit:true)) {
             i++;
+            Thread.sleep(50);
             synchronized(g) { if(g.applyActions() == false){
                 g.nextTurn();
             }

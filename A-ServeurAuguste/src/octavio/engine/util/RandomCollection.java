@@ -19,6 +19,7 @@ package octavio.engine.util;
 import java.util.NavigableMap;
 import java.util.Random;
 import java.util.TreeMap;
+import octavio.engine.entity.action.Movement;
 
 /**
  *
@@ -44,6 +45,14 @@ public class RandomCollection<E> {
             total += weight;
             map.put(total, result);
         }
+    }
+
+    /**
+     * @return the map
+     */
+    public NavigableMap<Double, E> getMap()
+    {
+        return map;
     }
 
     /**

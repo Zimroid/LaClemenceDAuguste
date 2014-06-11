@@ -47,26 +47,21 @@ public class IA {
     private ArrayList<ArrayList<Pawn>> groups;
     
     // Weights
-    public final double pawnWeight(Pawn p) {
+    public double pawnWeight(Pawn p) {
         return 1.0;
     }
-    public final double pawnArrivalWeight(Cell c) {
-        return game.getBoard().getSize()/2*(double)distance(c,game.getLaurel().getCell());
+    public double pawnArrivalWeight(Cell c) {
+        return Math.exp(game.getBoard().getSize()/(double)distance(c,game.getLaurel().getCell()));
     }
-    public final double laurelWeight(Legion l) {
-        Laurel lau = game.getLaurel();
-        Cell tent = legionsTent(l);
-        double laurelToTent = (double)distance(lau.getCell(),tent);
-        
-        return (game.getBoard().getSize()/2*laurelToTent)+1;
+    public double laurelWeight(Legion l) {
+        return 2000;
     }
-    public final double laurelArrivalWeight(Legion l, Cell c) {
+    public double laurelArrivalWeight(Legion l, Cell c) {
         Laurel lau = game.getLaurel();
         Cell tent = legionsTent(l);
         double cellToTent = (double)distance(c,tent);
         double laurelToTent = (double)distance(lau.getCell(),tent);
-        
-        return Math.exp(cellToTent/laurelToTent);
+        return Math.exp(laurelToTent-cellToTent);
     }
     
     public final double cartesianWeight(double pawnWeight, double arrivalWeight) {
@@ -174,9 +169,7 @@ public class IA {
                 m = (Movement) movementPoss.next();
                 ok = m.getPawn() != game.getLaurel() || !b.getPlayedLaurel();
             }
-            
         }
-        else System.out.println(l);
         return m;
     }
     
@@ -257,8 +250,8 @@ public class IA {
         ArrayList<Pawn> group;
         
         for(Legion l : game.getLegions()) {
-            for(Pawn p : l.getPawns()) {
-                if(!p.isDeleted() && !pawnInGroups(res,p)) {
+            for(Pawn p : l.getLivingPawns()) {
+                if(!pawnInGroups(res,p)) {
                     group = game.friendlyGroup(p);
                     res.add(group);
                 }
@@ -268,7 +261,7 @@ public class IA {
     }
     
     private Cell legionsTent(Legion l) {
-        return game.getBoard().getCell(game.getBoard().getRotatedPosition(new Point(-(game.getBoard().getSize()-1),0), l.getPosition()));
+        return game.getBoard().getCell(game.getBoard().getRotatedPosition(new Point(-(game.getBoard().getSize()-1),-(game.getBoard().getSize()-1)), l.getPosition()));
     }
     
     private boolean pawnInGroups(ArrayList<ArrayList<Pawn>> groups, Pawn p) {
