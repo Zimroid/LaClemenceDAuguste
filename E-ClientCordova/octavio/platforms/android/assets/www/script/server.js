@@ -2,5 +2,7 @@ function otherServerValidation()
 {
 	localStorage.ip='IP';
 	localStorage.port='Port';
-	loadPage('home_connectionView.html');
+	
+	alert("serveur non-disponible");
+	//loadPage('home_connectionView.html');
 }

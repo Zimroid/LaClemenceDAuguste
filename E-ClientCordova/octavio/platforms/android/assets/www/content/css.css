@@ -1,0 +1,19 @@
+#chat
+{
+	height : 100%;
+	width : 100%;
+	position : absolute;
+	background-color : white;
+	top: 0px;
+	left: 0px;
+}
+
+.chat_invisible
+{
+	display : none;
+}
+
+.chat_visible
+{
+	display : block;
+}

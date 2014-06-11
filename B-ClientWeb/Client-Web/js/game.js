@@ -151,6 +151,142 @@ function gameConfig()
     sendText(json);
 }
 
+function gameConfigViewer()
+{
+    var nbrTeamsConfig;
+    var nbrPlayersConfig = new Array();
+    var nbrLegionsConfig = new Array();
+    var k = 0;
+    nbrTeamsConfig = save_game_config.teams.length;
+
+    for(i = 0; i < save_game_config.teams.length; i++)
+    {
+        nbrPlayersConfig[i] = save_game_config.teams[i].players.length;
+        for(j = 0; j < nbrPlayersConfig[i]; j++)
+        {
+            nbrLegionsConfig[k] = save_game_config.teams[i].players[j].legions.length;
+            k++;
+        }
+    }
+
+    var nbrTeamsWeb = $('div [name="team"]').length;
+    var nbrPlayersWeb = new Array();
+    var nbrLegionsWeb = new Array();
+    k = 0;
+
+    for(i = 0; i < nbrTeamsWeb; i++)
+    {
+        nbrPlayersWeb[i] = $('#team' + (i + 1)).children('div [name="player"]').length;
+        for(j = 0; j < nbrPlayersWeb[i]; j++)
+        {
+            nbrLegionsWeb[k] = $('#team' + (i + 1)).children('#player' + (i + 1) + '_' + (j + 1)).children('div [name="legion"]').length;
+            k++;
+        }
+    }
+
+    $('#board_size').val(save_game_config.configuration.game_board_size);
+    $('#turn_duration').val((save_game_config.configuration.game_turn_duration/1000));
+    var couleur;
+    var forme;
+    var position;
+
+    if(nbrTeamsWeb == nbrTeamsConfig)
+    {
+        for(i = 0; i < nbrTeamsWeb; i++)
+        {
+            if(nbrPlayersWeb[i] == nbrPlayersConfig[i])
+            {
+                for(j = 0; j < nbrPlayersWeb[i]; j++)
+                {
+                    if(nbrLegionsWeb[j] == nbrLegionsConfig[j])
+                    {
+                        for(k = 0; k < nbrLegionsWeb[j]; k++)
+                        {
+                            switch(save_game_config.teams[i].players[j].legions[k].legion_color)
+                            {
+                                case "#FF0000" :
+                                    couleur = "Rouge";
+                                    break;
+                                case "#FFFF00" :
+                                    couleur = "Jaune";
+                                    break;
+                                case "#00FF00" :
+                                    couleur = "Vert";
+                                    break;
+                                case "#00FFFF" :
+                                    couleur = "Cyan";
+                                    break;
+                                case "#0000FF" :
+                                    couleur = "Bleu";
+                                    break;
+                                case "FF00FF" :
+                                    couleur = "Magenta";
+                                    break;
+                            }
+
+                            switch(save_game_config.teams[i].players[j].legions[k].legion_shape)
+                            {
+                                case "square" :
+                                    forme = "Carré";
+                                    break;
+                                case "circle" :
+                                    forme = "Hexagone";
+                                    break;
+                                case "triangle" :
+                                    forme = "Triangle";
+                                    break;
+                            }
+
+                            switch(save_game_config.teams[i].players[j].legions[k].legion_position)
+                            {
+                                case 0 :
+                                    position = "Haut Gauche";
+                                    break;
+                                case 1 :
+                                    position = "Haut Droit";
+                                    break;
+                                case 2 :
+                                    position = "Droit";
+                                    break;
+                                case 3 :
+                                    position = "Bas Droit";
+                                    break;
+                                case 4 :
+                                    position = "Bas Gauche";
+                                    break;
+                                case 5 :
+                                    position = "Gauche";
+                                    break;
+                            }
+
+                            $('#team' + (i + 1)).children('input.color').val(couleur);
+                            $('#team' + (i + 1)).children('#player' + (i + 1) + '_' + (j + 1)).children('#legion' + (i + 1) + '_' + (j + 1) + '_' + (k + 1)).children('input.pawn').val(forme);
+                            $('#team' + (i + 1)).children('#player' + (i + 1) + '_' + (j + 1)).children('#legion' + (i + 1) + '_' + (j + 1) + '_' + (k + 1)).children('input.position').val(position);
+                        }
+                    }
+
+                    if(save_game_config.teams[i].players[j].player_user_id == 0)
+                    {
+                        $('#team' + (i + 1)).children('#player' + (i + 1) + '_' + (j + 1)).children('input.playerName').val("ROBOT Pseudo-Random");
+                    }
+                    else
+                    {
+                        var nom;
+                        for(z = 0; z < save_game_users.length; z++)
+                        {
+                            if(save_game_users[z].user_id == save_game_config.teams[i].players[j].player_user_id)
+                            {
+                                nom = save_game_users[z].user_name;
+                            }
+                        }
+                        $('#team' + (i + 1)).children('#player' + (i + 1) + '_' + (j + 1)).children('input.playerName').val(nom);
+                    }
+                }
+            }
+        }
+    }
+}
+
 function gameList(argument)
 {
     if (argument == 'on_update')

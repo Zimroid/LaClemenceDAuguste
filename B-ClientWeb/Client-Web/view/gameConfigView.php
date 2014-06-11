@@ -103,7 +103,6 @@
 ?>
 <h2>En attente d'un joueur ...</h2>
 <input title='Type de partie' type="hidden" id="type_game" value='fast'>
-<input title='Lancer la partie' type="button" id="start" value="Lancer la partie" onclick="gameStart(<?php if (isset($_GET['id'])) echo $_GET['id']; ?>)">
 <?php
 	}
 ?>

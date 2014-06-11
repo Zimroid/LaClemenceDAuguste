@@ -8,27 +8,43 @@ function process(evt)
 	// Erreur
 	if(command == "message_error")
 	{
-		// Déconnexion
-		if(data.type == "logged_out")
+		switch (data.type)
 		{
-			localStorage.myId = '';
-			localStorage.myName = '';
-			loadPage("home_onlineChoiceView.html");
-		}
-		
-		else if (data.type == "must_be_logged")
-		{
-			loadPage('home_serverSelectView.html');
-		}
-		
-		else if (data.type == "not_owner_of_this_room")
-		{
-			alert("Vous n'êtes pas autorisé à modifier la configuration d'une partie dont vous n'êtes pas l'hôte.");
-		}
-		
-		else
-		{
-			alert(data.type);
+			case 'already_in_this_room':
+				alert("Vous avez déjà rejoint cette partie.");
+				break;
+			case 'inexistant_room':
+				alert("Cette salle n'existe pas.");
+				break;
+			case 'json_error':
+				alert("Paramètres de commande incorrects.");
+				break;
+			case 'log_error':
+				alert("Erreur d'identification.");
+				break;
+			case 'logged_out':
+				myId = '';
+				myName = '';
+				loadPage("home_connectionView.html");
+				break;
+			case 'must_be_logged':
+				loadPage("home_connectionView.html");
+				break;
+			case 'not_owner_of_this_room':
+				alert("Vous n'êtes pas autorisé à modifier la configuration d'une partie dont vous n'êtes pas l'hôte.");
+				break;
+			case 'rule_error':
+				alert("Ce coup n'est pas autorisé.");
+				break;
+			case 'server_error':
+				alert("Erreur serveur.");
+				break;
+			case 'unknown_command':
+				alert("Cette commande n'existe pas.");
+				break;
+			default:
+				alert(data.type);
+				break;
 		}
 	}
 	
@@ -37,7 +53,7 @@ function process(evt)
 	{
 		localStorage.myId = data.user_id;
 		localStorage.myName = data.user_name;
-		loadPage("chatView.html");
+		loadPage("lobbyView.html");
 	}
 	
 	// Réception message
@@ -103,14 +119,16 @@ function process(evt)
 				// Sinon -> configuration
 				else
 				{
-					sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#00FF00","legion_position": "5"},{"legion_shape": "circle","legion_color": "#00FF00","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#00FF00","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
+					//sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#00FF00","legion_position": "5"},{"legion_shape": "circle","legion_color": "#00FF00","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#00FF00","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
+					sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#0000FF","legion_position": "5"},{"legion_shape": "circle","legion_color": "#0000FF","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#0000FF","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
 				}
 			}
 			
 			// Si erreur -> configuration
 			catch(err)
 			{
-				sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#00FF00","legion_position": "5"},{"legion_shape": "circle","legion_color": "#00FF00","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#00FF00","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
+				//sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#00FF00","legion_position": "5"},{"legion_shape": "circle","legion_color": "#00FF00","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#00FF00","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
+				sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#0000FF","legion_position": "5"},{"legion_shape": "circle","legion_color": "#0000FF","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#0000FF","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
 			}			
 		}
 		// Mode de jeu : normal
@@ -135,9 +153,62 @@ function process(evt)
 	else if(command == "game_turn")
 	{
 		localStorage.save_game_turn = dataString;
+		var save_game_config = JSON.parse(localStorage.save_game_config);
 		
 		// Chargement page jeu ...
 		loadPage('gameView.html');
+				
+		// Gestion timer
+		clearInterval(localStorage.inter);
+		
+		if (data.winner_team && data.winner_legion)
+		{
+			if (data.winner_team == -1)
+			{
+				alert("Match nul.");
+			}
+			else
+			{
+				var nomteam = '';
+				if (data.winner_legion == -1)
+				{
+					for (var i = 0; i < save_game_users; i++)
+					{
+						if (save_game_users[i].user_id == data.winner_team)
+						{
+							nomteam += save_game_users[i].user_name+', ';
+						}
+					}
+					alert("Il n'y a plus d'adversaires. La team de " + nomteam + "a gagné.");
+				}
+				else
+				{
+					for (var i = 0; i < save_game_users; i++)
+					{
+						if (save_game_users[i].user_id == data.winner_team)
+						{
+							nomteam += save_game_users[i].user_name+', ';
+						}
+					}
+					alert("Le laurier est dans une tente. La team de " + nomteam + "a gagné.");
+				}
+			}
+		}
+		else
+		{
+			var timer = save_game_config.configuration.game_turn_duration/1000;
+			$("#timer").val(timer/2);
+			$("#timer").attr('max',timer);
+			
+			localStorage.inter = setInterval(function()
+			{
+				if (timer != 0)
+				{
+					timer--;
+					$("#timer").val(timer);
+				}
+			},1000);
+		}
 	}
 	
 	// Si on demande la liste des parties

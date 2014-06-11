@@ -233,8 +233,8 @@ function newTeam()
     //select pour la color
     var selColor = $("<select class='color' class='" + numberTeam + "' onchange='gameConfig();'></select>");
     //options pour la color
-    var optColor = $("<option value='#FF0000'>Rouge</option>");
-    var optColor2 = $("<option value='#FFFF00'>Jaune</option>");
+    var optColor = $("<option value='#0000FF'>Bleu</option>");
+    var optColor2 = $("<option value='#FF0000'>Rouge</option>");
     if (allTeams == 3)
     {
     	var optColor3 = $("<option value='#00FF00'selected>Vert</option>");
@@ -253,11 +253,11 @@ function newTeam()
     }
     if (allTeams == 5)
     {
-    	var optColor5 = $("<option value='#0000FF' selected>Bleu</option>");
+    	var optColor5 = $("<option value='#FFFF00' selected>Jaune</option>");
     }
     else
     {
-    	var optColor5 = $("<option value='#0000FF'>Bleu</option>");
+    	var optColor5 = $("<option value='#FFFF00'>Jaune</option>");
     }
     if (allTeams == 6)
     {

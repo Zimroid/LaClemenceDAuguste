@@ -1,6 +1,9 @@
+<button onClick="deconnexion();">Deconnexion</button>
+<button onclick="$('#chat').attr('class', 'chat_visible');">Chat</button>
+
 <div id="board_players"></div>
-<button id="turn_finish" onclick="gameTurnFinish(save_game_turn.room_id)">Terminer</button>
 <progress id="timer"></progress>
+<button id="turn_finish" onclick="gameTurnFinish(save_game_turn.room_id)">Terminer</button>
 
 <div style="width:90%;height:50%;margin:auto;margin-top:2%;">
 	<canvas id="board">
@@ -10,21 +13,3 @@
 
 <button onclick='$("#board").zoom();'>+</button>
 <button onclick='$("#board").dezoom();'>-</button>
-
-<div id='chat'>
-	<!-- Div d'affichage des messages -->
-	<div id="chatMessages">
-		Bonjour et bienvenue sur le chat ! Merci de rester courtois et d'éviter le langage SMS.
-		<br/>
-	</div>
-
-	<!-- Div d'envoi d'un message-->
-	<div id="chatSend">
-		<button onClick="deconnexion();">Deconnexion</button>
-			
-		<form onsubmit="addMessage(); return false;" autocomplete="off" >
-			<textarea title='Message' id="message" name="message" onkeypress="toucheEntree(event)"></textarea>
-			<input title='Envoyer un message' type="submit" id="valid" value="Envoyer" />
-		</form>
-	</div>
-</div>

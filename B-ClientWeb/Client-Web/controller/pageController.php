@@ -55,6 +55,11 @@ class pageController
 		include 'view/gameConfigView.php';
 	}
 
+	public function gameConfigViewer()
+	{
+		include 'view/gameConfigViewer.php';
+	}
+
 	// Panneau des paramêtres de jeu (attente des joueur et lancement d'une partie)
 	public function game()
 	{
