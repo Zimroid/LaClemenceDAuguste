@@ -922,6 +922,23 @@ public class Game
         return res;
     }
     
+    public ArrayList<Soldier> nearbySoldiers(Pawn p)
+    {
+        ArrayList<Soldier> res = new ArrayList<>();
+        ArrayList<Cell> cells = nearbyCells(p.getCell());
+        Pawn tPawn;
+        for(Cell c : cells)
+        {
+            tPawn = c.getPawn();
+            if(tPawn != null && tPawn instanceof Soldier)
+            {
+                res.add((Soldier)tPawn);
+            }
+        }
+        
+        return res;
+    }
+    
     public ArrayList<Cell> nearbyCells(Cell c)
     {
         ArrayList<Cell> res = new ArrayList<>();

@@ -164,7 +164,7 @@ public class AugusteTests {
         
         long t = System.currentTimeMillis();
         int i = 1;
-        int limit = 0;
+        int limit = 1;
         while(!end && (limit>0?i<limit:true)) {
             i++;
             synchronized(g) { if(g.applyActions() == false){
@@ -178,7 +178,6 @@ public class AugusteTests {
             showBoard(b);
             //System.in.read();
         }
-        
         
         /*addMove(-8, 0, -3, 0);
         addMove(0, -8, 0, -3);
