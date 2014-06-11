@@ -7,3 +7,6 @@
 <input type="text" name="gameName" id="gameName" onkeypress="if (event.keyCode == 13) gameCreate('')" />
 <button onclick="gameCreate('')" >Partie normale</button>
 <button onclick="gameCreate('defaut')" >Partie rapide</button>
+
+<h2>Rejoindre une partie</h2>
+<button onclick="loadPage('joinGameView.html'); gameList();" >Rejoindre une partie</button>
