@@ -17,6 +17,7 @@ C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\pla
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\cordova.js \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\cordova_plugins.js \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\gameConfigView.html \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\gameConfigViewer.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\gameFastWaiting.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\gameView.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\home_connectionView.html \
@@ -24,6 +25,7 @@ C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\pla
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\home_serverSelectView.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\home_subscribeView.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\index.html \
+C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\joinGameView.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\lobbyView.html \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\ressources \
 C:\Users\Vincent\Documents\GitHub\LaClemenceDAuguste\E-ClientCordova\octavio\platforms\android\assets\www\script \

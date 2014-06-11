@@ -119,7 +119,6 @@ function process(evt)
 				// Sinon -> configuration
 				else
 				{
-					//sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#00FF00","legion_position": "5"},{"legion_shape": "circle","legion_color": "#00FF00","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#00FF00","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
 					sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#0000FF","legion_position": "5"},{"legion_shape": "circle","legion_color": "#0000FF","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#0000FF","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
 				}
 			}
@@ -127,18 +126,49 @@ function process(evt)
 			// Si erreur -> configuration
 			catch(err)
 			{
-				//sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#00FF00","legion_position": "5"},{"legion_shape": "circle","legion_color": "#00FF00","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#00FF00","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
 				sendText('{"command": "GAME_CONFIGURATION","room_id": ' + localStorage.roomId + ',"game_name": "' + localStorage.gameName + '","game_mode": "fast","game_board_size": 5,"game_turn_duration": 30000,"teams":[{"players":[{"player_user_id":' + localStorage.myId + ',"legions":[{"legion_shape": "square","legion_color": "#0000FF","legion_position": "5"},{"legion_shape": "circle","legion_color": "#0000FF","legion_position": "1"},{"legion_shape": "triangle","legion_color": "#0000FF","legion_position": "3"}]}]},{"players":[{"player_user_id":0,"bot":"pseudoRandom","legions":[{"legion_shape": "square","legion_color": "#FF0000","legion_position": "2"},{"legion_shape": "circle","legion_color": "#FF0000","legion_position": "4"},{"legion_shape": "triangle","legion_color": "#FF0000","legion_position": "0"}]}]}]}');
 			}			
 		}
 		// Mode de jeu : normal
 		else if (data.configuration.game_mode == 'normal')
 		{	
-			// Configuration de partie
-			if (localStorage.sitePage != 'gameConfig')
+			if(typeof(localStorage.sgu) != "undefined")
 			{
-				localStorage.sitePage = 'gameConfig';
-				loadPage('gameConfigView.html');
+				var save_game_users = JSON.parse(localStorage.sgu);
+				var owner = false;
+
+				// Parcours des utilisateurs
+				for (i = 0; i < save_game_users.length; i++)
+				{
+					if (save_game_users[i].user_id == localStorage.myId && save_game_users[i].is_owner)
+					{
+						owner = true;
+					}
+				}
+				
+				// Si owner
+				if (owner)
+				{
+					if(localStorage.sitePage != 'gameConfig')
+					{
+						localStorage.sitePage = 'gameConfig';
+						loadPage('gameConfigView.html');
+					}
+				}
+				
+				// Si pas owner
+				else
+				{
+					if (localStorage.sitePage != 'gameConfigViewer')
+					{
+						sitePage = 'gameConfigViewer';
+						loadPage('gameConfigViewer.html');
+					}
+					else
+					{
+						gameConfigViewer();
+					}
+				}
 			}
 		}
 		// Mode de jeu incorrect
@@ -216,12 +246,15 @@ function process(evt)
 	{
 		$(".game").remove();
 		var text = '';
+		
 		for (var i = 0 ; i < data.games.length ; i++)
 		{
 			text += "<li class='game' onclick='gameJoin(" + data.games[i].room_id + ")'>" + data.games[i].game_name + "</li>";
 		}
+		
 		$("#joinGameView").append(text);
-		if (sitePage == 'joinGame')
+		
+		if (localStorage.sitePage == 'joinGame')
 		{
 			gameList("on_update");
 		}
