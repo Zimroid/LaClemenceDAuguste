@@ -82,7 +82,7 @@ public class IA {
                     case pseudoRandom:
                         m = pseudoRandomMove(b,l);
                         break;
-                    case distribuedRandom:
+                    case distribued:
                         m = distribuedRandomMove(b,l);
                         break;
                     default:
