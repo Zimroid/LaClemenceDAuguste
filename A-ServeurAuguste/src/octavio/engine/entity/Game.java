@@ -109,13 +109,21 @@ public class Game
             {
                 this.actions.remove(l.getAction());
             }
-            a.getLegion().setAction(a);
+            l.setAction(a);
             this.actions.add(a);
             if (this.actions.size() == nbAliveLegions()) 
             {
                 if(this.getListener() != null) this.getListener().onTurnEnd(); // timer.notify();
             }
         }
+    }
+
+    /**
+     * @return the teams
+     */
+    public ArrayList<Team> getTeams()
+    {
+        return teams;
     }
     
     public int nbAliveLegions()
@@ -194,11 +202,10 @@ public class Game
                     if(allPlayersAreBots() && listener!=null) try {
                         Thread.sleep(1000);
                     } catch (InterruptedException ex) {
-                        System.err.println("AllPlayersAreBots Sleep interrupted");
                     }
                     ia.activateBot(p.getBot()).stream().forEach((a) ->
                     {
-                        addAction(a);
+                        synchronized(Game.this) { addAction(a); }
                     });
                 }
             }).start();
@@ -240,8 +247,8 @@ public class Game
             });
             this.actions.clear();
             teamWinsCheck();
+            if(twinner != null) ends = true;
         }
-        
         return ends;
     }
     
@@ -628,6 +635,7 @@ public class Game
                     break;
             }
         }
+        turn();
     }
     
     /**
@@ -955,16 +963,13 @@ public class Game
         {
             if(p1.x > 0)
             {
-                if(p1.x == p2.x+1)
+                if(p1.x == p2.x+1 && p1.y == p2.y)
                 {
-                    if(p1.y == p2.y)
-                    {
                         res = 0;
-                    }
-                    else if(p1.y+1 == p2.y)
-                    {
+                }
+                else if(p1.x == p2.x+1 && p1.y+1 == p2.y)
+                {
                         res = 1;
-                    }
                 }
                 else if(p2.x <= 0)
                 {
@@ -979,7 +984,7 @@ public class Game
                 }
                 else if(p2.x > 0)
                 {
-                    if(p1.y == p2.y)
+                    if(p1.y >= p2.y)
                     {
                         res = 0;
                     }
@@ -997,7 +1002,7 @@ public class Game
                     {
                         res = 0;
                     }
-                    else if(p1.y == p2.y)
+                    else if(p1.y <= p2.y)
                     {
                         res = 1;
                     }
@@ -1005,16 +1010,13 @@ public class Game
             }
             else
             {
-                if(p2.x < 0)
+                if(p1.y <= p2.y)
                 {
-                    if(p1.y == p2.y)
-                    {
-                        res = 1;
-                    }
-                    else if(p1.y > p2.y)
-                    {
-                        res = 0;
-                    }
+                    res = 1;
+                }
+                else if(p1.y > p2.y)
+                {
+                    res = 0;
                 }
             }
         }

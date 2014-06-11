@@ -16,6 +16,7 @@
 
 package octavio.engine.ia;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -44,6 +45,20 @@ public class IA {
     
     // Variables utiles
     private ArrayList<ArrayList<Pawn>> groups;
+    
+    // Weights
+    public final double pawnArrivalWeight(Cell c) {
+        return 5/(double)distance(c,game.getLaurel().getCell());
+    }
+    public final double laurelWeight(Legion l) {
+        return 20.0;
+    }
+    public final double laurelArrivalWeight(Cell c, Cell tent) {
+        return 10/(double)distance(c,tent);
+    } 
+    public final double cartesianWeight(double pawnWeight, double arrivalWeight) {
+        return pawnWeight*arrivalWeight;
+    }
     
     public IA(Game g)
     {
@@ -140,10 +155,15 @@ public class IA {
         RandomCollection movementPoss = getMovePoss(pawnPoss,arrivalPoss);
         
         Movement m = null;
+        boolean ok = false;
         if(movementPoss.getTotal()>0) {
-            m = (Movement) movementPoss.next();
-            //System.out.println("Pawn : " + m.getPawn().getCell().getP() + " - Cell : " + m.getCell().getP());
+            while(!ok) {
+                m = (Movement) movementPoss.next();
+                ok = m.getPawn() != game.getLaurel() || !b.getPlayedLaurel();
+            }
+            
         }
+        else System.out.println(l);
         return m;
     }
     
@@ -163,10 +183,6 @@ public class IA {
         return res;
     }
     
-    private double cartesianWeight(double pawnWeight, double arrivalWeight) {
-        return pawnWeight*arrivalWeight;
-    }
-    
     private HashMap<GroupMovement,Double> getArrivalPoss(Legion l) {
         HashMap<GroupMovement,Double> res = new HashMap<>();
         HashMap<ArrayList<Pawn>, ArrayList<Cell>> poss = movementPossibilities(groups,l);
@@ -175,7 +191,7 @@ public class IA {
         {
             poss.get(group).stream().forEach((c) ->
             {
-                res.put(new GroupMovement(group,c), 1.0);       // TODO : evualuate weight
+                res.put(new GroupMovement(group,c), pawnArrivalWeight(c));       // TODO : evualuate weight
             });
         });
         
@@ -185,7 +201,8 @@ public class IA {
             ArrayList<Cell> ac = game.nearbyEmptyCells(al, false);
             ac.stream().forEach((c) ->
             {
-                res.put(new GroupMovement(al,c), 1.0);          // TODO : evualuate weight
+                Cell tent = game.getBoard().getCell(game.getBoard().getRotatedPosition(new Point(-(game.getBoard().getSize()-1),0), l.getPosition()));
+                res.put(new GroupMovement(al,c), laurelArrivalWeight(c,tent));          // TODO : evualuate weight
             });
         }
         
@@ -201,7 +218,7 @@ public class IA {
         });
         
         if(game.canMoveLaurel(l, game.getLaurel())) {
-            res.put(game.getLaurel(), 100.0);           // TODO : evualuate weight
+            res.put(game.getLaurel(), laurelWeight(l));           // TODO : evualuate weight
         }
         
         return res;
@@ -254,12 +271,27 @@ public class IA {
         return res;
     }
     
-    private int distance(Cell c1, Cell c2) {
-        int x1 = c1.getP().x;
+    public ArrayList<Cell> shortestPath(Cell c1, Cell c2) {
+        ArrayList<Cell> res = new ArrayList<>();
+        Cell temp = c1;
+        
+        while(temp != c2)
+        {
+            temp = game.getCell(temp,game.getOrientation(temp,c2));
+            if(temp == null) System.out.println(c1.getP() + " ; " + c2.getP());
+            res.add(temp);
+        }
+        
+        return res;
+    }
+    
+    public int distance(Cell c1, Cell c2) {
+        /*int x1 = c1.getP().x;
         int y1 = c1.getP().y;
         int x2 = c2.getP().x;
         int y2 = c2.getP().y;
         
-        return Math.abs(x2 - x1) + Math.abs(y2 - y1); // FALSE
+        return Math.abs(x2 - x1) + Math.abs(y2 - y1); // FALSE*/
+        return shortestPath(c1,c2).size();
     }
 }

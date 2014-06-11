@@ -12,6 +12,7 @@ package octavio.tests;
  */
 import java.awt.Point;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 import octavio.engine.entity.Board;
 import octavio.engine.entity.Bot;
@@ -166,15 +167,14 @@ public class AugusteTests {
         int limit = 0;
         while(!end && (limit>0?i<limit:true)) {
             i++;
-            Thread.sleep(10);
-            if(g.applyActions() == false){
+            synchronized(g) { if(g.applyActions() == false){
                 g.nextTurn();
             }
             else {
                 long tt = System.currentTimeMillis() - t;
-                System.out.println("Winner (" + i + " tours en " + (tt-(10*i)) + "ms soit " + (double)(tt-10)/i + "ms/tour) : " + g.getTwinner());
+                System.out.println("Winner (" + i + " tours en " + (tt) + "ms soit " + (double)(tt)/i + "ms/tour) : " + g.getTwinner());
                 end = true;
-            }
+            }}
             showBoard(b);
             //System.in.read();
         }
