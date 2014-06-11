@@ -102,7 +102,7 @@ public class Game
     */
     public void addAction(Action a)
     {
-        if(winner==null)
+        if(twinner==null)
         {
             Legion l = a.getLegion();
             if(l.getAction() != null)
