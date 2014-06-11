@@ -95,8 +95,8 @@ public class IA {
                     case pseudoRandom:
                         m = pseudoRandomMove(b,l);
                         break;
-                    case distribued:
-                        m = distribuedRandomMove(b,l);
+                    case distributed:
+                        m = distributedRandomMove(b,l);
                         break;
                     default:
                         m = pseudoRandomMove(b,l);
@@ -161,7 +161,7 @@ public class IA {
         else return null;
     }
     
-    private Movement distribuedRandomMove(Bot b, Legion l) {
+    private Movement distributedRandomMove(Bot b, Legion l) {
         HashMap<Pawn,Double> pawnPoss = getPawnPoss(l);
         HashMap<GroupMovement,Double> arrivalPoss = getArrivalPoss(l);
         

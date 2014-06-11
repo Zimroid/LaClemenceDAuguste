@@ -157,9 +157,9 @@ public class AugusteTests {
         
         boolean end = false;
         
-        pOne.setBot(new Bot(pOne,Bot.Strategy.distribued));
+        pOne.setBot(new Bot(pOne,Bot.Strategy.distributed));
         pOne.setConnected(false);
-        pTwo.setBot(new Bot(pTwo,Bot.Strategy.distribued));
+        pTwo.setBot(new Bot(pTwo,Bot.Strategy.distributed));
         pTwo.setConnected(false);
         
         long t = System.currentTimeMillis();
