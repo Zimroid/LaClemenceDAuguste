@@ -96,7 +96,7 @@ function process(evt)
 	// Si on nous confirme la création d'une partie
 	// ATTENTION NOM DE COMMANDE NON DEFINITIVE !!!
 	else if(command == "game_confirm")
-	{	
+	{
 		save_game_config = data;
 		// si une partie rapide est lancée
 		if (data.configuration.game_mode == 'fast' && (data.teams[0].players[0].player_user_id != 0) && (data.teams[1].players[0].player_user_id != 0))
@@ -107,7 +107,7 @@ function process(evt)
 		else if (sitePage != 'gameConfig' && sitePage != 'gameConfigViewer')
 		{
 			var owner = false;
-
+			// TODO aucun passage dans cette boucle
 			for (i = 0; i < save_game_users.length; i++)
 			{
 				if (save_game_users[i].user_id == myId && save_game_users[i].is_owner)
@@ -115,7 +115,7 @@ function process(evt)
 					owner = true;
 				}
 			}
-
+			
 			if (owner)
 			{
 				sitePage = 'gameConfig';
@@ -125,7 +125,7 @@ function process(evt)
 			{
 				sitePage = 'gameConfigViewer';
 				reloadContent(sitePath + "/index.php?script=1&page=gameConfigViewer&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
-			}
+			}		
 		}
 		else if(sitePage == 'gameConfigViewer')
 		{
@@ -138,7 +138,7 @@ function process(evt)
 					owner = true;
 				}
 			}
-
+			
 			if (!owner)
 			{
 				gameConfigViewer();
