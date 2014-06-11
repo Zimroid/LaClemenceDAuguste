@@ -26,11 +26,10 @@ function traitementsBoard()
 						{
 							if (save_game_users[l].user_id == save_game_config.teams[i].players[j].player_user_id)
 							{
-								// ● ▲ ■
 								switch (save_game_config.teams[i].players[j].legions[k].legion_shape)
 								{
 									case 'circle':
-										symbol = '●';
+										symbol = '⬢';
 										break;
 									case 'triangle':
 										symbol = '▲';

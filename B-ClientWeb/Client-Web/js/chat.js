@@ -19,8 +19,9 @@ function addMessage(isGameChat)
 	            "message": message
 	        });
 	        $("#messageGame").val("");
+	        last_command = json;
         	sendText(json);
-     		}
+     	}
    	}
    	else if (!isGameChat)
    	{
@@ -34,6 +35,7 @@ function addMessage(isGameChat)
 	            "message": message
 	        });
 	        $("#message").val("");
+	        last_command = json;
         	sendText(json);
        	}
    	}

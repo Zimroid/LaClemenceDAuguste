@@ -9,3 +9,4 @@ var save_game_users = new Array(); // utilisateurs de la partie courante
 var myId = 0; // id du membre connecté
 var myName = ''; // nom du membre connecté
 var inter; // intervalle de temps du timer de la partie courante
+var last_command; // denière commande envoyée côté client

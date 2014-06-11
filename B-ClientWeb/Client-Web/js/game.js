@@ -19,6 +19,7 @@ function gameCreate(arg)
 	        "game_type": type
 	    });
         $("#message").val("");
+        last_command = json;
         sendText(json);
         $('#chatMessagesGame').html("Chat de la partie " + gameName + "<br>Pour participer à de meilleures conversations, merci de rester courtois et d'éviter le langage SMS.");
     }
@@ -33,6 +34,7 @@ function gameStart(room_id)
         
     });
 	sitePage = 'gameStart';
+	last_command = json;
     sendText(json);
 }
 
@@ -87,7 +89,7 @@ function gameConfig()
 					// id du joueur
 					if (parseInt($('#player' + nbrTeam + '_' + nbrPlayer).children("[name='playerName']").val(),10) == 0)
 					{
-						stringJSON += '{"player_user_id":0,"bot":"distribued","legions":[';
+						stringJSON += '{"player_user_id":0,"bot":"distributed","legions":[';
 					}
 					else
 					{
@@ -147,7 +149,7 @@ function gameConfig()
     // envoi de la config
     // alert(stringJSON);
 	var json = stringJSON;
-    
+    last_command = json;
     sendText(json);
 }
 
@@ -305,6 +307,7 @@ function gameList(argument)
             "command": "QUERY_ROOMS"
         });
     }
+    last_command = json;
     sendText(json);
 }
 
@@ -315,7 +318,7 @@ function gameJoin(game)
         "command": "ROOM_JOIN",
         "room_id": game
     });
-    
+    last_command = json;
     sendText(json);
 }
 
@@ -326,7 +329,7 @@ function gameTurnFinish(game)
         "command": "FINISH_TURN",
         "room_id": game
     });
-    
+    last_command = json;
     sendText(json);
 }
 
@@ -348,7 +351,7 @@ function newTeam()
     var selColor = $("<select class='color' class='" + numberTeam + "' onchange='gameConfig();'></select>");
     //options pour la color
     var optColor = $("<option value='#FF0000'>Rouge</option>");
-    var optColor2 = $("<option value='#FFFF00'>Jaune</option>");
+    var optColor2 = $("<option value='#FFCC00'>Jaune</option>");
     if (allTeams.length == 2)
     {
     	var optColor3 = $("<option value='#00FF00'selected>Vert</option>");
@@ -453,7 +456,7 @@ function newLegion(team, player, legion)
     var selForm = $("<select class='pawn' class='" + team + "' onchange='gameConfig();'></select>");
     //options pour le selForm
     var optForm = $("<option value='square'>Carré</option>");
-    var optForm2 = $("<option value='circle'>Cercle</option>");
+    var optForm2 = $("<option value='circle'>Hexagone</option>");
     if (allLegions.length == 2)
 	{
     	var optForm3 = $("<option value='triangle' selected>Triangle</option>");
@@ -468,8 +471,15 @@ function newLegion(team, player, legion)
     var selPosit = $("<select class='position' class='" + team + "' onchange='gameConfig();'></select>");
     //options pour le selPosit
     var optPosit = $("<option value='5'>Gauche</option>");
-	var optPosit2 = $("<option value='4'>Bas gauche</option>");
 	if (allLegions.length == 2)
+	{
+		var optPosit2 = $("<option value='4' selected>Bas gauche</option>");
+	}
+	else
+	{
+		var optPosit2 = $("<option value='4'>Bas gauche</option>");
+	}
+	if (allLegions.length == 3)
 	{
 		var optPosit3 = $("<option value='3' selected>Bas droit</option>");
 	}
@@ -477,14 +487,7 @@ function newLegion(team, player, legion)
 	{
 		var optPosit3 = $("<option value='3'>Bas droit</option>");
 	}
-	if (allLegions.length == 3)
-	{
-		var optPosit4 = $("<option value='2' selected>Droit</option>");
-	}
-	else
-	{
-		var optPosit4 = $("<option value='2'>Droit</option>");
-	}
+	var optPosit4 = $("<option value='2'>Droit</option>");
 	if (allLegions.length == 4)
 	{
 		var optPosit5 = $("<option value='1' selected>Haut droit</option>");

@@ -18,7 +18,7 @@
 				<label>Couleur du pion</label>
 				<select class="color" class="1" onchange="gameConfig();">
 					<option value="#FF0000" selected>Rouge</option>
-					<option value="#FFFF00">Jaune</option>
+					<option value="#FFCC00">Jaune</option>
 					<option value="#00FF00">Vert</option>
 					<option value="#00FFFF">Cyan</option>
 					<option value="#0000FF">Bleu</option>
@@ -36,7 +36,7 @@
 						<label>Forme du pion</label>
 						<select class="pawn" class="1" onchange="gameConfig();">
 							<option value="square" selected>Carré</option>
-							<option value="circle">Cercle</option>
+							<option value="circle">Hexagone</option>
 							<option value="triangle">Triangle</option>
 						</select>
 						<label>Position sur le plateau</label>
@@ -56,7 +56,7 @@
 				<label>Couleur du pion</label>
 				<select class="color" class="1" onchange="gameConfig();">
 					<option value="#FF0000">Rouge</option>
-					<option value="#FFFF00" selected>Jaune</option>
+					<option value="#FFCC00" selected>Jaune</option>
 					<option value="#00FF00">Vert</option>
 					<option value="#00FFFF">Cyan</option>
 					<option value="#0000FF">Bleu</option>
@@ -74,15 +74,15 @@
 						<label>Forme du pion</label>
 						<select class="pawn" class="2" onchange="gameConfig();">
 							<option value="square">Carré</option>
-							<option value="circle" selected>Cercle</option>
+							<option value="circle" selected>Hexagone</option>
 							<option value="triangle">Triangle</option>
 						</select>
 						<label>Position sur le plateau</label>
 						<select class="position" class="2" onchange="gameConfig();">
 							<option value="5">Gauche</option>
-							<option value="4" selected>Bas gauche</option>
+							<option value="4">Bas gauche</option>
 							<option value="3">Bas droit</option>
-							<option value="2">Droit</option>
+							<option value="2" selected>Droit</option>
 							<option value="1">Haut droit</option>
 							<option value="0">Haut gauche</option>
 						</select>

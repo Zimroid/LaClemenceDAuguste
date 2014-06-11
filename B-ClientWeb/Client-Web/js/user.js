@@ -32,7 +32,7 @@ function connexion(bool,us,pa)
 			"user_name": user,
 			"user_password": pass
         });
-
+		last_command = json;
         sendText(json);
     }
     else
@@ -59,7 +59,7 @@ function inscription()
 			"user_name": user,
 			"user_password": pass
         });
-
+		last_command = json;
         sendText(json);
     }
     else if (pass != conf)
@@ -84,7 +84,7 @@ function modifier_nom()
 			"command": "ACCOUNT_EDIT_NAME",
 			"user_name_new": usernew
         });
-
+		last_command = json;
         sendText(json);
     }
     else
@@ -111,7 +111,7 @@ function modifier_pass()
 			"user_password_old": passold,
 			"user_password_new": passnew
         });
-
+		last_command = json;
         sendText(json);
     }
     else if (passnew != passnew2)
@@ -131,6 +131,6 @@ function deconnexion()
 	{
 		"command": "LOG_OUT"
 	});
-
+	last_command = json;
 	sendText(json);
 }

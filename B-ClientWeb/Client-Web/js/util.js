@@ -114,6 +114,7 @@ function redimensionnement()
 }
 // On lie l'événement resize à la fonction
 window.addEventListener('resize', redimensionnement, false);
+redimensionnement()
 
 var keysCodes = new Array();
 function keyPressCodes(e)

@@ -54,6 +54,7 @@ function process(evt)
 		myId = data.user_id;
 		myName = data.user_name;
 		reloadChat(sitePath + "/index.php?script=1&page=connect&user=" + data.user_name);
+		reloadContent(sitePath + "/index.php?script=1&page=news");
 	}
 	
 	// Réception message
@@ -106,31 +107,23 @@ function process(evt)
 		// si une partie normale est lancée
 		else if (sitePage != 'gameConfig' && sitePage != 'gameConfigViewer')
 		{
-			var owner = false;
-			// TODO aucun passage dans cette boucle
-			for (i = 0; i < save_game_users.length; i++)
-			{
-				if (save_game_users[i].user_id == myId && save_game_users[i].is_owner)
-				{
-					owner = true;
-				}
-			}
-			
-			if (owner)
+			var lc = JSON.parse(last_command);
+			if (lc.command == "ROOM_CREATE")
 			{
 				sitePage = 'gameConfig';
 				reloadContent(sitePath + "/index.php?script=1&page=gameConfig&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
 			}
-			else
+			else if (lc.command == "ROOM_JOIN")
 			{
 				sitePage = 'gameConfigViewer';
 				reloadContent(sitePath + "/index.php?script=1&page=gameConfigViewer&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
-			}		
+				gameConfigViewer();
+			}
 		}
 		else if(sitePage == 'gameConfigViewer')
 		{
 			var owner = false;
-
+		
 			for (i = 0; i < save_game_users.length; i++)
 			{
 				if (save_game_users[i].user_id == myId && save_game_users[i].is_owner)
@@ -138,7 +131,7 @@ function process(evt)
 					owner = true;
 				}
 			}
-			
+		
 			if (!owner)
 			{
 				gameConfigViewer();
@@ -159,7 +152,7 @@ function process(evt)
 		// Qu'on soit n'importe où, ou qu'on recharge la page principale pour arriver en jeu (cas pour un nouveau tour, un début de partie voir une reconnexion)
 		reloadContent(sitePath + "/index.php?script=1&page=game");
 		clearInterval(inter);
-		if (data.winner_team && data.winner_legion)
+		if ((typeof(data.winner_team) != "undefined") && (typeof(data.winner_legion) != "undefined"))
 		{
 			if (data.winner_team == -1)
 			{
@@ -167,30 +160,83 @@ function process(evt)
 			}
 			else
 			{
-				var nomteam = '';
+				var nomteam = ''; // noms des joueurs de la team gagnante
 				if (data.winner_legion == -1)
 				{
-					for (var i = 0; i < save_game_users; i++)
+					var tabwinners = new Array();
+					for (var i = 0; i < save_game_config.teams[data.winner_team].players.length; i++)
 					{
-						if (save_game_users[i].user_id == data.winner_team)
+						tabwinners.push(save_game_config.teams[data.winner_team].players[i].player_user_id);
+					}
+					for (var i = 0; i < save_game_users.length; i++)
+					{
+						for (var j = 0; j < tabwinners.length; j++)
 						{
-							nomteam += save_game_users[i].user_name+', ';
+							if (save_game_users[i].user_id == tabwinners[j])
+							{
+								if ((j+1) == tabwinners.length)
+								{
+									nomteam += save_game_users[i].user_name+' ';
+								}
+								else if ((j+2) == tabwinners.length)
+								{
+									nomteam += save_game_users[i].user_name+' et ';
+								}
+								else
+								{
+									nomteam += save_game_users[i].user_name+', ';
+								}
+							}
 						}
 					}
-					alert("Il n'y a plus d'adversaires. La team de " + nomteam + "a gagné.");
+					if (nomteam != '')
+					{
+						alert("Il n'y a plus d'adversaires. La team de " + nomteam + "a gagné.");
+					}
+					else
+					{
+						alert("Il n'y a plus d'adversaires. Une team de bots a gagné.");
+					}
 				}
 				else
 				{
-					for (var i = 0; i < save_game_users; i++)
+					var tabwinners = new Array();
+					for (var i = 0; i < save_game_config.teams[data.winner_team].players.length; i++)
 					{
-						if (save_game_users[i].user_id == data.winner_team)
+						tabwinners.push(save_game_config.teams[data.winner_team].players[i].player_user_id);
+					}
+					for (var i = 0; i < save_game_users.length; i++)
+					{
+						for (var j = 0; j < tabwinners.length; j++)
 						{
-							nomteam += save_game_users[i].user_name+', ';
+							if (save_game_users[i].user_id == tabwinners[j])
+							{
+								if ((j+1) == tabwinners.length)
+								{
+									nomteam += save_game_users[i].user_name+' ';
+								}
+								else if ((j+2) == tabwinners.length)
+								{
+									nomteam += save_game_users[i].user_name+' et ';
+								}
+								else
+								{
+									nomteam += save_game_users[i].user_name+', ';
+								}
+							}
 						}
 					}
-					alert("Le laurier est dans une tente. La team de " + nomteam + "a gagné.");
+					if (nomteam != '')
+					{
+						alert("Le laurier est dans une tente. La team de " + nomteam + "a gagné.");
+					}
+					else
+					{
+						alert("Le laurier est dans une tente. Une team de bots a gagné.");
+					}
 				}
 			}
+			reloadContent(sitePath + "/index.php?script=1&page=news");
 		}
 		else
 		{
@@ -312,6 +358,18 @@ function process(evt)
 					$("[name='playerName']").append(text2);
 				}
 			}
+			var owner = false;
+			for (i = 0; i < save_game_users.length; i++)
+			{
+				if (save_game_users[i].user_id == myId && save_game_users[i].is_owner)
+				{
+					owner = true;
+				}
+			}
+			if (!owner)
+			{
+				gameConfigViewer();
+			}
 		}
 		else if (mode == 'fast' && data.users[1] && myName == data.users[0].user_name)
 		{
@@ -325,6 +383,7 @@ function process(evt)
 			var json = JSON.stringify(save_game_config);
 			sendText(json);
 		}
+		
 	}
 	
 	else
