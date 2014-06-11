@@ -217,9 +217,23 @@ public class Game
         boolean res = true;
         for(Player p : players)
         {
-            if(p.isConnected())
+            if(p.isConnected() && playerHasLegionLeft(p))
             {
                 res = false;
+                break;
+            }
+        }
+        return res;
+    }
+    
+    public boolean playerHasLegionLeft(Player p)
+    {
+        boolean res = false;
+        for(Legion l : p.getLegions())
+        {
+            if(l.getLivingPawns().size() > 0)
+            {
+                res = true;
                 break;
             }
         }
