@@ -83,6 +83,8 @@ public class Room implements GameListener
 
     // Liste des clients affectés au salon
     private final HashMap<Integer, User> users = new HashMap<>();
+    
+    private final ArrayList<User> hasValidated = new ArrayList<>();
 
     /**
      * Instanciation d'un salon avec le nom et l'identifiant donné.
@@ -172,6 +174,14 @@ public class Room implements GameListener
         if (action != null)
         {
             this.game.addAction(action);
+        }
+    }
+    
+    public void validateAction(User user)
+    {
+        if (this.playing.values().contains(user.getId()) && !this.hasValidated.contains(user))
+        {
+            this.game.setActionsValidated(this.game.getActionsValidated() + 1);
         }
     }
 

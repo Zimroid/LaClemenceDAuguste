@@ -16,11 +16,13 @@
 
 package octavio.server.command;
 
+import java.sql.SQLException;
 import octavio.server.Room;
 import octavio.server.Server;
 import octavio.server.User;
 import octavio.server.command.client.AccountCreate;
 import octavio.server.command.client.ChatSend;
+import octavio.server.command.client.FinishTurn;
 import octavio.server.command.client.GameConfiguration;
 import octavio.server.command.client.GameMove;
 import octavio.server.command.client.GameStart;
@@ -38,7 +40,6 @@ import octavio.server.exception.CommandException;
 import octavio.server.exception.InexistantRoomException;
 import octavio.server.exception.NotInThisRoomException;
 import octavio.server.exception.RuleException;
-import java.sql.SQLException;
 import org.java_websocket.WebSocket;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,6 +67,7 @@ public abstract class ClientCommand
             {
                 case ACCOUNT_CREATE:     command = new AccountCreate();     break;
                 case CHAT_SEND:          command = new ChatSend();          break;
+                case FINISH_TURN:        command = new FinishTurn();        break;
                 case GAME_CONFIGURATION: command = new GameConfiguration(); break;
                 case GAME_MOVE:          command = new GameMove();          break;
                 case GAME_START:         command = new GameStart();         break;
@@ -282,6 +284,7 @@ public abstract class ClientCommand
     {
         ACCOUNT_CREATE,
         CHAT_SEND,
+        FINISH_TURN,
         GAME_CONFIGURATION,
         GAME_MOVE,
         GAME_START,
