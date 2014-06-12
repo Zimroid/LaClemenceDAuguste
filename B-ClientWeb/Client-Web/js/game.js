@@ -512,6 +512,7 @@ function newLegion(team, player, legion)
     divLegion.append(pLegion, lblForm, selForm, lblPosit, selPosit);
     if (legion != 1) divLegion.append(DLButton);
     divPlay.append(divLegion);
+    gameConfig();
 }
 
 function dropLegion(idLegion)

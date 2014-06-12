@@ -419,13 +419,16 @@ function oneHundredPercent(first)
 	t.attr('width', t.parent().width());
 	t.attr('height', t.parent().height());
 
-	if(first) {
+	if($("#divZoom").length == 0) {
 		var divZoom = t.parent().clone();
 		divZoom.html('');
 		divZoom.attr('id', "divZoom");
 		divZoom.appendTo(t.parent());
 		t.appendTo(divZoom);
-		divZoom.parent().css('overflow', 'scroll');
+		//divZoom.parent().css('overflow', 'scroll');
+	}
+
+	if(first) {
 		$( window ).resize(function() {
 			t.boardCreate(size, pawns, legions, playerGroup, armor, tent, new Array());
 			//harden();
@@ -476,12 +479,12 @@ function harden()
 				layer: true,
 				fillStyle: '#FFFFFF',
 				strokeStyle: 'black',
-				strokeWidth: 8,
+				strokeWidth: rayon/12,
 				x: coordX,
 				y: coordY,
-				radius: rayon/2,
-				sides: 4,
-				rotate: 0,
+				radius: rayon/5,
+				sides: 6,
+				rotate: 90,
 				click: function(layer) {
 					depEnd = [layer.pawnX-size+1, layer.pawnY-size+1];
 					var json = JSON.stringify(
@@ -501,8 +504,11 @@ function harden()
 		else {
 			pawnX = getXVirtual(coordX, coordY);
 			pawnY = getYVirtual(coordX, coordY, pawnX);
+			//var color = t.getLayer((pawnX+','+pawnY)).fillStyle;
 			t.setLayer(pawnX+','+pawnY, {
-				strokeWidth: 8,
+				strokeWidth: rayon/4,
+				//strokeStyle: color, 
+				//fillStyle: 'black',
 				hard: true
 			}).drawLayers();
 		}
@@ -1020,27 +1026,38 @@ jQuery.fn.extend({
 			if(jQuery.inArray(move[i][3] +','+ move[i][4], armorComp) != -1) {
 
 				//On supprime l'armure
+				var coliDetect = false;
 				for(var k = 0; k < armor.length; k++)
 				{
 					if(move[i][3]+','+move[i][4] == armor[k][0]+','+armor[k][1]) {
-						armor[k][2] = true;
+						if(!coliDetect) {
+							coliDetect = true;
+							armor[k][2] = true;
+						}
+						else {
+							armor[k][2] = false;
+							k = armor.length;
+						}
 					}
 				}
 				//alert([move[i][3], move[i][4], false] + ' => ' + armor);
-
-				t.removeLayer((move[i][3]+size-1)+','+(move[i][4]+size-1+'armor'));
+				if(!coliDetect) {
+					t.removeLayer((move[i][3]+size-1)+','+(move[i][4]+size-1+'armor'));
+				}
 				//si le pion est détruit
 				if(move[i][0]) {
+					//var color = t.getLayer((move[i][1]+size-1)+','+(move[i][2]+size-1)).fillStyle;
 					t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), {
-					  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1, strokeWidth: 8, radius: 0
+					  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1, strokeWidth: rayon/4, radius: 0//, strokeStyle: color, fillStyle: 'black'
 					}, 1000,
 					function(layer) {
 						//harden();
 					});
 				}
 				else {
+					//var color = t.getLayer((move[i][1]+size-1)+','+(move[i][2]+size-1)).fillStyle;
 					t.animateLayer((move[i][1]+size-1)+','+(move[i][2]+size-1), {
-					  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1, strokeWidth: 8
+					  x: coord[0], y: coord[1], pawnX: move[i][3]+size-1, pawnY: move[i][4]+size-1, strokeWidth: rayon/4//, strokeStyle: color, fillStyle: 'black'
 					}, 1000,
 					function(layer) {
 						//harden();
@@ -1100,7 +1117,10 @@ jQuery.fn.extend({
 				if(armor[j][0] == move[i][1] && armor[j][1] == move[i][2]) {
 					//si le pion est détruit
 					if(move[i][0]) {
-						armor.splice(j, 1);
+						//on supprime l'armure que si elle est prise
+						if(armor[i][2]) {
+							armor.splice(j, 1);
+						}
 					}
 					else {
 						armor[j] = [move[i][3], move[i][4], armor[j][2]];
