@@ -54,14 +54,14 @@ public class IA {
         return Math.exp(game.getBoard().getSize()/(double)distance(c,game.getLaurel().getCell()));
     }
     public double laurelWeight(Legion l) {
-        return 2000;
+        return l.getLivingPawns().size()*400;
     }
     public double laurelArrivalWeight(Legion l, Cell c) {
         Laurel lau = game.getLaurel();
         Cell tent = legionsTent(l);
         double cellToTent = (double)distance(c,tent);
         double laurelToTent = (double)distance(lau.getCell(),tent);
-        return Math.exp(laurelToTent-cellToTent);
+        return Math.exp(laurelToTent-cellToTent*2);
     }
     
     public final double cartesianWeight(double pawnWeight, double arrivalWeight) {
