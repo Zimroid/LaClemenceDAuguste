@@ -118,10 +118,6 @@ public class Game
             l.setAction(a);
             this.actions.add(a);
             if(bot) actionsValidated++;
-            if (actionsValidated == nbAliveLegions()) 
-            {
-                if(this.getListener() != null) this.getListener().onTurnEnd(); // timer.notify();
-            }
         }
     }
 
@@ -139,6 +135,10 @@ public class Game
     public void setActionsValidated(int actionsValidated)
     {
         this.actionsValidated = actionsValidated;
+        if (actionsValidated >= nbAliveLegions()) 
+        {
+            if(this.getListener() != null) this.getListener().onTurnEnd(); // timer.notify();
+        }
     }
 
     /**
