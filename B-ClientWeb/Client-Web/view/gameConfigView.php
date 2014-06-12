@@ -100,9 +100,9 @@
 	}
 	else if (isset($_GET['mode']) && ($_GET['mode'] == 'fast'))
 	{
-?>
-<h2>En attente d'un joueur ...</h2>
-<input title='Type de partie' type="hidden" id="type_game" value='fast'>
-<?php
+		?>
+		<h2>En attente d'un joueur ...</h2>
+		<input title='Type de partie' type="hidden" id="type_game" value='fast'>
+		<?php
 	}
 ?>
