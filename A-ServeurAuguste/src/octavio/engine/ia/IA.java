@@ -54,7 +54,7 @@ public class IA {
         return Math.exp(game.getBoard().getSize()/(double)distance(c,game.getLaurel().getCell()));
     }
     public double laurelWeight(Legion l) {
-        return l.getLivingPawns().size()*400;
+        return l.getLivingPawns().size()*1000;
     }
     public double laurelArrivalWeight(Legion l, Cell c) {
         Laurel lau = game.getLaurel();
