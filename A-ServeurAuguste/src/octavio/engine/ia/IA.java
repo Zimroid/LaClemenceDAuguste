@@ -51,10 +51,10 @@ public class IA {
         return 1.0;
     }
     public double pawnArrivalWeight(Cell c) {
-        return Math.exp(game.getBoard().getSize()/(double)distance(c,game.getLaurel().getCell()));
+        return Math.pow(game.getBoard().getSize()/(double)distance(c,game.getLaurel().getCell()),2);
     }
     public double laurelWeight(Legion l) {
-        return Math.pow(game.getBoard().getSize(),3)*nbUneplayedLegionsAroundLaurel(l)>1?10:100;
+        return Math.pow(game.getBoard().getSize(),3)*nbUneplayedLegionsAroundLaurel(l)>1?100:1000;
     }
     public double laurelArrivalWeight(Legion l, Cell c) {
         Laurel lau = game.getLaurel();
