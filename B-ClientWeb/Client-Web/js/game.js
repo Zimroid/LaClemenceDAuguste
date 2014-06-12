@@ -261,9 +261,9 @@ function gameConfigViewer()
                 var divLegion = $('<div name="legion" id="legion"' + (i + 1) + '_' + (j + 1) + '_' + (k + 1) + '"></div>');
                 var spLegion = $('<span>Légion ' + (k + 1) + '</span>');
                 var lblPawn = $('<label>Forme du pion</label>');
-                var inpPawn = $('<input type="text" class="pawn" class="1" onchange="gameConfig();" value="' + forme + '" disabled/>')
+                var inpPawn = $('<input type="text" class="pawn" class="1" onchange="gameConfig();" value="' + forme + '" disabled/>');
                 var lblPosit = $('<label>Position sur le plateau</label>');
-                var inpPosit = $('<input type="text" class="position" class="1" onchange="gameConfig();" value="' + position + '" disabled/>')
+                var inpPosit = $('<input type="text" class="position" class="1" onchange="gameConfig();" value="' + position + '" disabled/>');
 
                 inpColor.val(couleur);
                 divLegion.append(spLegion, lblPawn, inpPawn, lblPosit, inpPosit);
