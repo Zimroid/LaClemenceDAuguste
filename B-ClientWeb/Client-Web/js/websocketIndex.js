@@ -120,6 +120,7 @@ function process(evt)
 			{
 				sitePage = 'gameConfig';
 				reloadContent(sitePath + "/index.php?script=1&page=gameConfig&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
+				gameConfig();
 			}
 			else if (lc.command == "ROOM_JOIN")
 			{
