@@ -26,6 +26,7 @@ function process(evt)
 				myId = '';
 				myName = '';
 				reloadChat(sitePath + "/index.php?script=1&page=deconnect");
+				reloadContent(sitePath + "/index.php?script=1&page=news");
 				break;
 			case 'must_be_logged':
 				reloadContent(sitePath + "/index.php?script=1&page=subscribe");
@@ -154,9 +155,10 @@ function process(evt)
 		clearInterval(inter);
 		if ((typeof(data.winner_team) != "undefined") && (typeof(data.winner_legion) != "undefined"))
 		{
+			var messagewin = '';
 			if (data.winner_team == -1)
 			{
-				alert("Match nul.");
+				messagewin = "Match nul.";
 			}
 			else
 			{
@@ -191,11 +193,11 @@ function process(evt)
 					}
 					if (nomteam != '')
 					{
-						alert("Il n'y a plus d'adversaires. La team de " + nomteam + "a gagné.");
+						messagewin = "Il n'y a plus d'adversaires. La team de " + nomteam + "a gagné.";
 					}
 					else
 					{
-						alert("Il n'y a plus d'adversaires. Une team de bots a gagné.");
+						messagewin = "Il n'y a plus d'adversaires. Une team de bots a gagné.";
 					}
 				}
 				else
@@ -228,15 +230,15 @@ function process(evt)
 					}
 					if (nomteam != '')
 					{
-						alert("Le laurier est dans une tente. La team de " + nomteam + "a gagné.");
+						messagewin = "Le laurier est dans une tente. La team de " + nomteam + "a gagné.";
 					}
 					else
 					{
-						alert("Le laurier est dans une tente. Une team de bots a gagné.");
+						messagewin = "Le laurier est dans une tente. Une team de bots a gagné.";
 					}
 				}
 			}
-			reloadContent(sitePath + "/index.php?script=1&page=news");
+			alert(messagewin);
 		}
 		else
 		{
