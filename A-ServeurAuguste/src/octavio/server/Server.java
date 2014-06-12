@@ -393,6 +393,7 @@ public class Server extends WebSocketServer
         // Suppression des liens entre l'utilisateur et le salon
         user.getRooms().remove(room.getId());
         room.getUsers().remove(user.getId());
+        room.setBotForPlayer(user);
         room.updateUsers();
         
         // Suppression du salon si nécessaire

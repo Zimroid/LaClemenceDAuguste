@@ -134,7 +134,7 @@ public class Room implements GameListener
         {
             this.state = State.RUNNING;
             this.game = new Game(this, this.configuration.getLong("game_turn_duration"));
-            //this.game.setTurnDuration(this.configuration.getLong("game_turn_duration"));
+            this.game.setTurnDuration(this.configuration.getLong("game_turn_duration"));
             this.game.setBoard(new Board(this.configuration.getInt("game_board_size")));
             for (Player player : this.playing.keySet())
             {
@@ -540,6 +540,7 @@ public class Room implements GameListener
 
                 // Instanciation de l'équipe
                 Team newTeam = new Team();
+                newTeam.setNum(iTeam);
                 this.teams.add(newTeam);
 
                 // Ajout des joueurs
@@ -556,14 +557,21 @@ public class Room implements GameListener
                     // Attribution du joueur à l'utilisateur
                     if (playerData.has("bot"))
                     {
-                        Bot.Strategy strategy = playerData.getString("bot").equals("distribued") ? Bot.Strategy.distributed : Bot.Strategy.pseudoRandom;
-                        newPlayer.setBot(new Bot(newPlayer, strategy));
+                        try
+                        {
+                            newPlayer.setBot(new Bot(newPlayer, Bot.Strategy.valueOf(playerData.getString("bot"))));
+                        }
+                        catch (RuntimeException e)
+                        {
+                            newPlayer.setBot(new Bot(newPlayer, Bot.Strategy.distributed));
+                        }
                         newPlayer.setConnected(false);
                         this.playing.put(newPlayer, 0);
                     }
                     else
                     {
                         int userId = playerData.getInt("player_user_id");
+                        newPlayer.setBot(new Bot(newPlayer, Bot.Strategy.distributed));
                         if (this.getUsers().containsKey(userId))
                         {
                             //throw new NotInThisRoomException(this, userId);
@@ -585,6 +593,17 @@ public class Room implements GameListener
                         newPlayer.addLegion(newLegion);
                     }
                 }
+            }
+        }
+    }
+
+    public void setBotForPlayer(User user)
+    {
+        for (Entry<Player, Integer> entry : this.playing.entrySet())
+        {
+            if (entry.getValue() == user.getId())
+            {
+                entry.getKey().setConnected(false);
             }
         }
     }

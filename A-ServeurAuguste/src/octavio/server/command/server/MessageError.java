@@ -22,20 +22,21 @@ import org.json.JSONException;
 
 /**
  * Commande de signalisation qu'une erreur est survenue.
- * 
+ *
  * @author Lzard
  */
 public class MessageError extends ServerCommand
 {
     /**
      * Remplit le JSON avec le type d'erreur.
+     *
      * @param type Type de l'erreur
      */
     public MessageError(String type)
     {
         // Constructeur de la classe mère
         super("message_error");
-        
+
         // Création du JSON
         try
         {
@@ -46,21 +47,27 @@ public class MessageError extends ServerCommand
             Log.debug(e);
         }
     }
+
     public MessageError(String type, Exception ex)
     {
         // Constructeur de la classe mère
         super("message_error");
-        
+
         // Création du JSON
         try
         {
             this.getJSON().put("type", type);
-            this.getJSON().put("exception", ex.toString() + ":" + ex.getMessage());
+            this.getJSON().put(
+                    "exception",
+                    ex.getClass().getSimpleName() + ": "
+                    + ex.getMessage()
+                    + Log.getStackTraceString(ex)
+            );
         }
         catch (JSONException e)
         {
             Log.debug(e);
         }
     }
-    
+
 }
