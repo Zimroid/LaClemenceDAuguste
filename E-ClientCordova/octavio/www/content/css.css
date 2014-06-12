@@ -1,3 +1,38 @@
+html, body, #container {
+	width:100%;
+	height:100%;
+	margin:0px;
+}
+
+#valid {
+	width:100%;
+	display: block-inline;
+	background-color: #448844;
+}
+
+#chatSend {
+	height: 20%;
+	width: 100%;
+}
+
+#chatMessages {
+	height: 80%;
+	width: 100%;
+	overflow: scroll;
+}
+
+#message {
+	width:100%;
+	display: block;
+	margin: auto;
+	height: 80%;
+	resize: none;
+}
+
+#chatSend > #valid {
+	height: 20%;
+}
+
 #chat
 {
 	height : 100%;
@@ -16,4 +51,70 @@
 .chat_visible
 {
 	display : block;
+}
+
+#logo {
+	height: 8em;
+}
+
+#logo > img {
+	display: block;
+	margin: auto;
+	margin-top: 3em;
+}
+
+#octaFr, #autreServeur, #inscriptionBtn {
+	display: block;
+	margin: auto;
+	margin-top: 3.5em;
+	width: 80%;
+	height: 4em;
+	text-align: center;
+}
+
+.textalign, #titleConnection, #inscriptionTitle, #createPartie, #joinPartieTitle, #partieDispoTitle{
+	display: block;
+	text-align: center;
+	width: 100%;
+	margin: auto;
+}
+
+#createPartie , #joinPartieTitle, #partieDispoTitle{
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+#changeServeur, #connect, #inscript, #partieNormalBtn, #partieRapideBtn , #joinGameBtn, #searchServerBtn{
+	display: block;
+	margin: auto;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	width: 80%;
+	height: 4em;
+	text-align: center;
+}
+
+#userName, #userPass, #userSubscribe, #passwordSubscribe, #confirmSubscribe, #gameName , #refresh, #iId, #pId{
+	display: block;
+	margin: auto;
+	width: 80%;
+	height: 2em;
+	text-align: center;
+}
+
+#deco, #chatShow, #returnBtn{
+	width: 49%;
+	height: 3em;
+}
+
+#chatShow {
+	position: absolute;
+	right: 0px;
+}
+
+#separation {
+	width: 80%;
+	height: 2px;
+	background-color: #999999;
+	margin: auto;
 }

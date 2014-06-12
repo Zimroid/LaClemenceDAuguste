@@ -1,7 +1,9 @@
-<button onclick="loadPage('lobbyView.html')">Retour au lobby</button>
-<h2>Liste des parties disponibles :</h2>
+<button id="returnBtn" onclick="loadPage('lobbyView.html')">Retour au lobby</button>
+<button id="chatShow" onclick="$('#chat').attr('class', 'chat_visible');">Chat</button>
+
+<h2 id="partieDispoTitle">Liste des parties disponibles :</h2>
 
 <ul id="joinGameView">
-	<p>Cliquez sur le nom d'une partie pour la rejoindre.</p>
-	<input title='Rafraîchir' type="button" value="Rafraîchir" onclick="gameList()">
+	<p class="textalign" >Cliquez sur le nom d'une partie pour la rejoindre.</p>
+	<input id="refresh" title='Rafraîchir' type="button" value="Rafraîchir" onclick="gameList()">
 </ul>

@@ -1,12 +1,13 @@
-<button onClick="deconnexion();">Deconnexion</button>
-<button onclick="$('#chat').attr('class', 'chat_visible');">Chat</button>
+<button id="deco" onClick="deconnexion();">Deconnexion</button>
+<button id="chatShow" onclick="$('#chat').attr('class', 'chat_visible');">Chat</button>
 
-<h2>Création d'une nouvelle partie</h2>
+<h2 id="createPartie">Créer une partie</h2>
 
-<label for="gameName">Nom de la partie : </label>
-<input type="text" name="gameName" id="gameName" onkeypress="if (event.keyCode == 13) gameCreate('')" />
-<button onclick="gameCreate('')" >Partie normale</button>
-<button onclick="gameCreate('defaut')" >Partie rapide</button>
+<input type="text" name="gameName" id="gameName" onkeypress="if (event.keyCode == 13) gameCreate('')" placeholder="Nom de la partie" />
+<button id="partieNormalBtn" onclick="gameCreate('')" >Partie normale</button>
+<button id="partieRapideBtn" onclick="gameCreate('defaut')" >Partie rapide</button>
 
-<h2>Rejoindre une partie</h2>
-<button onclick="loadPage('joinGameView.html'); gameList();" >Rejoindre une partie</button>
+<div id="separation"></div>
+
+<h2 id="joinPartieTitle" >Rejoindre une partie</h2>
+<button id="joinGameBtn" onclick="loadPage('joinGameView.html'); gameList();" >Rejoindre une partie</button>

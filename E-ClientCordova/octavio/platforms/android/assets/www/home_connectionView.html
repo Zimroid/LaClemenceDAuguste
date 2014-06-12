@@ -5,15 +5,14 @@
 </div>
 
 <div id='formView'>
-	<h2 id=titleConnection">Connexion</h2>
+	<h2 id="titleConnection">Connexion</h2>
 
-	<button onclick="loadPage('home_onlineChoiceView.html')">Changer de serveur</button>
-	<br/>
+	<button id="changeServeur" onclick="loadPage('home_onlineChoiceView.html')">Changer de serveur</button>
 	<!-- Connexion -->
 	<input title='Pseudo' type="text" name="user" id="userName" placeholder="Desmu" onkeypress="if (event.keyCode == 13) connexion(true)" />
 	<input title='Mot de passe' type="password" name="password" id="userPass" placeholder="motdepasse" onkeypress="if (event.keyCode == 13) connexion(true)" />
-	<input id="connect" title='Connexion' type="button" value="Me connecter" onclick="connexion(true);" /><br>
+	<input id="connect" title='Connexion' type="button" value="Me connecter" onclick="connexion(true);" />
 	
 	<!-- Inscription (redirection) -->
-	<button onclick="loadPage('home_subscribeView.html')">Inscription</button>
+	<button id="inscriptionBtn" onclick="loadPage('home_subscribeView.html')">Inscription</button>
 </div>

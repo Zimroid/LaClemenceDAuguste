@@ -2,33 +2,19 @@
 
 <div id='logo'>
 	<img src="ressources/logo100.png"/>
-	<br/>
 </div>
 
 <!-- Inscription -->
 <div id='formView'>
-	<h2>Inscription</h2>
+	<h2 id="inscriptionTitle">Inscription</h2>
 	
-	<button onclick="loadPage('home_onlineChoiceView.html');">Changer de serveur</button>
-	<br/>
+	<button id="changeServeur" onclick="loadPage('home_onlineChoiceView.html');">Changer de serveur</button>
 	
-	<label for="userSubscribe">Pseudo : </label>
 	<input type="text" name="userSubscribe" id="userSubscribe" placeholder="Pseudo" onkeypress="if (event.keyCode == 13) inscription()">
-	<br/>
 	
-	<label for="passwordSubscribe">Mot de passe : </label>
 	<input type="password" name="passwordSubscribe" id="passwordSubscribe" placeholder="Mot de passe" onkeypress="if (event.keyCode == 13) inscription()">
-	<br/>
 	
-	<label for="confirmSubscribe">Confirmation : </label>
-	<input type="password" name="confSubscribe" id="confirmSubscribe" placeholder="Confirmation" onkeypress="if (event.keyCode == 13) inscription()">
-	<br/>
+	<input type="password" name="confSubscribe" id="confirmSubscribe" placeholder="Confirmation de mot de passe" onkeypress="if (event.keyCode == 13) inscription()">
 	
-	<input title='Inscription' type="button" value="Inscription" onclick="inscription();" />
-		
-	<p>
-	Ajouter vérification :
-	- disponibilité username
-	- compléxité mot de passe ...
-	</p>
+	<input id="inscript" title='Inscription' type="button" value="Inscription" onclick="inscription();" />
 </div>
