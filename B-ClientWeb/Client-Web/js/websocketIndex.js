@@ -367,6 +367,7 @@ function process(evt)
 					$("[name='playerName']").append(text2);
 				}
 			}
+
 			var owner = false;
 			for (i = 0; i < save_game_users.length; i++)
 			{
@@ -375,7 +376,8 @@ function process(evt)
 					owner = true;
 				}
 			}
-			if (!owner)
+			console.log(sitePage);
+			if (!owner && sitePage == 'gameConfigViewer')
 			{
 				gameConfigViewer();
 			}
