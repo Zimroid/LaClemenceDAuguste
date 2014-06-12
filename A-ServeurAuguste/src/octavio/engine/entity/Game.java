@@ -135,7 +135,7 @@ public class Game
     public void setActionsValidated(int actionsValidated)
     {
         this.actionsValidated = actionsValidated;
-        if (actionsValidated >= nbAliveLegions()) 
+        if (this.actionsValidated >= nbAliveLegions()) 
         {
             if(this.getListener() != null) this.getListener().onTurnEnd(); // timer.notify();
         }
