@@ -52,54 +52,55 @@ import org.json.JSONObject;
  * Classe représentant une instance de salon de jeu. Gère la configuration de la
  * future partie, les modifications du propriétaire du salon et le lancement de
  * la partie.
- * 
+ *
  * La configuration de la partie est stockée dans un objet JSON qui est lu et
  * retransmis aux différents utilisateurs. Lors de la réception d'une commande
  * game_start, la partie est crée et configurée en fonction de cet objet JSON.
- * 
+ *
  * L'évolution de la partie et la communication de son avancement est gérée par
  * le salon. Les informations sont transmises à tous les utilisateurs.
- * 
+ *
  * Les utilisateurs présents dans la salle ou non sont gérés par l'instance
  * courante de Server.
- * 
+ *
  * @author Lzard
  */
 public class Room implements GameListener
 {
     // Identifiant du salon
     private final int id;
-    
-    private User   owner; // Propriétaire du salon
-    private State  state; // Etat de la partie
-    private Game   game;  // Partie du salon
-    
+
+    private User owner; // Propriétaire du salon
+    private State state; // Etat de la partie
+    private Game game;  // Partie du salon
+
     // Configuration de la partie
-    private final JSONObject configuration = new JSONObject(); 
-    
+    private final JSONObject configuration = new JSONObject();
+
     // Listes des joueurs et des équipes
     private final HashMap<Player, Integer> playing = new HashMap<>();
-    private final ArrayList<Team>          teams   = new ArrayList<>();
-    
+    private final ArrayList<Team> teams = new ArrayList<>();
+
     // Liste des clients affectés au salon
     private final HashMap<Integer, User> users = new HashMap<>();
-    
+
     /**
      * Instanciation d'un salon avec le nom et l'identifiant donné.
+     *
      * @param id   Identifiant du salon
      * @param name Nom du salon
      */
     public Room(int id, String name)
     {
         // Initialisation des attributs
-        this.id   = id;
+        this.id = id;
         this.state = State.WAITING;
-        
+
         // Paramètrage de la configuration par défaut
         try
         {
-            this.configuration.put("game_name",          name                                               );
-            this.configuration.put("game_board_size",    Configuration.getInt ("game_default_board_size"   ));
+            this.configuration.put("game_name", name);
+            this.configuration.put("game_board_size", Configuration.getInt("game_default_board_size"));
             this.configuration.put("game_turn_duration", Configuration.getLong("game_default_turn_duration"));
             this.configuration.put("game_mode", "normal");
         }
@@ -108,18 +109,23 @@ public class Room implements GameListener
             Log.debug(e);
         }
     }
-    
+
     /**
      * Envoi d'un message à tous les utilisateurs présents dans le salon.
+     *
      * @param message Message à envoyer
      */
     public void broadcast(String message)
     {
-        for (User user : this.users.values()) Server.getInstance().send(user.getSocket(), message);
+        for (User user : this.users.values())
+        {
+            Server.getInstance().send(user.getSocket(), message);
+        }
     }
-    
+
     /**
      * Effectue le lancement de la partie.
+     *
      * @throws org.json.JSONException
      */
     public void start() throws JSONException
@@ -130,16 +136,20 @@ public class Room implements GameListener
             this.game = new Game(this, this.configuration.getLong("game_turn_duration"));
             //this.game.setTurnDuration(this.configuration.getLong("game_turn_duration"));
             this.game.setBoard(new Board(this.configuration.getInt("game_board_size")));
-            for (Player player : this.playing.keySet()) this.game.addPlayer(player);
+            for (Player player : this.playing.keySet())
+            {
+                this.game.addPlayer(player);
+            }
             this.game.initBoard();
             this.broadcast((new GameTurn(this, true)).toString());
         }
     }
-    
+
     /**
      *
      * @param user
      * @param json
+     *
      * @throws org.json.JSONException
      */
     public void addAction(User user, JSONObject json) throws JSONException
@@ -158,10 +168,13 @@ public class Room implements GameListener
                 }
             }
         }
-        
-        if (action != null) this.game.addAction(action);
+
+        if (action != null)
+        {
+            this.game.addAction(action);
+        }
     }
-    
+
     /**
      * Gère la fin d'un tour de jeu.
      */
@@ -170,10 +183,11 @@ public class Room implements GameListener
     {
         this.broadcast((new GameTurn(this, false)).toString());
     }
-    
+
     /**
      *
      * @param json
+     *
      * @throws org.json.JSONException
      */
     public void addTurnData(JSONObject json) throws JSONException
@@ -193,14 +207,20 @@ public class Room implements GameListener
                 legionData.put("legion_id", legion.getPosition());
                 legionData.put("legion_shape", legion.getShape());
                 legionData.put("legion_color", legion.getColor());
-                if (this.playing.get(legion.getPlayer()) == 0) legionData.put("legion_owner", "Bot");
-                else legionData.put("legion_owner", this.users.get(this.playing.get(legion.getPlayer())).getName());
+                if (this.playing.get(legion.getPlayer()) == 0)
+                {
+                    legionData.put("legion_owner", "Bot");
+                }
+                else
+                {
+                    legionData.put("legion_owner", this.users.get(this.playing.get(legion.getPlayer())).getName());
+                }
                 legions.put(legionData);
             }
         }
         informations.put("legions", legions);
         json.put("informations", informations);
-        
+
         // Ajout du plateau
         JSONArray boardData = new JSONArray();
         JSONObject cellData;
@@ -212,7 +232,7 @@ public class Room implements GameListener
                 cellData.put("u", cell.getP().getX());
                 cellData.put("w", cell.getP().getY());
                 cellData.put("type", cell.getPawn().getClass().getSimpleName().toLowerCase());
-                
+
                 if (cell.getTent() != null)
                 {
                     cellData.put("tent_color", cell.getTent().getColor());
@@ -241,20 +261,12 @@ public class Room implements GameListener
             }
         }
         json.put("board", boardData);
-        
+
         // Application des actions et ajout du prochain timeout
         json.put("turn_timeout", (new Date((new Date()).getTime() + this.configuration.getLong("game_turn_duration"))).getTime());
-        
-        boolean ends = false;
-        try 
-        {
-            ends = this.game.applyActions();
-        }
-        catch (InterruptedException e)
-        {
-            
-        }
-        
+
+        boolean ends = this.game.applyActions();
+
         // Ajout des déplacements
         JSONArray movesData = new JSONArray();
         JSONObject moveData;
@@ -269,7 +281,7 @@ public class Room implements GameListener
             movesData.put(moveData);
         }
         json.put("moves", movesData);
-        
+
         // Ajout des tenailles
         JSONArray tenaillesData = new JSONArray();
         JSONObject tenailleData;
@@ -283,7 +295,7 @@ public class Room implements GameListener
             tenaillesData.put(tenailleData);
         }
         json.put("tenailles", tenaillesData);
-        
+
         // Ajout des combats
         JSONArray battlesData = new JSONArray();
         JSONObject battleData;
@@ -302,22 +314,40 @@ public class Room implements GameListener
             battlesData.put(battleData);
         }
         json.put("battles", battlesData);
-        
+
         if (ends)
         {
-            if (this.game.getTwinner() != null) json.put("winner_team", this.game.getTwinner().getNum());
-            else json.put("winner_team", -1);
-            if (this.game.getWinner() != null) json.put("winner_legion", this.game.getWinner().getPosition());
-            else json.put("winner_legion", -1);
+            if (this.game.getTwinner() != null)
+            {
+                json.put("winner_team", this.game.getTwinner().getNum());
+            }
+            else
+            {
+                json.put("winner_team", -1);
+            }
+            if (this.game.getWinner() != null)
+            {
+                json.put("winner_legion", this.game.getWinner().getPosition());
+            }
+            else
+            {
+                json.put("winner_legion", -1);
+            }
             this.game.getTimer().cancel();
             this.game.getTimer().purge();
         }
-        
-        // Début du prochain tour
-        this.game.nextTurn();
-    }/**
+        else
+        {
+
+            // Début du prochain tour
+            this.game.nextTurn();
+        }
+    }
+
+    /**
      *
      * @param json
+     *
      * @throws org.json.JSONException
      */
     public void addInitialTurnData(JSONObject json) throws JSONException
@@ -337,14 +367,20 @@ public class Room implements GameListener
                 legionData.put("legion_id", legion.getPosition());
                 legionData.put("legion_shape", legion.getShape());
                 legionData.put("legion_color", legion.getColor());
-                if (this.playing.get(legion.getPlayer()) == 0) legionData.put("legion_owner", "Bot");
-                else legionData.put("legion_owner", this.users.get(this.playing.get(legion.getPlayer())).getName());
+                if (this.playing.get(legion.getPlayer()) == 0)
+                {
+                    legionData.put("legion_owner", "Bot");
+                }
+                else
+                {
+                    legionData.put("legion_owner", this.users.get(this.playing.get(legion.getPlayer())).getName());
+                }
                 legions.put(legionData);
             }
         }
         informations.put("legions", legions);
         json.put("informations", informations);
-        
+
         // Ajout du plateau
         JSONArray boardData = new JSONArray();
         JSONObject cellData;
@@ -356,7 +392,7 @@ public class Room implements GameListener
                 cellData.put("u", cell.getP().getX());
                 cellData.put("w", cell.getP().getY());
                 cellData.put("type", cell.getPawn().getClass().getSimpleName().toLowerCase());
-                
+
                 if (cell.getTent() != null)
                 {
                     cellData.put("tent_color", cell.getTent().getColor());
@@ -385,34 +421,39 @@ public class Room implements GameListener
             }
         }
         json.put("board", boardData);
-        
-        
+
     }
-    
+
     /**
      * Retourne l'identifiant du salon.
+     *
      * @return Identifiant du salon
      */
     public int getId()
     {
         return this.id;
     }
-    
+
     /**
      * Modifie le propriétaire du salon.
+     *
      * @param user Nouveau propriétaire
+     *
      * @throws NotInThisRoomException Utilisateur absent du salon
      */
     public void setOwner(User user) throws NotInThisRoomException
     {
         synchronized (this.users)
         {
-            if (!this.users.containsValue(user)) throw new NotInThisRoomException(this, user);
+            if (!this.users.containsValue(user))
+            {
+                throw new NotInThisRoomException(this, user);
+            }
             this.owner = user;
             this.updateUsers();
         }
     }
-    
+
     /**
      * Modifie le propriétaire du salon. Sélectionne un utilisateur au hasard
      * parmis les utilisateurs du salon.
@@ -426,7 +467,7 @@ public class Room implements GameListener
                 Object[] ids = this.users.keySet().toArray();
                 this.setOwner(
                         this.users.get(
-                                (Integer) ids[(new Random()).nextInt(ids.length)]
+                                (Integer)ids[(new Random()).nextInt(ids.length)]
                         )
                 );
             }
@@ -436,47 +477,53 @@ public class Room implements GameListener
             }
         }
     }
-    
+
     /**
      * Indique si l'utilisateur donné est le propriétaire du salon.
+     *
      * @param user Utilisateur à vérifier
+     *
      * @return Utilisateur propriétaire
      */
     public boolean isOwner(User user)
     {
         return user == this.owner;
     }
-    
+
     /**
      * Retourne l'état de la partie.
+     *
      * @return Etat de la partie
      */
     public State getState()
     {
         return this.state;
     }
-    
+
     /**
      * Modifie l'état de la partie.
+     *
      * @param state Nouvel état
      */
     public void setState(State state)
     {
         this.state = state;
     }
-    
+
     /**
      * Configure la partie avec les paramètres du JSON fourni.
+     *
      * @param json JSON à lire
+     *
      * @throws JSONException JSON éronné
      */
     public void setConfiguration(JSONObject json) throws JSONException, NotInThisRoomException
     {
         // Configuration de la partie
         //this.configuration.put("game_name",          json.getString("game_name"         ));
-        this.configuration.put("game_board_size",    json.getInt   ("game_board_size"   ));
-        this.configuration.put("game_turn_duration", json.getLong  ("game_turn_duration"));
-        this.configuration.put("game_mode", json.getString  ("game_mode"));
+        this.configuration.put("game_board_size", json.getInt("game_board_size"));
+        this.configuration.put("game_turn_duration", json.getLong("game_turn_duration"));
+        this.configuration.put("game_mode", json.getString("game_mode"));
 
         // Attribution des utilisateurs
         if (json.has("teams"))
@@ -484,35 +531,35 @@ public class Room implements GameListener
             // Vidage des listes
             this.playing.clear();
             this.teams.clear();
-            
+
             // Ajout des équipes
             for (int iTeam = 0; iTeam < json.getJSONArray("teams").length(); iTeam++)
             {
                 // Récupération du JSON
                 JSONObject teamData = json.getJSONArray("teams").getJSONObject(iTeam);
-                
+
                 // Instanciation de l'équipe
                 Team newTeam = new Team();
                 this.teams.add(newTeam);
-            
+
                 // Ajout des joueurs
                 for (int iPlayer = 0; iPlayer < teamData.getJSONArray("players").length(); iPlayer++)
                 {
                     // Récupération du JSON
                     JSONObject playerData = teamData.getJSONArray("players").getJSONObject(iPlayer);
-                    
+
                     // Instanciation du joueur
                     Player newPlayer = new Player();
                     newPlayer.setGame(this.game);
                     newPlayer.setTeam(newTeam);
-                    
+
                     // Attribution du joueur à l'utilisateur
                     if (playerData.has("bot"))
                     {
                         Bot.Strategy strategy = playerData.getString("bot").equals("distribued") ? Bot.Strategy.distributed : Bot.Strategy.pseudoRandom;
                         newPlayer.setBot(new Bot(newPlayer, strategy));
                         newPlayer.setConnected(false);
-                        this.playing.put(newPlayer, 0); 
+                        this.playing.put(newPlayer, 0);
                     }
                     else
                     {
@@ -529,7 +576,7 @@ public class Room implements GameListener
                     {
                         // Récupération du JSON
                         JSONObject legionData = playerData.getJSONArray("legions").getJSONObject(iLegion);
-                        
+
                         // Instanciation de la légion
                         Legion newLegion = new Legion(newPlayer);
                         newLegion.setColor(legionData.getString("legion_color"));
@@ -541,9 +588,10 @@ public class Room implements GameListener
             }
         }
     }
-    
+
     /**
      * Ajoute au JSON fourni la configuration partielle de la partie du salon.
+     *
      * @param json JSONObject à remplir
      */
     public void addLightConfiguration(JSONObject json)
@@ -551,22 +599,23 @@ public class Room implements GameListener
         try
         {
             // Ajout de la configuriation partielle de la partie
-            json.put("room_id",            this.id                                           );
-            json.put("game_name",          this.configuration.getString("game_name"         ));
-            json.put("game_board_size",    this.configuration.getInt   ("game_board_size"   ));
-            json.put("game_turn_duration", this.configuration.getLong  ("game_turn_duration"));
-            json.put("game_mode", this.configuration.getString  ("game_mode"));
-            json.put("game_state",         this.getState()                                   );
-            json.put("players_number",     this.getUsers().size()                            );
+            json.put("room_id", this.id);
+            json.put("game_name", this.configuration.getString("game_name"));
+            json.put("game_board_size", this.configuration.getInt("game_board_size"));
+            json.put("game_turn_duration", this.configuration.getLong("game_turn_duration"));
+            json.put("game_mode", this.configuration.getString("game_mode"));
+            json.put("game_state", this.getState());
+            json.put("players_number", this.getUsers().size());
         }
         catch (JSONException e)
         {
             Log.debug(e);
         }
     }
-    
+
     /**
      * Ajoute au JSON fourni la configuration complète de la partie du salon.
+     *
      * @param json JSONObject à remplir
      */
     public void addFullConfiguration(JSONObject json)
@@ -575,10 +624,10 @@ public class Room implements GameListener
         {
             // Etat de la partie
             json.put("game_state", this.getState());
-            
+
             // Configuration de la partie
             json.put("configuration", this.configuration);
-            
+
             // Ajout des équipes
             JSONArray teamsToAdd = new JSONArray();
             JSONObject teamData;
@@ -586,7 +635,7 @@ public class Room implements GameListener
             {
                 // Instanciation du JSON
                 teamData = new JSONObject();
-            
+
                 // Ajout des joueurs
                 JSONArray playersToAdd = new JSONArray();
                 JSONObject playerData;
@@ -598,8 +647,11 @@ public class Room implements GameListener
                     {
                         playerData.put("player_user_id", this.playing.get(player));
                     }
-                    else playerData.put("player_user_id", 0);
-            
+                    else
+                    {
+                        playerData.put("player_user_id", 0);
+                    }
+
                     // Légions
                     JSONArray legionsToAdd = new JSONArray();
                     JSONObject legionData;
@@ -624,7 +676,7 @@ public class Room implements GameListener
             Log.debug(e);
         }
     }
-    
+
     /**
      * Broadcast la configuration de la partie.
      */
@@ -632,19 +684,21 @@ public class Room implements GameListener
     {
         this.broadcast((new GameConfirm(this)).toString());
     }
-    
+
     /**
      * Retourne la liste des utilisateurs du salon.
+     *
      * @return Collection des utilisateurs du salon
      */
     public HashMap<Integer, User> getUsers()
     {
         return this.users;
     }
-    
+
     /**
      * Ajoute un attribut "users" contenant la liste des utilisateurs du salon
      * au JSON fourni en paramètre.
+     *
      * @param json
      */
     public void addUserList(JSONObject json)
@@ -670,17 +724,19 @@ public class Room implements GameListener
             Log.debug(e);
         }
     }
-    
+
     /**
      * Indique si un utilisateur est présent dans le salon.
+     *
      * @param user Utilisateur à vérifier
+     *
      * @return Booléen indiquant la présence de l'utilisateur
      */
     public boolean isInRoom(User user)
     {
         return this.users.containsValue(user);
     }
-    
+
     /**
      * Broadcast la liste des utilisateurs du salon.
      */
@@ -688,7 +744,7 @@ public class Room implements GameListener
     {
         this.broadcast((new RoomUsers(this)).toString());
     }
-    
+
     /**
      * Etats possibles d'une partie.
      */
@@ -699,5 +755,5 @@ public class Room implements GameListener
         FINISHING,
         CLOSING
     }
-    
+
 }

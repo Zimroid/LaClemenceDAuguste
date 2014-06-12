@@ -245,7 +245,7 @@ public class Game
     * @return Legion gagnane (null si partie non terminée)
      * @throws java.lang.InterruptedException
     */
-    public boolean applyActions() throws InterruptedException
+    public boolean applyActions()
     {
         calculateMoves();
         boolean ends;
