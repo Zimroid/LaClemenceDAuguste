@@ -120,9 +120,9 @@ var keysCodes = new Array();
 function keyPressCodes(e)
 {
 	keysCodes.push(e.keyCode);
-	if (keysCodes.toString().substr(keysCodes.toString().length-50, keysCodes.toString().length) == "79,77,70,71,68,79,71,83")
+	if (keysCodes.toString().substr(keysCodes.toString().length-50, keysCodes.toString().length) == "71,69,79,82,74,85,83")
 	{
-		$('#rigoloDiv').html("<iframe src='http://omfgdogs.com/'></iframe>");
+		$('#rigoloDiv').html("<video width='600px' autoplay controls><source src='ressources/laurier.webm' type='video/webm'></source></video>");
 	}
 }
 jQuery(document).keydown(keyPressCodes);
