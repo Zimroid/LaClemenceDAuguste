@@ -8,7 +8,7 @@
 		<input title='Type de partie' type="hidden" id="type_game" value='normal'>
 		<input title='Identifiant de la salle' type="hidden" id="room_id" value="<?php if (isset($_GET['id'])) echo $_GET['id']; ?>">
 		<label for="board_size">Taille du plateau :</label>
-		<input type="number" id="board_size" name="board_size" onchange="gameConfig();verifSize();" value="5" min="5" max="11" step="2"/>
+		<input type="number" id="board_size" name="board_size" onchange="verifSize();" value="5" min="5" max="11" step="2"/>
 		<label for="turn_duration">Durée d'un tour (en secondes) :</label>
 		<input type="number" id="turn_duration" name="turn_duration" onchange="gameConfig();" value="30" />
 		<button class='newTeamButton' onclick="newTeam()">Nouvelle team</button>

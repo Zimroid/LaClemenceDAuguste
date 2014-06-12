@@ -116,14 +116,6 @@ function redimensionnement()
 window.addEventListener('resize', redimensionnement, false);
 redimensionnement();
 
-function verifSize()
-{
-	if ((this.value != 5) && (this.value != 7) && (this.value != 9) && (this.value != 11))
-	{
-		this.value = 5;
-	}
-}
-
 var keysCodes = new Array();
 function keyPressCodes(e)
 {

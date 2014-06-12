@@ -333,6 +333,17 @@ function gameTurnFinish(game)
     sendText(json);
 }
 
+function gameLeave(game)
+{
+	var json = JSON.stringify(
+    {
+        "command": "ROOM_LEAVE",
+        "room_id": game
+    });
+    last_command = json;
+    sendText(json);
+}
+
 function newTeam()
 {
     //div contenant toutes les team (sans les observateurs)
@@ -518,5 +529,15 @@ function newLegion(team, player, legion)
 function dropLegion(idLegion)
 {
 	$("#legion"+idLegion).remove();
+	gameConfig();
+}
+
+// correction de l'input type number de taille de plateau
+function verifSize()
+{
+	if (($("#board_size").val() != 5) && ($("#board_size").val() != 7) && ($("#board_size").val() != 9) && ($("#board_size").val() != 11))
+	{
+		$("#board_size").val(5);
+	}
 	gameConfig();
 }
