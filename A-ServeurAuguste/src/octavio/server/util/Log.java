@@ -17,57 +17,92 @@
 package octavio.server.util;
 
 import java.io.PrintStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Classe utilitaire pour enregistrer les messages du serveur.
- * 
+ *
  * @author Lzard
  */
 public class Log
 {
     // Configuration des sorties
-    private static final PrintStream OUT   = System.out;
+    private static final PrintStream OUT = System.out;
     private static final PrintStream DEBUG = System.out;
     private static final PrintStream ERROR = System.err;
-    
+
     /**
      * Ecriture d'un message à logger.
+     *
      * @param message Message à logger
      */
     public static void out(String message)
     {
-        Log.OUT.println("OUT   " + (new Date()).toString() + " -- " + message);
+        Log.OUT.println("OUT   " + ((new SimpleDateFormat("HH:mm:ss:SSS")).format(new Date())) + " -- " + message);
     }
-    
+
     /**
      * Ecriture d'un message d'erreur à logger.
+     *
      * @param message Message d'erreur à logger
      */
     public static void error(String message)
     {
-        Log.ERROR.println("ERROR " + (new Date()).toString() + " -- " + message);
+        Log.ERROR.println("ERROR " + ((new SimpleDateFormat("HH:mm:ss:SSS")).format(new Date())) + " -- " + message);
     }
-    
+
     /**
      * Ecriture d'un message de débuggage à logger si la fonctionnalité est
      * activée.
+     *
      * @param message Message de débuggage à logger
      */
     public static void debug(String message)
     {
-        if (Configuration.getBoolean("debug")) Log.DEBUG.println("DEBUG " + (new Date()).toString() + " -- " + message);
+        if (Configuration.getBoolean("debug"))
+        {
+            Log.DEBUG.println("DEBUG " + ((new SimpleDateFormat("HH:mm:ss:SSS")).format(new Date())) + " -- " + message);
+        }
     }
-    
+
     /**
      * Ecriture d'un message de débuggage à logger décrivant l'exception fournie
      * si la fonctionnalité est activée.
+     *
      * @param e Exception à logger
      */
     public static void debug(Exception e)
     {
-        Log.debug(e.getClass().getName() + ":" + e.getMessage());
-        e.printStackTrace();
+        Log.debug(
+                e.getClass().getSimpleName() + ": "
+                + e.getMessage()
+                + Log.getStackTraceString(e)
+        );
     }
-    
+
+    /**
+     * Ecrit la stack trace d'une exception dans un nouvel objet String.
+     *
+     * @param exception Exception à analyser
+     *
+     * @return String représentant la stack trace
+     */
+    public static String getStackTraceString(Exception exception)
+    {
+        String stackTrace = new String();
+
+        for (StackTraceElement element : exception.getStackTrace())
+        {
+            stackTrace = stackTrace.concat(
+                    "\n\t at "
+                    + element.getClassName() + "."
+                    + element.getMethodName() + " ("
+                    + element.getFileName() + ":"
+                    + element.getLineNumber() + ")"
+            );
+        }
+
+        return stackTrace;
+    }
 }

@@ -26,9 +26,13 @@ function process(evt)
 				myId = '';
 				myName = '';
 				reloadChat(sitePath + "/index.php?script=1&page=deconnect");
+				reloadContent(sitePath + "/index.php?script=1&page=news");
 				break;
 			case 'must_be_logged':
 				reloadContent(sitePath + "/index.php?script=1&page=subscribe");
+				break;
+			case 'name_unavailable':
+				alert("Ce nom est déjà pris.");
 				break;
 			case 'not_owner_of_this_room':
 				alert("Vous n'êtes pas autorisé à modifier la configuration d'une partie dont vous n'êtes pas l'hôte.");
@@ -100,7 +104,7 @@ function process(evt)
 	{
 		save_game_config = data;
 		// si une partie rapide est lancée
-		if (data.configuration.game_mode == 'fast' && (data.teams[0].players[0].player_user_id != 0) && (data.teams[1].players[0].player_user_id != 0))
+		if (data.configuration.game_mode == 'fast' && (data.teams[0].players[0].player_user_id != 0) && (data.configuration.teams[1].players[0].player_user_id != 0))
 		{
 			gameStart(data.room_id);
 		}
@@ -154,9 +158,10 @@ function process(evt)
 		clearInterval(inter);
 		if ((typeof(data.winner_team) != "undefined") && (typeof(data.winner_legion) != "undefined"))
 		{
+			var messagewin = '';
 			if (data.winner_team == -1)
 			{
-				alert("Match nul.");
+				messagewin = "Match nul.";
 			}
 			else
 			{
@@ -191,11 +196,11 @@ function process(evt)
 					}
 					if (nomteam != '')
 					{
-						alert("Il n'y a plus d'adversaires. La team de " + nomteam + "a gagné.");
+						messagewin = "Il n'y a plus d'adversaires. La team de " + nomteam + "a gagné.";
 					}
 					else
 					{
-						alert("Il n'y a plus d'adversaires. Une team de bots a gagné.");
+						messagewin = "Il n'y a plus d'adversaires. Une team de bots a gagné.";
 					}
 				}
 				else
@@ -228,15 +233,15 @@ function process(evt)
 					}
 					if (nomteam != '')
 					{
-						alert("Le laurier est dans une tente. La team de " + nomteam + "a gagné.");
+						messagewin = "Le laurier est dans une tente. La team de " + nomteam + "a gagné.";
 					}
 					else
 					{
-						alert("Le laurier est dans une tente. Une team de bots a gagné.");
+						messagewin = "Le laurier est dans une tente. Une team de bots a gagné.";
 					}
 				}
 			}
-			reloadContent(sitePath + "/index.php?script=1&page=news");
+			alert(messagewin);
 		}
 		else
 		{

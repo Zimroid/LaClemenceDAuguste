@@ -52,6 +52,7 @@ public class Game
     private Team twinner = null;
     private int pawnsAlive = 0;
     private final ArrayList<Action> actions;
+    private int actionsValidated;
     private Timer timer;
     private int turn = 1;
     
@@ -102,7 +103,12 @@ public class Game
     */
     public void addAction(Action a)
     {
-        if(winner==null)
+        addAction(a,false);
+    }
+    
+    public void addAction(Action a, boolean bot)
+    {
+        if(twinner==null)
         {
             Legion l = a.getLegion();
             if(l.getAction() != null)
@@ -111,10 +117,27 @@ public class Game
             }
             l.setAction(a);
             this.actions.add(a);
-            if (this.actions.size() == nbAliveLegions()) 
-            {
-                if(this.getListener() != null) this.getListener().onTurnEnd(); // timer.notify();
-            }
+            if(bot) actionsValidated++;
+        }
+    }
+
+    /**
+     * @return the actionsValidated
+     */
+    public int getActionsValidated()
+    {
+        return actionsValidated;
+    }
+
+    /**
+     * @param actionsValidated the actionsValidated to set
+     */
+    public void setActionsValidated(int actionsValidated)
+    {
+        this.actionsValidated = actionsValidated;
+        if (actionsValidated >= nbAliveLegions()) 
+        {
+            if(this.getListener() != null) this.getListener().onTurnEnd(); // timer.notify();
         }
     }
 
@@ -171,6 +194,7 @@ public class Game
     public void nextTurn()
     {
         turn++;
+        actionsValidated = 0;
         moves.clear();
         tenailles.clear();
         battles.clear();
@@ -205,7 +229,7 @@ public class Game
                     }
                     ia.activateBot(p.getBot()).stream().forEach((a) ->
                     {
-                        synchronized(Game.this) { addAction(a); }
+                        synchronized(Game.this) { addAction(a,true); }
                     });
                 }
             }).start();
@@ -245,7 +269,7 @@ public class Game
     * @return Legion gagnane (null si partie non terminée)
      * @throws java.lang.InterruptedException
     */
-    public boolean applyActions() throws InterruptedException
+    public boolean applyActions()
     {
         calculateMoves();
         boolean ends;
