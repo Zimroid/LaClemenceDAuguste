@@ -117,7 +117,7 @@ public class Game
             }
             l.setAction(a);
             this.actions.add(a);
-            if(bot) actionsValidated++;
+            if(bot) setActionsValidated(actionsValidated+1);
         }
     }
 
