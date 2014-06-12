@@ -31,6 +31,9 @@ function process(evt)
 			case 'must_be_logged':
 				reloadContent(sitePath + "/index.php?script=1&page=subscribe");
 				break;
+			case 'name_unavailable':
+				alert("Ce nom est déjà pris.");
+				break;
 			case 'not_owner_of_this_room':
 				alert("Vous n'êtes pas autorisé à modifier la configuration d'une partie dont vous n'êtes pas l'hôte.");
 				break;
@@ -101,7 +104,7 @@ function process(evt)
 	{
 		save_game_config = data;
 		// si une partie rapide est lancée
-		if (data.configuration.game_mode == 'fast' && (data.teams[0].players[0].player_user_id != 0) && (data.teams[1].players[0].player_user_id != 0))
+		if (data.configuration.game_mode == 'fast' && (data.configuration.teams[0].players[0].player_user_id != 0) && (data.configuration.teams[1].players[0].player_user_id != 0))
 		{
 			gameStart(data.room_id);
 		}
@@ -166,9 +169,9 @@ function process(evt)
 				if (data.winner_legion == -1)
 				{
 					var tabwinners = new Array();
-					for (var i = 0; i < save_game_config.teams[data.winner_team].players.length; i++)
+					for (var i = 0; i < save_game_config.configuration.teams[data.winner_team].players.length; i++)
 					{
-						tabwinners.push(save_game_config.teams[data.winner_team].players[i].player_user_id);
+						tabwinners.push(save_game_config.configuration.teams[data.winner_team].players[i].player_user_id);
 					}
 					for (var i = 0; i < save_game_users.length; i++)
 					{
@@ -203,9 +206,9 @@ function process(evt)
 				else
 				{
 					var tabwinners = new Array();
-					for (var i = 0; i < save_game_config.teams[data.winner_team].players.length; i++)
+					for (var i = 0; i < save_game_config.configuration.teams[data.winner_team].players.length; i++)
 					{
-						tabwinners.push(save_game_config.teams[data.winner_team].players[i].player_user_id);
+						tabwinners.push(save_game_config.configuration.teams[data.winner_team].players[i].player_user_id);
 					}
 					for (var i = 0; i < save_game_users.length; i++)
 					{
@@ -376,12 +379,12 @@ function process(evt)
 		else if (mode == 'fast' && data.users[1] && myName == data.users[0].user_name)
 		{
 			save_game_config.command = "GAME_CONFIGURATION";
-			save_game_config.teams[0].players[0].player_user_id = data.users[0].user_id;
-			save_game_config.teams[1].players[0].player_user_id = data.users[1].user_id;
-			save_game_config.game_turn_duration = save_game_config.configuration.game_turn_duration;
-			save_game_config.game_mode = save_game_config.configuration.game_mode;
-			save_game_config.game_board_size = save_game_config.configuration.game_board_size;
-			save_game_config.game_name = save_game_config.configuration.game_name;
+			save_game_config.configuration.teams[0].players[0].player_user_id = data.users[0].user_id;
+			save_game_config.configuration.teams[1].players[0].player_user_id = data.users[1].user_id;
+			save_game_config.configuration.game_turn_duration = save_game_config.configuration.game_turn_duration;
+			save_game_config.configuration.game_mode = save_game_config.configuration.game_mode;
+			save_game_config.configuration.game_board_size = save_game_config.configuration.game_board_size;
+			save_game_config.configuration.game_name = save_game_config.configuration.game_name;
 			var json = JSON.stringify(save_game_config);
 			sendText(json);
 		}

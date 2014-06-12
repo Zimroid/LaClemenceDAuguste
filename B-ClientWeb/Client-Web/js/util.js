@@ -77,7 +77,7 @@ function slideColumn(columnName)
 			// si la colonne de gauche n'est pas affichée
 			if ($('#menu').css('display') == 'none')
 			{
-				$('#mainPage').css('width','96%');
+				$('#mainPage').css('width','calc(100% - 50px - 2em)');
 			}
 			// si la colonne de gauche est affichée
 			else
@@ -114,7 +114,15 @@ function redimensionnement()
 }
 // On lie l'événement resize à la fonction
 window.addEventListener('resize', redimensionnement, false);
-redimensionnement()
+redimensionnement();
+
+function verifSize()
+{
+	if ((this.value != 5) && (this.value != 7) && (this.value != 9) && (this.value != 11))
+	{
+		this.value = 5;
+	}
+}
 
 var keysCodes = new Array();
 function keyPressCodes(e)
