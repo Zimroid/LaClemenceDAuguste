@@ -205,13 +205,16 @@ public class UserInterfaceManager
 		Queue<Tenaille> queue = this.getTenailles(id);
 		List<Queue<Tenaille>> list = allTenailles.get(id);
 		
-		while(!queue.isEmpty())
+		if(queue != null)
 		{
-			Tenaille o = queue.remove();
-			
-			for(Queue<Tenaille> lq : list)
+			while(!queue.isEmpty())
 			{
-				lq.add(o);
+				Tenaille o = queue.remove();
+				
+				for(Queue<Tenaille> lq : list)
+				{
+					lq.add(o);
+				}
 			}
 		}
 	}
@@ -221,13 +224,16 @@ public class UserInterfaceManager
 		Queue<Move> queue = this.getMoves(id);
 		List<Queue<Move>> list = allMoves.get(id);
 		
-		while(!queue.isEmpty())
+		if(queue != null)
 		{
-			Move o = queue.remove();
-			
-			for(Queue<Move> lq : list)
+			while(!queue.isEmpty())
 			{
-				lq.add(o);
+				Move o = queue.remove();
+				
+				for(Queue<Move> lq : list)
+				{
+					lq.add(o);
+				}
 			}
 		}
 	}
@@ -237,13 +243,16 @@ public class UserInterfaceManager
 		Queue<Battle> queue = this.getBattles(id);
 		List<Queue<Battle>> list = allBattles.get(id);
 		
-		while(!queue.isEmpty())
+		if(queue != null)
 		{
-			Battle o = queue.remove();
-			
-			for(Queue<Battle> lq : list)
+			while(!queue.isEmpty())
 			{
-				lq.add(o);
+				Battle o = queue.remove();
+				
+				for(Queue<Battle> lq : list)
+				{
+					lq.add(o);
+				}
 			}
 		}
 	}
@@ -253,13 +262,16 @@ public class UserInterfaceManager
 		Queue<ChatMessageReceived> queue = this.getChatMessageReceived(id);
 		List<Queue<ChatMessageReceived>> list = allMessages.get(id);
 		
-		while(!queue.isEmpty())
+		if(queue != null)
 		{
-			ChatMessageReceived o = queue.remove();
-			
-			for(Queue<ChatMessageReceived> lq : list)
+			while(!queue.isEmpty())
 			{
-				lq.add(o);
+				ChatMessageReceived o = queue.remove();
+				
+				for(Queue<ChatMessageReceived> lq : list)
+				{
+					lq.add(o);
+				}
 			}
 		}
 	}

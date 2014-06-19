@@ -23,7 +23,7 @@ public class ChatMessage extends CommandServer
     public static final String AUTHOR =     "user_name";
     public static final String TEXT =       "text";
     public static final String DATE =       "date";
-    public static final String GAME_ID =	"game_id";
+    public static final String GAME_ID =	"room_id";
     
     private UserInterfaceManager IUM;
     
@@ -51,8 +51,8 @@ public class ChatMessage extends CommandServer
         cmr.setMessage(message);
         cmr.setDate(date);
 
-        IUM.addMessageChat(0, cmr);
-        IUM.fillQueueChatMessage(0);
+        IUM.addMessageChat(id, cmr);
+        IUM.fillQueueChatMessage(id);
         
         for(UpdateListener ul : this.getClient().getInterfaces())
         {

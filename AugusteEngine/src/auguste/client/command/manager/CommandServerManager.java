@@ -6,6 +6,8 @@
 
 package auguste.client.command.manager;
 
+import java.net.URISyntaxException;
+
 import auguste.client.command.server.ChatMessage;
 import auguste.client.command.server.CommandServer;
 import auguste.client.command.server.ConfirmCommand;
@@ -32,8 +34,9 @@ public class CommandServerManager
      * @param client
      * @param param
      *      La chaine qui contient la commande et ses paramètres.
+     * @throws URISyntaxException 
      */
-    public static void executeCommand(Client client, String param)
+    public static void executeCommand(Client client, String param) throws URISyntaxException
     {
         try 
         {

@@ -67,7 +67,10 @@ public abstract class CommandClient
     public static final String TEAMS				= "teams";
     public static final String GAME_TYPE			= "game_type";
     
-    
+    public static final String[] SHAPES				= {"Carré", "Hexagone", "Triangle"};
+    public static final String[] POSITIONS			= {"Haut gauche","Haut droit", "Droit", "Bas droit", "Bas gauche", "Gauche"};
+    public static final String[] COLORS				= {"Rouge", "Jaune", "Vert", "Cyan", "Bleu", "Magenta"};
+        
     public abstract void buildJSON() throws JSONException;
     
     public CommandClient() throws URISyntaxException
@@ -127,7 +130,6 @@ public abstract class CommandClient
      */
     public void execute() 
     {
-    	System.out.println(this.getJSON().toString());
         this.getClient().getClientSocket().send(this.getJSON().toString());
     }
     
@@ -141,7 +143,7 @@ public abstract class CommandClient
         ROOM_CREATE,
         GAME_CONFIGURATION,
         ROOM_JOIN,
-        GAME_LIST,
+        QUERY_ROOMS,
         GAME_START,
         GAME_LEAVE,
         GAME_TURN,

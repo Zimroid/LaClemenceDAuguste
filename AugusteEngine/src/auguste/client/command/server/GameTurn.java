@@ -58,7 +58,7 @@ public class GameTurn extends CommandServer
     public static final String W_END =			"end_w";
     
     public static final String LAUREL =			"laurel";
-    public static final String LEGIONNARY =		"legionnary";
+    public static final String LEGIONNARY =		"soldier";
     public static final String ARMORED =		"legion_armor";
     public static final String ARMOR =			"armor";
     public static final String WALL =			"wall";
@@ -81,10 +81,10 @@ public class GameTurn extends CommandServer
         int id = this.getJSON().getInt(ROOM_ID);
         
         Game game = this.getClient().getGame(id);
-        
+
+        this.setBoard(game);
         this.setMoves(game);
         this.setTenailles(game);
-        this.setBoard(game);
         this.setBattles(game);
         
         ium.fillQueueBattle(id);
@@ -101,59 +101,77 @@ public class GameTurn extends CommandServer
     
     private void setTenailles(Game game) throws JSONException
     {
-    	JSONArray tenailles = this.getJSON().getJSONArray(TENAILLES);
-        for(int i = 0; i < tenailles.length(); i++)
-        {
-        	JSONObject json = tenailles.getJSONObject(i);
-        	JSONObject cellBeg = json.getJSONObject(CELL_BEG);
-        	JSONObject cellEnd = json.getJSONObject(CELL_END);
-        	UW uwBeg = new UW(cellBeg.getInt(U), cellBeg.getInt(W));
-        	UW uwEnd = new UW(cellEnd.getInt(U), cellEnd.getInt(W));
-        	
-        	Cell begTenaille = game.getBoard().getCell(uwBeg);
-        	Cell endTenaille = game.getBoard().getCell(uwEnd);
-        	
-        	Tenaille tenaille = new Tenaille(begTenaille, endTenaille, game.getBoard());
-        	
-        	this.ium.addTenaille(game.getId(), tenaille);
-        }
+    	if(this.getJSON().has(TENAILLES))
+    	{
+    		JSONArray tenailles = this.getJSON().getJSONArray(TENAILLES);
+	        for(int i = 0; i < tenailles.length(); i++)
+	        {
+	        	JSONObject json = tenailles.getJSONObject(i);
+	        	JSONObject cellBeg = json.getJSONObject(CELL_BEG);
+	        	JSONObject cellEnd = json.getJSONObject(CELL_END);
+	        	UW uwBeg = UW.convertFrom(new UW(cellBeg.getInt(U), cellBeg.getInt(W)));
+	        	UW uwEnd = UW.convertFrom(new UW(cellEnd.getInt(U), cellEnd.getInt(W)));
+	        	
+	        	Cell begTenaille = game.getBoard().getCell(uwBeg);
+	        	Cell endTenaille = game.getBoard().getCell(uwEnd);
+	        	
+	        	Tenaille tenaille = new Tenaille(begTenaille, endTenaille, game.getBoard());
+	        	
+	        	this.ium.addTenaille(game.getId(), tenaille);
+	        }
+    	}
     }
     
     private void setMoves(Game game) throws JSONException
     {
-    	JSONArray moves = this.getJSON().getJSONArray(MOVES);
-        for(int i = 0; i < moves.length(); i++)
-        {
-        	JSONObject json = moves.getJSONObject(i);
-        	UW uwBeg = new UW(json.getInt(U_BEG), json.getInt(W_BEG));
-        	UW uwEnd = new UW(json.getInt(U_END), json.getInt(W_END));
-        	Pawn p = game.getBoard().getCell(uwBeg).getPawn();
-        	
-        	Move m = new Move(p, uwBeg, uwEnd, game.getBoard());
-        	m.setDestroyed(json.getBoolean(DESTROYED));
-        	
-        	this.ium.addMoves(game.getId(), m);
-        }
+    	if(this.getJSON().has(MOVES))
+    	{
+        	JSONArray moves = this.getJSON().getJSONArray(MOVES);
+            for(int i = 0; i < moves.length(); i++)
+            {
+            	JSONObject json = moves.getJSONObject(i);
+            	UW uwBeg = UW.convertFrom(new UW(json.getInt(U_BEG), json.getInt(W_BEG)));
+            	UW uwEnd = UW.convertFrom(new UW(json.getInt(U_END), json.getInt(W_END)));
+            	Pawn p = game.getBoard().getCell(uwBeg).getPawn();
+            	
+            	Move m = new Move(p, uwBeg, uwEnd, game.getBoard());
+            	m.setDestroyed(json.getBoolean(DESTROYED));
+            	
+            	this.ium.addMoves(game.getId(), m);
+            }
+    	}
     }
     
     private void setBattles(Game game) throws JSONException
     {
-    	JSONArray battles = this.getJSON().getJSONArray(BATTLES);
-    	for(int i = 0; i < battles.length(); i++)
+    	if(this.getJSON().has(BATTLES))
     	{
-    		JSONObject json = battles.getJSONObject(i);
-    		int u1 = json.getInt("pawn1_u");
-    		int w1 = json.getInt("pawn1_w");
-    		
-    		int u2 = json.getInt("pawn2_u");
-    		int w2 = json.getInt("pawn1_w");
-    		
-    		int uLoser = json.getInt("loser_u");
-    		int wLoser = json.getInt("loser_w");
-    		
-    		Battle battle = new Battle(u1,w1,u2,w2,uLoser,wLoser, game.getBoard());
-    		
-    		this.ium.addBattles(game.getId(), battle);
+        	JSONArray battles = this.getJSON().getJSONArray(BATTLES);
+        	for(int i = 0; i < battles.length(); i++)
+        	{
+        		System.out.println("addBattles");
+        		JSONObject json = battles.getJSONObject(i);
+        		int u1 = json.getInt("pawn1_u");
+        		int w1 = json.getInt("pawn1_w");
+        		
+        		int u2 = json.getInt("pawn2_u");
+        		int w2 = json.getInt("pawn2_w");
+        		
+        		UW fighter1 = UW.convertFrom(new UW(u1, w1));
+        		UW fighter2 = UW.convertFrom(new UW(u2, w2));
+
+        		UW loser = null;
+        		if(json.has("loser_u"))
+        		{
+            		int uLoser = json.getInt("loser_u");
+            		int wLoser = json.getInt("loser_w");
+            		loser = UW.convertFrom(new UW(uLoser, wLoser));
+        		}
+        		
+        		Battle battle = new Battle(fighter1, fighter2, loser, game.getBoard());
+        		
+        		this.ium.addBattles(game.getId(), battle);
+        	}
     	}
     }
     
@@ -175,28 +193,34 @@ public class GameTurn extends CommandServer
 
         	Legion legion = game.getLegion(legionColor, legionShape);
         	
-        	UW uw = new UW(json.getInt(U),json.getInt(W));
+        	UW uw = UW.convertFrom(new UW(json.getInt(U),json.getInt(W)));
         	Pawn p = null;
         	
-        	switch(json.getString(TYPE))
+        	if(json.has(TYPE))
         	{
-	        	case LAUREL:
-	        		p = new Laurel(uw);
-	        		break;
-	        	case LEGIONNARY:
-	        		p = new Legionnary(uw, legion);
-	        		break;
-	        	case ARMOR:
-	        		game.getBoard().getCell(uw).putArmor();
-	        		break;
-	        	case WALL:
-	        		p = new Wall(uw);
-	        		break;
+        		switch(json.getString(TYPE))
+            	{
+    	        	case LAUREL:
+    	        		p = new Laurel(uw);
+    	        		break;
+    	        	case LEGIONNARY:
+    	        		p = new Legionnary(uw, legion);
+    	        		break;
+    	        	case ARMOR:
+    	        		b.getCell(uw).putArmor();
+    	        		break;
+    	        	case WALL:
+    	        		p = new Wall(uw);
+    	        		break;
+            	}	
         	}
 
-	    	if(json.has(ARMORED) && json.getBoolean(ARMORED))
+	    	if(json.has(ARMORED))
 			{
-	    		((Legionnary) p).takeArmor();
+	    		if(json.getBoolean(ARMORED))
+	    		{
+		    		((Legionnary) p).takeArmor();
+	    		}
 			}
         	
         	b.getCell(uw).setPawn(p);

@@ -1,5 +1,7 @@
 package auguste.client.reseau;
 
+import java.net.URISyntaxException;
+
 import auguste.client.entity.Client;
 
 public class CommandTransfer implements Runnable
@@ -15,7 +17,15 @@ public class CommandTransfer implements Runnable
 	@Override
 	public void run()
 	{
-		client.messageServerReceive(this.json);
+		try
+		{
+			client.messageServerReceive(this.json);
+		}
+		catch (URISyntaxException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void setJSON(String json)

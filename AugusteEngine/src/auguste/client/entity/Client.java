@@ -70,8 +70,9 @@ public class Client
      * Cette méthode lit un message du serveur et l'interprète.
      * @param param
      *      Chaine contenant le nom de la commande ainsi que les paramètres l'accompagant
+     * @throws URISyntaxException 
      */
-    public void messageServerReceive(String param)
+    public void messageServerReceive(String param) throws URISyntaxException
     {
         CommandServerManager.executeCommand(INSTANCE, param);
     }
@@ -193,7 +194,6 @@ public class Client
     {
         if(this.getGame(game.getId()) != null)
         {
-        	System.out.println("test");
             this.removeGame(game.getId());
         }
         this.addGame(game);

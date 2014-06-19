@@ -27,6 +27,9 @@ public class GameAvailable extends CommandServer
     public static final String GAME_NAME =  	"game_name";
     public static final String BOARD_SIZE =		"game_board_size";
     public static final String TURN_DURATION =	"game_turn_duration";
+    public static final String GAME_STATE =		"game_state";
+    public static final String GAME_MODE =		"game_mode";
+    public static final String NUMBER_OF_PLAYER="players_number";
     
     public GameAvailable()
     {
@@ -46,11 +49,17 @@ public class GameAvailable extends CommandServer
             String game_name = game.getString(GAME_NAME);
             int board_size = game.getInt(BOARD_SIZE);
             long turn_duration = game.getLong(TURN_DURATION);
+            String gameState = game.getString(GAME_STATE);
+            String gameMode = game.getString(GAME_MODE);
+            int playerNumber = game.getInt(NUMBER_OF_PLAYER);
             
             g.setId(game_id);
             g.setName(game_name);
             g.setBoardSize(board_size);
             g.setTurn_duration(turn_duration);
+            g.setGameState(gameState);
+            g.setGameMode(gameMode);
+            g.setNumberOfPlayer(playerNumber);
             
             games.add(g);
         }

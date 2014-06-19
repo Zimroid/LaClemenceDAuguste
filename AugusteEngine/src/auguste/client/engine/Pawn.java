@@ -56,7 +56,7 @@ public class Pawn
     @Override
     public String toString()
     {
-        return "Pawn : "+this.id+" "+this.uw.toString();
+        return this.getStringRepresentation() + " : " + this.id + " " + this.uw.toString();
     }
     
     public String getStringRepresentation()

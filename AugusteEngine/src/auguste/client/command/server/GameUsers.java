@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import auguste.client.entity.Game;
 import auguste.client.entity.User;
+import auguste.client.interfaces.UpdateListener;
 
 public class GameUsers extends CommandServer
 {
@@ -41,10 +42,16 @@ public class GameUsers extends CommandServer
 			User user = new User();
 			user.setId(userId);
 			user.setName(userName);
+			user.setOwner(isOwner);
 			
 			userList.add(user);
 		}
 		
 		game.setUsers(userList);
+		
+		for(UpdateListener ul : this.getClient().getInterfaces())
+		{
+			ul.createGameUpdate(game.getId());
+		}
 	}
 }

@@ -16,12 +16,14 @@
 
 package auguste.client.command.server;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
 import auguste.client.engine.Legion;
 import auguste.client.engine.Player;
 import auguste.client.engine.Team;
+import auguste.client.entity.Client;
 import auguste.client.entity.Game;
 import auguste.client.interfaces.UpdateListener;
 
@@ -47,12 +49,19 @@ public class GameConfirm extends CommandServer
     public GameConfirm()
     {
         super();
-        game = new Game();
     }
 
     @Override
-    public void execute() throws JSONException 
+    public void execute() throws JSONException, URISyntaxException 
     {
+    	if(Client.getInstance().getGame(this.getJSON().getInt(ROOM_ID)) == null)
+    	{
+    		this.game = new Game();
+    	}
+    	else
+    	{
+            this.game = Client.getInstance().getGame(this.getJSON().getInt(ROOM_ID));
+    	}
         this.setConfiguration(this.getJSON());
         this.setTeams(this.getJSON());
 
@@ -64,7 +73,7 @@ public class GameConfirm extends CommandServer
         }
     }
     
-    private void setConfiguration(JSONObject json) throws JSONException
+    private void setConfiguration(JSONObject json) throws JSONException, URISyntaxException
     {
     	JSONObject configuration = json.getJSONObject(CONFIGURATION);
     	
@@ -79,23 +88,34 @@ public class GameConfirm extends CommandServer
     	this.game.setTurn_duration(game_turn_duration);
     }
     
-    private void setTeams(JSONObject json) throws JSONException
+    private void setTeams(JSONObject json) throws JSONException, URISyntaxException
     {
     	List<Team> res = new ArrayList<>();
 		JSONArray teams = json.getJSONArray(TEAMS);
     	
-    	for(int i = 0; i < teams.length(); i++)
-    	{
-    		Team team = new Team();
-    		JSONObject arrayPlayers = teams.getJSONObject(i);
-    		this.setPlayers(arrayPlayers.getJSONArray("players"), team);
-    		res.add(team);
-    	}
+		if(teams.length() > 0)
+		{
+	    	for(int i = 0; i < teams.length(); i++)
+	    	{
+	    		Team team = new Team();
+	    		JSONObject arrayPlayers = teams.getJSONObject(i);
+	    		this.setPlayers(arrayPlayers.getJSONArray("players"), team);
+	    		res.add(team);
+	    	}
+		}
+		else
+		{
+			for(int i = 1; i < 3; i++)
+			{
+				Team team = initTeam(i);
+				res.add(team);
+			}
+		}
     	
     	this.game.setTeams(res);
     }
-    
-    private void setPlayers(JSONArray players, Team team) throws JSONException
+
+	private void setPlayers(JSONArray players, Team team) throws JSONException
     {
     	for(int i = 0; i < players.length(); i++)
     	{
@@ -139,4 +159,31 @@ public class GameConfirm extends CommandServer
     	
     	player.setLegions(legions);
     }
+    
+    private Team initTeam(int i)
+	{
+    	Team res = new Team();
+    	res.setPlayers(initPlayers());
+		return res;
+	}
+
+	private List<Player> initPlayers()
+	{
+		List<Player> res = new ArrayList<>();
+		Player p = new Player(0);
+		p.setLegions(initLegions(p));
+		res.add(p);
+		return res;
+	}
+
+	private List<Legion> initLegions(Player p)
+	{
+		List<Legion> res = new ArrayList<>();
+		Legion l = new Legion(0, p);
+		l.setColor("#FF0000");
+		l.setPosition(3);
+		l.setShape("square");
+		res.add(l);
+		return res;
+	}
 }

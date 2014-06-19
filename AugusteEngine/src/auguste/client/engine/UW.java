@@ -67,6 +67,24 @@ public class UW
             return false;
         }
     }
+    
+    public static UW convertFrom(UW uw)
+    {
+    	UW res;
+        
+        if(uw.getU()>0)
+        {
+            int u = uw.getU();
+            int w = uw.getW() + uw.getU();
+            res = new UW(u,w);
+        }
+        else
+        {
+            res = uw;
+        }
+        
+        return res;
+    }
 
     @Override
     public int hashCode() 

@@ -151,4 +151,26 @@ public class Cell
     {
         return this.uw.getW();
     }
+    
+    @Override
+    public String toString()
+    {
+    	String pawnString = "";
+    	String tentString = "";
+    	if(this.pawn == null)
+    	{
+    		pawnString = "Pas de pion à cet emplacement";
+    	}
+    	else
+    	{
+    		pawnString = this.pawn.toString();
+    	}
+    	
+    	if(this.isTent())
+    	{
+    		tentString = "Est une tente.";
+    	}
+    	
+    	return pawnString + " " + tentString;
+    }
 }

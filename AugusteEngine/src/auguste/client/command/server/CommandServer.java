@@ -6,7 +6,10 @@
 
 package auguste.client.command.server;
 
+import java.net.URISyntaxException;
+
 import auguste.client.entity.Client;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,7 +22,7 @@ public abstract class CommandServer
     private JSONObject json;
     private Client client;
     
-    public abstract void execute() throws JSONException;
+    public abstract void execute() throws JSONException, URISyntaxException;
         
     public CommandServer()
     {}

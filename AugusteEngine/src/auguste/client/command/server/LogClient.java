@@ -18,6 +18,7 @@ import org.json.JSONException;
 public class LogClient extends CommandServer
 {    
     public static final String NAME =   "user_name";
+    public static final String ID =		"user_id";
     public LogClient()
     {
         super();
@@ -28,6 +29,7 @@ public class LogClient extends CommandServer
     {
         User user = new User();
         user.setName(this.getJSON().getString(NAME));
+        user.setId(this.getJSON().getInt(ID));
         
         this.getClient().setUser(user);
         for(UpdateListener ul : this.getClient().getInterfaces())

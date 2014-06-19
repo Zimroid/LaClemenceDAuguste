@@ -6,4 +6,10 @@ public class Laurel extends Pawn
 	{
 		super(uw);
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "Laurier:";
+	}
 }

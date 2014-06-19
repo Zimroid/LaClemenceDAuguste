@@ -14,6 +14,7 @@ public class User
 {
     private String name;
     private int id;
+    private boolean owner;
     
     public User(String name)
     {
@@ -58,4 +59,20 @@ public class User
     {
         return this.id;
     }
+    
+    @Override
+    public String toString()
+    {
+    	return this.name;
+    }
+
+	public boolean isOwner()
+	{
+		return owner;
+	}
+
+	public void setOwner(boolean owner)
+	{
+		this.owner = owner;
+	}
 }

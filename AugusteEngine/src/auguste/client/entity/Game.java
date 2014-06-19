@@ -28,9 +28,8 @@ public class Game
     private int id;
     private List<User> users;
     
-    private String name;
-    private int board_size;
-    private int legion_number;
+    private String name, gameState, gameMode;
+    private int board_size, legion_number, numberOfPlayer;
     private long turn_duration;
     
     private List<Team> teams;
@@ -236,5 +235,50 @@ public class Game
 	public void setUsers(List<User> users)
 	{
 		this.users = users;
+	}
+	
+	public User getUser(int id)
+	{
+		User res = null;
+		
+		for(User user : this.users)
+		{
+			if(user.getId() == id)
+			{
+				res = user;
+			}
+		}
+		
+		return res;
+	}
+
+	public String getGameState()
+	{
+		return gameState;
+	}
+
+	public void setGameState(String gameState)
+	{
+		this.gameState = gameState;
+	}
+
+	public String getGameMode()
+	{
+		return gameMode;
+	}
+
+	public void setGameMode(String gameMode)
+	{
+		this.gameMode = gameMode;
+	}
+
+	public int getNumberOfPlayer()
+	{
+		return numberOfPlayer;
+	}
+
+	public void setNumberOfPlayer(int numberOfPlayer)
+	{
+		this.numberOfPlayer = numberOfPlayer;
 	}
 }

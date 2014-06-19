@@ -52,7 +52,6 @@ public class GameConfig extends CommandClient
         
         Game game = this.getClient().getGame(Integer.parseInt((String) this.getArguments().get(ROOM_ID)));
         
-        // Il semblerai que les teams ne s'initialisent pas correctement à voir dans le game_confirm
     	List<?> teams = game.getTeams();
         JSONArray jsonTeams = getJSONTeams(teams);
         this.getJSON().put(TEAMS, jsonTeams);
