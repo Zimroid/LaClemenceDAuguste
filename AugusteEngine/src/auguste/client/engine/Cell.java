@@ -27,6 +27,9 @@ public class Cell
     private Pawn pawn;
     private boolean tent;
     
+    /**
+     * @param uw Les coordonnées de la cellule.
+     */
     public Cell(UW uw)
     {
         this.uw = uw;
@@ -34,16 +37,25 @@ public class Cell
         this.tent = false;
     }
     
+    /**
+     * @param pawn Le pion à définir.
+     */
     public void setPawn(Pawn pawn)
     {
         this.pawn = pawn;
     }
     
+    /**
+     * @return Le pion
+     */
     public Pawn getPawn()
     {
         return this.pawn;
     }
     
+    /**
+     * @return True si la cellule a un pion, false sinon.
+     */
     public boolean isOccuped()
     {
         boolean res = false;
@@ -54,35 +66,47 @@ public class Cell
         return res;
     }
     
+    /**
+     * @return True si la cellule contient une armure, false sinon.
+     */
     public boolean isArmored()
     {
         return this.armored;
     }
     
+    /**
+     * Enleve l'armure de la cellule.
+     */
     public void takeArmor()
     {
         this.armored = false;
     }
     
+    /**
+     * Met une armure sur la cellule. 
+     */
     public void putArmor()
     {
     	this.armored = true;
     }
     
+    /**
+     * @return Les coordonnées de la cellule.
+     */
     public UW getUW()
     {
         return this.uw;
     }
 
     /**
-     * @return the edge
+     * @return True si la cellule contient une tente, false sinon.
      */
     public boolean isTent() {
         return tent;
     }
 
     /**
-     * @param edge the edge to set
+     * Met une tente sur la cellule.
      */
     public void putTent() {
         this.tent = true;

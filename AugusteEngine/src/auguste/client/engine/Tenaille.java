@@ -29,6 +29,11 @@ public class Tenaille
     private final Cell end;
     private final Board board;
     
+    /**
+     * @param beginning Le début de la tenaille.
+     * @param end La fin de la tenaille.
+     * @param board Le plateau de jeu.
+     */
     public Tenaille(Cell beginning, Cell end, Board board)
     {
         this.beginning = beginning;

@@ -31,6 +31,13 @@ import org.json.JSONException;
  */
 public class CommandClientManager 
 {
+	/**
+	 * Fonction qui éxécute une commande à envoyer au serveur : on passe les paramètres à la commande, on construit le JSON et enfin on l'envoie au serveur.
+	 * @param client Le client qui doit envoyer la commanbde au serveur.
+	 * @param params Les paramètres à passer à la commande.
+	 * @throws JSONException
+	 * @throws URISyntaxException
+	 */
 	public static void executeCommand(Client client, Map<String,?> params) throws JSONException, URISyntaxException
     {
         String command_name = (String) params.get("command");

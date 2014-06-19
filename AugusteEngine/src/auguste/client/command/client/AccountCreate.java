@@ -41,6 +41,11 @@ public class AccountCreate extends CommandClient
         this.getJSON().put(PASSWORD,password);
     }
     
+    /**
+     * Crypte le mot de passe
+     * @param password : La chaine à crypter
+     * @return La chaine cryptée
+     */
     private static String hashPassword(String password)
     {
         try

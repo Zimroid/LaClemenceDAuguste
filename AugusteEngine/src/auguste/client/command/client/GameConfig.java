@@ -29,7 +29,7 @@ import auguste.client.engine.Team;
 import auguste.client.entity.Game;
 
 /**
- *
+ * Classe qui créé le JSON de demande de liste de partie au serveur. 
  * @author Evinrude
  */
 public class GameConfig extends CommandClient
@@ -39,6 +39,9 @@ public class GameConfig extends CommandClient
         super();
     }
 
+    /**
+     * Construit le JSON à partir des arguments passés en paramètres.
+     */
     @Override
     public void buildJSON() throws JSONException
     {
@@ -55,9 +58,14 @@ public class GameConfig extends CommandClient
     	List<?> teams = game.getTeams();
         JSONArray jsonTeams = getJSONTeams(teams);
         this.getJSON().put(TEAMS, jsonTeams);
-        System.out.println(this.getJSON().toString());
     }
     
+    /**
+     * Créé un JSONArray modélisant les équipes avec leurs joueurs.
+     * @param teams Le tableau d'équipe.
+     * @return Le JSONArray créé à partir du tableau d'équipes.
+     * @throws JSONException
+     */
     private static JSONArray getJSONTeams(List<?> teams) throws JSONException
     {
     	JSONArray res = new JSONArray();
@@ -72,6 +80,12 @@ public class GameConfig extends CommandClient
     	return res;
     }
     
+    /**
+     * Créé un JSONArray modélisant une équipe avec ses joueurs.
+     * @param players Le tableau de joueurs.
+     * @return Le JSONObject créé à partir d'une équipe.
+     * @throws JSONException
+     */
     private static JSONObject getJSONTeam(List<Player> players) throws JSONException
     {
     	JSONObject res = new JSONObject();
@@ -82,6 +96,12 @@ public class GameConfig extends CommandClient
     	return res;
     }
     
+     /**
+      * Céé un JSONArray modélisant les joueurs avec leurs légions.
+      * @param players Le tableau de joueurs.
+      * @return Le JSONArray créé à partir du tableau de joueurs.
+      * @throws JSONException
+      */
     private static JSONArray getJSONPlayers(List<Player> players) throws JSONException
     {
     	JSONArray res = new JSONArray();
@@ -94,6 +114,12 @@ public class GameConfig extends CommandClient
     	return res;
     }
     
+    /**
+     * Créé un JSONObject modélisant un joueur avec ses légions.
+     * @param player Le joueur dont on veut récupérer le JSON.
+     * @return Le JSONObject créé à partir d'un joueur.
+     * @throws JSONException
+     */
     private static JSONObject getJSONPlayer(Player player) throws JSONException
     {
     	JSONObject res = new JSONObject();
@@ -104,6 +130,12 @@ public class GameConfig extends CommandClient
     	return res;
     }
     
+    /**
+     * Créé un JSONArray modélisant les légions d'un joueur.
+     * @param legions Les légions dont on veut récupérer le JSON.
+     * @return Le JSONArray des légions.
+     * @throws JSONException
+     */
     private static JSONArray getLegions(List<Legion> legions) throws JSONException
     {
     	JSONArray res = new JSONArray();
@@ -116,6 +148,12 @@ public class GameConfig extends CommandClient
     	return res;
     }
     
+    /**
+     * Créé un JSONObject représentant une légion.
+     * @param legion La légion dont on veut récupérer le JSONObject.
+     * @return Le JSONObject qui représente la légion.
+     * @throws JSONException
+     */
     private static JSONObject getLegion(Legion legion) throws JSONException
     {
     	JSONObject res = new JSONObject();

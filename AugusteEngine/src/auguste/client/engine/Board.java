@@ -31,6 +31,10 @@ public class Board
     private final int size;
     private final Map<UW, Cell> tabCells;
     
+    /**
+     * Crée une instance de la classe Board, qui représente un tableau d'une certaine taille contenant des cellules.
+     * @param size La taille du tableau.
+     */
     public Board(int size)
     {
         this.tabCells = new HashMap<>();
@@ -84,13 +88,6 @@ public class Board
             List<Cell> line = board.get(i);
             List<Cell> preLine = line.subList(0, (size)+i);
             
-            //Ajout de case vide, pour plus de facilité à gérer les coordonnées
-//            List<Cell> nullList = new ArrayList<>();
-//            for(int j = size+i; j<line.size(); j++)
-//            {
-//                nullList.add(null);
-//            }
-//            preLine.addAll(nullList);
             res.add(preLine);
         }
         
@@ -101,13 +98,6 @@ public class Board
             List<Cell> line = board.get(i+size);
             List<Cell> preLine = line.subList(i+1, line.size());
             
-            //Ajout de case vide, pour plus de facilité à gérer les coordonnées
-//            List<Cell> nullList = new ArrayList<>();
-//            for(int j = 0; j<i+1; j++)
-//            {
-//                nullList.add(null);
-//            }
-//            nullList.addAll(preLine);
             res.add(preLine);
         }
         
@@ -123,7 +113,6 @@ public class Board
                 if(line.get(i) != null)
                 {
                     System.out.print(line.get(i).getUW().toString()+", ");
-                    //System.out.print("*");
                 }
                 else
                 {
@@ -134,11 +123,19 @@ public class Board
         }
     }
     
+    /**
+     * @param uw Les coordonnées de la cellule dont on veut trouver les voisines.
+     * @return La liste des cellules adjacentes au groupe de cellules auquel appartient la cellule passée en paramètre.
+     */
     public List<Cell> getDeplacableCells(UW uw)
     {
         return this.getDeplacableCells(this.getCell(uw));
     }
     
+    /**
+     * @param origin La cellule dont on veut trouver les voisines.
+     * @return La liste des cellules adjacentes au groupe de cellules auquel appartient la cellule passée en paramètre.
+     */
     public List<Cell> getDeplacableCells(Cell origin)
     {
         List<Cell> res = new ArrayList<>();
@@ -181,6 +178,10 @@ public class Board
         }
     }
     
+    /**
+     * @param cell La cellule dont on veut les voisins.
+     * @return Les voisins de la cellule passée en paramètre.
+     */
     public List<Cell> getNeighbors(Cell cell)
     {
         List<Cell> res = new ArrayList<>();
@@ -206,6 +207,10 @@ public class Board
         return res;
     }
     
+    /**
+     * @param uw Les coordonnées de la cellule.
+     * @return La cellule correspondante au coordonnées.
+     */
     public Cell getCell(UW uw)
     {
         Cell res = null;
@@ -224,6 +229,10 @@ public class Board
         return res;
     }
     
+    /**
+     * @param cells Liste de cellules à convertir vers le serveur. 
+     * @return Une liste de cellules avec les coordonnées correct pour le plateau serveur.
+     */
     public static List<Cell> convertTo(List<Cell> cells)
     {
         List<Cell> res = new ArrayList<>();
@@ -234,6 +243,10 @@ public class Board
         return res;
     }
     
+    /**
+     * @param cells Liste de cellules à convertir depuis le serveur.
+     * @return Une liste de cellules avec les coordonnées correct pour le plateau client.
+     */
     public static List<Cell> convertFrom(List<Cell> cells)
     {
         List<Cell> res = new ArrayList<>();
@@ -246,6 +259,9 @@ public class Board
         return res;
     }
     
+    /**
+     * @param tenailles La liste des tenailles à appliquer.
+     */
     public void applyTenaille(List<Tenaille> tenailles)
     {
         for(Tenaille tenaille : tenailles)

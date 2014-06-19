@@ -28,26 +28,41 @@ public class Pawn
     private int id;
     private UW uw;
     
+    /**
+     * @param uw Les coordonnées du pion.
+     */
     public Pawn(UW uw)
     {
         this.uw = uw;
     }
     
+    /**
+     * @return L'identifiant du pion.
+     */
     public int getId()
     {
         return this.id;
     }
     
+    /**
+     * @param id L'identifiant à définir.
+     */
     public void setId(int id)
     {
         this.id = id;
     }
     
+    /**
+     * @return Les coordonnées du pion.
+     */
     public UW getUW()
     {
         return this.uw;
     }
     
+    /**
+     * @param uw Les coordonnées à définir.
+     */
     public void setUW(UW uw)
     {
         this.uw = uw;
@@ -59,11 +74,18 @@ public class Pawn
         return this.getStringRepresentation() + " : " + this.id + " " + this.uw.toString();
     }
     
+    /**
+     * @return La représentation d'un pion en art ASCII.
+     */
     public String getStringRepresentation()
     {
         return "*";
     }
     
+    /**
+     * @return Le JSON du pion.
+     * @throws JSONException
+     */
     public JSONObject toJSON() throws JSONException
     {
         JSONObject json = new JSONObject();

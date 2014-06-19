@@ -51,6 +51,10 @@ public class GameConfirm extends CommandServer
         super();
     }
 
+    /**
+     * Récupère la configuration d'une partie depuis un JSON.
+     * La commande construit les équipes et met à jour les informations de la partie dans le moteur.
+     */
     @Override
     public void execute() throws JSONException, URISyntaxException 
     {
@@ -73,6 +77,10 @@ public class GameConfirm extends CommandServer
         }
     }
     
+    /**
+     * Met à jour la configuration d'une partie à partir du JSON
+     * @throws JSONException, URISyntaxException
+     */
     private void setConfiguration(JSONObject json) throws JSONException, URISyntaxException
     {
     	JSONObject configuration = json.getJSONObject(CONFIGURATION);

@@ -63,31 +63,49 @@ public class Game
     }
     
     // *** Getters et setters *** //
+    /**
+     * @param id L'identifiant à définir.
+     */
     public void setId(int id)
     {
         this.id = id;
     }
     
+    /**
+     * @param name Le nom à définir.
+     */
     public void setName(String name)
     {
         this.name = name;
     }
     
+    /**
+     * @param board_size La taille du plateau.
+     */
     public void setBoardSize(int board_size)
     {
         this.board_size = board_size;
     }
     
+    /**
+     * @return L'identifiant de la partie.
+     */
     public int getId()
     {
         return this.id;
     }
     
+    /**
+     * @return La tailel du plateau
+     */
     public int getBoardSize()
     {
         return this.board_size;
     }
     
+    /**
+     * @return Le nom de la partie
+     */
     public String getName()
     {
         return this.name;
@@ -131,26 +149,41 @@ public class Game
         this.legion_number = legion_number;
     }
 
+	/**
+	 * @return Le client actuel.
+	 */
 	public Client getClient() 
 	{
 		return client;
 	}
 
+	/**
+	 * @param client Le client de la partie.
+	 */
 	public void setClient(Client client)
 	{
 		this.client = client;
 	}
 
+	/**
+	 * @return Le plateau associé à la partie.
+	 */
 	public Board getBoard() 
 	{
 		return board;
 	}
 
+	/**
+	 * @param board Le plateau à associer à la partie.
+	 */
 	public void setBoard(Board board) 
 	{
 		this.board = board;
 	}
 	
+	/**
+	 * @return La liste des légions de la partie.
+	 */
 	public List<Legion> getLegions()
 	{
 		List<Legion> legions = new ArrayList<>();
@@ -166,6 +199,11 @@ public class Game
 		return legions;
 	}
 	
+	/**
+	 * @param color La couleur voulue.
+	 * @param shape La forme voulue.
+	 * @return La légion qui a la forme et la couleur voulue.
+	 */
 	public Legion getLegion(String color, String shape)
 	{
 		Legion res = null;
@@ -181,31 +219,50 @@ public class Game
 		return res;
 	}
 	
+	/**
+	 * @return La file des tenailles.
+	 */
 	public Queue<Tenaille> getTenailles()
 	{
 		return this.tenailles;
 	}
 	
+	/**
+	 * @return La file des mouvements.
+	 */
 	public Queue<Move> getMoves()
 	{
 		return this.moves;
 	}
 	
+	/**
+	 * @return La file des batailles.
+	 */
 	public Queue<Battle> getBattles()
 	{
 		return this.battles;
 	}
 
+	/**
+	 * @return La durée d'un tour.
+	 */
 	public long getTurn_duration() 
 	{
 		return turn_duration;
 	}
 
+	/**
+	 * @param turn_duration La durée d'un tour.
+	 */
 	public void setTurn_duration(long turn_duration) 
 	{
 		this.turn_duration = turn_duration;
 	}
 	
+	/**
+	 * @param id L'identifiant du joueur voulu.
+	 * @return Le joueur voulu.
+	 */
 	public Player getPlayer(int id)
 	{
 		Player res = null;
@@ -227,16 +284,26 @@ public class Game
 		System.out.println("Game.sendTurn non défini");
 	}
 
+	/**
+	 * @return La liste des utilisateurs jouant dans cette partie.
+	 */
 	public List<User> getUsers()
 	{
 		return users;
 	}
 
+	/**
+	 * @param users La liste des utilisateurs qui vont jouer dans cette partie.
+	 */
 	public void setUsers(List<User> users)
 	{
 		this.users = users;
 	}
 	
+	/**
+	 * @param id L'identifiant de l'utilisateur recherché.
+	 * @return L'utilisateur voulu.
+	 */
 	public User getUser(int id)
 	{
 		User res = null;
@@ -252,31 +319,49 @@ public class Game
 		return res;
 	}
 
+	/**
+	 * @return l'état de la partie.
+	 */
 	public String getGameState()
 	{
 		return gameState;
 	}
 
+	/**
+	 * @param gameState L'état de la partie.
+	 */
 	public void setGameState(String gameState)
 	{
 		this.gameState = gameState;
 	}
 
+	/**
+	 * @return Le mode de la partie.
+	 */
 	public String getGameMode()
 	{
 		return gameMode;
 	}
 
+	/**
+	 * @param gameMode Le mode de la partie.
+	 */
 	public void setGameMode(String gameMode)
 	{
 		this.gameMode = gameMode;
 	}
 
+	/**
+	 * @return Le nombre de joueur de la partie.
+	 */
 	public int getNumberOfPlayer()
 	{
 		return numberOfPlayer;
 	}
 
+	/**
+	 * @param numberOfPlayer Le nombre de joueur de la partie.
+	 */
 	public void setNumberOfPlayer(int numberOfPlayer)
 	{
 		this.numberOfPlayer = numberOfPlayer;

@@ -23,6 +23,9 @@ public class LogOut extends CommandClient
         super();
     }
 
+    /**
+     * Construit le JSON de déconnexion.
+     */
     @Override
     public void buildJSON() throws JSONException 
     {

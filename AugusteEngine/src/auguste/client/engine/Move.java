@@ -28,6 +28,12 @@ public class Move
     private boolean destroyed;
     private Board board;
     
+    /**
+     * @param pawn Le pion concerné par le mouvement.
+     * @param beg La position de départ du pion.
+     * @param end La position d'arrivée du pion.
+     * @param board La plateau de jeu.
+     */
     public Move(Pawn pawn, UW beg, UW end, Board board)
     {
         this.pawn = pawn;
@@ -83,16 +89,25 @@ public class Move
         this.pawn = pawn;
     }
     
+    /**
+     * @param b True si le pion doit être détruit, false sinon.
+     */
     public void setDestroyed(boolean b)
     {
     	this.destroyed = b;
     }
     
+    /**
+     * @return True si le pion est détruit, false sinon.
+     */
     public boolean isDestroyed()
     {
     	return this.destroyed;
     }
     
+    /**
+     * @return Le légionnaire qui bouge.
+     */
     public Legionnary applyMove()
     {
 		return (Legionnary) this.board.getCell(this.uwBeg).getPawn();

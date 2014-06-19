@@ -20,6 +20,10 @@ public class GameJoin extends CommandClient
         super();
     }
 
+    /**
+     * Construit le JSON pour joindre une partie.
+     * @throws JSONException
+     */
     @Override
     public void buildJSON() throws JSONException 
     {

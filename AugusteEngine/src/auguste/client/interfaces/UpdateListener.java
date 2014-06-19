@@ -17,7 +17,7 @@
 package auguste.client.interfaces;
 
 /**
- *
+ * Interface à implémenter pour être reconnu par le moteur client.
  * @author Evinrude
  */
 public interface UpdateListener 

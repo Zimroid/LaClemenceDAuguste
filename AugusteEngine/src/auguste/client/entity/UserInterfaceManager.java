@@ -38,6 +38,9 @@ public class UserInterfaceManager
 		this.allMessages	= new HashMap<>();
 	}
 	
+	/**
+	 * @return L'instance courante de la classe.
+	 */
 	public static UserInterfaceManager getInstance()
 	{
 		if(INSTANCE == null)
@@ -47,8 +50,10 @@ public class UserInterfaceManager
 		return INSTANCE;
 	}
 	
-	/*
+	/**
 	 * Fonctions pour ajouter un élément à une file en fonction de la partie
+	 * @param gameId L'identifiant de la partie concernée.
+	 * @param tenaille La tenaille à ajouter.
 	 */
 	public void addTenaille(int gameId, Tenaille tenaille)
 	{
@@ -65,6 +70,10 @@ public class UserInterfaceManager
 		}
 	}
 	
+	/**
+	 * @param gameId L'identifiant de la partie concernée.
+	 * @param move Le mouvement à ajouter.
+	 */
 	public void addMoves(int gameId, Move move)
 	{
 		if(this.getMoves(gameId) == null)
@@ -80,6 +89,10 @@ public class UserInterfaceManager
 		}
 	}
 	
+	/**
+	 * @param gameId L'identifiant de la partie concernée.
+	 * @param battle La bataille à ajouter.
+	 */
 	public void addBattles(int gameId, Battle battle)
 	{
 		if(this.getBattles(gameId) == null)
@@ -95,6 +108,10 @@ public class UserInterfaceManager
 		}
 	}
 	
+	/**
+	 * @param gameId L'identifiant de la partie concernée.
+	 * @param message Le message à ajouter.
+	 */
 	public void addMessageChat(int gameId, ChatMessageReceived message)
 	{
 		if(this.getChatMessageReceived(gameId) == null)
@@ -113,21 +130,37 @@ public class UserInterfaceManager
 	/*
 	 * Fonctions pour récupérer les files originales
 	 */
+	/**
+	 * @param id L'identifiant de la partie concernée.
+	 * @return La file des tenailles de la partie.
+	 */
 	public Queue<Tenaille> getTenailles(int id)
 	{
 		return this.tenailles.get(id);
 	}
 	
+	/**
+	 * @param id L'identifiant de la partie concernée.
+	 * @return La file des mouvements de la partie.
+	 */
 	public Queue<Move> getMoves(int id)
 	{
 		return this.moves.get(id);
 	}
 	
+	/**
+	 * @param id L'identifiant de la partie concernée.
+	 * @return La file des batailles de la partie.
+	 */
 	public Queue<Battle> getBattles(int id)
 	{
 		return this.battles.get(id);
 	}
 	
+	/**
+	 * @param id L'identifiant de la partie concernée.
+	 * @return La file des messages de la partie.
+	 */
 	public Queue<ChatMessageReceived> getChatMessageReceived(int id)
 	{
 		return this.messages.get(id);
@@ -135,6 +168,10 @@ public class UserInterfaceManager
 	
 	/*
 	 * Fonction pour ajouter les files des différentes interfaces aux lists
+	 */
+	/**
+	 * @param id L'identifiant de la partie concernée.
+	 * @param queue La file à ajouter.
 	 */
 	public void addQueueTenaille(int id, Queue<Tenaille> queue)
 	{
@@ -151,6 +188,10 @@ public class UserInterfaceManager
 		}
 	}
 	
+	/**
+	 * @param id L'identifiant de la partie concernée.
+	 * @param queue La file à ajouter.
+	 */
 	public void addQueueBattle(int id, Queue<Battle> queue)
 	{
 		if(this.allBattles.get(id) == null)
@@ -166,6 +207,10 @@ public class UserInterfaceManager
 		}
 	}
 	
+	/**
+	 * @param id L'identifiant de la partie concernée.
+	 * @param queue La file à ajouter.
+	 */
 	public void addQueueMove(int id, Queue<Move> queue)
 	{
 		if(this.allMoves.get(id) == null)
@@ -181,6 +226,10 @@ public class UserInterfaceManager
 		}
 	}
 	
+	/**
+	 * @param id L'identifiant de la partie concernée.
+	 * @param queue La file à ajouter.
+	 */
 	public void addQueueMessageChat(int id, Queue<ChatMessageReceived> queue)
 	{
 		if(this.allMessages.get(id) == null)
@@ -200,6 +249,9 @@ public class UserInterfaceManager
 	 * Fonction pour remplir les Queue des interface à partir de la queue originale du moteur
 	 */
 	
+	/**
+	 * @param id L'identifiant de la partie concernée.
+	 */
 	public void fillQueueTenaille(int id)
 	{
 		Queue<Tenaille> queue = this.getTenailles(id);
@@ -219,6 +271,9 @@ public class UserInterfaceManager
 		}
 	}
 	
+	/**
+	 * @param id L'identifiant de la partie concernée.
+	 */
 	public void fillQueueMove(int id)
 	{
 		Queue<Move> queue = this.getMoves(id);
@@ -238,6 +293,9 @@ public class UserInterfaceManager
 		}
 	}
 	
+	/**
+	 * @param id L'identifiant de la partie concernée.
+	 */
 	public void fillQueueBattle(int id)
 	{
 		Queue<Battle> queue = this.getBattles(id);
@@ -257,6 +315,9 @@ public class UserInterfaceManager
 		}
 	}
 	
+	/**
+	 * @param id L'identifiant de la partie concernée.
+	 */
 	public void fillQueueChatMessage(int id)
 	{
 		Queue<ChatMessageReceived> queue = this.getChatMessageReceived(id);

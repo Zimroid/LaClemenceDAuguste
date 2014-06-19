@@ -20,6 +20,10 @@ public class GameList extends CommandClient
         super();
     }
 
+    /**
+     * Construit le JSON qui servira à récupérer les parties disponibles sur le serveur.
+     * @throws JSONException
+     */
     @Override
     public void buildJSON() throws JSONException 
     {

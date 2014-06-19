@@ -27,17 +27,27 @@ public class ClientSocket extends WebSocketClient
 	
 	private static ClientSocket INSTANCE;
         
+	/**
+	 * @param serverURI L'adresse du serveur.
+	 */
 	private ClientSocket(URI serverURI)
 	{
 		super(serverURI);
 	}
 
+	/**
+	 * @throws URISyntaxException
+	 */
 	private ClientSocket() throws URISyntaxException
 	{
 		this(new URI(CONNECTION_STRING));
 		System.out.println("Client created");
 	}
         
+    /**
+     * @return L'instance courante de la socket.
+     * @throws URISyntaxException
+     */
     public static ClientSocket getInstance() throws URISyntaxException
     {
         if(INSTANCE == null)

@@ -23,6 +23,10 @@ public class LogIn extends CommandClient
         super();
     }
 
+    /**
+     * Construit le JSON de login.
+     * @throws JSONException
+     */
     @Override
     public void buildJSON() throws JSONException 
     {
@@ -37,6 +41,11 @@ public class LogIn extends CommandClient
         System.out.println(this.getJSON().toString());
     }
     
+    /**
+     * Crypte une chaine de caractère pour qu'elle puisse être lue par le serveur.
+     * @param password La chaine à crypter.
+     * @return La chaine cryptée.
+     */
     private static String hashPassword(String password)
     {
         try

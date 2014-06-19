@@ -33,6 +33,10 @@ public class ChatMessage extends CommandServer
         this.IUM = UserInterfaceManager.getInstance();
     }
 
+    /**
+     * Récupère un message de chat d'un JSON. Le message est classé en fonction de sa room. Une notification est envoyée aux interfaces utilisateurs.
+     * @throws JSONException
+     */
     @Override
     public void execute() throws JSONException 
     {

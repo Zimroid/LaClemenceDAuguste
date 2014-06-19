@@ -52,13 +52,18 @@ public class Team
         this.players = players;
     }
     
+    /**
+     * @param id L'identifiant du joueur voulu.
+     * @return Le joueur.
+     */
     public Player getPlayer(int id)
     {
         return this.tabPlayers.get(id);
     }
     
-    /*
+    /**
      * Mise à jour du joueur passé en paramètre. S'il n'existe pas, un nouveau joueur est inseré.
+     * @param player Le joueur à mettre à jour.
      */
     public void updatePlayer(Player player)
     {
@@ -72,6 +77,9 @@ public class Team
         this.tabPlayers.put(player.getId(), player);
     }
     
+    /**
+     * @param p Le joueur à retirer.
+     */
     public void removePlayer(Player p)
     {
         this.players.remove(p);

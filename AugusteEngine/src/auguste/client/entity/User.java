@@ -16,6 +16,9 @@ public class User
     private int id;
     private boolean owner;
     
+    /**
+     * @param name Le nom de l'utilisateur.
+     */
     public User(String name)
     {
         this.name = name;
@@ -28,33 +31,52 @@ public class User
         this.id = -1;
     }
     
+    /**
+     * @param id L'identifiant de l'utilisateur.
+     */
     public User(int id)
     {
         this.id = id;
         this.name = "";
     }
     
+    /**
+     * @param id L'identifiant de l'utilisateur.
+     * @param name Le nom de l'utilisateur.
+     */
     public User(int id, String name)
     {
         this.name = name;
         this.id = id;
     }
     
+    /**
+     * @param name Le nom de l'utilisateur.
+     */
     public void setName(String name)
     {
         this.name = name;
     }
     
+    /**
+     * @param id L'identifiant de l'utilisateur.
+     */
     public void setId(int id)
     {
         this.id = id;
     }
     
+    /**
+     * @return Le nom de l'utilisateur.
+     */
     public String getName()
     {
         return this.name;
     }
     
+    /**
+     * @return L'identifiant de l'utilisateur.
+     */
     public int getId()
     {
         return this.id;
@@ -66,11 +88,17 @@ public class User
     	return this.name;
     }
 
+	/**
+	 * @return True si le joueur est responsable de la salle, false sinon.
+	 */
 	public boolean isOwner()
 	{
 		return owner;
 	}
 
+	/**
+	 * @param owner True si le joueur est responsable de la salle, false sinon.
+	 */
 	public void setOwner(boolean owner)
 	{
 		this.owner = owner;

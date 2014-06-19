@@ -30,6 +30,10 @@ public class GameTurn extends CommandClient
         super();
     }
 
+    /**
+     * Construit le JSON qui enverra les données d'un tour de jeu au serveur.
+     * @throws JSONException
+     */
     @Override
     public void buildJSON() throws JSONException 
     {

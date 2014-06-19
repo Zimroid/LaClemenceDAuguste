@@ -1,0 +1,15 @@
+auguste.client.command.client
+auguste.client.command.manager
+auguste.client.command.server
+auguste.client.engine
+auguste.client.entity
+auguste.client.interfaces
+auguste.client.reseau
+auguste.user.chat
+auguste.user.error
+auguste.user.gamelist
+auguste.user.room
+auguste.user.shapes
+auguste.user.userinterface
+clientjavaacrobatt
+packagetest

@@ -30,7 +30,7 @@ public class CommandServerManager
 {
 
     /**
-     *
+     * Cette fonction décompose un message reçu par le serveur. Elle crée la commande nécessaire et l'éxécute. 
      * @param client
      * @param param
      *      La chaine qui contient la commande et ses paramètres.

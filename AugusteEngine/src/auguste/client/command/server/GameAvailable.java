@@ -36,6 +36,12 @@ public class GameAvailable extends CommandServer
         super();
     }
 
+    /**
+     * Récupère la liste des partie disponibles depuis un serveur.
+     * On récupère l'ID de la room, le nom de la partie, la taille du plateau, la durée d'un tour, l'état de la partie, le mode de la partie, le nombre de joueur.
+     * Une notification est envoyée aux interfaces utilisateurs.
+     * @throws JSONException
+     */
     @Override
     public void execute() throws JSONException 
     {

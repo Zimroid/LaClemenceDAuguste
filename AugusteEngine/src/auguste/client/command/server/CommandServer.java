@@ -27,21 +27,37 @@ public abstract class CommandServer
     public CommandServer()
     {}
     
+    /**
+     * Récupère le JSON associé à une commande serveur.
+     * @return Le JSON associé à la commande serveur.
+     */
     public JSONObject getJSON()
     {
         return this.json;
     }
     
+    /**
+     * Définie le JSON associé à une commande serveur.
+     * @param json Le JSON à associer.
+     */
     public void setJSON(JSONObject json)
     {
         this.json = json;
     }
     
+    /**
+     * Récupère le client associé à une commande serveur.
+     * @return Le client associé à une commande serveur.
+     */
     public Client getClient()
     {
         return this.client;
     }
     
+    /**
+     * Définie le client associé à une commande serveur.
+     * @param client Le client à associer.
+     */    
     public void setClient(Client client)
     {
         this.client = client;

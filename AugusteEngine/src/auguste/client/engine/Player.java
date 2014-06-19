@@ -31,6 +31,9 @@ public class Player
     private Game game;
     private List<Legion> legions;
     
+    /**
+     * @param id L'identifiant à associer au joueur.
+     */
     public Player(int id)
     {
         this.id = id;
@@ -85,16 +88,25 @@ public class Player
         this.game = game;
     }
     
+    /**
+     * @param l La légion à ajouter au joueur.
+     */
     public void addLegion(Legion l)
     {
     	this.legions.add(l);
     }
     
+    /**
+     * @return La liste des légions controllées par le joueur.
+     */
     public List<Legion> getLegions()
     {
         return this.legions;
     }
     
+    /**
+     * @param legions La liste des légions que le joueur doit pouvoir controller.
+     */
     public void setLegions(List<Legion> legions)
     {
     	this.legions = legions;

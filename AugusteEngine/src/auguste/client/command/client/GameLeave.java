@@ -30,6 +30,10 @@ public class GameLeave extends CommandClient
         super();
     }
     
+    /**
+     * Construit le JSON pour quitter une partie sur le serveur.
+     * @throws JSONException
+     */
     @Override
     public void buildJSON() throws JSONException 
     {

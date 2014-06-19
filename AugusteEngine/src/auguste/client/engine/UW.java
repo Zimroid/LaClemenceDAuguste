@@ -25,17 +25,27 @@ public class UW
     private final int u;
     private final int w;
     
+    /**
+     * @param u La coordonnée U
+     * @param w La coordonnée W
+     */
     public UW(int u, int w)
     {
         this.u = u;
         this.w = w;
     }
     
+    /**
+     * @return La coordonnée U
+     */
     public int getU()
     {
         return this.u;
     }
     
+    /**
+     * @return La coordonnée W
+     */
     public int getW()
     {
         return this.w;
@@ -68,6 +78,10 @@ public class UW
         }
     }
     
+    /**
+     * @param uw Les coordonnées à convertir du serveur.
+     * @return Les coorodnnées converties.
+     */
     public static UW convertFrom(UW uw)
     {
     	UW res;

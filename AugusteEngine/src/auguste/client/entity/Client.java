@@ -36,6 +36,9 @@ public class Client
     
     private String confirmMessage;
     
+    /**
+     * @throws URISyntaxException
+     */
     private Client() throws URISyntaxException
     {
         this.socket = ClientSocket.getInstance();
@@ -47,6 +50,10 @@ public class Client
         this.socket.connect();
     }
     
+    /**
+     * @return L'instance courante du client.
+     * @throws URISyntaxException
+     */
     public static Client getInstance() throws URISyntaxException
     {
         if(INSTANCE == null)
@@ -56,11 +63,17 @@ public class Client
         return INSTANCE;
     }
     
+    /**
+     * @return La liste des interface utilisateurs qui utilisent le client actuellement.
+     */
     public List<UpdateListener> getInterfaces()
     {
         return this.interfaces;
     }
     
+    /**
+     * @return La socket utilisée pour communiquer avec le serveur.
+     */
     public ClientSocket getClientSocket()
     {
         return this.socket;
@@ -89,21 +102,33 @@ public class Client
         CommandClientManager.executeCommand(INSTANCE, command);
     }
     
+    /**
+     * @return La liste des partie disponibles sur le serveur.
+     */
     public List<Game> getGameAvailable()
     {
         return this.gameAvailable;
     }
     
+    /**
+     * @param games La liste des partie disponibles sur le serveur.
+     */
     public void setGameAvailable(List<Game> games)
     {
         this.gameAvailable = games;
     }
     
+    /**
+     * @return L'utilisateur courant.
+     */
     public User getUser()
     {
         return this.currentUser;
     }
     
+    /**
+     * @param user L'utilisateur courant.
+     */
     public void setUser(User user)
     {
         this.currentUser = user;
@@ -121,6 +146,10 @@ public class Client
         return res;
     }
     
+    /**
+     * @param id L'identifiant de la bataille à récupérer
+     * @return La bataille voulue.
+     */
     public Queue<Battle> getBattles(int id)
     {
     	Queue<Battle> res = new LinkedList<>();
@@ -130,6 +159,10 @@ public class Client
     	return res;
     }
     
+    /**
+     * @param id L'identifiant du mouvement à récupérer.
+     * @return Le mouvement voulu.
+     */
     public Queue<Move> getMoves(int id)
     {
     	Queue<Move> res = new LinkedList<>();
@@ -139,6 +172,10 @@ public class Client
     	return res;
     }
     
+    /**
+     * @param id L'identifiant de la tenaille à récupérer.
+     * @return La tenaille voulue.
+     */
     public Queue<Tenaille> getTenailles(int id)
     {
     	Queue<Tenaille> res = new LinkedList<>();
@@ -148,11 +185,17 @@ public class Client
     	return res;
     }
 
+    /**
+     * @return Le message de confirmation.
+     */
     public String getConfirmMessage() 
     {
         return this.confirmMessage;
     }
     
+    /**
+     * @param confirmMessage Le message de confirmation.
+     */
     public void setConfirmMessage(String confirmMessage)
     {
         this.confirmMessage = confirmMessage;
@@ -165,16 +208,26 @@ public class Client
         return this.games;
     }
     
+    /**
+     * @param game La partie à ajouter au client.
+     */
     public void addGame(Game game)
     {
         this.games.add(game);
     }
     
+    /**
+     * @param id La partie à retirer du client.
+     */
     public void removeGame(int id)
     {
         this.games.remove(this.getGame(id));
     }
     
+    /**
+     * @param id L'identifiant de la partie qu'on veut récupérer.
+     * @return La partie voulue.
+     */
     public Game getGame(int id)
     {
         Game res = null;
@@ -190,6 +243,9 @@ public class Client
         return res;
     }
     
+    /**
+     * @param game La partie à actualiser.
+     */
     public void updateGame(Game game)
     {
         if(this.getGame(game.getId()) != null)
@@ -199,6 +255,9 @@ public class Client
         this.addGame(game);
     }
     
+    /**
+     * @param ui L'interface à ajouter au client.
+     */
     public void addInterface(UpdateListener ui)
     {
     	this.interfaces.add(ui);

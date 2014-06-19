@@ -33,6 +33,11 @@ public class Turn
     private final int turnNumber;
     private final Game game;
     
+    /**
+     * @param game La partie concernée.
+     * @param id L'identifiant du tour.
+     * @param turnNumber Le numéro du tour.
+     */
     public Turn(Game game, int id, int turnNumber)
     {
         this.game = game;
@@ -40,6 +45,10 @@ public class Turn
         this.turnNumber = turnNumber;
     }
     
+    /**
+     * @return La représentation en JSON du tour.
+     * @throws JSONException
+     */
     public JSONObject toJSON() throws JSONException
     {
         JSONObject json = new JSONObject();

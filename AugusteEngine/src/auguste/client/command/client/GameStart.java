@@ -20,6 +20,10 @@ public class GameStart extends CommandClient
         super();
     }
 
+    /**
+     * Construit le JSON qui permet de lancer une partie.
+     * @throws JSONException
+     */
     @Override
     public void buildJSON() throws JSONException 
     {

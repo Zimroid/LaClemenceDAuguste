@@ -22,7 +22,7 @@ public class GameCreate extends CommandClient
     }
 
     /**
-     * 
+     * Construit le JSON de création de partie.
      * @throws JSONException
      */
     @Override
