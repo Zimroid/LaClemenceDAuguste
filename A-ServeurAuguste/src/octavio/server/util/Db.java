@@ -39,9 +39,9 @@ public class Db
     public static Connection open() throws SQLException
     {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://" + Configuration.get("db_host") + ":" + Configuration.get("db_port") + "/" + Configuration.get("db_name"),
-                Configuration.get("db_login"),
-                Configuration.get("db_password")
+                "jdbc:mysql://" + Configuration.get("db_host", "") + ":" + Configuration.get("db_port", "") + "/" + Configuration.get("db_name", ""),
+                Configuration.get("db_login", ""),
+                Configuration.get("db_password", "")
         );
         connection.setAutoCommit(false);
         return connection;

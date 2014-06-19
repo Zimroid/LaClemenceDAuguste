@@ -57,7 +57,7 @@ public class ChatSend extends ClientCommand
                             this.getUser(),
                             new Date(),
                             this.getJSON().getString("message")
-                    )
+                    ).toString()
             );
         }
     }

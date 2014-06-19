@@ -16,21 +16,69 @@
 
 package octavio.server.exception;
 
+import java.util.Properties;
+import octavio.server.commands.server.ErrorCommand;
+
 /**
- * Exception lancée lorsqu'une commande émise par un client n'est pas reconnue.
+ * Exception émise lorsqu'une commande réalisée par un client est impossible à
+ * effectuer. Cette exception stocke également une liste d'arguments pour
+ * préciser l'erreur.
  *
  * @author Lzard
  */
 public class CommandException extends Exception
 {
     /**
-     * Enregistre la commande non-reconnue.
-     *
-     * @param command Commande non-reconnue
+     * Code du message d'erreur.
      */
-    public CommandException(String command)
+    private final String code;
+
+    /**
+     * Arguments du message d'erreur.
+     */
+    private final Properties args = new Properties();
+
+    /**
+     * Création de l'exception avec le message donné.
+     *
+     * @param message Message d'erreur
+     * @param code    Code du message d'erreur à envoyer aux clients
+     */
+    public CommandException(String message, String code)
     {
-        super("Command error: unknown command " + command);
+        super(message);
+        this.code = code;
     }
 
+    /**
+     * Ajoute un argument au message d'erreur.
+     *
+     * @param key   Nom de l'argument
+     * @param value Valeur de l'argument
+     */
+    public void setArgument(String key, String value)
+    {
+        this.args.setProperty(key, value);
+    }
+
+    /**
+     * Retourne une nouvelle instance de commande d'erreur à émettre avec cette
+     * exception.
+     *
+     * @return Commande d'erreur décrivant l'exception
+     */
+    public ErrorCommand getErrorCommand()
+    {
+        ErrorCommand command = new ErrorCommand(this.code);
+
+        this.args.stringPropertyNames().stream().forEach((key) ->
+        {
+            command.setArgument(
+                    key,
+                    this.args.getProperty(key)
+            );
+        });
+
+        return command;
+    }
 }

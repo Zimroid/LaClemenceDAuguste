@@ -57,7 +57,7 @@ public class User
     {
         try
         {
-            MessageDigest digest = MessageDigest.getInstance(Configuration.get("hash_algorithm"));
+            MessageDigest digest = MessageDigest.getInstance(Configuration.get("hash_algorithm", "SHA-1"));
             digest.reset();
             digest.update(password.getBytes());
             return new String(Hex.encodeHex(digest.digest()));
@@ -100,8 +100,8 @@ public class User
         // Paramètres
         try
         {
-            this.parameters.put("user_favourite_pawns", Configuration.get("user_default_favourite_pawns"));
-            this.parameters.put("user_favourite_color", Configuration.get("user_default_favourite_color"));
+            this.parameters.put("user_favourite_pawns", Configuration.get("user_default_favourite_pawns", "hexagon"));
+            this.parameters.put("user_favourite_color", Configuration.get("user_default_favourite_color", "red"));
         }
         catch (JSONException e)
         {
@@ -126,8 +126,8 @@ public class User
         // Paramètres
         try
         {
-            this.parameters.put("user_favourite_pawns", Configuration.get("user_default_favourite_pawns"));
-            this.parameters.put("user_favourite_color", Configuration.get("user_default_favourite_color"));
+            this.parameters.put("user_favourite_pawns", Configuration.get("user_default_favourite_pawns", "hexagon"));
+            this.parameters.put("user_favourite_color", Configuration.get("user_default_favourite_color", "red"));
         }
         catch (JSONException e)
         {

@@ -47,13 +47,13 @@ public class Main
             Configuration.load(Main.CONFIGURATION_FILE);
 
             // Vérification du mode hors-ligne
-            if (Configuration.getBoolean("online"))
+            if (Configuration.getBoolean("online", false))
             {
                 // Vérification de la présence du driver JDBC
-                Class.forName(Configuration.get("db_driver"));
+                Class.forName(Configuration.get("db_driver", ""));
 
                 // Vérification de la disponibilité de l'algorithme de hashage
-                MessageDigest.getInstance(Configuration.get("hash_algorithm"));
+                MessageDigest.getInstance(Configuration.get("hash_algorithm", "SHA-1"));
             }
 
             // Lancement

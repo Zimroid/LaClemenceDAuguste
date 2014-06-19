@@ -60,7 +60,7 @@ public class Log
      */
     public static void debug(String message)
     {
-        if (Configuration.getBoolean("debug"))
+        if (Configuration.getBoolean("debug", false))
         {
             Log.DEBUG.println("DEBUG " + ((new SimpleDateFormat("HH:mm:ss:SSS")).format(new Date())) + " -- " + message);
         }

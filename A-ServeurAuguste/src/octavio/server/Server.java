@@ -57,8 +57,8 @@ public class Server extends WebSocketServer
     // Création du singleton
     private static final Server INSTANCE = new Server(
             new InetSocketAddress(
-                    Configuration.get("server_host_name"),
-                    Configuration.getInt("server_host_port")
+                    Configuration.get("server_host_name", "localhost"),
+                    Configuration.getInt("server_host_port", 76543)
             )
     );
 

@@ -100,7 +100,7 @@ public abstract class ClientCommand
         catch (IllegalArgumentException e)
         {
             // Commande inconnue
-            throw new CommandException(name);
+            throw new CommandException(name, e.toString());
         }
     }
 

@@ -101,8 +101,8 @@ public class Room implements GameListener
         try
         {
             this.configuration.put("game_name", name);
-            this.configuration.put("game_board_size", Configuration.getInt("game_default_board_size"));
-            this.configuration.put("game_turn_duration", Configuration.getLong("game_default_turn_duration"));
+            this.configuration.put("game_board_size", Configuration.getInt("game_default_board_size", 5));
+            this.configuration.put("game_turn_duration", Configuration.getLong("game_default_turn_duration", 30000));
             this.configuration.put("game_mode", "normal");
         }
         catch (JSONException e)
