@@ -16,14 +16,14 @@
 
 package octavio.server.command.client;
 
+import java.sql.SQLException;
 import octavio.server.command.ClientCommand;
 import octavio.server.exception.RuleException;
-import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
  * Commande pour commencer une partie.
- * 
+ *
  * @author Lzard
  */
 public class GameStart extends ClientCommand
@@ -31,7 +31,10 @@ public class GameStart extends ClientCommand
     @Override
     public void execute() throws SQLException, JSONException, RuleException
     {
-        this.getRoom().start();
+        synchronized (this.getRoom())
+        {
+            this.getRoom().start();
+        }
     }
-    
+
 }

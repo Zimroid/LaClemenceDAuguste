@@ -16,19 +16,19 @@
 
 package octavio.server.command.client;
 
-import octavio.server.command.ClientCommand;
-import octavio.server.User;
-import octavio.server.manager.UserManager;
-import octavio.server.util.Db;
 import java.sql.Connection;
 import java.sql.SQLException;
+import octavio.server.User;
+import octavio.server.command.ClientCommand;
+import octavio.server.manager.UserManager;
+import octavio.server.util.Db;
 import org.json.JSONException;
 
 /**
  * Commande de création d'un compte. Instancie un objet User avec les paramètres
  * donnés, ouvre une connexion à la base de données, vérifie la disponibilité
  * du nom puis ajoute l'utilisateur.
- * 
+ *
  * @author Lzard
  */
 public class AccountCreate extends ClientCommand
@@ -38,13 +38,13 @@ public class AccountCreate extends ClientCommand
     {
         return false;
     }
-    
+
     @Override
     public boolean checkRoom()
     {
         return false;
     }
-    
+
     @Override
     public void execute() throws JSONException, SQLException
     {
@@ -70,10 +70,16 @@ public class AccountCreate extends ClientCommand
                     connection.commit();
                     this.confirm("account_create");
                 }
-                else this.error("name_unavailable");
+                else
+                {
+                    this.error("name_unavailable");
+                }
             }
         }
-        else this.error("already_logged");
+        else
+        {
+            this.error("already_logged");
+        }
     }
-    
+
 }

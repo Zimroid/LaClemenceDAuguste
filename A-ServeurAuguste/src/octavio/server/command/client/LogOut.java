@@ -16,14 +16,14 @@
 
 package octavio.server.command.client;
 
-import octavio.server.command.ClientCommand;
 import octavio.server.Server;
+import octavio.server.command.ClientCommand;
 import octavio.server.exception.AuthentificationException;
 import org.json.JSONException;
 
 /**
  * Commande de désauthentification d'un client.
- * 
+ *
  * @author Lzard
  */
 public class LogOut extends ClientCommand
@@ -33,12 +33,12 @@ public class LogOut extends ClientCommand
     {
         return false;
     }
-    
+
     @Override
     public void execute() throws JSONException, AuthentificationException
     {
         // Désauthentification de l'utilisateur
         Server.getInstance().logOut(this.getUser());
     }
-    
+
 }

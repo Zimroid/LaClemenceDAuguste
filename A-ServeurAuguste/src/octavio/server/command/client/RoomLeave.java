@@ -16,15 +16,15 @@
 
 package octavio.server.command.client;
 
-import octavio.server.command.ClientCommand;
 import octavio.server.Server;
+import octavio.server.command.ClientCommand;
 import org.json.JSONException;
 
 /**
  * Commande pour quitter une partie. Retire l'utilisateur du salon puis
  * envoi une confirmation aux utilisateurs du salon et à l'utilisateur
  * ayant envoyé la commande.
- * 
+ *
  * @author Lzard
  */
 public class RoomLeave extends ClientCommand
@@ -32,9 +32,12 @@ public class RoomLeave extends ClientCommand
     @Override
     public void execute() throws JSONException
     {
-        // Retrait de l'utilisateur du salon
-        Server.getInstance().leaveRoom(this.getUser(), this.getRoom());
-        this.confirm("room_left");
+        synchronized (this.getRoom())
+        {
+            // Retrait de l'utilisateur du salon
+            Server.getInstance().leaveRoom(this.getUser(), this.getRoom());
+            this.confirm("room_left");
+        }
     }
-    
+
 }

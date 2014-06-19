@@ -16,16 +16,16 @@
 
 package octavio.server.command.client;
 
-import octavio.server.command.ClientCommand;
 import octavio.server.Room;
 import octavio.server.Server;
+import octavio.server.command.ClientCommand;
 import octavio.server.exception.InexistantRoomException;
 import org.json.JSONException;
 
 /**
  * Commande pour rejoindre une partie. Identifie le salon et, si il existe et
  * que l'utilisateur ne l'a pas déjà rejoint, y ajoute l'utilisateur.
- * 
+ *
  * @author Lzard
  */
 public class RoomJoin extends ClientCommand
@@ -35,20 +35,26 @@ public class RoomJoin extends ClientCommand
     {
         return false;
     }
-    
+
     @Override
     public void execute() throws InexistantRoomException, JSONException
     {
         // Récupération du salon
         Room room = Server.getInstance().getRoom(this.getJSON().getInt("room_id"));
 
-        // Vérification de la non-présence de l'utilisateur
-        if (!room.isInRoom(this.getUser()))
+        synchronized (room)
         {
-            // Ajout du client au salon
-            Server.getInstance().joinRoom(this.getUser(), room);
+            // Vérification de la non-présence de l'utilisateur
+            if (!room.isInRoom(this.getUser()))
+            {
+                // Ajout du client au salon
+                Server.getInstance().joinRoom(this.getUser(), room);
+            }
+            else
+            {
+                this.error("already_in_this_room");
+            }
         }
-        else this.error("already_in_this_room");
     }
-    
+
 }

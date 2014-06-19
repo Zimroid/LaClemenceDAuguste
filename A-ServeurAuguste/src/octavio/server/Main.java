@@ -16,26 +16,27 @@
 
 package octavio.server;
 
-import octavio.server.util.Configuration;
-import octavio.server.util.Log;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import octavio.server.util.Configuration;
+import octavio.server.util.Log;
 
 /**
  * Classe statique de lancement du serveur.
- * 
+ *
  * @author Lzard
  */
 public class Main
 {
     // Chemin du fichier de configuration
     private static final String CONFIGURATION_FILE = "properties.conf";
-    
+
     /**
      * Point d'entrée de l'application. Charge la configuration, vérifie
      * la présence du driver JDBC et la disponibilité de l'algorithme de
      * hashage s'il s'agit d'un serveur en ligne, puis lance le serveur.
+     *
      * @param args Arguments de la commande
      */
     public static void main(String[] args)
@@ -44,7 +45,7 @@ public class Main
         {
             // Chargement de la configuration
             Configuration.load(Main.CONFIGURATION_FILE);
-            
+
             // Vérification du mode hors-ligne
             if (Configuration.getBoolean("online"))
             {
@@ -54,7 +55,7 @@ public class Main
                 // Vérification de la disponibilité de l'algorithme de hashage
                 MessageDigest.getInstance(Configuration.get("hash_algorithm"));
             }
-            
+
             // Lancement
             Server.getInstance().start();
         }
@@ -77,5 +78,5 @@ public class Main
             Log.debug(e);
         }
     }
-    
+
 }

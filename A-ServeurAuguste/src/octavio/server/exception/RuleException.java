@@ -18,18 +18,19 @@ package octavio.server.exception;
 
 /**
  * Exception lancée lorsqu'une commande enfreint les règles du jeu.
- * 
+ *
  * @author Lzard
  */
 public class RuleException extends Exception
 {
     /**
      * Enregistre l'énoncé de la règle enfreinte.
+     *
      * @param rule Règle enfreinte
      */
     public RuleException(String rule)
     {
         super("Forbidden action: " + rule);
     }
-    
+
 }

@@ -23,7 +23,7 @@ import java.sql.SQLException;
 /**
  * Classe utilitaire de connexion à la base de données. Ouvre les connexions et
  * désactive le commit automatique des requêtes afin d'éviter les erreurs.
- * 
+ *
  * @author Lzard
  */
 public class Db
@@ -31,7 +31,9 @@ public class Db
     /**
      * Ouvre et retourne une connexion à la base de données. La fonctionnalité
      * de commit automatique de la connexion ouverte est désactivée.
+     *
      * @return Une instance de Connection
+     *
      * @throws SQLException Erreur SQL
      */
     public static Connection open() throws SQLException
@@ -44,5 +46,5 @@ public class Db
         connection.setAutoCommit(false);
         return connection;
     }
-    
+
 }

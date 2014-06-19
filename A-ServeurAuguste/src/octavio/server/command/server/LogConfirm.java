@@ -16,29 +16,30 @@
 
 package octavio.server.command.server;
 
-import octavio.server.command.ServerCommand;
 import octavio.server.User;
+import octavio.server.command.ServerCommand;
 
 /**
  * Commande de confirmation d'authentification. Envoi les données et paramètres
  * de l'utilisateur.
- * 
+ *
  * @author Lzard
  */
 public class LogConfirm extends ServerCommand
 {
     /**
      * Remplit le JSON avec les données de l'utilisateur.
+     *
      * @param user Utilisateur authentifié
      */
     public LogConfirm(User user)
     {
         // Constructeur de la classe mère
         super("log_confirm");
-        
+
         // Remplissage du JSON
         user.addUserInformations(this.getJSON());
         user.addUserParameters(this.getJSON());
     }
-    
+
 }

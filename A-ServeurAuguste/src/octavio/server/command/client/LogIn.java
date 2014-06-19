@@ -13,50 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package octavio.server.command.client;
 
-import octavio.server.command.ClientCommand;
+import java.sql.Connection;
+import java.sql.SQLException;
 import octavio.server.Server;
 import octavio.server.User;
+import octavio.server.command.ClientCommand;
 import octavio.server.command.server.LogConfirm;
 import octavio.server.manager.UserManager;
 import octavio.server.util.Db;
-import java.sql.Connection;
-import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
  * Commande d'authentification d'un joueur. Si l'utilisateur n'est pas
  * identifié, ouvre une connexion à la base de données et vérifie qu'un
  * utilisateur enregistré correspond au login donné.
- * 
+ *
  * @author Lzard
  */
-public class LogIn extends ClientCommand
-{
+public class LogIn extends ClientCommand {
+
     @Override
-    public boolean checkAuth()
-    {
+    public boolean checkAuth() {
         return false;
     }
-    
+
     @Override
-    public boolean checkRoom()
-    {
+    public boolean checkRoom() {
         return false;
     }
-    
+
     @Override
-    public void execute() throws SQLException, JSONException
-    {
+    public void execute() throws SQLException, JSONException {
         // Commande pouvant être exécutée que si l'utilisateur n'est pas authentifié
-        if (this.getUser() == null)
-        {
+        if (this.getUser() == null) {
             // Connexion à la base de données et récupération de l'utilisateur
             User userToLog;
-            try (Connection connection = Db.open())
-            {
+            try (Connection connection = Db.open()) {
                 UserManager manager = new UserManager(connection);
                 userToLog = manager.getUser(
                         this.getJSON().getString("user_name"),
@@ -65,18 +59,19 @@ public class LogIn extends ClientCommand
             }
 
             // Authentification du client
-            if (userToLog != null)
-            {
+            if (userToLog != null) {
                 // Déconnexion des utilisateurs de même nom déjà connecté
                 Server.getInstance().logOut(userToLog);
-                
+
                 // Connexion de l'utilisateur
                 Server.getInstance().logIn(this.getSocket(), userToLog);
                 this.send((new LogConfirm(userToLog)).toString());
+            } else {
+                this.error("log_error");
             }
-            else this.error("log_error");
+        } else {
+            this.error("already_logged");
         }
-        else this.error("already_logged");
     }
-    
+
 }

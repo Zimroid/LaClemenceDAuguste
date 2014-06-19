@@ -16,9 +16,9 @@
 
 package octavio.server.command.server;
 
-import octavio.server.command.ServerCommand;
 import octavio.server.Room;
 import octavio.server.Server;
+import octavio.server.command.ServerCommand;
 import octavio.server.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +26,7 @@ import org.json.JSONObject;
 
 /**
  * Commande d'envoi de la liste des salons créés.
- * 
+ *
  * @author Lzard
  */
 public class ListGames extends ServerCommand
@@ -38,7 +38,7 @@ public class ListGames extends ServerCommand
     {
         // Constructeur de la classe mère
         super("list_games");
-        
+
         // Remplissage du JSON
         try
         {

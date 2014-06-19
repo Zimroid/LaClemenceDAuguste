@@ -16,9 +16,9 @@
 
 package octavio.server.command.server;
 
-import octavio.server.command.ServerCommand;
 import octavio.server.Server;
 import octavio.server.User;
+import octavio.server.command.ServerCommand;
 import octavio.server.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +27,7 @@ import org.json.JSONObject;
 /**
  * Commande de transfert de la liste des utilisateurs authentifiés actuellement
  * connectés au serveur.
- * 
+ *
  * @author Lzard
  */
 public class ListUsers extends ServerCommand
@@ -39,7 +39,7 @@ public class ListUsers extends ServerCommand
     {
         // Constructeur de la classe mère
         super("list_users");
-        
+
         // Remplissage du JSON
         try
         {

@@ -16,16 +16,16 @@
 
 package octavio.server.command.client;
 
-import octavio.server.command.ClientCommand;
+import java.sql.SQLException;
 import octavio.server.Server;
+import octavio.server.command.ClientCommand;
 import octavio.server.command.server.ListGames;
 import octavio.server.exception.RuleException;
-import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
  * Commande pour récupérer la liste des parties disponibles.
- * 
+ *
  * @author Lzard
  */
 public class QueryRooms extends ClientCommand
@@ -35,12 +35,18 @@ public class QueryRooms extends ClientCommand
     {
         return false;
     }
-    
+
     @Override
     public void execute() throws SQLException, JSONException, RuleException
     {
-        if (this.getJSON().has("on_update") && this.getJSON().getString("on_update").equals("true")) Server.getInstance().getRoomsWatchers().add(this.getUser());
-        else this.send((new ListGames()).toString());
+        if (this.getJSON().has("on_update") && this.getJSON().getString("on_update").equals("true"))
+        {
+            Server.getInstance().getRoomsWatchers().add(this.getUser());
+        }
+        else
+        {
+            this.send((new ListGames()).toString());
+        }
     }
-    
+
 }

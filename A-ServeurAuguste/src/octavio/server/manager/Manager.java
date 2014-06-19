@@ -25,17 +25,18 @@ import java.sql.Statement;
  * Classe abstraite des gestionnaires de données à faire persister. Utilise une
  * connexion à la base de données pour effectuer des requêtes dans le but de
  * faire persister un type d'objet précis.
- * 
+ *
  * @author Lzard
  */
 public abstract class Manager
 {
     // Connexion à la base de données
     private final Connection connection;
-    
+
     /**
      * Initialisation de la connexion à la base de données. Le gestionnaire
      * utilisera la connexion fournie.
+     *
      * @param connection Connexion à la base de données
      */
     public Manager(Connection connection)
@@ -45,26 +46,38 @@ public abstract class Manager
 
     /**
      * Prépare une requête à la base de donnée connectée.
+     *
      * @param query Requête à préparer
+     *
      * @return PreparedStatement de la requête
+     *
      * @throws SQLException Erreur dans la requête SQL
      */
     protected PreparedStatement query(String query) throws SQLException
     {
         return this.connection.prepareStatement(query);
     }
-    
+
     /**
      * Prépare une requête avec récupération des clés identifiantes générées.
+     *
      * @param query         Requête à préparer
      * @param generatedKeys Retourner les clés identifiantes ?
+     *
      * @return PreparedStatement de la requête
+     *
      * @throws SQLException Erreur dans la requête SQL
      */
     protected PreparedStatement query(String query, boolean generatedKeys) throws SQLException
     {
-        if (generatedKeys) return this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        else               return this.query(query);
+        if (generatedKeys)
+        {
+            return this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        }
+        else
+        {
+            return this.query(query);
+        }
     }
-    
+
 }

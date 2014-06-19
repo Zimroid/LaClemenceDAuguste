@@ -18,18 +18,19 @@ package octavio.server.exception;
 
 /**
  * Exception lancée lorsqu'une commande concerne un salon qui n'existe pas.
- * 
+ *
  * @author Lzard
  */
 public class InexistantRoomException extends Exception
 {
     /**
      * Enregistre l'identifiant du salon inexistant.
+     *
      * @param id Identifiant du salon
      */
     public InexistantRoomException(int id)
     {
         super("Inexistant room: " + id);
     }
-    
+
 }

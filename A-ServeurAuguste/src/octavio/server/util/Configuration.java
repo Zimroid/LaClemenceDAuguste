@@ -19,35 +19,23 @@ package octavio.server.util;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Properties;
 
 /**
  * Classe utilitaire permettant de charger et de lire la configuration du
  * serveur. La configuration est d'abord chargée via la méthode statique load,
- * puis lue avec les méthodes get. Si besoin, la méthode set permet de modifier
- * à la volée ces paramètres.
+ * puis lue avec les méthodes get, getBoolean, getInt et getLong.
  *
  * @author Lzard
  */
 public class Configuration
 {
-    /**
-     * Paramètres de la configuration.
-     */
+    // Properties de la configuration du serveur
     private static final Properties PROPERTIES = new Properties();
 
     /**
-     * Indique si le serveur fonctionne en mode debug.
-     */
-    private static boolean debug = true;
-
-    /**
      * Charge la configuration de base du serveur depuis le fichier de
-     * configuration spécifié. Identifie également si le serveur fonctionne en
-     * mode débug.
+     * configuration spécifié.
      *
      * @param file Chemin du fichier de configuration
      *
@@ -60,124 +48,54 @@ public class Configuration
         {
             Configuration.PROPERTIES.load(stream);
         }
-
-        Configuration.debug = Configuration.getBoolean("debug", false);
     }
 
     /**
-     * Ajoute ou modifie une propriété de la configuration du serveur.
+     * Renvoie le paramètre demandé sous forme de chaîne de caractères.
      *
-     * @param key   Clé de la configuration à modifier
-     * @param value Valeur de la configuration à modifier
+     * @param key Clé du paramètre
+     *
+     * @return Valeur correspondant à la clé ou chaîne vide si clé inconnue
      */
-    public static void set(String key, String value)
+    public static String get(String key)
     {
-        Configuration.PROPERTIES.setProperty(key, value);
+        return Configuration.PROPERTIES.getProperty(key, "");
     }
 
     /**
-     * Retourne le paramètre correspondant à la clé donnée.
+     * Renvoie le paramètre demandé sous forme de booléen.
      *
-     * @param key          Clé du paramètre
-     * @param defaultValue Valeur renvoyée si la clé est absente
+     * @param key Clé du paramètre
      *
-     * @return Valeur du paramètre sous forme de chaîne ou valeur par défaut
+     * @return Valeur correspondant à la clé ou false si clé inconnue
      */
-    public static String get(String key, String defaultValue)
+    public static boolean getBoolean(String key)
     {
-        if (Configuration.PROPERTIES.containsKey(key))
-        {
-            return Configuration.PROPERTIES.getProperty(key);
-        }
-        else
-        {
-            Logger.printError("Configuration: Absent key " + key);
-            return defaultValue;
-        }
+        return Configuration.PROPERTIES.getProperty(key, "false").equals("true");
     }
 
     /**
-     * Retourne le paramètre demandé sous forme de booléen.
+     * Renvoie le paramètre demandée sous forme d'entier.
      *
-     * @param key          Clé du paramètre
-     * @param defaultValue Valeur renvoyée si la clé est absente
+     * @param key Clé de la configuration
      *
-     * @return Valeur du paramètre sous forme de booléen ou valeur par défaut
+     * @return Valeur correspondant à la clé ou 0 si clé inconnue
      */
-    public static boolean getBoolean(String key, boolean defaultValue)
+    public static int getInt(String key)
     {
-        return Configuration.get(
-                key,
-                String.valueOf(defaultValue)
-        ).equals("true");
+        return Integer.valueOf(Configuration.PROPERTIES.getProperty(key, "0"));
     }
 
     /**
-     * Retourne le paramètre demandé sous forme d'entier.
+     * Renvoie le paramètre demandée sous forme d'entier long.
      *
-     * @param key          Clé de la configuration
-     * @param defaultValue Valeur renvoyée si la clé est absente
+     * @param key Clé de la configuration
      *
-     * @return Valeur du paramètre sous forme d'entier ou valeur par défaut
+     * @return Valeur correspondant à la clé ou 0 si clé inconnue
      */
-    public static int getInt(String key, int defaultValue)
+    public static long getLong(String key)
     {
-        return Integer.valueOf(
-                Configuration.get(
-                        key,
-                        String.valueOf(defaultValue)
-                )
-        );
+        return Long.valueOf(Configuration.PROPERTIES.getProperty(key, "0"));
     }
 
-    /**
-     * Retourne le paramètre demandé sous forme d'entier long.
-     *
-     * @param key          Clé de la configuration
-     * @param defaultValue Valeur renvoyée si la clé est absente
-     *
-     * @return Valeur du paramètre sous forme d'entier long ou valeur par défaut
-     */
-    public static long getLong(String key, long defaultValue)
-    {
-        return Long.valueOf(
-                Configuration.get(
-                        key,
-                        String.valueOf(defaultValue)
-                )
-        );
-    }
-
-    /**
-     * Retourne si le serveur fonctionne en mode debug ou non.
-     *
-     * @return Serveur en mode debug ou non
-     */
-    public static boolean isDebugging()
-    {
-        return Configuration.debug;
-    }
-
-    /**
-     * Ouvre et retourne une connexion à la base de données. La fonctionnalité
-     * de commit automatique de la connexion ouverte est désactivée.
-     *
-     * @return Une instance de Connection
-     *
-     * @throws SQLException Erreur SQL
-     */
-    public static Connection getDbConnection() throws SQLException
-    {
-        Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://" + Configuration.get("db_host", "localhost") + ":"
-                + Configuration.get("db_port", "3306")
-                + "/" + Configuration.get("db_name", "octaviodb"),
-                Configuration.get("db_login", "root"),
-                Configuration.get("db_password", "")
-        );
-
-        connection.setAutoCommit(false);
-
-        return connection;
-    }
 }

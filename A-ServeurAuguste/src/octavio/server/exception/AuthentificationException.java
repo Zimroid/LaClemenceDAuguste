@@ -17,10 +17,21 @@
 package octavio.server.exception;
 
 /**
+ * Exception lancée lorsqu'un client non-authentifié tente d'effectuer une
+ * action qu'il ne peut effectuer sans être authentifié.
  *
  * @author Lzard
  */
-public class AuthentificationException
+public class AuthentificationException extends Exception
 {
-    
+    /**
+     * Enregistre la commande demandée qui nécessite d'être authentifié.
+     *
+     * @param command Commande demandée
+     */
+    public AuthentificationException(String command)
+    {
+        super("Authentification error: must be logged to use " + command);
+    }
+
 }

@@ -16,14 +16,14 @@
 
 package octavio.server.command.client;
 
-import octavio.server.command.ClientCommand;
 import octavio.server.Server;
+import octavio.server.command.ClientCommand;
 import octavio.server.command.server.ListUsers;
 import org.json.JSONException;
 
 /**
  * Commande de demande des utilisateurs de tous les utilisateurs authentifiés.
- * 
+ *
  * @author Lzard
  */
 public class QueryUsers extends ClientCommand
@@ -33,12 +33,18 @@ public class QueryUsers extends ClientCommand
     {
         return false;
     }
-    
+
     @Override
     public void execute() throws JSONException
     {
-        if (this.getJSON().has("on_update") && this.getJSON().getString("on_update").equals("true")) Server.getInstance().getRoomsWatchers().add(this.getUser());
-        else this.send((new ListUsers()).toString());
+        if (this.getJSON().has("on_update") && this.getJSON().getString("on_update").equals("true"))
+        {
+            Server.getInstance().getRoomsWatchers().add(this.getUser());
+        }
+        else
+        {
+            this.send((new ListUsers()).toString());
+        }
     }
-    
+
 }

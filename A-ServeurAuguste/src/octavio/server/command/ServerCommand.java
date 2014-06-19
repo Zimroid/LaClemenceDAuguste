@@ -23,16 +23,17 @@ import org.json.JSONObject;
 
 /**
  * Classe abstraite des commandes serveurs à envoyer.
- * 
+ *
  * @author Lzard
  */
 public abstract class ServerCommand
 {
     // JSON de la commande
     private final JSONObject json = new JSONObject();
-    
+
     /**
      * Insère dans le JSON le nom de la commande.
+     *
      * @param name Nom de la commande
      */
     public ServerCommand(String name)
@@ -46,9 +47,10 @@ public abstract class ServerCommand
             Log.debug(e);
         }
     }
-    
+
     /**
      * Insère dans le JSON le nom de la commande et l'identifiant de la salon.
+     *
      * @param name Nom de la commande
      * @param room Salon à destination
      */
@@ -64,18 +66,20 @@ public abstract class ServerCommand
             Log.debug(e);
         }
     }
-    
+
     /**
      * Retourne le JSON de la commande.
+     *
      * @return JSON de la commande
      */
     public final JSONObject getJSON()
     {
         return this.json;
     }
-    
+
     /**
      * Retourne le JSON en format texte.
+     *
      * @return JSON texte
      */
     @Override
@@ -83,5 +87,5 @@ public abstract class ServerCommand
     {
         return this.json.toString();
     }
-   
+
 }

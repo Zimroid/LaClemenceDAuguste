@@ -20,8 +20,8 @@ import octavio.server.command.ClientCommand;
 import org.json.JSONException;
 
 /**
- * 
- * 
+ *
+ *
  * @author Lzard
  */
 public class FinishTurn extends ClientCommand
@@ -29,7 +29,10 @@ public class FinishTurn extends ClientCommand
     @Override
     public void execute() throws JSONException
     {
-        this.getRoom().validateAction(this.getUser());
+        synchronized (this.getRoom())
+        {
+            this.getRoom().validateAction(this.getUser());
+        }
     }
-    
+
 }

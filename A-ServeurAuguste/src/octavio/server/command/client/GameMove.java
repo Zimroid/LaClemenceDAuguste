@@ -16,14 +16,14 @@
 
 package octavio.server.command.client;
 
+import java.sql.SQLException;
 import octavio.server.command.ClientCommand;
 import octavio.server.exception.RuleException;
-import java.sql.SQLException;
 import org.json.JSONException;
 
 /**
  * Commande pour effectuer une action.
- * 
+ *
  * @author Lzard
  */
 public class GameMove extends ClientCommand
@@ -31,9 +31,11 @@ public class GameMove extends ClientCommand
     @Override
     public void execute() throws SQLException, JSONException, RuleException
     {
-        this.getRoom().addAction(this.getUser(), this.getJSON());
-        this.confirm("action_received");
+        synchronized (this.getRoom())
+        {
+            this.getRoom().addAction(this.getUser(), this.getJSON());
+            this.confirm("action_received");
+        }
     }
-    
-}
 
+}

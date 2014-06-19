@@ -24,7 +24,7 @@ import org.json.JSONException;
  * Commande de configuration d'une partie. Vérifie si l'utilisateur est le
  * propriétaire du salon, puis modifie la configuration et envoi une
  * confirmation à tous les utilisateurs.
- * 
+ *
  * @author Lzard
  */
 public class GameConfiguration extends ClientCommand
@@ -32,14 +32,20 @@ public class GameConfiguration extends ClientCommand
     @Override
     public void execute() throws JSONException, NotInThisRoomException
     {
-        // Vérification du propriétaire
-        if (this.getRoom().isOwner(this.getUser()))
+        synchronized (this.getRoom())
         {
-            // Modification de la configuration et confirmation
-            this.getRoom().setConfiguration(this.getJSON());
-            this.getRoom().updateConfiguration();
+            // Vérification du propriétaire
+            if (this.getRoom().isOwner(this.getUser()))
+            {
+                // Modification de la configuration et confirmation
+                this.getRoom().setConfiguration(this.getJSON());
+                this.getRoom().updateConfiguration();
+            }
+            else
+            {
+                this.error("not_owner_of_this_room");
+            }
         }
-        else this.error("not_owner_of_this_room");
     }
-    
+
 }

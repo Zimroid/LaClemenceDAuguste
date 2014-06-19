@@ -22,20 +22,21 @@ import org.json.JSONException;
 
 /**
  * Commande de confirmation d'une action quelconque.
- * 
+ *
  * @author Lzard
  */
 public class MessageConfirm extends ServerCommand
 {
     /**
      * Remplit le JSON avec le type de confirmation.
+     *
      * @param type Type de confirmation
      */
     public MessageConfirm(String type)
     {
         // Constructeur de la classe mère
         super("message_confirm");
-        
+
         // Remplissage du JSON
         try
         {
@@ -46,5 +47,5 @@ public class MessageConfirm extends ServerCommand
             Log.debug(e);
         }
     }
-    
+
 }

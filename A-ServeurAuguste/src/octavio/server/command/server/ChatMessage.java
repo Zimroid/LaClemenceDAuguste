@@ -16,22 +16,23 @@
 
 package octavio.server.command.server;
 
-import octavio.server.command.ServerCommand;
+import java.util.Date;
 import octavio.server.Room;
 import octavio.server.User;
+import octavio.server.command.ServerCommand;
 import octavio.server.util.Log;
-import java.util.Date;
 import org.json.JSONException;
 
 /**
  * Commande de transfert d'un message de chat.
- * 
+ *
  * @author Lzard
  */
 public class ChatMessage extends ServerCommand
 {
     /**
      * Remplit le JSON avec les données du message.
+     *
      * @param author  Utilisateur auteur du message
      * @param date    Date de réception du message
      * @param message Contenu du message
@@ -40,10 +41,10 @@ public class ChatMessage extends ServerCommand
     {
         // Constructeur de la classe mère
         super("chat_message");
-        
+
         // Ajout des informations de l'auteur
         author.addUserInformations(this.getJSON());
-        
+
         // Remplissage du JSON
         try
         {
@@ -58,6 +59,7 @@ public class ChatMessage extends ServerCommand
 
     /**
      * Remplit le JSON avec les données du message.
+     *
      * @param author  Utilisateur auteur du message
      * @param room    Salon à destination du message
      * @param date    Date de réception du message
@@ -67,10 +69,10 @@ public class ChatMessage extends ServerCommand
     {
         // Constructeur de la classe mère
         super("chat_message", room);
-        
+
         // Ajout des informations de l'auteur
         author.addUserInformations(this.getJSON());
-        
+
         // Remplissage du JSON
         try
         {

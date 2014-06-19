@@ -16,27 +16,28 @@
 
 package octavio.server.command.server;
 
-import octavio.server.command.ServerCommand;
 import octavio.server.Room;
+import octavio.server.command.ServerCommand;
 
 /**
  * Commande de signalisation de la liste des utilisateurs d'un salon.
- * 
+ *
  * @author Lzard
  */
 public class RoomUsers extends ServerCommand
 {
     /**
      * Remplit le JSON avec les utilisateurs du salon.
+     *
      * @param room Salon de la partie
      */
     public RoomUsers(Room room)
     {
         // Constructeur de la classe mère
         super("game_users", room);
-        
+
         // Remplissage du JSON
         room.addUserList(this.getJSON());
     }
-    
+
 }

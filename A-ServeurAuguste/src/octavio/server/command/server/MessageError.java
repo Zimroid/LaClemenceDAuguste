@@ -48,6 +48,12 @@ public class MessageError extends ServerCommand
         }
     }
 
+    /**
+     * Création d'un message d'erreur à partir d'une exception.
+     *
+     * @param type Type du message
+     * @param ex   Exception
+     */
     public MessageError(String type, Exception ex)
     {
         // Constructeur de la classe mère

@@ -16,28 +16,29 @@
 
 package octavio.server.command.server;
 
-import octavio.server.command.ServerCommand;
 import octavio.server.Room;
+import octavio.server.command.ServerCommand;
 
 /**
  * Commande de confirmation de création/modification d'une partie. Envoi la
  * configuration de la partie.
- * 
+ *
  * @author Lzard
  */
 public class GameConfirm extends ServerCommand
 {
     /**
      * Remplit le JSON avec la configuration de la partie.
+     *
      * @param room Salon de la partie
      */
     public GameConfirm(Room room)
     {
         // Constructeur de la classe mère
         super("game_confirm", room);
-        
+
         // Remplissage du JSON
         room.addFullConfiguration(this.getJSON());
     }
-    
+
 }

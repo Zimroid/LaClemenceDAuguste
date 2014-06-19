@@ -16,16 +16,16 @@
 
 package octavio.server.command.client;
 
-import octavio.server.command.ClientCommand;
-import octavio.server.Server;
-import octavio.server.command.server.ChatMessage;
 import java.util.Date;
+import octavio.server.Server;
+import octavio.server.command.ClientCommand;
+import octavio.server.command.server.ChatMessage;
 import org.json.JSONException;
 
 /**
  * Commande d'envoi d'un message. Envoi du message au salon si précisé ou au
  * canal général sinon.
- * 
+ *
  * @author Lzard
  */
 public class ChatSend extends ClientCommand
@@ -36,7 +36,7 @@ public class ChatSend extends ClientCommand
         // Vérification du salon si il est précisé
         return this.getJSON().has("room_id");
     }
-    
+
     @Override
     public void execute() throws JSONException
     {
@@ -46,11 +46,11 @@ public class ChatSend extends ClientCommand
             // Envoi du message au salon
             this.getRoom().broadcast(
                     (new ChatMessage(
-                            this.getUser(),
-                            this.getRoom(),
-                            new Date(),
-                            this.getJSON().getString("message")
-                    )).toString()
+                     this.getUser(),
+                     this.getRoom(),
+                     new Date(),
+                     this.getJSON().getString("message")
+                             )).toString()
             );
         }
         else
@@ -58,12 +58,12 @@ public class ChatSend extends ClientCommand
             // Envoi du message à tous les utilisateurs
             Server.getInstance().broadcast(
                     (new ChatMessage(
-                            this.getUser(),
-                            new Date(),
-                            this.getJSON().getString("message")
-                    )).toString()
+                     this.getUser(),
+                     new Date(),
+                     this.getJSON().getString("message")
+                             )).toString()
             );
         }
     }
-    
+
 }

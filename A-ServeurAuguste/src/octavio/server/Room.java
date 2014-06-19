@@ -16,8 +16,15 @@
 
 package octavio.server;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Random;
 import octavio.engine.GameListener;
 import octavio.engine.entity.Board;
+import octavio.engine.entity.Bot;
 import octavio.engine.entity.Cell;
 import octavio.engine.entity.Game;
 import octavio.engine.entity.Legion;
@@ -25,7 +32,6 @@ import octavio.engine.entity.Player;
 import octavio.engine.entity.Team;
 import octavio.engine.entity.action.Action;
 import octavio.engine.entity.action.Movement;
-import octavio.engine.entity.pawn.Laurel;
 import octavio.engine.entity.pawn.Soldier;
 import octavio.engine.turnData.Battle;
 import octavio.engine.turnData.Move;
@@ -36,14 +42,6 @@ import octavio.server.command.server.RoomUsers;
 import octavio.server.exception.NotInThisRoomException;
 import octavio.server.util.Configuration;
 import octavio.server.util.Log;
-import java.awt.Color;
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Random;
-import octavio.engine.entity.Bot;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -70,7 +68,7 @@ public class Room implements GameListener
     // Identifiant du salon
     private final int id;
 
-    private User owner; // Propriétaire du salon
+    private User owner = null; // Propriétaire du salon
     private State state; // Etat de la partie
     private Game game;  // Partie du salon
 
@@ -83,8 +81,9 @@ public class Room implements GameListener
 
     // Liste des clients affectés au salon
     private final HashMap<Integer, User> users = new HashMap<>();
-    
-    private final ArrayList<User> hasValidated = new ArrayList<>();
+
+    private volatile ArrayList<User> hasValidated = new ArrayList<>();
+    private final HashMap<User, Integer> legionsPerPlayer = new HashMap<>();
 
     /**
      * Instanciation d'un salon avec le nom et l'identifiant donné.
@@ -156,33 +155,49 @@ public class Room implements GameListener
      */
     public void addAction(User user, JSONObject json) throws JSONException
     {
-        Cell cell = this.game.getBoard().getCell(new Point(json.getInt("start_u"), json.getInt("start_w")));
-        Action action = null;
-        if (this.playing.get(this.game.getLegion(json.getInt("legion_id")).getPlayer()) == user.getId() && cell != null)
+        if (!this.hasValidated.contains(user))
         {
-            if (cell.getPawn() != null)
+            Cell cell = this.game.getBoard().getCell(new Point(json.getInt("start_u"), json.getInt("start_w")));
+            Action action = null;
+            if (this.playing.get(this.game.getLegion(json.getInt("legion_id")).getPlayer()) == user.getId() && cell != null)
             {
-                Cell newCell = this.game.getBoard().getCell(new Point(json.getInt("end_u"), json.getInt("end_w")));
-                if (newCell != null)
+                if (cell.getPawn() != null)
                 {
-                    Movement movement = new Movement(cell.getPawn(), newCell);
-                    action = new Action(this.game.getLegion(json.getInt("legion_id")), movement, null);
+                    Cell newCell = this.game.getBoard().getCell(new Point(json.getInt("end_u"), json.getInt("end_w")));
+                    if (newCell != null)
+                    {
+                        Movement movement = new Movement(cell.getPawn(), newCell);
+                        action = new Action(this.game.getLegion(json.getInt("legion_id")), movement, null);
+                    }
                 }
             }
-        }
 
-        if (action != null)
-        {
-            this.game.addAction(action);
+            if (action != null)
+            {
+                this.game.addAction(action);
+            }
+
         }
     }
-    
+
+    /**
+     * Validation de l'action d'un joueur (inutilisé).
+     *
+     * @param user Joueur à valider
+     */
     public void validateAction(User user)
     {
-        if (this.playing.values().contains(user.getId()) && !this.hasValidated.contains(user))
-        {
-            this.game.setActionsValidated(this.game.getActionsValidated() + 1);
-        }
+        /*if (this.playing.values().contains(user.getId()) && !this.hasValidated.contains(user))
+         {
+         if (this.game.setActionsValidated(this.game.getActionsValidated() + this.legionsPerPlayer.get(user)))
+         {
+         this.hasValidated = new ArrayList<>();
+         }
+         else
+         {
+         this.hasValidated.add(user);
+         }
+         }*/
     }
 
     /**
@@ -191,7 +206,10 @@ public class Room implements GameListener
     @Override
     public void onTurnEnd()
     {
-        this.broadcast((new GameTurn(this, false)).toString());
+        synchronized (this)
+        {
+            this.broadcast((new GameTurn(this, false)).toString());
+        }
     }
 
     /**
@@ -217,7 +235,7 @@ public class Room implements GameListener
                 legionData.put("legion_id", legion.getPosition());
                 legionData.put("legion_shape", legion.getShape());
                 legionData.put("legion_color", legion.getColor());
-                if (this.playing.get(legion.getPlayer()) == 0)
+                if (this.playing.get(legion.getPlayer()) == 0 || this.users.get(this.playing.get(legion.getPlayer())) == null)
                 {
                     legionData.put("legion_owner", "Bot");
                 }
@@ -525,7 +543,8 @@ public class Room implements GameListener
      *
      * @param json JSON à lire
      *
-     * @throws JSONException JSON éronné
+     * @throws JSONException          JSON éronné
+     * @throws NotInThisRoomException
      */
     public void setConfiguration(JSONObject json) throws JSONException, NotInThisRoomException
     {
@@ -590,7 +609,8 @@ public class Room implements GameListener
                     }
 
                     // Ajout des légions
-                    for (int iLegion = 0; iLegion < playerData.getJSONArray("legions").length(); iLegion++)
+                    int iLegion;
+                    for (iLegion = 0; iLegion < playerData.getJSONArray("legions").length(); iLegion++)
                     {
                         // Récupération du JSON
                         JSONObject legionData = playerData.getJSONArray("legions").getJSONObject(iLegion);
@@ -602,11 +622,20 @@ public class Room implements GameListener
                         newLegion.setPosition(legionData.getInt("legion_position"));
                         newPlayer.addLegion(newLegion);
                     }
+                    if (!playerData.has("bot"))
+                    {
+                        this.legionsPerPlayer.put(this.users.get(playerData.getInt("player_user_id")), iLegion);
+                    }
                 }
             }
         }
     }
 
+    /**
+     * Remplace un joueur par un bot.
+     *
+     * @param user Utilisateur à remplacer
+     */
     public void setBotForPlayer(User user)
     {
         for (Entry<Player, Integer> entry : this.playing.entrySet())
@@ -779,9 +808,22 @@ public class Room implements GameListener
      */
     public enum State
     {
+
+        /**
+         * Partie en attente
+         */
         WAITING,
+        /**
+         * Partie en cours
+         */
         RUNNING,
+        /**
+         * Partie terminée
+         */
         FINISHING,
+        /**
+         * Partie fermée
+         */
         CLOSING
     }
 

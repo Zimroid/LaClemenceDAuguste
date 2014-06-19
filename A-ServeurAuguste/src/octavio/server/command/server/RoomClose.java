@@ -16,18 +16,19 @@
 
 package octavio.server.command.server;
 
-import octavio.server.command.ServerCommand;
 import octavio.server.Room;
+import octavio.server.command.ServerCommand;
 
 /**
  * Commande indiquant la fermeture d'un salon.
- * 
+ *
  * @author Lzard
  */
 public class RoomClose extends ServerCommand
 {
     /**
      * Remplit le JSON avec l'identifiant du salon.
+     *
      * @param room Salon fermée
      */
     public RoomClose(Room room)
@@ -35,5 +36,5 @@ public class RoomClose extends ServerCommand
         // Constructeur de la classe mère
         super("room_close", room);
     }
-    
+
 }

@@ -22,13 +22,14 @@ import octavio.server.User;
 /**
  * Exception lancée lorsqu'une commande concerne un salon dans lequel
  * l'utilisateur n'est pas présent.
- * 
+ *
  * @author Lzard
  */
 public class NotInThisRoomException extends Exception
 {
     /**
      * Enregistre le salon et l'utilisateur concernés.
+     *
      * @param room Salon concerné
      * @param user Utilisateur concerné
      */
@@ -36,9 +37,10 @@ public class NotInThisRoomException extends Exception
     {
         super("Not in this room: " + user.getName() + " not in room " + room.getId());
     }
-    
+
     /**
      * Enregistre le salon et l'identifiant de l'utilisateur concernés.
+     *
      * @param room   Salon concerné
      * @param userId Identifiant de l'utilisateur concerné
      */
