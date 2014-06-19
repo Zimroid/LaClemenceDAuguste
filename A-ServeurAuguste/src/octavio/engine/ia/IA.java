@@ -82,7 +82,7 @@ public class IA {
         Cell tent = legionsTent(l);
         double cellToTent = (double)distance(c,tent);
         double laurelToTent = (double)distance(lau.getCell(),tent);
-        return Math.exp(laurelToTent-cellToTent*2);
+        return Math.exp((laurelToTent-cellToTent)*2);
     }
     
     /**
