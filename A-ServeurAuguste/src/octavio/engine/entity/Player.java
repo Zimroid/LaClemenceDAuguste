@@ -45,18 +45,32 @@ public class Player
         this.connected = true;
     }
     
+    /**
+     * 
+     * @param num
+     * @param team 
+     */
     public Player(int num, Team team)
     {
         this(num);
         this.team = team;
     }
     
+    /**
+     * 
+     * @param num
+     * @param team
+     * @param connected 
+     */
     public Player(int num, Team team, boolean connected)
     {
         this(num,team);
         this.connected = connected;
     }
     
+    /**
+     * 
+     */
     public Player()
     {
         this.legions = new ArrayList<>();

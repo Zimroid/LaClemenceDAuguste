@@ -43,6 +43,10 @@ public class Team
         this.players = new ArrayList<>();
     }
     
+    /**
+     * 
+     * @param num 
+     */
     public Team(int num)
     {
         this();

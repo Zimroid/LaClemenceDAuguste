@@ -27,6 +27,12 @@ public class Move {
     private Point p2;
     private boolean dies;
     
+    /**
+     * 
+     * @param p1
+     * @param p2
+     * @param dies 
+     */
     public Move(Point p1, Point p2, boolean dies)
     {
         this.p1 = p1;

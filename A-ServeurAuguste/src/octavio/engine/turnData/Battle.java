@@ -27,6 +27,12 @@ public class Battle {
     private Point p2;
     private Point dies;
     
+    /**
+     * 
+     * @param p1
+     * @param p2
+     * @param dies 
+     */
     public Battle(Point p1, Point p2, Point dies)
     {
         this.p1 = p1;

@@ -21,7 +21,7 @@ import octavio.engine.entity.Cell;
 import octavio.engine.entity.pawn.Pawn;
 
 /**
- *
+ * Classe utilisée par l'IA pour stocker un mouvement possible correspondant à un groupe de pions
  * @author Zwyk
  */
 public class GroupMovement
@@ -29,6 +29,11 @@ public class GroupMovement
     private final ArrayList<Pawn> group;
     private final Cell cell;
     
+    /**
+     * 
+     * @param group
+     * @param cell 
+     */
     public GroupMovement(ArrayList<Pawn> group, Cell cell) {
         this.group = group;
         this.cell = cell;

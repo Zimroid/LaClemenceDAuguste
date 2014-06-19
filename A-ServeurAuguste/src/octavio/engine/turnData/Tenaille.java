@@ -26,6 +26,11 @@ public class Tenaille {
     private Point p1;
     private Point p2;
     
+    /**
+     * 
+     * @param p1
+     * @param p2 
+     */
     public Tenaille(Point p1, Point p2)
     {
         this.p1 = p1;

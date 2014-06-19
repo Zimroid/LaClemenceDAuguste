@@ -22,24 +22,34 @@ import java.util.TreeMap;
 import octavio.engine.entity.action.Movement;
 
 /**
- *
+ * Classe permettant le tirage aléatoire pondéré d'une collection d'objets
  * @author Zwyk
  */
-
-    
 public class RandomCollection<E> {
     private final NavigableMap<Double, E> map = new TreeMap<>();
     private final Random random;
     private double total = 0;
 
+    /**
+     * 
+     */
     public RandomCollection() {
         this(new Random());
     }
 
+    /**
+     * 
+     * @param random 
+     */
     public RandomCollection(Random random) {
         this.random = random;
     }
 
+    /**
+     * 
+     * @param weight
+     * @param result 
+     */
     public void add(double weight, E result) {
         if (weight > 0) {
             total += weight;
@@ -63,8 +73,15 @@ public class RandomCollection<E> {
         return total;
     }
 
+    /**
+     * 
+     * @return L'objet tiré aléatoirement selon les poids
+     */
     public E next() {
-        double value = random.nextDouble() * total;
-        return map.ceilingEntry(value).getValue();
+        if(total > 0) {
+            double value = random.nextDouble() * total;
+            return map.ceilingEntry(value).getValue();
+        }
+        else return null;
     }
 }

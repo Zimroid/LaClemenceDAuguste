@@ -42,6 +42,11 @@ public class Action {
         this.card = card;
     }
     
+    /**
+     * 
+     * @param legion
+     * @param movement 
+     */
     public Action(Legion legion, Movement movement) {
         this.legion = legion;
         this.movement = movement;

@@ -25,10 +25,19 @@ public class Bot {
     private Player player;
     private boolean playedLaurel = false;
 
+    /**
+     * 
+     * @param p 
+     */
     public Bot(Player p) {
         this.player = p;
     }
     
+    /**
+     * 
+     * @param p
+     * @param strategy 
+     */
     public Bot(Player p, Strategy strategy) {
         this(p);
         this.strategy = strategy;

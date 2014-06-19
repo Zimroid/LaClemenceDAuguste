@@ -34,7 +34,7 @@ import octavio.engine.ia.entity.GroupMovement;
 import octavio.engine.util.RandomCollection;
 
 /**
- *
+ * IA activant les Bots d'une Game
  * @author Zwyk
  */
 public class IA {
@@ -47,15 +47,36 @@ public class IA {
     private ArrayList<ArrayList<Pawn>> groups;
     
     // Weights
+    /**
+     * 
+     * @param p
+     * @return Le poids d'un pion
+     */
     public double pawnWeight(Pawn p) {
         return 1.0;
     }
+    /**
+     * 
+     * @param c
+     * @return Le poids d'une case d'arrivée
+     */
     public double pawnArrivalWeight(Cell c) {
         return Math.pow(game.getBoard().getSize()/(double)distance(c,game.getLaurel().getCell()),2);
     }
+    /**
+     * 
+     * @param l
+     * @return Le poids du Laurier pour la Légion donnée
+     */
     public double laurelWeight(Legion l) {
         return Math.pow(game.getBoard().getSize(),3)*nbUneplayedLegionsAroundLaurel(l)>1?100:1000;
     }
+    /**
+     * 
+     * @param l
+     * @param c
+     * @return Le poids d'une case d'arrivée du laurier pour la Légion donnée
+     */
     public double laurelArrivalWeight(Legion l, Cell c) {
         Laurel lau = game.getLaurel();
         Cell tent = legionsTent(l);
@@ -64,15 +85,31 @@ public class IA {
         return Math.exp(laurelToTent-cellToTent*2);
     }
     
+    /**
+     * 
+     * @param pawnWeight
+     * @param arrivalWeight
+     * @return La poids final d'une combinaison pion->case d'arrivée.
+     * TODO : mettre en argument le Pion et la Case et calculer plus précisément selon la rentabilité du mouvement.
+     */
     public final double cartesianWeight(double pawnWeight, double arrivalWeight) {
         return pawnWeight*arrivalWeight;
     }
     
+    /**
+     * 
+     * @param g 
+     */
     public IA(Game g)
     {
         this.game = g;
     }
     
+    /**
+     * 
+     * @param b
+     * @return ArrayList des Actions des légions réalisées par le Bot
+     */
     public ArrayList<Action> activateBot(Bot b)
     {
         ArrayList<Action> res = new ArrayList<>();
@@ -105,11 +142,21 @@ public class IA {
         return res;
     }
     
+    /**
+     * A appeler à la fin de l'activation d'un Bot
+     * @param b 
+     */
     private void botTurnEnd(Bot b)
     {
         b.setPlayedLaurel(false);
     }
     
+    /**
+     * 
+     * @param b
+     * @param l
+     * @return Un mouvement random d'une Légion d'un Bot
+     */
     private Movement randomMove(Bot b, Legion l)
     {
         ArrayList<Pawn> pawns = l.getLivingPawns();
@@ -129,6 +176,12 @@ public class IA {
         else return null;
     }
     
+    /**
+     * 
+     * @param b
+     * @param l
+     * @return Un mouvement random d'une Légion d'un Bot légèrement pondéré pour qu'il joue le Laurier de manière raisonnable et qu'il gère les mouvements impossibles
+     */
     private Movement pseudoRandomMove(Bot b, Legion l)
     {
         ArrayList<Pawn> pawns = l.getLivingPawns();
@@ -156,6 +209,12 @@ public class IA {
         else return null;
     }
     
+    /**
+     * 
+     * @param b
+     * @param l
+     * @return Mouvement d'une Légion d'un Bot avec distribution pondérée et estimation des poids (fonction principale)
+     */
     private Movement distributedRandomMove(Bot b, Legion l) {
         HashMap<Pawn,Double> pawnPoss = getPawnPoss(l);
         HashMap<GroupMovement,Double> arrivalPoss = getArrivalPoss(l);
@@ -173,6 +232,12 @@ public class IA {
         return m;
     }
     
+    /**
+     * 
+     * @param pawnPoss
+     * @param arrivalPoss
+     * @return A partir d'une liste avec poids de possibilités de pions et d'une liste avec poids de possibilités d'arrivée, renvoie la liste sur laquelle le choix aléatoire pondéré sera réalisé
+     */
     private RandomCollection getMovePoss(HashMap<Pawn,Double> pawnPoss, HashMap<GroupMovement,Double> arrivalPoss) {
         RandomCollection res = new RandomCollection();
         
@@ -189,6 +254,11 @@ public class IA {
         return res;
     }
     
+    /**
+     * 
+     * @param l
+     * @return HashMap pour chaque Groupe de pions d'une Légion et les différentes cases d'arrivée possibles et leurs poids relatifs
+     */
     private HashMap<GroupMovement,Double> getArrivalPoss(Legion l) {
         HashMap<GroupMovement,Double> res = new HashMap<>();
         HashMap<ArrayList<Pawn>, ArrayList<Cell>> poss = movementPossibilities(groups,l);
@@ -214,6 +284,11 @@ public class IA {
         return res;
     }
     
+    /**
+     * 
+     * @param l
+     * @return HashMap de chaque pion d'une Légion et les pois relatifs à ces Pions
+     */
     private HashMap<Pawn,Double> getPawnPoss(Legion l) {
         HashMap<Pawn,Double> res = new HashMap<>();
         
@@ -229,6 +304,12 @@ public class IA {
         return res;
     }
     
+    /**
+     * 
+     * @param groups
+     * @param l
+     * @return HashMap des possibilités de cases d'arrivées pour chaque groupe de Pion correspondant à groups pour la Légion l
+     */
     private HashMap<ArrayList<Pawn>, ArrayList<Cell>> movementPossibilities(ArrayList<ArrayList<Pawn>> groups, Legion l) {
         HashMap<ArrayList<Pawn>, ArrayList<Cell>> res = new  HashMap<>();
         
@@ -245,6 +326,10 @@ public class IA {
         return res;
     }
     
+    /**
+     * 
+     * @return Les différents groupes de pions sur le plateau pour toutes les légions
+     */
     private ArrayList<ArrayList<Pawn>> getGroups() {
         ArrayList<ArrayList<Pawn>> res = new ArrayList<>();
         ArrayList<Pawn> group;
@@ -260,10 +345,22 @@ public class IA {
         return res;
     }
     
+    /**
+     * 
+     * @param l
+     * @return La Case sur laquelle est située la tente de la Légion l
+     * TODO : Actuellement renvoie la case du coin du plateau selon la position de la Légion, il faudrait renvoyer toutes les cases de tentes selon leurs placements originels
+     */
     private Cell legionsTent(Legion l) {
         return game.getBoard().getCell(game.getBoard().getRotatedPosition(new Point(-(game.getBoard().getSize()-1),-(game.getBoard().getSize()-1)), l.getPosition()));
     }
     
+    /**
+     * 
+     * @param groups
+     * @param p
+     * @return True si le Pion p est présent dans un des groupe de pions groups
+     */
     private boolean pawnInGroups(ArrayList<ArrayList<Pawn>> groups, Pawn p) {
         boolean res = false;
         
@@ -280,6 +377,11 @@ public class IA {
         return res;
     }
     
+    /**
+     * 
+     * @param leg
+     * @return Nombre de pions autour du Laurier qui ne font pas partie des légions contrôlées par le joueur contrôlant la Légion leg
+     */
     public int nbUneplayedLegionsAroundLaurel(Legion leg) {
         Laurel l = game.getLaurel();
         int i = 0;
@@ -289,6 +391,14 @@ public class IA {
         return i;
     }
     
+    /**
+     * 
+     * @param c1
+     * @param c2
+     * @return ArrayList des cases correspondant au chemin supposément le plus court pour aller d'une case à une autre
+     * TODO : Actuellement ignore totalement si les cases sont occupées ou non, il faudrait arriver à trouver le chemin en prenant en compte les cases occupées.
+     * Utilise actuellement l'orientation entre 2 cases non adjacentes, qui n'est pas parfaite actuellement.
+     */
     public ArrayList<Cell> shortestPath(Cell c1, Cell c2) {
         ArrayList<Cell> res = new ArrayList<>();
         Cell temp = c1;
@@ -303,6 +413,12 @@ public class IA {
         return res;
     }
     
+    /**
+     * 
+     * @param c1
+     * @param c2
+     * @return Distance supposée entre 2 cases
+     */
     public int distance(Cell c1, Cell c2) {
         /*int x1 = c1.getP().x;
         int y1 = c1.getP().y;

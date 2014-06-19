@@ -86,12 +86,22 @@ public class Game
         this.ia = new IA(this);
     }
     
+    /**
+     * 
+     * @param listener
+     * @param turnDuration
+     * @param b 
+     */
     public Game(GameListener listener, long turnDuration, Board b)
     {
         this(listener,turnDuration);
         this.board = b;
     }
     
+    /**
+     * 
+     * @param turnDuration 
+     */
     public Game(int turnDuration)
     {
         this(null, turnDuration);
@@ -106,6 +116,11 @@ public class Game
         addAction(a,false);
     }
     
+    /**
+     * 
+     * @param a
+     * @param bot 
+     */
     public void addAction(Action a, boolean bot)
     {
         if(twinner==null)
@@ -149,6 +164,10 @@ public class Game
         return teams;
     }
     
+    /**
+     * 
+     * @return Le nombre de légions avec au moins 1 pion vivant en jeu
+     */
     public int nbAliveLegions()
     {
         int res = 0;
@@ -191,6 +210,9 @@ public class Game
         this.timer = timer;
     }
     
+    /**
+     * 
+     */
     public void nextTurn()
     {
         turn++;
@@ -206,6 +228,9 @@ public class Game
         turn();
     }
     
+    /**
+     * 
+     */
     public void turn()
     {
         if(listener!=null)
@@ -216,6 +241,9 @@ public class Game
         playBots();
     }
     
+    /**
+     * 
+     */
     private void playBots()
     {
         players.stream().filter((p) -> (p.getBot() != null && !p.isConnected())).forEach((p) ->
@@ -236,6 +264,10 @@ public class Game
         });
     }
     
+    /**
+     * 
+     * @return Si tous les joueurs sont joués par des Bots
+     */
     public boolean allPlayersAreBots()
     {
         boolean res = true;
@@ -250,6 +282,11 @@ public class Game
         return res;
     }
     
+    /**
+     * 
+     * @param p
+     * @return 
+     */
     public boolean playerHasLegionLeft(Player p)
     {
         boolean res = false;
@@ -266,8 +303,7 @@ public class Game
     
     /**
     * Applique les actions.
-    * @return Legion gagnane (null si partie non terminée)
-     * @throws java.lang.InterruptedException
+    * @return True si le tour établit de la fin de la partie
     */
     public boolean applyActions()
     {
@@ -290,6 +326,9 @@ public class Game
         return ends;
     }
     
+    /**
+     * 
+     */
     private void teamWinsCheck()
     {
         Team w = null;
@@ -390,6 +429,11 @@ public class Game
         }
     }
     
+    /**
+     * 
+     * @return True si le Laurier est mis sur une tente ou qu'une collision
+     * amène à plus aucun pion vivant dans la partie
+     */
     private boolean applyMoves()
     {
         Cell c1;
@@ -491,6 +535,11 @@ public class Game
         }
     }
     
+    /**
+     * 
+     * @param p
+     * @return ArrayList des Soldats autour du pion p sur lesquels il peut potentiellement réaliser une tenaille
+     */
     public ArrayList<Soldier> nearbyTenailleEnnemies(Pawn p)
     {
         ArrayList<Soldier> res = new ArrayList<>();
@@ -520,6 +569,9 @@ public class Game
         return res;
     }
     
+    /**
+     * Applique les tenailles
+     */
     public void applyTenailles()
     {
         Pawn p1;
@@ -586,6 +638,12 @@ public class Game
         }
     }
     
+    /**
+     * 
+     * @param p1
+     * @param orientation
+     * @return La force d'une ligne partant d'un soldat p1 donné et de l'orientation de sa ligne
+     */
     private int lineForce(Soldier p1, int orientation)
     {
         int res = p1.isArmored()?2:1;
@@ -602,6 +660,9 @@ public class Game
         return res;
     }
     
+    /**
+     * Applique les batailles
+     */
     public void applyBattles()
     {
         Pawn p1;
@@ -633,6 +694,10 @@ public class Game
         }
     }
     
+    /**
+     * Initialise le plateau avec une ArrayList de Pion (pour reprendre une partie déjà commencée)
+     * @param pawns 
+     */
     public void initBoard(ArrayList<Pawn> pawns)
     {
         for(Pawn p : pawns) {
@@ -677,7 +742,7 @@ public class Game
     }
     
     /**
-    * Initialise le plateau.
+    * Initialise le contenu du plateau.
     */
     public void initBoard()
     {
@@ -814,6 +879,12 @@ public class Game
         
     }
     
+    /**
+     * 
+     * @param l
+     * @param laurel
+     * @return True si la Légion l possède au moins 1 pion autour du Laurier
+     */
     public boolean canMoveLaurel(Legion l, Pawn laurel)
     {
         boolean res = false;
@@ -839,6 +910,12 @@ public class Game
         return correctMove(m,false);
     }
     
+    /**
+     * 
+     * @param m
+     * @param isLaurel
+     * @return True si le mouvement est correct
+     */
     public boolean correctMove(Movement m, boolean isLaurel)
     {
         if(isLaurel)
@@ -851,6 +928,12 @@ public class Game
         }
     }
     
+    /**
+     * 
+     * @param pawn
+     * @param armorIsOk
+     * @return ArrayList des Cases libres autour du Pion pawn
+     */
     public ArrayList<Cell> nearbyEmptyCells(Pawn pawn, boolean armorIsOk)
     {
         ArrayList<Pawn> l = new ArrayList<>();
@@ -858,6 +941,12 @@ public class Game
         return nearbyEmptyCells(l,armorIsOk);
     }
     
+    /**
+     * 
+     * @param group
+     * @param armorIsOk
+     * @return ArrayList des Cases libres autour du groupe de Pions group
+     */
     public ArrayList<Cell> nearbyEmptyCells(ArrayList<Pawn> group, boolean armorIsOk)
     {
         ArrayList<Cell> res = new ArrayList<>();
@@ -875,6 +964,11 @@ public class Game
         return res;
     }
     
+    /**
+     * 
+     * @param p
+     * @return ArrayList du groupe de pions correspondant au pion p
+     */
     public ArrayList<Pawn> friendlyGroup(Pawn p)
     {
         ArrayList<Pawn> res = new ArrayList<>();
@@ -912,6 +1006,11 @@ public class Game
         return res;
     }
     
+    /**
+     * 
+     * @param p
+     * @return ArrayList des pions de la même légion autour du Pion p
+     */
     public ArrayList<Pawn> nearbyFriends(Pawn p)
     {
         ArrayList<Pawn> res = new ArrayList<>();
@@ -929,6 +1028,11 @@ public class Game
         return res;
     }
     
+    /**
+     * 
+     * @param p
+     * @return  ArrayList des pions d'une team différente autour du Pion p
+     */
     public ArrayList<Soldier> nearbyEnnemies(Pawn p)
     {
         ArrayList<Soldier> res = new ArrayList<>();
@@ -946,6 +1050,11 @@ public class Game
         return res;
     }
     
+    /**
+     * 
+     * @param p
+     * @return ArrayList des Soldats autour du pion p
+     */
     public ArrayList<Soldier> nearbySoldiers(Pawn p)
     {
         ArrayList<Soldier> res = new ArrayList<>();
@@ -963,6 +1072,11 @@ public class Game
         return res;
     }
     
+    /**
+     * 
+     * @param c
+     * @return ArrayList des Cases adjacentes à la case c
+     */
     public ArrayList<Cell> nearbyCells(Cell c)
     {
         ArrayList<Cell> res = new ArrayList<>();
@@ -988,7 +1102,13 @@ public class Game
         return res;
     }
     
-    // NB : Orientation c2 par rapport à c1 de 0 à 5 dans le sens horaires avec 0 = haut gauche
+    /**
+     * 
+     * @param c1
+     * @param c2
+     * @return Orientation c2 par rapport à c1 de 0 à 5 dans le sens horaires avec 0 = haut gauche.
+     * Fonctionne de manière approximative quand les cases ne sont pas adjacentes   
+     */
     public int getOrientation(Cell c1, Cell c2)
     {
         int res = -1;
@@ -1079,6 +1199,12 @@ public class Game
         return res==-1?res:(reverse?(res+3)%6:res);
     }
     
+    /**
+     * 
+     * @param c
+     * @param orientation
+     * @return La case adjacente à la Case c selon l'orientation
+     */
     public Cell getCell(Cell c, int orientation)
     {
         Cell res = null;
