@@ -1,16 +1,17 @@
-<button onClick="deconnexion();">Deconnexion</button>
+<button id="returnBtn" onClick="deconnexion();">Deconnexion</button>
 <!-- Quitte la room : ROOM_LEAVE + numéro room -->
-<button onclick="$('#chat').attr('class', 'chat_visible');">Chat</button>
+<button id="chatShow" onclick="$('#chat').attr('class', 'chat_visible');">Chat</button>
 
 <div id="board_players"></div>
 <progress id="timer"></progress>
-<button id="turn_finish" onclick="gameTurnFinish(save_game_turn.room_id)">Terminer</button>
+<button id="turn_finish" onclick="finishTurn();">Terminer tour</button>
+<button id="turn_finish" onclick="leaveGame();">Quitter partie</button>
 
-<div style="width:90%;height:50%;margin:auto;margin-top:2%;">
+<div id="canvas">
 	<canvas id="board">
 		HMTL 5 non-disponible ...
 	</canvas>
 </div>
 
-<button onclick='$("#board").zoom();'>+</button>
-<button onclick='$("#board").dezoom();'>-</button>
+<button id="zoomBtn" onclick='$("#board").zoom();'>+</button>
+<button id="dezoomBtn" onclick='$("#board").dezoom();'>-</button>

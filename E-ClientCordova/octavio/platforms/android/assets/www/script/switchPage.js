@@ -21,6 +21,7 @@ function loadPage(url) {
 			{				
 				console.log(localStorage.save_game_turn);
 				$("#board").initBoard(JSON.parse(localStorage.save_game_turn));
+				traitementsBoard();
 			}
         }
     };

@@ -329,6 +329,7 @@ function gameList(argument)
     sendText(json);
 }
 
+// Liste des joueurs
 function gameUsers(game)
 {
 	var json = JSON.stringify(
@@ -348,6 +349,26 @@ function gameJoin(game)
         "room_id": game
     });
     
+    sendText(json);
+}
+
+function finishTurn()
+{
+	var json = JSON.stringify(
+    {
+        "command": "FINISH_TURN",
+        "room_id": localStorage.roomId
+    });
+    sendText(json);
+}
+
+function leaveGame()
+{
+	var json = JSON.stringify(
+    {
+        "command": "ROOM_LEAVE",
+        "room_id": localStorage.roomId
+    });
     sendText(json);
 }
 
@@ -425,6 +446,8 @@ function dropTeam(idTeam)
 
 function newPlayer(team, player)
 {
+	var save_game_users = JSON.parse(localStorage.sgu);
+	
     //button de création du nouveau joueur
     var NPButton = $("#button" + team).attr("onclick","newPlayer(" + team + "," + (player + 1) + ")");
     //div de la team du nouveau joueur
@@ -441,9 +464,9 @@ function newPlayer(team, player)
     var DPButton = $("<button class='dropPlayerButton' onclick='dropPlayer(\"" + team + "_" + player + "\")'>Supprimer le joueur</button>");
 
 	var users_options = '';
-	for (var i = 0 ; i < localStorage.save_game_users.length ; i++)
+	for (var i = 0 ; i < save_game_users.length ; i++)
 	{
-		users_options += "<option value='" + localStorage.save_game_users[i].user_id + "'>" + localStorage.save_game_users[i].user_name + "</option>";
+		users_options += "<option value='" + save_game_users[i].user_id + "'>" + save_game_users[i].user_name + "</option>";
 	}
 	selPlay.append(users_options);
     divPlay.append(pPlay, selPlay, NLButton);

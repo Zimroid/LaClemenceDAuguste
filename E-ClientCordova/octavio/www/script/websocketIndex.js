@@ -83,6 +83,11 @@ function process(evt)
 		{
 			connexion(false);
 		}
+		
+		else if(type == "room_left")
+		{
+			loadPage('lobbyView.html');
+		}
 	}
 
 	// Si on nous confirme la création d'une partie
@@ -374,6 +379,7 @@ function process(evt)
 		
 		localStorage.sgu = JSON.stringify(save_game_users);
 	}
+	
 	
 	// Commande non-traitée
 	else
