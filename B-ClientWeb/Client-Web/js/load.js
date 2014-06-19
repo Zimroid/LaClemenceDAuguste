@@ -11,7 +11,7 @@ function load() {
 	$("#newGameScript").html("<a id='newGameScript' href='' onclick='reloadContent(\"" + sitePath + "/index.php?script=1&page=newGame\"); return false;' ><img src='css/images/file.png' alt='N'> Créer une partie</a>");
 	$("#joinGameScript").html("<a id='joinGameScript' href='' onclick='reloadContent(\"" + sitePath + "/index.php?script=1&page=joinGame\"); return false;' ><img src='css/images/stack.png' alt='J'> Rejoindre une partie</a>");
 	$("#subscribeScript").html("<a id='subscribeScript' href='' onclick='reloadContent(\"" + sitePath + "/index.php?script=1&page=subscribe\"); return false;' >M'inscrire au jeu</a>");
-	$("#accountScript").html("<a id='accountScript' href='' onclick='reloadContent(\"" + sitePath + "/index.php?script=1&page=account\"); return false;' >Mon compte</a>");
+	//$("#accountScript").html("<a id='accountScript' href='' onclick='reloadContent(\"" + sitePath + "/index.php?script=1&page=account\"); return false;' >Mon compte</a>");
 	
 	$("#homeScriptSmall").html("<a id='homeScript' href='' onclick='reloadContent(\"" + sitePath + "/index.php?script=1&page=news\"); return false;' ><img src='css/images/home.png' alt='H'></a>");
 	$("#rulesScriptSmall").html("<a id='rulesScript' href='' onclick='reloadContent(\"" + sitePath + "/index.php?script=1&page=rules\"); return false;' ><img src='css/images/book.png' alt='R'></a>");

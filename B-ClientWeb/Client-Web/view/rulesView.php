@@ -1,6 +1,6 @@
 <?php require_once("view/siteGlobalVar.php"); ?>
 <h2>Règles</h2>
-(<a href="<?php echo $sitePath; ?>/ressources/ReglesAuguste.pdf">Télécharger les règles complètes de <b><?php echo $siteName; ?></b></a>)
+(<a class="blue" href="<?php echo $sitePath; ?>/ressources/ReglesAuguste.pdf">Télécharger les règles complètes de <b><?php echo $siteName; ?></b></a>)
 
 <h3>Déroulement d'un tour :</h3>
 Phase 1 :

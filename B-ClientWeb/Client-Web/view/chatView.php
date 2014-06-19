@@ -7,7 +7,7 @@
 		<div>
 			<span>Nom d'utilisateur : <?php echo $_SESSION['username'].' '; ?></span><br>
 			<button id="deconnect" onclick="deconnexion();">Déconnexion</button>
-			<a id='accountScript' href='<?php echo $sitePath; ?>/index.php?page=account'>Mon compte</a>
+			<!--<a id='accountScript' href='<?php echo $sitePath; ?>/index.php?page=account'>Mon compte</a>-->
 		</div>
 <?php
 	}

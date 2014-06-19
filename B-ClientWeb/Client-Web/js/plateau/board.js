@@ -1026,22 +1026,15 @@ jQuery.fn.extend({
 			if(jQuery.inArray(move[i][3] +','+ move[i][4], armorComp) != -1) {
 
 				//On supprime l'armure
-				var coliDetect = false;
+				var coliDetect = 0;
 				for(var k = 0; k < armor.length; k++)
 				{
 					if(move[i][3]+','+move[i][4] == armor[k][0]+','+armor[k][1]) {
-						if(!coliDetect) {
-							coliDetect = true;
-							armor[k][2] = true;
-						}
-						else {
-							armor[k][2] = false;
-							k = armor.length;
-						}
+						coliDetect++;
 					}
 				}
 				//alert([move[i][3], move[i][4], false] + ' => ' + armor);
-				if(!coliDetect) {
+				if(coliDetect == 1) {
 					t.removeLayer((move[i][3]+size-1)+','+(move[i][4]+size-1+'armor'));
 				}
 				//si le pion est détruit

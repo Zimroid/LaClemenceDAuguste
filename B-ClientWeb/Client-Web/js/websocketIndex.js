@@ -96,6 +96,10 @@ function process(evt)
 			connexion(true,'','');
 			reloadContent(sitePath + "/index.php?script=1&page=news");
 		}
+		else if(type == "room_left")
+		{
+			reloadContent(sitePath + '/index.php?script=1&page=news');
+		}
 	}
 
 	// Si on nous confirme la création d'une partie
@@ -104,7 +108,7 @@ function process(evt)
 	{
 		save_game_config = data;
 		// si une partie rapide est lancée
-		if (data.configuration.game_mode == 'fast' && (data.teams[0].players[0].player_user_id != 0) && (data.configuration.teams[1].players[0].player_user_id != 0))
+		if (data.configuration.game_mode == 'fast' && (data.teams[0].players[0].player_user_id != 0) && (data.teams[1].players[0].player_user_id != 0))
 		{
 			gameStart(data.room_id);
 		}
@@ -116,6 +120,7 @@ function process(evt)
 			{
 				sitePage = 'gameConfig';
 				reloadContent(sitePath + "/index.php?script=1&page=gameConfig&mode=" + data.configuration.game_mode + "&name=" + data.configuration.game_name + "&id=" + data.room_id);
+				gameConfig();
 			}
 			else if (lc.command == "ROOM_JOIN")
 			{
@@ -363,6 +368,7 @@ function process(evt)
 					$("[name='playerName']").append(text2);
 				}
 			}
+
 			var owner = false;
 			for (i = 0; i < save_game_users.length; i++)
 			{
@@ -371,7 +377,8 @@ function process(evt)
 					owner = true;
 				}
 			}
-			if (!owner)
+			console.log(sitePage);
+			if (!owner && sitePage == 'gameConfigViewer')
 			{
 				gameConfigViewer();
 			}

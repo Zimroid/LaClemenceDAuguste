@@ -154,14 +154,13 @@ function gameConfig()
 }
 
 function gameConfigViewer()
-{
-    var nbrTeamsConfig;
+{   
+    var nbrTeamsConfig = save_game_config.teams.length;
     var nbrPlayersConfig = new Array();
     var nbrLegionsConfig = new Array();
     var k = 0;
-    nbrTeamsConfig = save_game_config.teams.length;
 
-    for(i = 0; i < save_game_config.teams.length; i++)
+    for(i = 0; i < nbrTeamsConfig; i++)
     {
         nbrPlayersConfig[i] = save_game_config.teams[i].players.length;
         for(j = 0; j < nbrPlayersConfig[i]; j++)
@@ -171,121 +170,116 @@ function gameConfigViewer()
         }
     }
 
-    var nbrTeamsWeb = $('div [name="team"]').length;
-    var nbrPlayersWeb = new Array();
-    var nbrLegionsWeb = new Array();
-    k = 0;
-
-    for(i = 0; i < nbrTeamsWeb; i++)
-    {
-        nbrPlayersWeb[i] = $('#team' + (i + 1)).children('div [name="player"]').length;
-        for(j = 0; j < nbrPlayersWeb[i]; j++)
-        {
-            nbrLegionsWeb[k] = $('#team' + (i + 1)).children('#player' + (i + 1) + '_' + (j + 1)).children('div [name="legion"]').length;
-            k++;
-        }
-    }
-
     $('#board_size').val(save_game_config.configuration.game_board_size);
     $('#turn_duration').val((save_game_config.configuration.game_turn_duration/1000));
+    $('#allTeams').empty();
+    $('#noTeam').empty();
     var couleur;
     var forme;
     var position;
+    var joueur;
 
-    if(nbrTeamsWeb == nbrTeamsConfig)
+    for(i = 0; i < nbrTeamsConfig; i++)
     {
-        for(i = 0; i < nbrTeamsWeb; i++)
+        var divTeam = $('<div id="team' + (i + 1) + '" name="team"></div>');
+        var spTitle = $('<span id="title' + (i + 1) + '" name="title' + (i + 1) + '">Team' + (i + 1) + '</span>');
+        var lblColor = $('<label>Couleur du pion</label>');
+        var inpColor = $('<input type="text" class="color" class="1" value="" disabled/>');
+        var butNewPlayer = $('<button class="newPlayerButton" id="button1" name="button1" disabled>Nouveau Joueur</button>');
+
+        divTeam.append(spTitle, lblColor, inpColor, butNewPlayer);
+
+        for(j = 0; j < nbrPlayersConfig[i]; j++)
         {
-            if(nbrPlayersWeb[i] == nbrPlayersConfig[i])
+            var divPlayer = $('<div id="player' + (i + 1) + '_' + (j + 1) + '" name="player"></div>');
+            var spPlayer = $('<span>Joueur' + (j + 1) + '</span>');
+
+            if(save_game_config.teams[i].players[j].player_user_id == 0)
             {
-                for(j = 0; j < nbrPlayersWeb[i]; j++)
+                joueur = "Robot";
+            }
+            else
+            {
+                for(z = 0; z < save_game_users.length; z++)
                 {
-                    if(nbrLegionsWeb[j] == nbrLegionsConfig[j])
+                    if(save_game_users[z].user_id == save_game_config.teams[i].players[j].player_user_id)
                     {
-                        for(k = 0; k < nbrLegionsWeb[j]; k++)
-                        {
-                            switch(save_game_config.teams[i].players[j].legions[k].legion_color)
-                            {
-                                case "#FF0000" :
-                                    couleur = "Rouge";
-                                    break;
-                                case "#FFFF00" :
-                                    couleur = "Jaune";
-                                    break;
-                                case "#00FF00" :
-                                    couleur = "Vert";
-                                    break;
-                                case "#00FFFF" :
-                                    couleur = "Cyan";
-                                    break;
-                                case "#0000FF" :
-                                    couleur = "Bleu";
-                                    break;
-                                case "FF00FF" :
-                                    couleur = "Magenta";
-                                    break;
-                            }
-
-                            switch(save_game_config.teams[i].players[j].legions[k].legion_shape)
-                            {
-                                case "square" :
-                                    forme = "Carré";
-                                    break;
-                                case "circle" :
-                                    forme = "Hexagone";
-                                    break;
-                                case "triangle" :
-                                    forme = "Triangle";
-                                    break;
-                            }
-
-                            switch(save_game_config.teams[i].players[j].legions[k].legion_position)
-                            {
-                                case 0 :
-                                    position = "Haut Gauche";
-                                    break;
-                                case 1 :
-                                    position = "Haut Droit";
-                                    break;
-                                case 2 :
-                                    position = "Droit";
-                                    break;
-                                case 3 :
-                                    position = "Bas Droit";
-                                    break;
-                                case 4 :
-                                    position = "Bas Gauche";
-                                    break;
-                                case 5 :
-                                    position = "Gauche";
-                                    break;
-                            }
-
-                            $('#team' + (i + 1)).children('input.color').val(couleur);
-                            $('#team' + (i + 1)).children('#player' + (i + 1) + '_' + (j + 1)).children('#legion' + (i + 1) + '_' + (j + 1) + '_' + (k + 1)).children('input.pawn').val(forme);
-                            $('#team' + (i + 1)).children('#player' + (i + 1) + '_' + (j + 1)).children('#legion' + (i + 1) + '_' + (j + 1) + '_' + (k + 1)).children('input.position').val(position);
-                        }
-                    }
-
-                    if(save_game_config.teams[i].players[j].player_user_id == 0)
-                    {
-                        $('#team' + (i + 1)).children('#player' + (i + 1) + '_' + (j + 1)).children('input.playerName').val("ROBOT Pseudo-Random");
-                    }
-                    else
-                    {
-                        var nom;
-                        for(z = 0; z < save_game_users.length; z++)
-                        {
-                            if(save_game_users[z].user_id == save_game_config.teams[i].players[j].player_user_id)
-                            {
-                                nom = save_game_users[z].user_name;
-                            }
-                        }
-                        $('#team' + (i + 1)).children('#player' + (i + 1) + '_' + (j + 1)).children('input.playerName').val(nom);
+                        joueur = save_game_users[z].user_name;
                     }
                 }
             }
+
+            var inpPlayer = $('<input type="text" class="playerName" class="1" value="' + joueur + '" disabled/>');
+            var butNewLegion = $('<button class="newLegionButton" id="legion' + (i + 1) + '_' + (j + 1) + '" disabled>Nouvelle légion</button>');
+
+            divPlayer.append(spPlayer, inpPlayer, butNewPlayer);
+            
+            for(k = 0; k < nbrLegionsConfig[j]; k++)
+            {
+                switch(save_game_config.teams[i].players[j].legions[k].legion_color)
+                {
+                    case "#FF0000" : couleur = "Rouge";
+                        break;
+                    case "#FFFF00" : couleur = "Jaune";
+                        break;
+                    case "#00FF00" : couleur = "Vert";
+                        break;
+                    case "#00FFFF" : couleur = "Cyan";
+                        break;
+                    case "#0000FF" : couleur = "Bleu";
+                        break;
+                    case "#FF00FF" : couleur = "Magenta";
+                        break;
+                }
+
+                switch(save_game_config.teams[i].players[j].legions[k].legion_shape)
+                {
+                    case "square" : forme = "Carré";
+                        break;
+                    case "circle" : forme = "Hexagone";
+                        break;
+                    case "triangle" : forme = "Triangle";
+                        break;
+                }
+
+                switch(save_game_config.teams[i].players[j].legions[k].legion_position)
+                {
+                    case 0 : position = "Haut Gauche";
+                        break;
+                    case 1 : position = "Haut Droit";
+                        break;
+                    case 2 : position = "Droit";
+                        break;
+                    case 3 : position = "Bas Droit";
+                        break;
+                    case 4 : position = "Bas Gauche";
+                        break;
+                    case 5 : position = "Gauche";
+                        break;
+                }
+
+                var divLegion = $('<div name="legion" id="legion"' + (i + 1) + '_' + (j + 1) + '_' + (k + 1) + '"></div>');
+                var spLegion = $('<span>Légion ' + (k + 1) + '</span>');
+                var lblPawn = $('<label>Forme du pion</label>');
+                var inpPawn = $('<input type="text" class="pawn" class="1" onchange="gameConfig();" value="' + forme + '" disabled/>');
+                var lblPosit = $('<label>Position sur le plateau</label>');
+                var inpPosit = $('<input type="text" class="position" class="1" onchange="gameConfig();" value="' + position + '" disabled/>');
+
+                inpColor.val(couleur);
+                divLegion.append(spLegion, lblPawn, inpPawn, lblPosit, inpPosit);
+                divPlayer.append(divLegion);
+            }
+
+            divTeam.append(divPlayer);
         }
+
+        $('#allTeams').append(divTeam);
+    }
+
+    for(p = 0; p < save_game_users.length; p++)
+    {
+        var pPlayer = $('<p>' + save_game_users[p].user_name + '</p>');
+        $('#noTeam').append(pPlayer);
     }
 }
 
@@ -333,6 +327,17 @@ function gameTurnFinish(game)
     sendText(json);
 }
 
+function gameLeave(game)
+{
+	var json = JSON.stringify(
+    {
+        "command": "ROOM_LEAVE",
+        "room_id": game
+    });
+    last_command = json;
+    sendText(json);
+}
+
 function newTeam()
 {
     //div contenant toutes les team (sans les observateurs)
@@ -342,9 +347,9 @@ function newTeam()
     //numéro de la nouvelle team
     var numberTeam = allTeams.length + 1;
     //div pour la team avec son numéro
-    var divTeam = $("<div id='team" + numberTeam + "' name='team'>");
+    var divTeam = $("<div id='team" + numberTeam + "' name='team'></div>");
     //titre de la div
-    var ptitle = $("<span id='title" + numberTeam + "' name='title" + numberTeam + "'>Team " + numberTeam + "</span>");
+    var spTitle = $("<span id='title" + numberTeam + "' name='title" + numberTeam + "'>Team " + numberTeam + "</span>");
     //label pour la color
     var lblColor = $("<label>Couleur du pion</label>");
     //select pour la color
@@ -390,7 +395,7 @@ function newTeam()
     var DTButton = $("<button class='dropTeamButton' onclick='dropTeam(\"" + numberTeam + "\")'>Supprimer la team</button>");
 
 	selColor.append(optColor, optColor2, optColor3, optColor4, optColor5, optColor6);
-	divTeam.append(ptitle, lblColor, selColor, NPButton, DTButton);
+	divTeam.append(spTitle, lblColor, selColor, NPButton, DTButton);
     divTeams.append(divTeam);
     newPlayer(numberTeam,1);
 }
@@ -518,5 +523,15 @@ function newLegion(team, player, legion)
 function dropLegion(idLegion)
 {
 	$("#legion"+idLegion).remove();
+	gameConfig();
+}
+
+// correction de l'input type number de taille de plateau
+function verifSize()
+{
+	if (($("#board_size").val() != 5) && ($("#board_size").val() != 7) && ($("#board_size").val() != 9) && ($("#board_size").val() != 11))
+	{
+		$("#board_size").val(5);
+	}
 	gameConfig();
 }
